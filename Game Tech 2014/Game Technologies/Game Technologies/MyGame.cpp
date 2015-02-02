@@ -64,7 +64,8 @@ MyGame::MyGame()	{
 	
 }
 
-MyGame::~MyGame(void)	{
+MyGame::~MyGame(void)	
+{
 	/*
 	We're done with our assets now, so we can delete them
 	*/
@@ -123,21 +124,23 @@ void MyGame::UpdateGame(float msec) {
 	Debug rendering uses its own debug shader, and so should be unaffected by
 	and shader changes made 'outside' of debug drawing
 
+
+	Lets draw a box around the cube robot!
 	*/
-	//Lets draw a box around the cube robot!
-	//Renderer::GetRenderer().DrawDebugBox(DEBUGDRAW_PERSPECTIVE, Vector3(0,51,0), Vector3(100,100,100), Vector3(1,0,0));
 
-	//////We'll assume he's aiming at something...so let's draw a line from the cube robot to the target
-	//////The 1 on the y axis is simply to prevent z-fighting!
-	//Renderer::GetRenderer().DrawDebugLine(DEBUGDRAW_PERSPECTIVE, Vector3(0,1,0),Vector3(200,1,200), Vector3(0,0,1), Vector3(1,0,0));
+	Renderer::GetRenderer().DrawDebugBox(DEBUGDRAW_PERSPECTIVE, Vector3(0,51,0), Vector3(100,100,100), Vector3(1,0,0));
 
-	//////Maybe he's looking for treasure? X marks the spot!
-	//Renderer::GetRenderer().DrawDebugCross(DEBUGDRAW_PERSPECTIVE, Vector3(200,1,200),Vector3(50,50,50), Vector3(0,0,0));
+	////We'll assume he's aiming at something...so let's draw a line from the cube robot to the target
+	////The 1 on the y axis is simply to prevent z-fighting!
+	Renderer::GetRenderer().DrawDebugLine(DEBUGDRAW_PERSPECTIVE, Vector3(0,1,0),Vector3(200,1,200), Vector3(0,0,1), Vector3(1,0,0));
 
-	//////CubeRobot is looking at his treasure map upside down!, the treasure's really here...
-	//Renderer::GetRenderer().DrawDebugCircle(DEBUGDRAW_PERSPECTIVE, Vector3(-200,1,-200), 50.0f, Vector3(0,1,0));
+	////Maybe he's looking for treasure? X marks the spot!
+	Renderer::GetRenderer().DrawDebugCross(DEBUGDRAW_PERSPECTIVE, Vector3(200,1,200),Vector3(50,50,50), Vector3(0,0,0));
 
-	//PhysicsSystem::GetPhysicsSystem().DrawDebug();
+	////CubeRobot is looking at his treasure map upside down!, the treasure's really here...
+	Renderer::GetRenderer().DrawDebugCircle(DEBUGDRAW_PERSPECTIVE, Vector3(-200,1,-200), 50.0f, Vector3(0,1,0));
+
+	PhysicsSystem::GetPhysicsSystem().DrawDebug();
 }
 
 /*
@@ -175,7 +178,7 @@ GameEntity* MyGame::BuildSphereEntity(float radius, Vector3 pos, Vector3 vel) {
 
 	s->SetModelScale(Vector3(radius,radius,radius));
 	s->SetBoundingRadius(radius);
-	s->SetColour(Vector4(1.0,1.0,1.0,1));
+	s->SetColour(Vector4(0.0,1.0,0.5,1));
 	PhysicsNode*p = new PhysicsNode();
 	p->SetPosition(pos);
 	p->SetLinearVelocity(vel);
