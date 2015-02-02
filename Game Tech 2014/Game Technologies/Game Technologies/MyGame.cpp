@@ -125,19 +125,19 @@ void MyGame::UpdateGame(float msec) {
 
 	*/
 	//Lets draw a box around the cube robot!
-	Renderer::GetRenderer().DrawDebugBox(DEBUGDRAW_PERSPECTIVE, Vector3(0,51,0), Vector3(100,100,100), Vector3(1,0,0));
+	//Renderer::GetRenderer().DrawDebugBox(DEBUGDRAW_PERSPECTIVE, Vector3(0,51,0), Vector3(100,100,100), Vector3(1,0,0));
 
-	////We'll assume he's aiming at something...so let's draw a line from the cube robot to the target
-	////The 1 on the y axis is simply to prevent z-fighting!
-	Renderer::GetRenderer().DrawDebugLine(DEBUGDRAW_PERSPECTIVE, Vector3(0,1,0),Vector3(200,1,200), Vector3(0,0,1), Vector3(1,0,0));
+	//////We'll assume he's aiming at something...so let's draw a line from the cube robot to the target
+	//////The 1 on the y axis is simply to prevent z-fighting!
+	//Renderer::GetRenderer().DrawDebugLine(DEBUGDRAW_PERSPECTIVE, Vector3(0,1,0),Vector3(200,1,200), Vector3(0,0,1), Vector3(1,0,0));
 
-	////Maybe he's looking for treasure? X marks the spot!
-	Renderer::GetRenderer().DrawDebugCross(DEBUGDRAW_PERSPECTIVE, Vector3(200,1,200),Vector3(50,50,50), Vector3(0,0,0));
+	//////Maybe he's looking for treasure? X marks the spot!
+	//Renderer::GetRenderer().DrawDebugCross(DEBUGDRAW_PERSPECTIVE, Vector3(200,1,200),Vector3(50,50,50), Vector3(0,0,0));
 
-	////CubeRobot is looking at his treasure map upside down!, the treasure's really here...
-	Renderer::GetRenderer().DrawDebugCircle(DEBUGDRAW_PERSPECTIVE, Vector3(-200,1,-200), 50.0f, Vector3(0,1,0));
+	//////CubeRobot is looking at his treasure map upside down!, the treasure's really here...
+	//Renderer::GetRenderer().DrawDebugCircle(DEBUGDRAW_PERSPECTIVE, Vector3(-200,1,-200), 50.0f, Vector3(0,1,0));
 
-	PhysicsSystem::GetPhysicsSystem().DrawDebug();
+	//PhysicsSystem::GetPhysicsSystem().DrawDebug();
 }
 
 /*
