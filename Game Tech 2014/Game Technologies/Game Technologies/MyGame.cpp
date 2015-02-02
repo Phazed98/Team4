@@ -175,7 +175,7 @@ GameEntity* MyGame::BuildSphereEntity(float radius, Vector3 pos, Vector3 vel) {
 
 	s->SetModelScale(Vector3(radius,radius,radius));
 	s->SetBoundingRadius(radius);
-	s->SetColour(Vector4(1.0,0.2,0.5,1));
+	s->SetColour(Vector4(1.0,1.0,1.0,1));
 	PhysicsNode*p = new PhysicsNode();
 	p->SetPosition(pos);
 	p->SetLinearVelocity(vel);
