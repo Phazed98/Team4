@@ -96,6 +96,7 @@
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Spring.h" />
     <ClInclude Include="SpringDemo.h" />
+    <ClInclude Include="SupportPoint.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\nclgl\nclgl.vcxproj">

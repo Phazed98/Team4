@@ -92,5 +92,8 @@
     <ClInclude Include="GJK.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SupportPoint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

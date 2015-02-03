@@ -37,15 +37,8 @@ bool GJK::CollisionDetection(PhysicsNode& n0, PhysicsNode& n1, CollisionData* cd
 	Matrix4 orientation1 = n1.GetOrientation().ToMatrix();
 
 
-	/*
-	ERROR THIS IS WRONG TODO FIX  ADD CODE TO PHYSICSNODE TO DETERMINE SCALE
-	
-	*/
-	Matrix4 scale0 = Matrix4::Scale(Vector3(1,1,1));
-	Matrix4 scale1 = Matrix4::Scale(Vector3(1, 1, 1));
-
-	//Matrix4 scale0 = Matrix4::Scale(n0.GetScale());
-	//Matrix4 scale1 = Matrix4::Scale(n1.GetScale());
+	Matrix4 scale0 = Matrix4::Scale(n0.getTarget()->GetModelScale());
+	Matrix4 scale1 = Matrix4::Scale(n1.getTarget()->GetModelScale());
 
 	Matrix4 Object0Matrix = translation0 * orientation0 * scale0;
 	Matrix4 Object1Matrix = translation1 * orientation1 * scale1;
@@ -100,8 +93,6 @@ bool GJK::CollisionDetection(PhysicsNode& n0, PhysicsNode& n1, CollisionData* cd
 			if (ContainsOrigin(dir))
 			{
 
-				/////////////////////////////////////////////EPA ALGORITHM GOES HERE///////////////////////////////////////////////
-
 				/* This is the basic algorithm for EPA :
 
 				1 Take over the simplex from GJK when GJK terminated, and “blow up” the simplex to a tetrahedron if it contains less than 4 vertices.
@@ -127,15 +118,17 @@ bool GJK::CollisionDetection(PhysicsNode& n0, PhysicsNode& n1, CollisionData* cd
 				9 End EPA.
 				*/
 
-
 				if (a == Vector3(0, 0, 0) || b == Vector3(0, 0, 0) || c == Vector3(0, 0, 0) || d == Vector3(0, 0, 0))
 				{
 					return false;
 				}
-				//1 Take over the simplex from GJK when GJK terminated, and “blow up” the simplex to a tetrahedron if it contains less than 4 vertices.
-				//Assuming Now that we dont need this // Add later
 
-				//2 Use the 4 faces(triangles) of the tetrahedron to construct an initial polytope.
+				/*1 Take over the simplex from GJK when GJK terminated, and “blow up” the simplex to a tetrahedron if it contains less than 4 vertices.Assuming Now that we dont need this 
+				*/
+
+				/*
+				2 Use the 4 faces(triangles) of the tetrahedron to construct an initial polytope.
+				*/
 				triVector.push_back(Triangle(a, b, c));
 				triVector.push_back(Triangle(a, c, d));
 				triVector.push_back(Triangle(a, d, b));
@@ -143,25 +136,23 @@ bool GJK::CollisionDetection(PhysicsNode& n0, PhysicsNode& n1, CollisionData* cd
 
 				float distToOrigin = -FLT_MAX;
 
-				//int previousIndex = findTriangle();
-				//Triangle previousT = triVector.at(previousIndex);
-				//Vector3 entry_prev_support = previousT.triNormal;
 				int count = 0;
 				while (count < 100) //Should never matter, but if EPA gets stuck, have an out
 				{
 					count++;
-					//3 Pick the closest face of the polytope to the origin.
+					/*
+					3 Pick the closest face of the polytope to the origin.
+					*/
 					Triangle tempT = triVector.at(findTriangle());
 					SupportPoint entry_cur_support = Support(Object0FixedVertices, Object0VertexCount, Object1FixedVertices, Object1VertexCount, tempT.triNormal);
 					float vecLength = Vector3::Dot(entry_cur_support.vector, tempT.triNormal);
 
-					//4 If the closest face is no closer(by a certain threshold) to the origin than the previously picked one, go to 8. (8 = collisionData generation)
+					/*4 If the closest face is no closer(by a certain threshold) to the origin than the previously picked one, go to 8. (8 = collisionData generation)
+					*/
 					if (vecLength - distToOrigin < 0.001f)
 					{
-						//8 Project the origin onto the closest triangle.This is our closest point to the origin on the CSO’s boundary.Compute the barycentric coordinates of this closest point with
-						//	respect to the vertices from the closest triangle.The barycentric coordinates are coefficients of linear combination of vertices from the closest triangle.Linearly combining 
-						//	the individual support points(original results from individual colliders) corresponding to the vertices from the closest triangle, with the same barycentric coordinates as 
-						//	coefficients, gives us contact points on both colliders in their own model space.We can then convert these contact points to world space.
+						/*8 Project the origin onto the closest triangle.This is our closest point to the origin on the CSO’s boundary.Compute the barycentric coordinates of this closest point with respect to the vertices from the closest triangle.The barycentric coordinates are coefficients of linear combination of vertices from the closest triangle.Linearly combining the individual support points(original results from individual colliders) corresponding to the vertices from the closest triangle, with the same barycentric coordinates as coefficients, gives us contact points on both colliders in their own model space.We can then convert these contact points to world space.
+						*/
 
 						float bary_u, bary_v, bary_w;
 						barycentric(tempT.triNormal * vecLength,
@@ -203,9 +194,11 @@ bool GJK::CollisionDetection(PhysicsNode& n0, PhysicsNode& n1, CollisionData* cd
 
 					//Determine to remove = Iterate though triangles 
 					// If dot product of (triangles normal, supportpoint - currentTriangleFirstpoint)
-
-					//5 Remove the closest face, use the face normal(outward pointing) as the search direction to find a support point on the CSO.
-					//	Remove Triangle and Add its edges to the edgeVector
+				
+					/*
+					5 Remove the closest face, use the face normal(outward pointing) as the search direction to find a support point on the CSO. Remove Triangle and Add its edges to the edgeVector
+					*/
+			
 
 					// If dot product of (triangles normal, supportpoint - currentTriangleFirstpoint)
 					for (auto i = triVector.begin(); i != triVector.end();)
@@ -230,16 +223,22 @@ bool GJK::CollisionDetection(PhysicsNode& n0, PhysicsNode& n1, CollisionData* cd
 						triVector.push_back(Triangle(entry_cur_support, e.a, e.b));
 					}
 
+					/*
+					6 Remove all faces from the polytope that can be “seen” by this new support point, and add new faces to cover up the “hole” on the polytope, where all new faces share the new support point as a common vertex(this is the expanding part of the algorithm).
+					*/
 					edgeVector.clear();
+	
+					
 
-					//6 Remove all faces from the polytope that can be “seen” by this new support point, and add new faces to cover up the “hole” on the polytope, 
-					//	where all new faces share the new support point as a common vertex(this is the expanding part of the algorithm).
+					/*
+					7 Go to 3. and Try Again
+					*/
+				} 
+				
 
-				} //7 Go to 3.
-
-
-				//9 End EPA.
-
+				/*
+				9 End EPA.
+				*/
 				delete[] Object0FixedVertices;
 				delete[] Object1FixedVertices;
 				return false;

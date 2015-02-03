@@ -12,7 +12,8 @@ through the floor as gravity is added to the scene.
 You can completely change all of this if you want, it's your game!
 
 */
-MyGame::MyGame()	{
+MyGame::MyGame()	
+{
 	gameCamera = new Camera(-30.0f,0.0f,Vector3(0,450,850));
 
 	Renderer::GetRenderer().SetCamera(gameCamera);
@@ -51,8 +52,8 @@ MyGame::MyGame()	{
 	PhysicsSystem::GetPhysicsSystem().AddConstraint(s);
 	PhysicsSystem::GetPhysicsSystem().AddDebugDraw(s);
 
-
-	s = new Spring(&ball1->GetPhysicsNode(), Vector3(0,100,0), &quadEntity->GetPhysicsNode(), Vector3(0,-100,-600)); // Note that these are relative positions and the quad is already rotated
+	// Note that these are relative positions and the quad is already rotated
+	s = new Spring(&ball1->GetPhysicsNode(), Vector3(0,100,0), &quadEntity->GetPhysicsNode(), Vector3(0,-100,-600)); 
 	
 	PhysicsSystem::GetPhysicsSystem().AddConstraint(s);
 	PhysicsSystem::GetPhysicsSystem().AddDebugDraw(s);
@@ -83,12 +84,15 @@ Here's the base 'skeleton' of your game update loop! You will presumably
 want your games to have some sort of internal logic to them, and this
 logic will be added to this function.
 */
-void MyGame::UpdateGame(float msec) {
-	if(gameCamera) {
+void MyGame::UpdateGame(float msec) 
+{
+	if(gameCamera) 
+	{
 		gameCamera->UpdateCamera(msec);
 	}
 
-	for(vector<GameEntity*>::iterator i = allEntities.begin(); i != allEntities.end(); ++i) {
+	for(vector<GameEntity*>::iterator i = allEntities.begin(); i != allEntities.end(); ++i) 
+	{
 		(*i)->Update(msec);
 	}
 
@@ -148,7 +152,8 @@ Makes an entity that looks like a CubeRobot! You'll probably want to modify
 this so that you can have different sized robots, with different masses and
 so on!
 */
-GameEntity* MyGame::BuildRobotEntity() {
+GameEntity* MyGame::BuildRobotEntity() 
+{
 	GameEntity*g = new GameEntity(new CubeRobot(), new PhysicsNode());
 
 	g->GetPhysicsNode().SetUseGravity(false);
@@ -173,7 +178,8 @@ GameEntity* MyGame::BuildCubeEntity(float size) {
 /*
 Makes a sphere.
 */
-GameEntity* MyGame::BuildSphereEntity(float radius, Vector3 pos, Vector3 vel) {
+GameEntity* MyGame::BuildSphereEntity(float radius, Vector3 pos, Vector3 vel) 
+{
 	SceneNode* s = new SceneNode(sphere);
 
 	s->SetModelScale(Vector3(radius,radius,radius));
@@ -195,7 +201,8 @@ GameEntity* MyGame::BuildSphereEntity(float radius, Vector3 pos, Vector3 vel) {
 Makes a flat quad, initially oriented such that we can use it as a simple
 floor. 
 */
-GameEntity* MyGame::BuildQuadEntity(float size) {
+GameEntity* MyGame::BuildQuadEntity(float size) 
+{
 	SceneNode* s = new SceneNode(quad);
 
 	s->SetModelScale(Vector3(size,size,size));

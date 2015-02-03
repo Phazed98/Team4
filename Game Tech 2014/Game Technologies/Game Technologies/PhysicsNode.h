@@ -56,8 +56,9 @@ public:
 	
 	float		GetInverseMass() const		{return m_invMass;}
 	float		GetMass() const				{return 1.0f/m_invMass;}
+	float		GetElasticity() const		{ return m_elasticity; }
 
-	Matrix4		GetInverseInertia() const	{ return m_invInertia; }
+	Matrix4		GetInverseInertiaMatrix() const	{ return m_invInertia; }
 
 	Quaternion	GetOrientation() const		{ return m_orientation;}
 	Vector3		GetAngularVelocity() const	{ return m_angularVelocity;}
@@ -87,6 +88,7 @@ public:
 	void	SetTarget(SceneNode *s) { target = s;}
 	void	SetUseGravity(bool value) { useGravity = value; }
 	void	SetCollisionVolume(CollisionVolume* vol) { this->vol = vol; }
+	void	SetElasticity(float value){ m_elasticity = value; }
 
 
 	Vector3	GetForce()	{ return m_force;}
@@ -100,6 +102,7 @@ protected:
 	bool useGravity;
 	bool m_moveable;
 	bool m_atRest;
+	float m_elasticity;
 
 	//<---------LINEAR-------------->
 	Vector3		m_position;

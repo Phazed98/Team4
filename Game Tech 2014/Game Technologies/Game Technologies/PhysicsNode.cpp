@@ -6,12 +6,14 @@ PhysicsNode::PhysicsNode(void): vol(NULL)
 {
 	target = NULL;
 	useGravity = true;
+	m_elasticity = 1.0f;
 }
 
 PhysicsNode::PhysicsNode(Quaternion orientation, Vector3 position): vol(NULL) 
 {
 	m_orientation	= orientation;
 	m_position		= position;
+	m_elasticity = 1.0f;
 	useGravity = true;
 }
 
@@ -20,9 +22,7 @@ PhysicsNode::~PhysicsNode(void)
 
 }
 
-//You will perform your per-object physics integration, here!
-//I've added in a bit that will set the transform of the
-//graphical representation of this object, too.
+
 void	PhysicsNode::Update(float msec) 
 {
 	//Damping Factor
