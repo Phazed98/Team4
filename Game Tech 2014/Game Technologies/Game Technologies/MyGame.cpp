@@ -13,11 +13,13 @@ You can completely change all of this if you want, it's your game!
 
 */
 MyGame::MyGame()	{
-	gameCamera = new Camera(-30.0f,0.0f,Vector3(0,450,850));
+	gameCamera = new Camera(-30.0f,0.0f,Vector3(0,350,-800)); //changed the location Daixi 3.2.2015
 
 	Renderer::GetRenderer().SetCamera(gameCamera);
 
 	CubeRobot::CreateCube();
+
+	PlayerPosition=Vector3(0,100,-400);//new 2.2.2015 Daixi
 
 	/*
 	We're going to manage the meshes we need in our game in the game class!
@@ -31,6 +33,7 @@ MyGame::MyGame()	{
 	cube	= new OBJMesh(MESHDIR"cube.obj");
 	quad	= Mesh::GenerateQuad();
 	sphere	= new OBJMesh(MESHDIR"ico.obj");
+	PlayerMesh = new OBJMesh(MESHDIR"Player.obj"); // 3.2.2015 Daixi
 
 	/*
 	A more 'robust' system would check the entities vector for duplicates so as
@@ -44,6 +47,9 @@ MyGame::MyGame()	{
 	allEntities.push_back(ball0);
 	GameEntity* ball1 = BuildSphereEntity(100.0f, Vector3(-100, 300, -100), Vector3(0, 0, 0));
 	allEntities.push_back(ball1);
+
+	GameEntity* charactor = BuildPlayerEntity(20.0f,Vector3(0,0,0));   //new 2.2.2015  Daixi
+	Player = charactor;   
 
 
 	Spring* s = new Spring(&ball0->GetPhysicsNode(), Vector3(0,100,0), &ball1->GetPhysicsNode(), Vector3(0,-100,0));
@@ -83,9 +89,68 @@ Here's the base 'skeleton' of your game update loop! You will presumably
 want your games to have some sort of internal logic to them, and this
 logic will be added to this function.
 */
+
+//new 3.2.2015    Daixi
+
+void MyGame::UpdatePlayer(float msec){
+	PlayerPosition = Player->GetPhysicsNode().GetPosition();
+
+	if(Player->GetPhysicsNode().GetOrientation().z<-0.3||Player->GetPhysicsNode().GetOrientation().z>0.3){
+		Player->GetPhysicsNode().SetAngularVelocity(Vector3(0,0,0));
+	}
+
+	if(Window::GetKeyboard()->KeyDown(KEYBOARD_A)) {
+		PlayerPosition=PlayerPosition + Vector3(1,0,0)*msec/10;
+		if(Player->GetPhysicsNode().GetOrientation().z>=-0.3){
+			Player->GetPhysicsNode().SetAngularVelocity(Vector3(0,0,-0.0002));
+		}
+		if(Player->GetPhysicsNode().GetOrientation().z>0){
+			Player->GetPhysicsNode().SetAngularVelocity(Vector3(0,0,-0.0007));
+		}
+	}
+
+	if(Window::GetKeyboard()->KeyDown(KEYBOARD_D)) {
+		PlayerPosition=PlayerPosition + Vector3(-1,0,0)*msec/10;
+		if(Player->GetPhysicsNode().GetOrientation().z<=0.3){
+			Player->GetPhysicsNode().SetAngularVelocity(Vector3(0,0,0.0002));
+		}
+		if(Player->GetPhysicsNode().GetOrientation().z<0){
+			Player->GetPhysicsNode().SetAngularVelocity(Vector3(0,0,0.0007));
+		}
+	}
+
+	if(!Window::GetKeyboard()->KeyDown(KEYBOARD_D)&&!Window::GetKeyboard()->KeyDown(KEYBOARD_A)) {
+		if(Player->GetPhysicsNode().GetOrientation().z==0){
+		Player->GetPhysicsNode().SetAngularVelocity(Vector3(0,0,0));
+		}
+		if(Player->GetPhysicsNode().GetOrientation().z<0){
+			Player->GetPhysicsNode().SetAngularVelocity(Vector3(0,0,0.0004));
+		}
+		if(Player->GetPhysicsNode().GetOrientation().z>0){
+			Player->GetPhysicsNode().SetAngularVelocity(Vector3(0,0,-0.0004));
+		}
+	}
+
+	if(Player->GetPhysicsNode().GetPosition().y<=100){
+		Player->GetPhysicsNode().SetLinearVelocity(Vector3(0,0,0));
+		Player->GetPhysicsNode().SetUseGravity(FALSE);
+	}
+	if(Player->GetPhysicsNode().GetLinearVelocity()==Vector3(0,0,0)){
+		if(Window::GetKeyboard()->KeyDown(KEYBOARD_SPACE)){
+			Player->GetPhysicsNode().SetInverseMass(10);
+			Player->GetPhysicsNode().SetUseGravity(TRUE);
+			Player->GetPhysicsNode().SetLinearVelocity(Vector3(0,0.6,0));	
+		}
+	}
+	Player->GetPhysicsNode().SetPosition(PlayerPosition);
+}
+
+
+
 void MyGame::UpdateGame(float msec) {
 	if(gameCamera) {
 		gameCamera->UpdateCamera(msec);
+		UpdatePlayer(msec);//new 3.2.2015 Daixi
 	}
 
 	for(vector<GameEntity*>::iterator i = allEntities.begin(); i != allEntities.end(); ++i) {
@@ -170,6 +235,27 @@ GameEntity* MyGame::BuildCubeEntity(float size) {
 
 	return g;
 }
+
+/*
+Makes a Player. Every game has a crate in it somewhere!
+*/
+GameEntity* MyGame::BuildPlayerEntity(float size, Vector3 pos) {   //new 2.2.2015 Daixi
+	SceneNode* test = new SceneNode(PlayerMesh);
+	test->SetModelScale(Vector3(size,size,size));
+	test->SetBoundingRadius(size);
+	test->SetColour(Vector4(0.2,0.2,0.5,1));
+	PhysicsNode*p = new PhysicsNode();
+
+	p->SetUseGravity(false);
+	pos = Vector3(0,100,-400);
+	p->SetPosition(pos);
+
+
+	GameEntity*g = new GameEntity(test, p);
+	g->ConnectToSystems();
+	return g;
+}
+
 /*
 Makes a sphere.
 */

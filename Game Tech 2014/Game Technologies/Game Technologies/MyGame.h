@@ -46,6 +46,8 @@ public:
 
 	virtual void UpdateGame(float msec);
 
+	void UpdatePlayer(float msec);
+
 protected:
 	GameEntity* BuildRobotEntity();
 
@@ -55,7 +57,11 @@ protected:
 
 	GameEntity* BuildQuadEntity(float size);
 
+	GameEntity* BuildPlayerEntity(float size, Vector3 pos); //new 2.2.2015 Daixi
 
+	Vector3 PlayerPosition; //new 2.2.2015  Daixi
+
+	Mesh* PlayerMesh; //new 3.2.2015 Daixi
 	Mesh* cube;
 	Mesh* quad;
 	Mesh* sphere;

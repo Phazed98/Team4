@@ -7,8 +7,12 @@ last frame (default value is for simplicities sake...)
 */
 void Camera::UpdateCamera(float msec)	{
 	//Update the mouse by how much
-	pitch -= (Window::GetMouse()->GetRelativePosition().y);
-	yaw	  -= (Window::GetMouse()->GetRelativePosition().x);
+
+	//changed someting to test  Daixi 3.2.2015
+	pitch = -30.0f;
+	yaw = 180.0f;
+	//pitch -= (Window::GetMouse()->GetRelativePosition().y);
+	//yaw	  -= (Window::GetMouse()->GetRelativePosition().x);
 
 	//Bounds check the pitch, to be between straight up and straight down ;)
 	pitch = min(pitch,90.0f);
@@ -23,25 +27,27 @@ void Camera::UpdateCamera(float msec)	{
 
 	msec *= 5.0f;
 
+	//make some change, because the camara speed too fast Daixi 3.2.2015
+
 	if(Window::GetKeyboard()->KeyDown(KEYBOARD_W)) {
-		position += Matrix4::Rotation(yaw, Vector3(0,1,0)) * Vector3(0,0,-1) * msec;
+		position += Matrix4::Rotation(yaw, Vector3(0,1,0)) * Vector3(0,0,-1) * msec/100;
 	}
 	if(Window::GetKeyboard()->KeyDown(KEYBOARD_S)) {
-		position -= Matrix4::Rotation(yaw, Vector3(0,1,0)) * Vector3(0,0,-1) * msec;
+		position -= Matrix4::Rotation(yaw, Vector3(0,1,0)) * Vector3(0,0,-1) * msec/100;
 	}
 
 	if(Window::GetKeyboard()->KeyDown(KEYBOARD_A)) {
-		position += Matrix4::Rotation(yaw, Vector3(0,1,0)) * Vector3(-1,0,0) * msec;
+		position += Matrix4::Rotation(yaw, Vector3(0,1,0)) * Vector3(-1,0,0) * msec/100;
 	}
 	if(Window::GetKeyboard()->KeyDown(KEYBOARD_D)) {
-		position -= Matrix4::Rotation(yaw, Vector3(0,1,0)) * Vector3(-1,0,0) * msec;
+		position -= Matrix4::Rotation(yaw, Vector3(0,1,0)) * Vector3(-1,0,0) * msec/100;
 	}
 
 	if(Window::GetKeyboard()->KeyDown(KEYBOARD_SHIFT)) {
 		position.y += msec;
 	}
 	if(Window::GetKeyboard()->KeyDown(KEYBOARD_SPACE)) {
-		position.y -= msec;
+		//position.y -= msec;
 	}
 }
 

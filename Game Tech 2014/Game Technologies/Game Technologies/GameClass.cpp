@@ -13,6 +13,7 @@ GameClass::~GameClass(void)	{
 	for(vector<GameEntity*>::iterator i = allEntities.begin(); i != allEntities.end(); ++i) {
 		delete (*i);
 	}
+	delete Player;  //new 2.2.2015 Daixi
 	delete gameCamera;
 }
 
