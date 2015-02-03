@@ -61,6 +61,8 @@ public:
 	Quaternion	GetOrientation() const		{ return m_orientation;}
 	Vector3		GetAngularVelocity() const	{ return m_angularVelocity;}
 
+	SceneNode*			getTarget()				const	{ return target; }
+
 	CollisionVolume* GetCollisionVolume() const { return vol; }
 
 	Matrix4		BuildTransform();

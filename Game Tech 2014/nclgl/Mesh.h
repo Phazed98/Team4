@@ -56,6 +56,10 @@ public:
 	//Gets the Mesh's diffuse map. Returns an OpenGL texture 'name'
 	GLuint  GetTexture()			{return texture;}
 
+	//Returns an Array of Vertices
+	Vector3* getVertices()	{ return vertices; }
+	int getNumVertices() { return numVertices; }
+
 	void	SetColour(Vector4* colour) {colours = colour;} //NX 24/10/2012
 
 	//Sets the Mesh's bump map. Takes an OpenGL texture 'name'

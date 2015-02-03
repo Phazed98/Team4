@@ -46,6 +46,7 @@ Vector3 Camera::getFacingVector()
 
 	return faceVector;
 }
+
 Matrix4 Camera::BuildViewMatrix()
 {
 	return	Matrix4::Rotation(-pitch, Vector3(-1, 0, 0)) *
