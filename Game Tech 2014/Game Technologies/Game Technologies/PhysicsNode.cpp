@@ -20,7 +20,8 @@ PhysicsNode::~PhysicsNode(void)	{
 //You will perform your per-object physics integration, here!
 //I've added in a bit that will set the transform of the
 //graphical representation of this object, too.
-void	PhysicsNode::Update(float msec) {
+void	PhysicsNode::Update(float msec) 
+{
 	//FUN GOES HERE
 
 	Vector3 acc = m_force*m_invMass + (useGravity? gravity: Vector3(0,0,0));
@@ -42,12 +43,14 @@ void	PhysicsNode::Update(float msec) {
 	m_force = Vector3(0,0,0);
 	m_torque = Vector3(0,0,0);
 
-	if(target) {
+	if(target) 
+	{
 		target->SetTransform(BuildTransform());
 	}
 }
 
-void PhysicsNode::AddForce(Vector3 point, Vector3 force) {
+void PhysicsNode::AddForce(Vector3 point, Vector3 force) 
+{
 	m_force = m_force + force;
 	m_torque = m_torque + Vector3::Cross(point - m_position, force);
 }
@@ -64,7 +67,8 @@ physics processing and 'game-side' logic, it is much neater to
 have seperate orientations and positions.
 
 */
-Matrix4		PhysicsNode::BuildTransform() {
+Matrix4		PhysicsNode::BuildTransform() 
+{
 	Matrix4 m = m_orientation.ToMatrix();
 
 	m.SetPositionVector(m_position);
