@@ -43,6 +43,7 @@ _-_-_-_-_-_-_-""  ""
 #define LINEAR_VELOCITY_DAMP 0.998
 #define ANGULAR_VELOCITY_DAMP 0.998
 #define LINEAR_VELOCITY_MIN 0.00001
+#define RESTCHECKFRAMES 12
 
 class PhysicsNode	{
 public:
@@ -68,6 +69,9 @@ public:
 	Matrix4		BuildTransform();
 
 	virtual void		Update(float msec);
+	void		updateLinear(float msec);
+	void		updateAngular(float msec);
+	void		CalculateAvgVel();
 
 	void	SetPosition(Vector3 vec) { m_position = vec; }
 	void	SetLinearVelocity(Vector3 vec)		{ m_linearVelocity = vec;}
@@ -94,12 +98,16 @@ public:
 
 protected:
 	bool useGravity;
+	bool m_moveable;
+	bool m_atRest;
 
 	//<---------LINEAR-------------->
 	Vector3		m_position;
 	Vector3		m_linearVelocity;
 	Vector3		m_force;
 	float		m_invMass;
+	Vector3 m_avgVelocity;
+	Vector3 avgVel[RESTCHECKFRAMES];
 
 	//<----------ANGULAR--------------->
 	Quaternion  m_orientation;

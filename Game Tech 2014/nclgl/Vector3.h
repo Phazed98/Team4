@@ -47,8 +47,14 @@ public:
 		x = y = z = 0.0f;
 	}
 
-	float			Length() const {
+	float			Length() const 
+	{
 		return sqrt((x*x)+(y*y)+(z*z));	
+	}
+
+	float			LengthSqrd() const
+	{
+		return((x*x) + (y*y) + (z*z));
 	}
 
 	void			Invert() {

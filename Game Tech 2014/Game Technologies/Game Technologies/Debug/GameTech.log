@@ -1,11 +1,11 @@
-﻿Build started 03/02/2015 12:17:38.
+﻿Build started 03/02/2015 13:31:12.
      1>Project "C:\Users\cmdadmin\Desktop\Github\Team4\Game Tech 2014\Game Technologies\Game Technologies\GameTech.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt PhysicsNode.cpp
          PhysicsNode.cpp
      1>c:\users\cmdadmin\desktop\github\team4\game tech 2014\game technologies\game technologies\physicsnode.cpp(3): warning C4305: 'argument' : truncation from 'double' to 'const float'
+     1>c:\users\cmdadmin\desktop\github\team4\game tech 2014\game technologies\game technologies\physicsnode.cpp(29): warning C4305: 'argument' : truncation from 'double' to 'const float'
      1>c:\users\cmdadmin\desktop\github\team4\game tech 2014\game technologies\game technologies\physicsnode.cpp(30): warning C4305: 'argument' : truncation from 'double' to 'const float'
-     1>c:\users\cmdadmin\desktop\github\team4\game tech 2014\game technologies\game technologies\physicsnode.cpp(39): warning C4305: 'argument' : truncation from 'double' to 'const float'
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\cmdadmin\Desktop\Github\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\cmdadmin\Desktop\Github\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\cmdadmin\Desktop\Github\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.lib" /MACHINE:X86 Debug\CollisionHelper.obj
          Debug\GameClass.obj
@@ -24,4 +24,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.00
+Time Elapsed 00:00:02.57
