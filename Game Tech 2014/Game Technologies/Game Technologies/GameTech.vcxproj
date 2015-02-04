@@ -70,6 +70,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CollisionHelper.cpp" />
+    <ClCompile Include="EarthPlane.cpp" />
     <ClCompile Include="GameClass.cpp" />
     <ClCompile Include="GameEntity.cpp" />
     <ClCompile Include="GJK.cpp" />
@@ -86,6 +87,7 @@
     <ClInclude Include="CollisionVolume.h" />
     <ClInclude Include="Constraint.h" />
     <ClInclude Include="DebugDrawer.h" />
+    <ClInclude Include="EarthPlane.h" />
     <ClInclude Include="GameClass.h" />
     <ClInclude Include="GameEntity.h" />
     <ClInclude Include="GJK.h" />

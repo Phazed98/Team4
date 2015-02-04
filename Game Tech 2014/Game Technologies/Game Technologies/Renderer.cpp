@@ -7,6 +7,10 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)	{
 
 	root			= new SceneNode();
 
+	EarthPlane* epln = new EarthPlane(10, 100, 100, 10);
+
+	epln->CreateMap();
+
 	simpleShader	= new Shader(SHADERDIR"TechVertex.glsl", SHADERDIR"TechFragment.glsl");
 
 	if(!simpleShader->LinkProgram() ){
@@ -16,6 +20,8 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)	{
 	instance		= this;
 
 	init			= true;
+
+	
 }
 
 Renderer::~Renderer(void)	{

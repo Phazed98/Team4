@@ -37,6 +37,7 @@ _-_-_-_-_-_-_-""  ""
 #include "../../nclgl/Camera.h"
 #include "../../nclgl/Frustum.h"
 #include <algorithm>
+#include "EarthPlane.h"
 
 class Renderer : public OGLRenderer	{
 public:
