@@ -46,7 +46,6 @@ MyGame::MyGame()
 	GameEntity* ball1 = BuildSphereEntity(100.0f, Vector3(-100, 300, -100), Vector3(0, 0, 0));
 	allEntities.push_back(ball1);
 
-
 	Spring* s = new Spring(&ball0->GetPhysicsNode(), Vector3(0,100,0), &ball1->GetPhysicsNode(), Vector3(0,-100,0));
 	
 	PhysicsSystem::GetPhysicsSystem().AddConstraint(s);
@@ -95,42 +94,6 @@ void MyGame::UpdateGame(float msec)
 	{
 		(*i)->Update(msec);
 	}
-
-	/*
-	Here's how we can use OGLRenderer's inbuilt debug-drawing functions! 
-	I meant to talk about these in the graphics module - Oops!
-
-	We can draw squares, lines, crosses and circles, of varying size and
-	colour - in either perspective or orthographic mode.
-
-	Orthographic debug drawing uses a 'virtual canvas' of 720 * 480 - 
-	that is 0,0 is the top left, and 720,480 is the bottom right. A function
-	inside OGLRenderer is provided to convert clip space coordinates into
-	this canvas space coordinates. How you determine clip space is up to you -
-	maybe your renderer has getters for the view and projection matrix?
-
-	Or maybe your Camera class could be extended to contain a projection matrix?
-	Then your game would be able to determine clip space coordinates for its
-	active Camera without having to involve the Renderer at all?
-
-	Perspective debug drawing relies on the view and projection matrices inside
-	the renderer being correct at the point where 'SwapBuffers' is called. As
-	long as these are valid, your perspective drawing will appear in the world.
-
-	This gets a bit more tricky with advanced rendering techniques like deferred
-	rendering, as there's no guarantee of the state of the depth buffer, or that
-	the perspective matrix isn't orthographic. Therefore, you might want to draw
-	your debug lines before the inbuilt position before SwapBuffers - there are
-	two OGLRenderer functions DrawDebugPerspective and DrawDebugOrtho that can
-	be called at the appropriate place in the pipeline. Both take in a viewProj
-	matrix as an optional parameter.
-
-	Debug rendering uses its own debug shader, and so should be unaffected by
-	and shader changes made 'outside' of debug drawing
-
-
-	Lets draw a box around the cube robot!
-	*/
 
 	Renderer::GetRenderer().DrawDebugBox(DEBUGDRAW_PERSPECTIVE, Vector3(0,51,0), Vector3(100,100,100), Vector3(1,0,0));
 

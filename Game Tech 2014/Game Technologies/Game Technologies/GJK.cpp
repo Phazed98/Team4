@@ -13,6 +13,8 @@ GJK::~GJK()
 
 bool GJK::CollisionDetection(PhysicsNode& n0, PhysicsNode& n1, CollisionData* cd)
 {
+
+	//return false;
 	//Default Direction
 	Vector3 dir = Vector3(1, 1, 1);
 
@@ -118,10 +120,10 @@ bool GJK::CollisionDetection(PhysicsNode& n0, PhysicsNode& n1, CollisionData* cd
 				9 End EPA.
 				*/
 
-				if (a == Vector3(0, 0, 0) || b == Vector3(0, 0, 0) || c == Vector3(0, 0, 0) || d == Vector3(0, 0, 0))
-				{
-					return false;
-				}
+				//if (a == Vector3(0, 0, 0) || b == Vector3(0, 0, 0) || c == Vector3(0, 0, 0) || d == Vector3(0, 0, 0))
+				//{
+				//	return false;
+				//}
 
 				/*1 Take over the simplex from GJK when GJK terminated, and “blow up” the simplex to a tetrahedron if it contains less than 4 vertices.Assuming Now that we dont need this 
 				*/
@@ -175,11 +177,11 @@ bool GJK::CollisionDetection(PhysicsNode& n0, PhysicsNode& n1, CollisionData* cd
 						// penetration depth
 						cd->m_penetration = distToOrigin * 0.1;
 
-						if (cd->m_penetration > 6 || cd->m_penetration < 0)
-							return false;
+						//if (cd->m_penetration > 6 || cd->m_penetration < 0)
+						//	return false;
 
-						if (cd->m_normal.Length() > 1.1 || cd->m_normal.Length() < 0.9)
-							return false;
+						//if (cd->m_normal.Length() > 1.1 || cd->m_normal.Length() < 0.9)
+						//	return false;
 
 
 						triVector.clear();
