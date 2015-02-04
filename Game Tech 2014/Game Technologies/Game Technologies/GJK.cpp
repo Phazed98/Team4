@@ -56,20 +56,20 @@ bool GJK::CollisionDetection(PhysicsNode& n0, PhysicsNode& n1, CollisionData* cd
 	//Get first Point of TetraHedron
 	c = Support(Object0FixedVertices, Object0VertexCount, Object1FixedVertices, Object1VertexCount, dir);
 
-	dir = -(c.vector);
+	dir = -(c.getPoint());
 
 	//Get Point Opposite point C's normal
 	b = Support(Object0FixedVertices, Object0VertexCount, Object1FixedVertices, Object1VertexCount, dir);
 
 	//Early Out because is invalid
-	if (Vector3::Dot(b.vector, dir) < 0)
+	if (Vector3::Dot(b.getPoint(), dir) < 0)
 	{
 		delete[] Object0FixedVertices;
 		delete[] Object1FixedVertices;
 		return false;
 	}
 
-	dir = Vector3::DoubleCross(c.vector - b.vector, -b.vector);
+	dir = Vector3::DoubleCross(c.getPoint() - b.getPoint(), -b.getPoint());
 
 	nrPointsSimplex = 2;
 
@@ -81,7 +81,7 @@ bool GJK::CollisionDetection(PhysicsNode& n0, PhysicsNode& n1, CollisionData* cd
 		a = Support(Object0FixedVertices, Object0VertexCount, Object1FixedVertices, Object1VertexCount, dir);
 
 		//A is invalid so early out, YAY!!!
-		if (Vector3::Dot(a.vector, dir) < 0)
+		if (Vector3::Dot(a.getPoint(), dir) < 0)
 		{
 			delete[] Object0FixedVertices;
 			delete[] Object1FixedVertices;
@@ -145,7 +145,7 @@ bool GJK::CollisionDetection(PhysicsNode& n0, PhysicsNode& n1, CollisionData* cd
 					*/
 					Triangle tempT = triVector.at(findTriangle());
 					SupportPoint entry_cur_support = Support(Object0FixedVertices, Object0VertexCount, Object1FixedVertices, Object1VertexCount, tempT.triNormal);
-					float vecLength = Vector3::Dot(entry_cur_support.vector, tempT.triNormal);
+					float vecLength = Vector3::Dot(entry_cur_support.getPoint(), tempT.triNormal);
 
 					/*4 If the closest face is no closer(by a certain threshold) to the origin than the previously picked one, go to 8. (8 = collisionData generation)
 					*/
@@ -156,17 +156,17 @@ bool GJK::CollisionDetection(PhysicsNode& n0, PhysicsNode& n1, CollisionData* cd
 
 						float bary_u, bary_v, bary_w;
 						barycentric(tempT.triNormal * vecLength,
-							tempT.a.vector,
-							tempT.b.vector,
-							tempT.c.vector,
+							tempT.a.getPoint(),
+							tempT.b.getPoint(),
+							tempT.c.getPoint(),
 							&bary_u,
 							&bary_v,
 							&bary_w);
 
 						// collision point on object a in world space
-						cd->m_point = (tempT.a.sup_a * bary_u) +
-							(tempT.b.sup_b * bary_v) +
-							(tempT.c.sup_a * bary_w);
+						cd->m_point = (tempT.a.getpointInA() * bary_u) +
+							(tempT.b.getpointInB() * bary_v) +
+							(tempT.c.getpointInA() * bary_w);
 
 						// collision normal
 
@@ -193,18 +193,18 @@ bool GJK::CollisionDetection(PhysicsNode& n0, PhysicsNode& n1, CollisionData* cd
 					distToOrigin = vecLength;
 
 					//Determine to remove = Iterate though triangles 
-					// If dot product of (triangles normal, supportpoint - currentTriangleFirstpoint)
+					// If dot product of (triangles normal, SupportPoint - currentTriangleFirstpoint)
 				
 					/*
 					5 Remove the closest face, use the face normal(outward pointing) as the search direction to find a support point on the CSO. Remove Triangle and Add its edges to the edgeVector
 					*/
 			
 
-					// If dot product of (triangles normal, supportpoint - currentTriangleFirstpoint)
+					// If dot product of (triangles normal, SupportPoint - currentTriangleFirstpoint)
 					for (auto i = triVector.begin(); i != triVector.end();)
 					{
 						Triangle& t = *i;
-						if (Vector3::Dot(t.triNormal, (entry_cur_support.vector - t.a.vector)) > 0)
+						if (Vector3::Dot(t.triNormal, (entry_cur_support.getPoint() - t.a.getPoint())) > 0)
 						{
 							addEdge(t.a, t.b);
 							addEdge(t.b, t.c);
@@ -269,9 +269,9 @@ bool GJK::ContainsOrigin(Vector3& dir)
 
 bool GJK::triangle(Vector3& dir)
 {
-	Vector3 ao = Vector3(-a.vector.x, -a.vector.y, -a.vector.z);
-	Vector3 ab = b.vector - a.vector;
-	Vector3 ac = c.vector - a.vector;
+	Vector3 ao = Vector3(-a.getPoint().x, -a.getPoint().y, -a.getPoint().z);
+	Vector3 ab = b.getPoint() - a.getPoint();
+	Vector3 ac = c.getPoint() - a.getPoint();
 	Vector3 abc = Vector3::Cross(ab, ac);
 
 	Vector3 ab_abc = Vector3::Cross(ab, abc);
@@ -328,9 +328,9 @@ bool GJK::triangle(Vector3& dir)
 bool GJK::tetrahedron(Vector3& dir)
 {
 	//Create the existing points
-	Vector3 ao = -a.vector;
-	Vector3 ab = b.vector - a.vector;
-	Vector3 ac = c.vector - a.vector;
+	Vector3 ao = -a.getPoint();
+	Vector3 ab = b.getPoint() - a.getPoint();
+	Vector3 ac = c.getPoint() - a.getPoint();
 
 	//Build the abc triangle
 	Vector3 abc = Vector3::Cross(ab, ac);
@@ -344,7 +344,7 @@ bool GJK::tetrahedron(Vector3& dir)
 
 
 	// First Triangle didnt see the origin, check second triangle
-	Vector3 ad = d.vector - a.vector;
+	Vector3 ad = d.getPoint() - a.getPoint();
 
 	//Build the acd triangle
 	Vector3 acd = Vector3::Cross(ac, ad);
@@ -482,7 +482,7 @@ int GJK::findTriangle()
 
 	for (Triangle t : triVector)
 	{
-		float triValue = Vector3::Dot(t.triNormal, t.a.vector);
+		float triValue = Vector3::Dot(t.triNormal, t.a.getPoint());
 
 		if (triValue < value)
 		{
