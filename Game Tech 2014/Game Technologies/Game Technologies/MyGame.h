@@ -35,6 +35,7 @@ _-_-_-_-_-_-_-""  ""
 
 #pragma once
 #include "GameEntity.h"
+#include "ObjectType.h"
 #include "GameClass.h"
 #include "../nclgl/Camera.h"
 #include "../nclgl/CubeRobot.h"
@@ -55,7 +56,7 @@ protected:
 
 	GameEntity* BuildQuadEntity(float size);
 
-	GameEntity* BuildObjectEntity(float size);
+	GameEntity* BuildObjectEntity(float size, int type, int subType);
 
 
 	Mesh* cube;

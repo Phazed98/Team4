@@ -1,24 +1,25 @@
-﻿Build started 04/02/2015 17:12:04.
-     1>Project "C:\Users\cmdadmin\Desktop\Github\Team4\Game Tech 2014\Game Technologies\Game Technologies\GameTech.vcxproj" on node 2 (Build target(s)).
+﻿Build started 04/02/2015 18:34:34.
+     1>Project "C:\Users\cmdadmin\Documents\GitHub\Team4\Game Tech 2014\Game Technologies\Game Technologies\GameTech.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt PhysicsSystem.cpp
-         PhysicsSystem.cpp
-     1>c:\users\cmdadmin\desktop\github\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(14): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\cmdadmin\desktop\github\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(43): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\cmdadmin\desktop\github\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(46): warning C4018: '<' : signed/unsigned mismatch
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Main.cpp MyGame.cpp
+         MyGame.cpp
+         Generating Code...
+         Skipping... (no relevant changes detected)
+         Main.cpp
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\cmdadmin\Desktop\Github\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\cmdadmin\Desktop\Github\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\cmdadmin\Desktop\Github\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.lib" /MACHINE:X86 /FORCE:MULTIPLE Debug\CollisionHelper.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\cmdadmin\Documents\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\cmdadmin\Documents\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\cmdadmin\Documents\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.lib" /MACHINE:X86 /FORCE:MULTIPLE Debug\CollisionHelper.obj
          Debug\GameClass.obj
          Debug\GameEntity.obj
          Debug\GJK.obj
          Debug\Main.obj
          Debug\MyGame.obj
+         Debug\ObjectType.obj
          Debug\PhysicsNode.obj
          Debug\PhysicsSystem.obj
          Debug\Renderer.obj
          Debug\Spring.obj
          Debug\SpringDemo.obj
-         "C:\Users\cmdadmin\Desktop\Github\Team4\Game Tech 2014\Game Technologies\Debug\nclgl.lib"
+         "C:\Users\cmdadmin\Documents\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\nclgl.lib"
      1>LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/FORCE' specification
      1>CollisionHelper.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/OPT:LBR' specification
      1>PhysicsSystem.obj : warning LNK4006: "public: __thiscall SupportPoint::SupportPoint(class Vector3 &,class Vector3 &,class Vector3 &)" (??0SupportPoint@@QAE@AAVVector3@@00@Z) already defined in GJK.obj; second definition ignored
@@ -29,23 +30,22 @@
      1>Renderer.obj : warning LNK4049: locally defined symbol ___glewUniform4fv imported
      1>Renderer.obj : warning LNK4049: locally defined symbol ___glewUniformMatrix4fv imported
      1>Renderer.obj : warning LNK4049: locally defined symbol ___glewUseProgram imported
-     1>C:\Users\cmdadmin\Desktop\Github\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.exe : warning LNK4088: image being generated due to /FORCE option; image may not run
-     1>SpringDemo.obj : warning LNK4099: PDB 'vc120.pdb' was not found with 'SpringDemo.obj' or at 'C:\Users\cmdadmin\Desktop\Github\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
-     1>Spring.obj : warning LNK4099: PDB 'vc120.pdb' was not found with 'Spring.obj' or at 'C:\Users\cmdadmin\Desktop\Github\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
-     1>Renderer.obj : warning LNK4099: PDB 'vc120.pdb' was not found with 'Renderer.obj' or at 'C:\Users\cmdadmin\Desktop\Github\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
-     1>PhysicsNode.obj : warning LNK4099: PDB 'vc120.pdb' was not found with 'PhysicsNode.obj' or at 'C:\Users\cmdadmin\Desktop\Github\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
-     1>Main.obj : warning LNK4099: PDB 'vc120.pdb' was not found with 'Main.obj' or at 'C:\Users\cmdadmin\Desktop\Github\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
-     1>GameEntity.obj : warning LNK4099: PDB 'vc120.pdb' was not found with 'GameEntity.obj' or at 'C:\Users\cmdadmin\Desktop\Github\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
-     1>GameClass.obj : warning LNK4099: PDB 'vc120.pdb' was not found with 'GameClass.obj' or at 'C:\Users\cmdadmin\Desktop\Github\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
-     1>CollisionHelper.obj : warning LNK4099: PDB 'vc120.pdb' was not found with 'CollisionHelper.obj' or at 'C:\Users\cmdadmin\Desktop\Github\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
-     1>glew32.lib(glew.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'glew32.lib(glew.obj)' or at 'C:\Users\cmdadmin\Desktop\Github\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
-     1>SOIL.lib(image_DXT.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'SOIL.lib(image_DXT.obj)' or at 'C:\Users\cmdadmin\Desktop\Github\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
-     1>SOIL.lib(image_helper.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'SOIL.lib(image_helper.obj)' or at 'C:\Users\cmdadmin\Desktop\Github\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
-     1>SOIL.lib(SOIL.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'SOIL.lib(SOIL.obj)' or at 'C:\Users\cmdadmin\Desktop\Github\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
-     1>SOIL.lib(stb_image_aug.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'SOIL.lib(stb_image_aug.obj)' or at 'C:\Users\cmdadmin\Desktop\Github\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
-         GameTech.vcxproj -> C:\Users\cmdadmin\Desktop\Github\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.exe
-     1>Done Building Project "C:\Users\cmdadmin\Desktop\Github\Team4\Game Tech 2014\Game Technologies\Game Technologies\GameTech.vcxproj" (Build target(s)).
+     1>C:\Users\cmdadmin\Documents\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.exe : warning LNK4088: image being generated due to /FORCE option; image may not run
+     1>SpringDemo.obj : warning LNK4099: PDB 'vc120.pdb' was not found with 'SpringDemo.obj' or at 'C:\Users\cmdadmin\Documents\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
+     1>Spring.obj : warning LNK4099: PDB 'vc120.pdb' was not found with 'Spring.obj' or at 'C:\Users\cmdadmin\Documents\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
+     1>Renderer.obj : warning LNK4099: PDB 'vc120.pdb' was not found with 'Renderer.obj' or at 'C:\Users\cmdadmin\Documents\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
+     1>PhysicsNode.obj : warning LNK4099: PDB 'vc120.pdb' was not found with 'PhysicsNode.obj' or at 'C:\Users\cmdadmin\Documents\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
+     1>GameEntity.obj : warning LNK4099: PDB 'vc120.pdb' was not found with 'GameEntity.obj' or at 'C:\Users\cmdadmin\Documents\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
+     1>GameClass.obj : warning LNK4099: PDB 'vc120.pdb' was not found with 'GameClass.obj' or at 'C:\Users\cmdadmin\Documents\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
+     1>CollisionHelper.obj : warning LNK4099: PDB 'vc120.pdb' was not found with 'CollisionHelper.obj' or at 'C:\Users\cmdadmin\Documents\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
+     1>glew32.lib(glew.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'glew32.lib(glew.obj)' or at 'C:\Users\cmdadmin\Documents\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
+     1>SOIL.lib(image_DXT.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'SOIL.lib(image_DXT.obj)' or at 'C:\Users\cmdadmin\Documents\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
+     1>SOIL.lib(image_helper.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'SOIL.lib(image_helper.obj)' or at 'C:\Users\cmdadmin\Documents\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
+     1>SOIL.lib(SOIL.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'SOIL.lib(SOIL.obj)' or at 'C:\Users\cmdadmin\Documents\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
+     1>SOIL.lib(stb_image_aug.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'SOIL.lib(stb_image_aug.obj)' or at 'C:\Users\cmdadmin\Documents\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
+         GameTech.vcxproj -> C:\Users\cmdadmin\Documents\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.exe
+     1>Done Building Project "C:\Users\cmdadmin\Documents\GitHub\Team4\Game Tech 2014\Game Technologies\Game Technologies\GameTech.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.94
+Time Elapsed 00:00:01.31

@@ -61,6 +61,11 @@ MyGame::MyGame()
 	
 	PhysicsSystem::GetPhysicsSystem().AddConstraint(demo);
 	PhysicsSystem::GetPhysicsSystem().AddDebugDraw(demo);
+
+
+	GameEntity* plane = BuildObjectEntity(200, 1, 1);
+	allEntities.push_back(plane);
+
 	
 }
 
@@ -179,5 +184,21 @@ GameEntity* MyGame::BuildQuadEntity(float size)
 	p->SetCollisionVolume(new CollisionPlane(Vector3(0,1,0), 0));
 	GameEntity*g = new GameEntity(s, p);
 	g->ConnectToSystems();
+	return g;
+}
+
+GameEntity* MyGame::BuildObjectEntity(float size, int type, int subType) {
+	SceneNode* s = new SceneNode(cube);
+	PhysicsNode* p = new PhysicsNode();
+	p->SetUseGravity(false);
+
+	ObjectType*g = new ObjectType(s, p, 1, 1);
+	g->ConnectToSystems();
+	
+	SceneNode &test = g->GetRenderNode();
+
+	test.SetModelScale(Vector3(size, size / 2, size * 2));
+	test.SetBoundingRadius(size);
+
 	return g;
 }

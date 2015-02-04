@@ -17,5 +17,7 @@ protected:
 	int subType; // 1- top plane, 2- right plane, 3- down plane, 4- left plane
 
 	int state; // 
+
+	void SetInitialPosition(); // Initialise the position of an object depending on its type and subtype
 };
 
