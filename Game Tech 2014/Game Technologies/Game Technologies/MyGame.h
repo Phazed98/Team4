@@ -55,6 +55,8 @@ protected:
 
 	GameEntity* BuildQuadEntity(float size);
 
+	GameEntity* BuildObjectEntity(float size);
+
 
 	Mesh* cube;
 	Mesh* quad;
