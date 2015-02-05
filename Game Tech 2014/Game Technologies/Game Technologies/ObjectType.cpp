@@ -33,9 +33,8 @@ void ObjectType::Update(float msec)
 		}
 		else if (state == 2)
 		{
-			if (physicsNode->GetPosition().z < -(length*7))
+			if (physicsNode->GetPosition().z < -(length*15))
 			{
-				this->DisconnectFromSystems();
 				state = 3;
 			}
 		}
@@ -67,4 +66,12 @@ void ObjectType::SetInitialAttributes()
 		physicsNode->SetOrientation(Quaternion(0, 0, 1, 1));
 		renderNode->SetColour(Vector4(0, 1, 0, 1));
 	}
+}
+
+void ObjectType::reset()
+{
+	state = 0;
+	SetInitialAttributes();
+	length = 800.0f;
+	random = 1;
 }

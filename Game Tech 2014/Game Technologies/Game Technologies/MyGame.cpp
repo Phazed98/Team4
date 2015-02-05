@@ -19,6 +19,11 @@ MyGame::MyGame()
 	elements.push_back(bottom);
 	elements.push_back(left);
 
+	reference.push_back(top);
+	reference.push_back(right);
+	reference.push_back(bottom);
+	reference.push_back(left);
+
 	gameCamera = new Camera(-30.0f,0.0f,Vector3(0,450,850));
 
 	Renderer::GetRenderer().SetCamera(gameCamera);
@@ -94,6 +99,9 @@ MyGame::~MyGame(void)
 
 	CubeRobot::DeleteCube();
 
+	elements.clear();
+	reference.clear();
+
 	//GameClass destructor will destroy your entities for you...
 }
 
@@ -104,7 +112,7 @@ logic will be added to this function.
 */
 void MyGame::UpdateGame(float msec) 
 {
-	cout << "\nObject Count:" << allEntities.size() << "  elements:" << elements[0].size();
+	//cout << "\nObject Count:" << allEntities.size() << "  elements:" << elements[0].size();
 	if(gameCamera) 
 	{
 		gameCamera->UpdateCamera(msec);
@@ -116,39 +124,7 @@ void MyGame::UpdateGame(float msec)
 	
 	}
 
-		for (int i = 0; i < 4; i++)
-		{
-
-			for (int j = 0; j < elements[i].size(); j++)
-			{
-				if (elements[i][j]->getState() == 1)
-				{
-
-					//create new
-					allEntities.push_back(BuildObjectEntity(200, 0, i));
-
-					//change state
-					elements[i][j]->setState(2);
-
-				}
-				else if (elements[i][j]->getState() == 3)
-				{
-
-					elements[i][j]->setState(4);
-
-					allEntities.erase(allEntities.begin() + getIndexOfAllEtities(elements[i][j]));
-
-					//elements[i][j]->DisconnectFromSystems();
-					//remove from all entities
-				
-
-					// remove from elements list
-					elements[i].erase(elements[i].begin() + j);
-					j = 4;
-
-				}
-			}
-		}
+	handlePlanes();
 
 	Renderer::GetRenderer().DrawDebugBox(DEBUGDRAW_PERSPECTIVE, Vector3(0,51,0), Vector3(100,100,100), Vector3(1,0,0));
 
@@ -253,14 +229,22 @@ ObjectType* MyGame::BuildObjectEntity(float size, int type, int subType) {
 	{
 		if (getDrawingPlanes(subType) > 1)
 		{
-			g->setRandom(rand() % 10 + 1);
+			g->setRandom(rand() % 3 + 1);
 		}
 	}
 
 	elements[subType].push_back(g);
 
+	while(reference[subType].size() > 0)
+	{
+		reference[subType].pop_back();
+	}
+
+	reference[subType].push_back(g);
+	
 	return g;
 }
+
 int MyGame::getIndexOfAllEtities(GameEntity* _G)
 {
 	int index = -1;
@@ -293,13 +277,77 @@ int MyGame::getIndexOfElements(ObjectType* _G)
 int MyGame::getDrawingPlanes(int _subType)
 {
 	int count = 0;
-	for (int i = 0; i < elements.size(); i++)
+	for (int i = 0; i <4; i++)
 	{
-		if (elements[i].size()>0)
-		if (elements[i][elements[i].size()-1]->getRandom() == 1 && i!=_subType )
+		if (reference[i].size() > 0)
 		{
-			count++;
+			cout << "\nrandomvalue" << reference[i][0]->getRandom();
+			if (reference[i][0]->getRandom() == 1 && i != _subType)
+			{
+				count++;
+			}
 		}
 	}
+	cout << "Count:"<<count<<"\n\n";
 	return count;
+}
+int MyGame::getEmptyIndex(int _subType)
+{
+	for (int i = 0; i < elements[_subType].size(); i++)
+	{
+		if (elements[_subType][i]->getState() == 4)
+		{
+			return i;
+		}
+	}
+	return -1;
+}
+
+void MyGame::handlePlanes()
+{
+	for (int i = 0; i < 4; i++)
+	{
+
+		for (int j = 0; j < elements[i].size(); j++)
+		{
+			if (elements[i][j]->getState() == 1)
+			{
+
+				//create new
+				if (getEmptyIndex(i) == -1)
+				{
+					allEntities.push_back(BuildObjectEntity(200, 0, i));
+				}
+				else
+				{
+					int x = getEmptyIndex(i);
+
+					elements[i][x]->reset();
+					while (reference[i].size()>0)
+						reference[i].pop_back();
+
+					reference[i].push_back(elements[i][x]);
+					if ((rand() % 100 + 1) > 50)
+					{
+						if (getDrawingPlanes(i) > 0)
+						{
+							elements[i][x]->setRandom(rand() % 10 + 1);
+						}
+					}
+					allEntities.push_back(elements[i][x]);
+				}
+				//change state
+				elements[i][j]->setState(2);
+
+			}
+			else if (elements[i][j]->getState() == 3)
+			{
+
+				elements[i][j]->setState(4);
+
+				allEntities.erase(allEntities.begin() + getIndexOfAllEtities(elements[i][j]));
+
+			}
+		}
+	}
 }

@@ -53,6 +53,10 @@ public:
 
 	int getDrawingPlanes(int);
 
+	int getEmptyIndex(int subType);
+
+	void handlePlanes();
+
 protected:
 	GameEntity* BuildRobotEntity();
 
@@ -77,7 +81,7 @@ protected:
 	//vector<ObjectType*> elements[4] = { top, right, bottom, left };
 
 	vector<vector<ObjectType*>> elements;
-
+	vector<vector<ObjectType*>> reference;
 	
 };
 
