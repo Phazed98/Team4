@@ -47,6 +47,12 @@ public:
 
 	virtual void UpdateGame(float msec);
 
+	int getIndexOfAllEtities(GameEntity* _G);
+
+	int getIndexOfElements(ObjectType* _G);
+
+	int getDrawingPlanes(int);
+
 protected:
 	GameEntity* BuildRobotEntity();
 
@@ -56,11 +62,22 @@ protected:
 
 	GameEntity* BuildQuadEntity(float size);
 
-	GameEntity* BuildObjectEntity(float size, int type, int subType);
+	ObjectType* BuildObjectEntity(float size, int type, int subType);
 
 
 	Mesh* cube;
 	Mesh* quad;
 	Mesh* sphere;
+
+	vector<ObjectType*> top;
+	vector<ObjectType*> right;
+	vector<ObjectType*> bottom;
+	vector<ObjectType*> left;
+
+	//vector<ObjectType*> elements[4] = { top, right, bottom, left };
+
+	vector<vector<ObjectType*>> elements;
+
+	
 };
 

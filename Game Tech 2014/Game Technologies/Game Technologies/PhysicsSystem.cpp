@@ -20,7 +20,7 @@ PhysicsSystem::~PhysicsSystem(void)
 void	PhysicsSystem::Update(float msec)
 {
 	BroadPhaseCollisions();
-	NarrowPhaseCollisions();
+	//NarrowPhaseCollisions();
 
 	for (vector<Constraint*>::iterator i = allSprings.begin(); i != allSprings.end(); ++i) 
 	{

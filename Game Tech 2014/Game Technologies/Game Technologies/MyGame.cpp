@@ -14,6 +14,11 @@ You can completely change all of this if you want, it's your game!
 */
 MyGame::MyGame()	
 {
+	elements.push_back(top);
+	elements.push_back(right);
+	elements.push_back(bottom);
+	elements.push_back(left);
+
 	gameCamera = new Camera(-30.0f,0.0f,Vector3(0,450,850));
 
 	Renderer::GetRenderer().SetCamera(gameCamera);
@@ -62,11 +67,20 @@ MyGame::MyGame()
 	PhysicsSystem::GetPhysicsSystem().AddConstraint(demo);
 	PhysicsSystem::GetPhysicsSystem().AddDebugDraw(demo);
 
+	//-------------------------------------------------Planes---------------------------------------------------------//
 
-	GameEntity* plane = BuildObjectEntity(200, 1, 1);
+	GameEntity* plane = BuildObjectEntity(200, 0, 0);
 	allEntities.push_back(plane);
 
-	
+	plane = BuildObjectEntity(200, 0, 1);
+	allEntities.push_back(plane);
+
+	plane = BuildObjectEntity(200, 0, 2);
+	allEntities.push_back(plane);
+
+	plane = BuildObjectEntity(200, 0, 3);
+	allEntities.push_back(plane);
+
 }
 
 MyGame::~MyGame(void)	
@@ -90,6 +104,7 @@ logic will be added to this function.
 */
 void MyGame::UpdateGame(float msec) 
 {
+	cout << "\nObject Count:" << allEntities.size() << "  elements:" << elements[0].size();
 	if(gameCamera) 
 	{
 		gameCamera->UpdateCamera(msec);
@@ -98,7 +113,42 @@ void MyGame::UpdateGame(float msec)
 	for(vector<GameEntity*>::iterator i = allEntities.begin(); i != allEntities.end(); ++i) 
 	{
 		(*i)->Update(msec);
+	
 	}
+
+		for (int i = 0; i < 4; i++)
+		{
+
+			for (int j = 0; j < elements[i].size(); j++)
+			{
+				if (elements[i][j]->getState() == 1)
+				{
+
+					//create new
+					allEntities.push_back(BuildObjectEntity(200, 0, i));
+
+					//change state
+					elements[i][j]->setState(2);
+
+				}
+				else if (elements[i][j]->getState() == 3)
+				{
+
+					elements[i][j]->setState(4);
+
+					allEntities.erase(allEntities.begin() + getIndexOfAllEtities(elements[i][j]));
+
+					//elements[i][j]->DisconnectFromSystems();
+					//remove from all entities
+				
+
+					// remove from elements list
+					elements[i].erase(elements[i].begin() + j);
+					j = 4;
+
+				}
+			}
+		}
 
 	Renderer::GetRenderer().DrawDebugBox(DEBUGDRAW_PERSPECTIVE, Vector3(0,51,0), Vector3(100,100,100), Vector3(1,0,0));
 
@@ -187,18 +237,69 @@ GameEntity* MyGame::BuildQuadEntity(float size)
 	return g;
 }
 
-GameEntity* MyGame::BuildObjectEntity(float size, int type, int subType) {
+ObjectType* MyGame::BuildObjectEntity(float size, int type, int subType) {
 	SceneNode* s = new SceneNode(cube);
 	PhysicsNode* p = new PhysicsNode();
 	p->SetUseGravity(false);
 
-	ObjectType*g = new ObjectType(s, p, 1, 1);
+	ObjectType*g = new ObjectType(s, p, type, subType);
 	g->ConnectToSystems();
-	
 	SceneNode &test = g->GetRenderNode();
 
 	test.SetModelScale(Vector3(size, size / 2, size * 2));
 	test.SetBoundingRadius(size);
 
+	if ((rand() % 100 + 1) > 50)
+	{
+		if (getDrawingPlanes(subType) > 1)
+		{
+			g->setRandom(rand() % 10 + 1);
+		}
+	}
+
+	elements[subType].push_back(g);
+
 	return g;
+}
+int MyGame::getIndexOfAllEtities(GameEntity* _G)
+{
+	int index = -1;
+	for (int i = 0; i < allEntities.size(); i++)
+	{
+		if (_G == allEntities[i])
+		{
+
+			
+			index = i;
+			break;
+		}
+	}
+
+	return index;
+}
+
+int MyGame::getIndexOfElements(ObjectType* _G)
+{
+	for (int j = 0; j < elements[_G->getSubType()].size(); j++)
+	{
+		if (_G == elements[_G->getSubType()][j])
+		{
+			return j;
+		}
+	}
+	return 0;
+}
+
+int MyGame::getDrawingPlanes(int _subType)
+{
+	int count = 0;
+	for (int i = 0; i < elements.size(); i++)
+	{
+		if (elements[i].size()>0)
+		if (elements[i][elements[i].size()-1]->getRandom() == 1 && i!=_subType )
+		{
+			count++;
+		}
+	}
+	return count;
 }
