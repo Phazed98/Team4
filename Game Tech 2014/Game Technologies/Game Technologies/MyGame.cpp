@@ -225,21 +225,23 @@ ObjectType* MyGame::BuildObjectEntity(float size, int type, int subType) {
 	test.SetModelScale(Vector3(size, size / 2, size * 2));
 	test.SetBoundingRadius(size);
 
+	//50% chance that we set the random value of this plane to a random value from 1 - 5
 	if ((rand() % 100 + 1) > 50)
 	{
 		if (getDrawingPlanes(subType) > 1)
 		{
-			g->setRandom(rand() % 3 + 1);
+			g->setRandom(rand() % 5 + 1);
 		}
 	}
 
 	elements[subType].push_back(g);
 
+	/*if reference vector of this subtype has objects inside delete them all
+	  so it contains only the one that was created last */
 	while(reference[subType].size() > 0)
 	{
 		reference[subType].pop_back();
 	}
-
 	reference[subType].push_back(g);
 	
 	return g;
@@ -252,8 +254,6 @@ int MyGame::getIndexOfAllEtities(GameEntity* _G)
 	{
 		if (_G == allEntities[i])
 		{
-
-			
 			index = i;
 			break;
 		}
@@ -274,6 +274,8 @@ int MyGame::getIndexOfElements(ObjectType* _G)
 	return 0;
 }
 
+/* We get the number of planes that are not generating gaps infront of them 
+   which should always be at least one*/
 int MyGame::getDrawingPlanes(int _subType)
 {
 	int count = 0;
@@ -281,16 +283,15 @@ int MyGame::getDrawingPlanes(int _subType)
 	{
 		if (reference[i].size() > 0)
 		{
-			cout << "\nrandomvalue" << reference[i][0]->getRandom();
 			if (reference[i][0]->getRandom() == 1 && i != _subType)
 			{
 				count++;
 			}
 		}
 	}
-	cout << "Count:"<<count<<"\n\n";
 	return count;
 }
+
 int MyGame::getEmptyIndex(int _subType)
 {
 	for (int i = 0; i < elements[_subType].size(); i++)
@@ -331,7 +332,7 @@ void MyGame::handlePlanes()
 					{
 						if (getDrawingPlanes(i) > 0)
 						{
-							elements[i][x]->setRandom(rand() % 10 + 1);
+							elements[i][x]->setRandom(rand() % 5 + 1);
 						}
 					}
 					allEntities.push_back(elements[i][x]);
