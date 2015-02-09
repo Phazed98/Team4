@@ -41,7 +41,7 @@ _-_-_-_-_-_-_-""  ""
 #include <queue>
 
 class Vehicle;
-
+class Bullets;
 class MyGame : public GameClass	{
 public:
 	MyGame();
@@ -62,21 +62,17 @@ protected:
 
 	GameEntity* BuildQuadEntity(float size);
 
-	GameEntity* BuildBulletEntity(float radius, Vector3 pos); //new 4.2.2015 Daixi
-
 	GameEntity* BuildBuffEntity(float radius, Vector3 pos); //new 6.2.2015 Daixi
 
 	GameEntity* BuildPlayerEntity(float size, Vector3 pos);
-
-	GameEntity* Bullet0;  //new 4.2.2015 Daixi
-
-	GameEntity* Bullet1;//new 5.2.2015 Daixi
 
 	GameEntity* Enemy;  //new 4.2.2015 Daixi  just for test i create some enemy
 
 	GameEntity* BuffEntity;
 
 	Vehicle* Car;
+
+	Bullets* bullet;
 
 	Vector3 PositionEnemy;  //new 4.2.2015 Daixi
 	Vector3 Position0;
@@ -92,5 +88,6 @@ protected:
 
 	int count_time;  //new 4.2.2015 Daixi
 	int Speed_Player; //4.2.2015 Daixi
+
 };
 

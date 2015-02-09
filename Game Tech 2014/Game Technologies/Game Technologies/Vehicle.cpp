@@ -36,10 +36,9 @@ void Vehicle::UpdatePlayer(float msec){
 	}
 
 	if(Window::GetKeyboard()->KeyDown(KEYBOARD_A)) {
-		if(Player->GetPhysicsNode().GetOrientation().z>=-0.3){
+		if(Player->GetPhysicsNode().GetOrientation().z>=-0.33){
 			Player->GetPhysicsNode().SetAngularVelocity(Vector3(0,0,Speed_Rotate));
-		}
-				
+		}			
 		temp1 = Player->GetPhysicsNode().GetLinearVelocity();
 		temp1.x=0.1*Speed_Player;
 		Player->GetPhysicsNode().SetLinearVelocity(temp1);
@@ -52,7 +51,7 @@ void Vehicle::UpdatePlayer(float msec){
 	}
 
 	if(Window::GetKeyboard()->KeyDown(KEYBOARD_D)) {
-		if(Player->GetPhysicsNode().GetOrientation().z<=0.3){
+		if(Player->GetPhysicsNode().GetOrientation().z<=0.33){
 			Player->GetPhysicsNode().SetAngularVelocity(Vector3(0,0,-Speed_Rotate));
 		}
 		temp1 = Player->GetPhysicsNode().GetLinearVelocity();
@@ -126,7 +125,6 @@ void Vehicle::UpdatePlayer(float msec){
 			Player->GetPhysicsNode().SetLinearVelocity(temp1);	
 		}
 	}
-	cout<<temp1.x<<endl;
 }
 
 /*

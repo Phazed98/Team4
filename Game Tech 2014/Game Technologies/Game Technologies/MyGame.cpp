@@ -3,6 +3,7 @@
 #include "Spring.h"
 #include "SpringDemo.h"
 #include "Vehicle.h"
+#include "Bullets.h"
 
 /*
 Creates a really simple scene for our game - A cube robot standing on
@@ -61,14 +62,7 @@ MyGame::MyGame()	{
 
 	Position0 = Enemy->GetPhysicsNode().GetPosition(); //5.2.2015 Daixi ------------------This is the straight line bullet
 	Position0.z = Position0.z -20;
-	Bullet0 = BuildBulletEntity(2,Position0);
-	Bullet0->GetPhysicsNode().SetLinearVelocity(Vector3(0,0,-1));
-
-	Position1 = Position0; //5.2.2015 Daixi ------------------This is the Parabola line bullet
-	Position1.x = Position0.x -20;
-	Bullet1 = BuildBulletEntity(2,Position1);
-	Bullet1->GetPhysicsNode().SetLinearVelocity(Vector3(0,0.5,-0.5));
-	Bullet1->GetPhysicsNode().SetUseGravity(TRUE);
+	bullet = new Bullets(Position0);
 
 	BuffEntity = BuildBuffEntity(6,Vector3(0,100,-200)); //6.2.2015 Daixi ------------------ This is the buff object, and when player hit it, will speed up
 	BuffEntity->GetRenderNode().SetColour(Vector4(1,1,0,1));
@@ -100,9 +94,8 @@ MyGame::~MyGame(void)
 	delete quad;
 	delete sphere;
 	delete Enemy;   //new 5.2.2015 Daixi
-	delete Bullet0;
-	delete Bullet1;
 	delete Car;
+	delete bullet;
 
 	CubeRobot::DeleteCube();
 	
@@ -127,7 +120,7 @@ void MyGame::UpdateGame(float msec) {
 	}
 
 	if(count_time == 80){    //new control when shoot the bullets   4.2.2015 Daixi
-		ShootBullets();
+		bullet->ShootBullets();
 		count_time = 0;
 	}
 	
@@ -236,26 +229,6 @@ GameEntity* MyGame::BuildCubeEntity(float size) {
 	return g;
 }
 
-/*
-Makes Bullets. Every game has a crate in it somewhere!
-*/
-GameEntity* MyGame::BuildBulletEntity(float radius, Vector3 pos) {   //new 4.2.2015 Daixi
-	SceneNode* test = new SceneNode(sphere);
-	test->SetModelScale(Vector3(radius,radius,radius));
-	test->SetBoundingRadius(radius);
-	test->SetColour(Vector4(0.2,0.2,0.5,1));
-	PhysicsNode*p = new PhysicsNode();
-
-	p->SetUseGravity(false);
-	p->SetPosition(pos);
-	p->SetCollisionVolume(new CollisionSphere(radius));    //new 4.2.2015  Daixi
-
-
-	GameEntity*g = new GameEntity(test, p);
-	g->ConnectToSystems();
-	return g;
-}
-
 
 /*
 Makes Buff. it can speed up Player or slow down!
@@ -316,13 +289,3 @@ GameEntity* MyGame::BuildQuadEntity(float size) {
 	return g;
 }
 
-/*
-Create bullets, and let the bullets shoot the player or shooting depends on some ways.
-4.2.2015 Daixi
-*/
-void MyGame::ShootBullets(){
-	Bullet0->GetPhysicsNode().SetPosition(Position0);
-	Bullet0->GetPhysicsNode().SetLinearVelocity(Vector3(0,0,-1));
-	Bullet1->GetPhysicsNode().SetPosition(Position1);
-	Bullet1->GetPhysicsNode().SetLinearVelocity(Vector3(0,0.5,-0.5));
-}
