@@ -40,7 +40,7 @@ _-_-_-_-_-_-_-""  ""
 
 #include "CollisionVolume.h"
 
-#define LINEAR_VELOCITY_DAMP 0.998
+#define LINEAR_VELOCITY_DAMP 0.997
 #define ANGULAR_VELOCITY_DAMP 0.998
 #define LINEAR_VELOCITY_MIN 0.00001
 

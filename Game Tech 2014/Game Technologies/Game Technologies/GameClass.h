@@ -48,7 +48,6 @@ protected:
 	float physicsCounter;
 
 	vector<GameEntity*> allEntities;
-	GameEntity* Player; //new 2.2.2015 Daixi
 
 	Camera* gameCamera;
 	static GameClass* instance;

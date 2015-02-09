@@ -40,6 +40,8 @@ _-_-_-_-_-_-_-""  ""
 #include "../nclgl/CubeRobot.h"
 #include <queue>
 
+class Vehicle;
+
 class MyGame : public GameClass	{
 public:
 	MyGame();
@@ -60,13 +62,11 @@ protected:
 
 	GameEntity* BuildQuadEntity(float size);
 
-	GameEntity* BuildPlayerEntity(float size, Vector3 pos); //new 2.2.2015 Daixi
-
 	GameEntity* BuildBulletEntity(float radius, Vector3 pos); //new 4.2.2015 Daixi
 
 	GameEntity* BuildBuffEntity(float radius, Vector3 pos); //new 6.2.2015 Daixi
 
-	Vector3 PlayerPosition; //new 2.2.2015  Daixi
+	GameEntity* BuildPlayerEntity(float size, Vector3 pos);
 
 	GameEntity* Bullet0;  //new 4.2.2015 Daixi
 
@@ -76,10 +76,12 @@ protected:
 
 	GameEntity* BuffEntity;
 
+	Vehicle* Car;
+
 	Vector3 PositionEnemy;  //new 4.2.2015 Daixi
 	Vector3 Position0;
 	Vector3 Position1;
-	Vector3 tempPosition;   //5.2.2015 just test
+
 	Vector3 temp;   // 5.2.2015 for caculate the length between Player and Buff
 	Vector3 temp1,temp2,temp3;  //Control the player speed  6.2.2015
 
