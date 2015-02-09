@@ -71,6 +71,7 @@ MyGame::MyGame()	{
 	Bullet1->GetPhysicsNode().SetLinearVelocity(Vector3(0,0.5,-0.5));
 	Bullet1->GetPhysicsNode().SetUseGravity(TRUE);
 
+
 	BuffEntity = BuildBuffEntity(6,Vector3(0,100,-200)); //6.2.2015 Daixi ------------------ This is the buff object, and when player hit it, will speed up
 	BuffEntity->GetRenderNode().SetColour(Vector4(1,1,0,1));
 
