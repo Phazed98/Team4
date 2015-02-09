@@ -24,6 +24,14 @@ MyGame::MyGame()
 	reference.push_back(bottom);
 	reference.push_back(left);
 
+	obstacleElements.resize(4);
+	obstacleReference.resize(4);
+
+	for (int i = 0; i < 4; i++)
+	{
+		obstacleReference[i] = NULL;
+	}
+
 	gameCamera = new Camera(-30.0f,0.0f,Vector3(0,450,850));
 
 	Renderer::GetRenderer().SetCamera(gameCamera);
@@ -112,7 +120,6 @@ logic will be added to this function.
 */
 void MyGame::UpdateGame(float msec) 
 {
-	//cout << "\nObject Count:" << allEntities.size() << "  elements:" << elements[0].size();
 	if(gameCamera) 
 	{
 		gameCamera->UpdateCamera(msec);
@@ -308,7 +315,20 @@ void MyGame::handlePlanes()
 {
 	for (int i = 0; i < 4; i++)
 	{
+		// iterate through all obstacles
+		for (int j = 0; j < obstacleElements[i].size(); j++)
+		{
+			//check if the Obstacel has reached at the end
+			if (obstacleElements[i][j]->getState() == 1)
+			{
+				//set the new state so that it can be re used
+				obstacleElements[i][j]->setState(2);
 
+				//remove from all Entities so that we dont waste the update calls when not moving.
+				allEntities.erase(allEntities.begin() + getIndexOfAllEtities(obstacleElements[i][j]));
+			}
+		}
+		// iterate through all Tiles
 		for (int j = 0; j < elements[i].size(); j++)
 		{
 			if (elements[i][j]->getState() == 1)
@@ -336,6 +356,9 @@ void MyGame::handlePlanes()
 						}
 					}
 					allEntities.push_back(elements[i][x]);
+
+					//create obs
+					CreateObstacle(elements[i][x]);
 				}
 				//change state
 				elements[i][j]->setState(2);
@@ -350,5 +373,89 @@ void MyGame::handlePlanes()
 
 			}
 		}
+		
 	}
+}
+
+void MyGame::CreateObstacle(ObjectType* _obj)
+{
+	int random_number = rand() % 2 + 1;
+	Obstacle* temp=NULL;
+	int empty = getObstacleEmptyIndex(_obj->getSubType(),0);
+	// for the first obstacle created
+	if (obstacleReference[_obj->getSubType()] == NULL)
+	{
+		temp = BuildObstacleEntity(150, 1, _obj->getSubType(), _obj);
+		obstacleElements[_obj->getSubType()].push_back(temp);
+	}
+	//reference exists, but everything is running/working
+	else if (empty == -1)
+	{
+		if (obstacleReference[_obj->getSubType()] != NULL)
+		{
+			if (obstacleReference[_obj->getSubType()]->GetPhysicsNode().GetPosition().z < -800.0f)
+			{
+				temp = BuildObstacleEntity(150, 1, _obj->getSubType(), _obj);
+				obstacleElements[_obj->getSubType()].push_back(temp);
+			}
+		}
+	}
+	//free obstacle exists 
+	else
+	{
+		//use the old object
+		if (obstacleReference[_obj->getSubType()] != NULL)
+		{
+			if (obstacleReference[_obj->getSubType()]->GetPhysicsNode().GetPosition().z <- 800.0f)
+			{
+				temp = obstacleElements[_obj->getSubType()][empty];
+			}
+		}
+	}
+	//initialize values and push to allEntities
+	if (temp != NULL)
+	{
+		int temp_lane = (_obj->getSubType() + 1) * 2 - random_number;
+		temp->SetLane(temp_lane);
+		temp->resetObstacle();
+		obstacleReference[_obj->getSubType()] = temp;
+		allEntities.push_back(temp);
+	}
+}
+//creates a new Obstacle
+Obstacle* MyGame::BuildObstacleEntity(float size, int type, int subType, ObjectType* _obj) {
+	SceneNode* s = new SceneNode(sphere);
+	PhysicsNode* p = new PhysicsNode();
+	p->SetUseGravity(false);
+
+	Obstacle*g = new Obstacle(_obj, s, p, type, subType,0);
+	g->ConnectToSystems();
+	SceneNode &test = g->GetRenderNode();
+
+	test.SetModelScale(Vector3(size, size , size ));
+	test.SetBoundingRadius(size);
+
+
+	obstacleElements[subType].push_back(g);
+
+	/*if reference vector of this subtype has objects inside delete them all
+	so it contains only the one that was created last */
+	
+
+	return g;
+}
+
+
+//returns the index of the Obstacle which is free , if not , returns -1
+int MyGame::getObstacleEmptyIndex(int _subType, int _obstacleType)
+{
+	for (int i = 0; i < obstacleElements[_subType].size(); i++)
+	{
+		if (obstacleElements[_subType][i]!=NULL)
+		if (obstacleElements[_subType][i]->getState() == 2 && _obstacleType == obstacleElements[_subType][i]->getObstacleType())
+		{
+			return i;
+		}
+	}
+	return -1;
 }

@@ -20,6 +20,7 @@ public:
 	void reset();
 
 
+
 protected:
 
 	int type; // 0- Plane, 1- Obstacle

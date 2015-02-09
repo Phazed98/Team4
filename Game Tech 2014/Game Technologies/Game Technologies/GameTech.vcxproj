@@ -78,6 +78,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MyGame.cpp" />
     <ClCompile Include="ObjectType.cpp" />
+    <ClCompile Include="Obstacle.cpp" />
     <ClCompile Include="PhysicsNode.cpp" />
     <ClCompile Include="PhysicsSystem.cpp" />
     <ClCompile Include="Renderer.cpp" />
@@ -95,6 +96,7 @@
     <ClInclude Include="InertialMatrixHelper.h" />
     <ClInclude Include="MyGame.h" />
     <ClInclude Include="ObjectType.h" />
+    <ClInclude Include="Obstacle.h" />
     <ClInclude Include="PhysicsNode.h" />
     <ClInclude Include="PhysicsSystem.h" />
     <ClInclude Include="Renderer.h" />

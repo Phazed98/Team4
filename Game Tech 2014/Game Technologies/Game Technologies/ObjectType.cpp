@@ -1,6 +1,6 @@
 #include "ObjectType.h"
 
-//lsy
+
 
 ObjectType::ObjectType(SceneNode* s, PhysicsNode* p, int _type, int _subType) : GameEntity(s, p)
 {
@@ -75,4 +75,7 @@ void ObjectType::reset()
 	SetInitialAttributes();
 	length = 800.0f;
 	random = 1;
+
+	//create obstacle
 }
+

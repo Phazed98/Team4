@@ -36,6 +36,7 @@ _-_-_-_-_-_-_-""  ""
 #pragma once
 #include "GameEntity.h"
 #include "ObjectType.h"
+#include "Obstacle.h"
 #include "GameClass.h"
 #include "../nclgl/Camera.h"
 #include "../nclgl/CubeRobot.h"
@@ -57,6 +58,9 @@ public:
 
 	void handlePlanes();
 
+	void CreateObstacle(ObjectType* _obj);
+	int getObstacleEmptyIndex(int _subType,int);
+
 protected:
 	GameEntity* BuildRobotEntity();
 
@@ -68,6 +72,8 @@ protected:
 
 	ObjectType* BuildObjectEntity(float size, int type, int subType);
 
+	Obstacle* BuildObstacleEntity(float size, int type, int subType, ObjectType*);
+
 
 	Mesh* cube;
 	Mesh* quad;
@@ -78,10 +84,11 @@ protected:
 	vector<ObjectType*> bottom;
 	vector<ObjectType*> left;
 
-	//vector<ObjectType*> elements[4] = { top, right, bottom, left };
-
 	vector<vector<ObjectType*>> elements;
 	vector<vector<ObjectType*>> reference;
+
+	vector<vector<Obstacle*>> obstacleElements;
+	vector<Obstacle*> obstacleReference;
 	
 };
 
