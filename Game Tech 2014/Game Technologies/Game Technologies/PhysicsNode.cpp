@@ -22,6 +22,7 @@ PhysicsNode::~PhysicsNode(void)	{
 //graphical representation of this object, too.
 void	PhysicsNode::Update(float msec) {
 	//FUN GOES HERE
+	
 
 	Vector3 acc = m_force*m_invMass + (useGravity? gravity: Vector3(0,0,0));
 	m_linearVelocity = m_linearVelocity + acc*msec;
@@ -31,7 +32,7 @@ void	PhysicsNode::Update(float msec) {
 	//	m_linearVelocity = Vector3(0,0,0);
 	//}
 
-	m_position = m_position + m_linearVelocity*msec;
+	m_position = m_position + m_linearVelocity*msec;  
 
 	Vector3 angAcc = m_invInertia*m_torque;
 	m_angularVelocity = m_angularVelocity + angAcc*msec;

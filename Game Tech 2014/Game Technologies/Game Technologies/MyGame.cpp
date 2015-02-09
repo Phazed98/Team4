@@ -13,7 +13,13 @@ You can completely change all of this if you want, it's your game!
 
 */
 MyGame::MyGame()	{
+	count_time = 0;    //new control shoot the bullets   4.2.2015 Daixi
+
+	Speed_Player = 1;  //control the player speed
+
 	gameCamera = new Camera(-30.0f,0.0f,Vector3(0,350,-800)); //changed the location Daixi 3.2.2015
+
+	tempPosition = Vector3(0,350,-800);
 
 	Renderer::GetRenderer().SetCamera(gameCamera);
 
@@ -51,6 +57,22 @@ MyGame::MyGame()	{
 	GameEntity* charactor = BuildPlayerEntity(20.0f,Vector3(0,0,0));   //new 2.2.2015  Daixi
 	Player = charactor;   
 
+	Enemy = BuildPlayerEntity(20.0f, Vector3(-300,100,-300)); //new 4.2.2015 Daixi
+	Enemy->GetPhysicsNode().SetPosition(Vector3(300,100,-100));
+
+	Position0 = Enemy->GetPhysicsNode().GetPosition(); //5.2.2015 Daixi ------------------This is the straight line bullet
+	Position0.z = Position0.z -20;
+	Bullet0 = BuildBulletEntity(2,Position0);
+	Bullet0->GetPhysicsNode().SetLinearVelocity(Vector3(0,0,-1));
+
+	Position1 = Position0; //5.2.2015 Daixi ------------------This is the Parabola line bullet
+	Position1.x = Position0.x -20;
+	Bullet1 = BuildBulletEntity(2,Position1);
+	Bullet1->GetPhysicsNode().SetLinearVelocity(Vector3(0,0.5,-0.5));
+	Bullet1->GetPhysicsNode().SetUseGravity(TRUE);
+
+	BuffEntity = BuildBuffEntity(6,Vector3(0,100,-200)); //6.2.2015 Daixi ------------------ This is the buff object, and when player hit it, will speed up
+	BuffEntity->GetRenderNode().SetColour(Vector4(1,1,0,1));
 
 	Spring* s = new Spring(&ball0->GetPhysicsNode(), Vector3(0,100,0), &ball1->GetPhysicsNode(), Vector3(0,-100,0));
 	
@@ -78,9 +100,12 @@ MyGame::~MyGame(void)
 	delete cube;
 	delete quad;
 	delete sphere;
+	delete Enemy;   //new 5.2.2015 Daixi
+	delete Bullet0;
+	delete Bullet1;
 
 	CubeRobot::DeleteCube();
-
+	
 	//GameClass destructor will destroy your entities for you...
 }
 
@@ -99,57 +124,115 @@ void MyGame::UpdatePlayer(float msec){
 		Player->GetPhysicsNode().SetAngularVelocity(Vector3(0,0,0));
 	}
 
+	if(Player->GetPhysicsNode().GetPosition().y<=100){
+		temp1 = Player->GetPhysicsNode().GetLinearVelocity();
+		temp1.y = 0;
+		Player->GetPhysicsNode().SetLinearVelocity(temp1);
+		Player->GetPhysicsNode().SetUseGravity(FALSE);
+	}
+
 	if(Window::GetKeyboard()->KeyDown(KEYBOARD_A)) {
-		PlayerPosition=PlayerPosition + Vector3(1,0,0)*msec/10;
+		//PlayerPosition=PlayerPosition + Vector3(1,0,0)*msec/Speed_Player;
 		if(Player->GetPhysicsNode().GetOrientation().z>=-0.3){
 			Player->GetPhysicsNode().SetAngularVelocity(Vector3(0,0,-0.0002));
 		}
 		if(Player->GetPhysicsNode().GetOrientation().z>0){
 			Player->GetPhysicsNode().SetAngularVelocity(Vector3(0,0,-0.0007));
+		}		
+		temp1 = Player->GetPhysicsNode().GetLinearVelocity();
+		temp1.x=0.1*Speed_Player;
+		Player->GetPhysicsNode().SetLinearVelocity(temp1);
+		tempPosition.x = PlayerPosition.x;
+		gameCamera->SetPosition(tempPosition);
+		temp = PlayerPosition - BuffEntity->GetPhysicsNode().GetPosition();//new just for buff    6.2.2015
+		if(temp.Length()<=20)
+		{
+			Speed_Player = 2;
 		}
 	}
 
 	if(Window::GetKeyboard()->KeyDown(KEYBOARD_D)) {
-		PlayerPosition=PlayerPosition + Vector3(-1,0,0)*msec/10;
+		//PlayerPosition=PlayerPosition + Vector3(-1,0,0)*msec/Speed_Player;
 		if(Player->GetPhysicsNode().GetOrientation().z<=0.3){
 			Player->GetPhysicsNode().SetAngularVelocity(Vector3(0,0,0.0002));
 		}
 		if(Player->GetPhysicsNode().GetOrientation().z<0){
 			Player->GetPhysicsNode().SetAngularVelocity(Vector3(0,0,0.0007));
 		}
-	}
-
-	if(!Window::GetKeyboard()->KeyDown(KEYBOARD_D)&&!Window::GetKeyboard()->KeyDown(KEYBOARD_A)) {
-		if(Player->GetPhysicsNode().GetOrientation().z==0){
-		Player->GetPhysicsNode().SetAngularVelocity(Vector3(0,0,0));
-		}
-		if(Player->GetPhysicsNode().GetOrientation().z<0){
-			Player->GetPhysicsNode().SetAngularVelocity(Vector3(0,0,0.0004));
-		}
-		if(Player->GetPhysicsNode().GetOrientation().z>0){
-			Player->GetPhysicsNode().SetAngularVelocity(Vector3(0,0,-0.0004));
+		temp1 = Player->GetPhysicsNode().GetLinearVelocity();
+		temp1.x=-0.1*Speed_Player;
+		Player->GetPhysicsNode().SetLinearVelocity(temp1);
+		tempPosition.x = PlayerPosition.x;
+		gameCamera->SetPosition(tempPosition);
+		temp = PlayerPosition - BuffEntity->GetPhysicsNode().GetPosition();//new just for buff    6.2.2015
+		if(temp.Length()<=20)
+		{
+			Speed_Player = 2;
 		}
 	}
 
-	if(Player->GetPhysicsNode().GetPosition().y<=100){
-		Player->GetPhysicsNode().SetLinearVelocity(Vector3(0,0,0));
-		Player->GetPhysicsNode().SetUseGravity(FALSE);
+	if(Window::GetKeyboard()->KeyDown(KEYBOARD_W)) {
+		temp1 = Player->GetPhysicsNode().GetLinearVelocity();
+		temp1.z=0.1*Speed_Player;
+		Player->GetPhysicsNode().SetLinearVelocity(temp1);             
+		tempPosition.z = PlayerPosition.z-400; //new 5.2.2015 make the camera position follow the Player position   Daixi
+		gameCamera->SetPosition(tempPosition);
+
+		temp = PlayerPosition - BuffEntity->GetPhysicsNode().GetPosition();//new just for buff    6.2.2015
+		if(temp.Length()<=20)
+		{
+			Speed_Player = 2;
+		}
 	}
-	if(Player->GetPhysicsNode().GetLinearVelocity()==Vector3(0,0,0)){
+
+	if(Window::GetKeyboard()->KeyDown(KEYBOARD_S)) {
+		temp1 = Player->GetPhysicsNode().GetLinearVelocity();
+		temp1.z=-0.1*Speed_Player;
+		Player->GetPhysicsNode().SetLinearVelocity(temp1);             
+		tempPosition.z = PlayerPosition.z-400;
+		gameCamera->SetPosition(tempPosition);
+		temp = PlayerPosition - BuffEntity->GetPhysicsNode().GetPosition();    //new just for buff    6.2.2015
+		if(temp.Length()<=20)
+		{
+			Speed_Player = 2;
+		}
+	}
+
+	if(!Window::GetKeyboard()->KeyDown(KEYBOARD_D)&&!Window::GetKeyboard()->KeyDown(KEYBOARD_A)) {		
+		temp1 = Player->GetPhysicsNode().GetLinearVelocity();
+		temp1.x=0;
+		Player->GetPhysicsNode().SetLinearVelocity(temp1);
+		if(Player->GetPhysicsNode().GetOrientation().z<-0.0008||Player->GetPhysicsNode().GetOrientation().z>0.0008){
+			if(Player->GetPhysicsNode().GetOrientation().z<0){
+				Player->GetPhysicsNode().SetAngularVelocity(Vector3(0,0,0.0004));
+			}
+			if(Player->GetPhysicsNode().GetOrientation().z>0){
+				Player->GetPhysicsNode().SetAngularVelocity(Vector3(0,0,-0.0004));
+			}
+		}
+		else{
+			Player->GetPhysicsNode().SetAngularVelocity(Vector3(0,0,0));
+		}
+	}
+	if(!Window::GetKeyboard()->KeyDown(KEYBOARD_W)&&!Window::GetKeyboard()->KeyDown(KEYBOARD_S)) {		
+		temp1 = Player->GetPhysicsNode().GetLinearVelocity();
+		temp1.z=0;
+		Player->GetPhysicsNode().SetLinearVelocity(temp1);
+	}
+	if(Player->GetPhysicsNode().GetLinearVelocity().y==0){
 		if(Window::GetKeyboard()->KeyDown(KEYBOARD_SPACE)){
 			Player->GetPhysicsNode().SetInverseMass(10);
 			Player->GetPhysicsNode().SetUseGravity(TRUE);
 			Player->GetPhysicsNode().SetLinearVelocity(Vector3(0,0.6,0));	
 		}
 	}
-	Player->GetPhysicsNode().SetPosition(PlayerPosition);
 }
 
 
 
 void MyGame::UpdateGame(float msec) {
 	if(gameCamera) {
-		gameCamera->UpdateCamera(msec);
+		//gameCamera->UpdateCamera(msec);
 		UpdatePlayer(msec);//new 3.2.2015 Daixi
 	}
 
@@ -157,6 +240,14 @@ void MyGame::UpdateGame(float msec) {
 		(*i)->Update(msec);
 	}
 
+	if(count_time == 80){    //new control when shoot the bullets   4.2.2015 Daixi
+		ShootBullets();
+		count_time = 0;
+	}
+	
+	count_time++;
+
+	
 	/*
 	Here's how we can use OGLRenderer's inbuilt debug-drawing functions! 
 	I meant to talk about these in the graphics module - Oops!
@@ -249,6 +340,7 @@ GameEntity* MyGame::BuildPlayerEntity(float size, Vector3 pos) {   //new 2.2.201
 	p->SetUseGravity(false);
 	pos = Vector3(0,100,-400);
 	p->SetPosition(pos);
+	p->SetCollisionVolume(new CollisionSphere(size));    //new 3.2.2015  Daixi
 
 
 	GameEntity*g = new GameEntity(test, p);
@@ -256,6 +348,44 @@ GameEntity* MyGame::BuildPlayerEntity(float size, Vector3 pos) {   //new 2.2.201
 	return g;
 }
 
+/*
+Makes Bullets. Every game has a crate in it somewhere!
+*/
+GameEntity* MyGame::BuildBulletEntity(float radius, Vector3 pos) {   //new 4.2.2015 Daixi
+	SceneNode* test = new SceneNode(sphere);
+	test->SetModelScale(Vector3(radius,radius,radius));
+	test->SetBoundingRadius(radius);
+	test->SetColour(Vector4(0.2,0.2,0.5,1));
+	PhysicsNode*p = new PhysicsNode();
+
+	p->SetUseGravity(false);
+	p->SetPosition(pos);
+	p->SetCollisionVolume(new CollisionSphere(radius));    //new 4.2.2015  Daixi
+
+
+	GameEntity*g = new GameEntity(test, p);
+	g->ConnectToSystems();
+	return g;
+}
+
+
+/*
+Makes Buff. it can speed up Player or slow down!
+*/
+GameEntity* MyGame::BuildBuffEntity(float radius, Vector3 pos) {   //new 6.2.2015 Daixi
+	SceneNode* test = new SceneNode(sphere);
+	test->SetModelScale(Vector3(radius,radius,radius));
+	test->SetBoundingRadius(radius);
+	test->SetColour(Vector4(0.2,0.2,0.5,1));
+	PhysicsNode*p = new PhysicsNode();
+
+	p->SetUseGravity(false);
+	p->SetPosition(pos);
+
+	GameEntity*g = new GameEntity(test, p);
+	g->ConnectToSystems();
+	return g;
+}
 /*
 Makes a sphere.
 */
@@ -296,4 +426,15 @@ GameEntity* MyGame::BuildQuadEntity(float size) {
 	GameEntity*g = new GameEntity(s, p);
 	g->ConnectToSystems();
 	return g;
+}
+
+/*
+Create bullets, and let the bullets shoot the player or shooting depends on some ways.
+4.2.2015 Daixi
+*/
+void MyGame::ShootBullets(){
+	Bullet0->GetPhysicsNode().SetPosition(Position0);
+	Bullet0->GetPhysicsNode().SetLinearVelocity(Vector3(0,0,-1));
+	Bullet1->GetPhysicsNode().SetPosition(Position1);
+	Bullet1->GetPhysicsNode().SetLinearVelocity(Vector3(0,0.5,-0.5));
 }

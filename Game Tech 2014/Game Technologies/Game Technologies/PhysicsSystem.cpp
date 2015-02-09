@@ -24,6 +24,7 @@ void	PhysicsSystem::Update(float msec) {
 	for(vector<PhysicsNode*>::iterator i = allNodes.begin(); i != allNodes.end(); ++i) {
 		(*i)->Update(msec);
 	}
+	
 }
 
 void	PhysicsSystem::BroadPhaseCollisions() {
