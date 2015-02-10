@@ -55,30 +55,30 @@ MyGame::MyGame()
 	A more 'robust' system would check the entities vector for duplicates so as
 	to not cause problems...why not give it a go?
 	*/
-	GameEntity* quadEntity = BuildQuadEntity(1000.0f);
-	allEntities.push_back(quadEntity);
-	allEntities.push_back(BuildRobotEntity());
-	
-	GameEntity* ball0 = BuildSphereEntity(100.0f, Vector3(-300, 300, -100), Vector3(0, 0, 0));
-	allEntities.push_back(ball0);
-	GameEntity* ball1 = BuildSphereEntity(100.0f, Vector3(-100, 300, -100), Vector3(0, 0, 0));
-	allEntities.push_back(ball1);
+	//GameEntity* quadEntity = BuildQuadEntity(1000.0f);
+	//allEntities.push_back(quadEntity);
+	//allEntities.push_back(BuildRobotEntity());
+	//
+	//GameEntity* ball0 = BuildSphereEntity(100.0f, Vector3(-300, 300, -100), Vector3(0, 0, 0));
+	//allEntities.push_back(ball0);
+	//GameEntity* ball1 = BuildSphereEntity(100.0f, Vector3(-100, 300, -100), Vector3(0, 0, 0));
+	//allEntities.push_back(ball1);
 
-	Spring* s = new Spring(&ball0->GetPhysicsNode(), Vector3(0,100,0), &ball1->GetPhysicsNode(), Vector3(0,-100,0));
-	
-	PhysicsSystem::GetPhysicsSystem().AddConstraint(s);
-	PhysicsSystem::GetPhysicsSystem().AddDebugDraw(s);
+	//Spring* s = new Spring(&ball0->GetPhysicsNode(), Vector3(0,100,0), &ball1->GetPhysicsNode(), Vector3(0,-100,0));
+	//
+	//PhysicsSystem::GetPhysicsSystem().AddConstraint(s);
+	//PhysicsSystem::GetPhysicsSystem().AddDebugDraw(s);
 
-	// Note that these are relative positions and the quad is already rotated
-	s = new Spring(&ball1->GetPhysicsNode(), Vector3(0,100,0), &quadEntity->GetPhysicsNode(), Vector3(0,-100,-600)); 
-	
-	PhysicsSystem::GetPhysicsSystem().AddConstraint(s);
-	PhysicsSystem::GetPhysicsSystem().AddDebugDraw(s);
+	//// Note that these are relative positions and the quad is already rotated
+	//s = new Spring(&ball1->GetPhysicsNode(), Vector3(0,100,0), &quadEntity->GetPhysicsNode(), Vector3(0,-100,-600)); 
+	//
+	//PhysicsSystem::GetPhysicsSystem().AddConstraint(s);
+	//PhysicsSystem::GetPhysicsSystem().AddDebugDraw(s);
 
-	SpringDemo* demo = new SpringDemo();
-	
-	PhysicsSystem::GetPhysicsSystem().AddConstraint(demo);
-	PhysicsSystem::GetPhysicsSystem().AddDebugDraw(demo);
+	//SpringDemo* demo = new SpringDemo();
+	//
+	//PhysicsSystem::GetPhysicsSystem().AddConstraint(demo);
+	//PhysicsSystem::GetPhysicsSystem().AddDebugDraw(demo);
 
 	//-------------------------------------------------Planes---------------------------------------------------------//
 
@@ -133,19 +133,19 @@ void MyGame::UpdateGame(float msec)
 
 	handlePlanes();
 
-	Renderer::GetRenderer().DrawDebugBox(DEBUGDRAW_PERSPECTIVE, Vector3(0,51,0), Vector3(100,100,100), Vector3(1,0,0));
+	//Renderer::GetRenderer().DrawDebugBox(DEBUGDRAW_PERSPECTIVE, Vector3(0,51,0), Vector3(100,100,100), Vector3(1,0,0));
 
-	////We'll assume he's aiming at something...so let's draw a line from the cube robot to the target
-	////The 1 on the y axis is simply to prevent z-fighting!
-	Renderer::GetRenderer().DrawDebugLine(DEBUGDRAW_PERSPECTIVE, Vector3(0,1,0),Vector3(200,1,200), Vector3(0,0,1), Vector3(1,0,0));
+	//////We'll assume he's aiming at something...so let's draw a line from the cube robot to the target
+	//////The 1 on the y axis is simply to prevent z-fighting!
+	//Renderer::GetRenderer().DrawDebugLine(DEBUGDRAW_PERSPECTIVE, Vector3(0,1,0),Vector3(200,1,200), Vector3(0,0,1), Vector3(1,0,0));
 
-	////Maybe he's looking for treasure? X marks the spot!
-	Renderer::GetRenderer().DrawDebugCross(DEBUGDRAW_PERSPECTIVE, Vector3(200,1,200),Vector3(50,50,50), Vector3(0,0,0));
+	//////Maybe he's looking for treasure? X marks the spot!
+	//Renderer::GetRenderer().DrawDebugCross(DEBUGDRAW_PERSPECTIVE, Vector3(200,1,200),Vector3(50,50,50), Vector3(0,0,0));
 
-	////CubeRobot is looking at his treasure map upside down!, the treasure's really here...
-	Renderer::GetRenderer().DrawDebugCircle(DEBUGDRAW_PERSPECTIVE, Vector3(-200,1,-200), 50.0f, Vector3(0,1,0));
+	//////CubeRobot is looking at his treasure map upside down!, the treasure's really here...
+	//Renderer::GetRenderer().DrawDebugCircle(DEBUGDRAW_PERSPECTIVE, Vector3(-200,1,-200), 50.0f, Vector3(0,1,0));
 
-	PhysicsSystem::GetPhysicsSystem().DrawDebug();
+	//PhysicsSystem::GetPhysicsSystem().DrawDebug();
 }
 
 /*
@@ -254,6 +254,24 @@ ObjectType* MyGame::BuildObjectEntity(float size, int type, int subType) {
 	return g;
 }
 
+//creates a new Obstacle
+Obstacle* MyGame::BuildObstacleEntity(float size, int type, int subType, ObjectType* _obj) {
+	SceneNode* s = new SceneNode(sphere);
+	PhysicsNode* p = new PhysicsNode();
+	p->SetUseGravity(false);
+
+	Obstacle*g = new Obstacle(_obj, s, p, type, subType, subType);
+	g->ConnectToSystems();
+	SceneNode &test = g->GetRenderNode();
+
+	test.SetModelScale(Vector3(size, size, size));
+	test.SetBoundingRadius(size);
+
+	obstacleElements[subType].push_back(g);
+
+	return g;
+}
+
 int MyGame::getIndexOfAllEtities(GameEntity* _G)
 {
 	int index = -1;
@@ -357,8 +375,9 @@ void MyGame::handlePlanes()
 					}
 					allEntities.push_back(elements[i][x]);
 
-					//create obs
-					CreateObstacle(elements[i][x]);
+					//create obstacle
+					if ((rand() % 100 + 1) > 50)
+						CreateObstacle(elements[i][x]);
 				}
 				//change state
 				elements[i][j]->setState(2);
@@ -380,12 +399,12 @@ void MyGame::handlePlanes()
 void MyGame::CreateObstacle(ObjectType* _obj)
 {
 	int random_number = rand() % 2 + 1;
-	Obstacle* temp=NULL;
+	Obstacle* temp = NULL;
 	int empty = getObstacleEmptyIndex(_obj->getSubType(),0);
 	// for the first obstacle created
 	if (obstacleReference[_obj->getSubType()] == NULL)
 	{
-		temp = BuildObstacleEntity(150, 1, _obj->getSubType(), _obj);
+		temp = BuildObstacleEntity(50, 1, _obj->getSubType(), _obj);
 		obstacleElements[_obj->getSubType()].push_back(temp);
 	}
 	//reference exists, but everything is running/working
@@ -395,7 +414,7 @@ void MyGame::CreateObstacle(ObjectType* _obj)
 		{
 			if (obstacleReference[_obj->getSubType()]->GetPhysicsNode().GetPosition().z < -800.0f)
 			{
-				temp = BuildObstacleEntity(150, 1, _obj->getSubType(), _obj);
+				temp = BuildObstacleEntity(50, 1, _obj->getSubType(), _obj);
 				obstacleElements[_obj->getSubType()].push_back(temp);
 			}
 		}
@@ -406,7 +425,7 @@ void MyGame::CreateObstacle(ObjectType* _obj)
 		//use the old object
 		if (obstacleReference[_obj->getSubType()] != NULL)
 		{
-			if (obstacleReference[_obj->getSubType()]->GetPhysicsNode().GetPosition().z <- 800.0f)
+			if (obstacleReference[_obj->getSubType()]->GetPhysicsNode().GetPosition().z < -800.0f)
 			{
 				temp = obstacleElements[_obj->getSubType()][empty];
 			}
@@ -422,28 +441,7 @@ void MyGame::CreateObstacle(ObjectType* _obj)
 		allEntities.push_back(temp);
 	}
 }
-//creates a new Obstacle
-Obstacle* MyGame::BuildObstacleEntity(float size, int type, int subType, ObjectType* _obj) {
-	SceneNode* s = new SceneNode(sphere);
-	PhysicsNode* p = new PhysicsNode();
-	p->SetUseGravity(false);
 
-	Obstacle*g = new Obstacle(_obj, s, p, type, subType,0);
-	g->ConnectToSystems();
-	SceneNode &test = g->GetRenderNode();
-
-	test.SetModelScale(Vector3(size, size , size ));
-	test.SetBoundingRadius(size);
-
-
-	obstacleElements[subType].push_back(g);
-
-	/*if reference vector of this subtype has objects inside delete them all
-	so it contains only the one that was created last */
-	
-
-	return g;
-}
 
 
 //returns the index of the Obstacle which is free , if not , returns -1

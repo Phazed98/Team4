@@ -18,7 +18,7 @@ public:
 
 private:
 
-	int lane; // 0 to 7 lanes
+	int lane; // Lanes are from 0 t 7 starting from top, two lanes per tile
 
 	Vector3 offset;
 

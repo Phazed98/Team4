@@ -6,8 +6,11 @@ Obstacle::Obstacle(ObjectType* _tile, SceneNode* s, PhysicsNode* p, int _type, i
 	tile = _tile;
 	obstacleType = _obstacleType;
 
-	//if (obstacleType == 0)
-		offset.y = 100;
+	this->GetRenderNode().SetColour(Vector4(0, 0, 0, 1));
+
+	
+	
+		
 }
 
 
@@ -38,4 +41,53 @@ void Obstacle::Update(float msec)
 void Obstacle::SetLane(int _lane)
 {
 	lane = _lane;
+
+	if (subType == 0)
+	{
+		offset.y = -100;
+		if (lane == 0)
+		{
+			offset.x = -100;
+		}
+		else if (lane == 1)
+		{
+			offset.x = 100;
+		}
+	}
+	else if (subType == 1)
+	{
+		offset.x = -100;
+		if (lane == 2)
+		{
+			offset.y = -100;
+		}
+		else if (lane == 3)
+		{
+			offset.y = 100;
+		}
+	}
+	else if (subType == 2)
+	{
+		offset.y = 100;
+		if (lane == 4)
+		{
+			offset.x = -100;
+		}
+		else if (lane == 5)
+		{
+			offset.x = 100;
+		}
+	}
+	else if (subType == 3)
+	{
+		offset.x = 100;
+		if (lane == 6)
+		{
+			offset.y = -100;
+		}
+		else if (lane == 7)
+		{
+			offset.y = 100;
+		}
+	}
 }
