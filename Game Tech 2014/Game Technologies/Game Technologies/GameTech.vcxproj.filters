@@ -57,6 +57,12 @@
     <ClCompile Include="TextMesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Bullets.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Vehicle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameEntity.h">
@@ -111,6 +117,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TextMesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullets.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Vehicle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

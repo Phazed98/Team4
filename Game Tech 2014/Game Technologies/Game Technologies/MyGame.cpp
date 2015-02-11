@@ -14,6 +14,11 @@ You can completely change all of this if you want, it's your game!
 */
 MyGame::MyGame()	
 {
+
+	count_time = 0;    //new control shoot the bullets   4.2.2015 Daixi
+
+	Speed_Player = 1;  //control the player speed
+
 	elements.push_back(top);
 	elements.push_back(right);
 	elements.push_back(bottom);
@@ -32,11 +37,14 @@ MyGame::MyGame()
 		obstacleReference[i] = NULL;
 	}
 
-	gameCamera = new Camera(-30.0f,0.0f,Vector3(0,450,850));
+	gameCamera = new Camera(-30.0f, 0.0f, Vector3(0, 350, -800)); //changed the location Daixi 3.2.2015
 
 	Renderer::GetRenderer().SetCamera(gameCamera);
 
 	CubeRobot::CreateCube();
+
+	Car = new Vehicle();
+	PlayerMesh = new OBJMesh(MESHDIR"Player.obj"); // 3.2.2015 Daixi
 
 	/*
 	We're going to manage the meshes we need in our game in the game class!
@@ -50,6 +58,17 @@ MyGame::MyGame()
 	cube	= new OBJMesh(MESHDIR"cube.obj");
 	quad	= Mesh::GenerateQuad();
 	sphere	= new OBJMesh(MESHDIR"ico.obj");
+	PlayerMesh = new OBJMesh(MESHDIR"Player.obj"); // 3.2.2015 Daixi
+
+	Enemy = BuildPlayerEntity(20.0f, Vector3(-300, 100, -300)); //new 4.2.2015 Daixi
+	Enemy->GetPhysicsNode().SetPosition(Vector3(300, 100, -100));
+
+	Position0 = Enemy->GetPhysicsNode().GetPosition(); //5.2.2015 Daixi ------------------This is the straight line bullet
+	Position0.z = Position0.z - 20;
+	bullet = new Bullets(Position0);
+
+	BuffEntity = BuildBuffEntity(6, Vector3(0, 100, -200)); //6.2.2015 Daixi ------------------ This is the buff object, and when player hit it, will speed up
+	BuffEntity->GetRenderNode().SetColour(Vector4(1, 1, 0, 1));
 
 	/*
 	A more 'robust' system would check the entities vector for duplicates so as
@@ -104,6 +123,9 @@ MyGame::~MyGame(void)
 	delete cube;
 	delete quad;
 	delete sphere;
+	delete Enemy;   //new 5.2.2015 Daixi
+	delete Car;
+	delete bullet;
 
 	CubeRobot::DeleteCube();
 
@@ -124,6 +146,8 @@ void MyGame::UpdateGame(float msec)
 {
 	if(gameCamera) 
 	{
+		Car->UpdatePlayer(msec);
+		gameCamera->SetPosition(Car->tempPosition);
 		gameCamera->UpdateCamera(msec);
 	}
 
@@ -132,6 +156,14 @@ void MyGame::UpdateGame(float msec)
 		(*i)->Update(msec);
 	
 	}
+
+	if (count_time == 80)
+	{    //new control when shoot the bullets   4.2.2015 Daixi
+		bullet->ShootBullets();
+		count_time = 0;
+	}
+
+	count_time++;
 
 	handlePlanes();
 
@@ -148,6 +180,44 @@ void MyGame::UpdateGame(float msec)
 	//Renderer::GetRenderer().DrawDebugCircle(DEBUGDRAW_PERSPECTIVE, Vector3(-200,1,-200), 50.0f, Vector3(0,1,0));
 
 	//PhysicsSystem::GetPhysicsSystem().DrawDebug();
+}
+
+GameEntity* MyGame::BuildPlayerEntity(float size, Vector3 pos)
+{
+	SceneNode* test = new SceneNode(PlayerMesh);
+	test->SetModelScale(Vector3(size, size, size));
+	test->SetBoundingRadius(size);
+	test->SetColour(Vector4(0.2, 0.2, 0.5, 1));
+	PhysicsNode*p = new PhysicsNode();
+
+	p->SetUseGravity(false);
+	pos = Vector3(0, 100, -400);
+	p->SetPosition(pos);
+	p->SetCollisionVolume(new CollisionSphere(size));
+
+
+	GameEntity*g = new GameEntity(test, p);
+	g->ConnectToSystems();
+	return g;
+}
+
+/*
+Makes Buff. it can speed up Player or slow down!
+*/
+GameEntity* MyGame::BuildBuffEntity(float radius, Vector3 pos)
+{   //new 6.2.2015 Daixi
+	SceneNode* test = new SceneNode(sphere);
+	test->SetModelScale(Vector3(radius, radius, radius));
+	test->SetBoundingRadius(radius);
+	test->SetColour(Vector4(0.2, 0.2, 0.5, 1));
+	PhysicsNode*p = new PhysicsNode();
+
+	p->SetUseGravity(false);
+	p->SetPosition(pos);
+
+	GameEntity*g = new GameEntity(test, p);
+	g->ConnectToSystems();
+	return g;
 }
 
 /*

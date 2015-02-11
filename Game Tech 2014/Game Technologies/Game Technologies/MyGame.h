@@ -40,7 +40,11 @@ _-_-_-_-_-_-_-""  ""
 #include "GameClass.h"
 #include "../nclgl/Camera.h"
 #include "../nclgl/CubeRobot.h"
+#include "Vehicle.h"
+#include "Bullets.h"
 
+class Vehicle;
+class Bullets;
 class MyGame : public GameClass	{
 public:
 	MyGame();
@@ -61,6 +65,10 @@ public:
 	void CreateObstacle(ObjectType* _obj);
 	int getObstacleEmptyIndex(int _subType,int);
 
+	void UpdatePlayer(float msec);
+
+	void ShootBullets();  //new 4.2.2015 Daixi
+
 protected:
 	GameEntity* BuildRobotEntity();
 
@@ -73,6 +81,11 @@ protected:
 	ObjectType* BuildObjectEntity(float size, int type, int subType);
 
 	Obstacle* BuildObstacleEntity(float size, int type, int subType, ObjectType*);
+
+	GameEntity* BuildBuffEntity(float radius, Vector3 pos); //new 6.2.2015 Daixi
+
+	GameEntity* BuildPlayerEntity(float size, Vector3 pos);
+
 
 
 	Mesh* cube;
@@ -89,6 +102,27 @@ protected:
 
 	vector<vector<Obstacle*>> obstacleElements;
 	vector<Obstacle*> obstacleReference;
+
+	GameEntity* Enemy;  //new 4.2.2015 Daixi  just for test i create some enemy
+
+	GameEntity* BuffEntity;
+
+	Vehicle* Car;
+
+	Bullets* bullet;
+
+	Vector3 PositionEnemy;  //new 4.2.2015 Daixi
+	Vector3 Position0;
+	Vector3 Position1;
+
+	Vector3 temp;   // 5.2.2015 for caculate the length between Player and Buff
+	Vector3 temp1, temp2, temp3;  //Control the player speed  6.2.2015
+
+	Mesh* PlayerMesh; //new 3.2.2015 Daixi
+
+
+	int count_time;  //new 4.2.2015 Daixi
+	int Speed_Player; //4.2.2015 Daixi
 	
 };
 
