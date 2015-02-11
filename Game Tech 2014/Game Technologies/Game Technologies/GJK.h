@@ -2,39 +2,7 @@
 #include "../../nclgl/Vector3.h"
 #include "PhysicsNode.h"
 #include "SupportPoint.h"
-
-//struct SupportPoint
-//{
-//	Vector3 vector; // the minkowski difference point
-//
-//	// the individual support points
-//	Vector3 sup_a;
-//	Vector3 sup_b; // not actually necessary
-//
-//	SupportPoint(Vector3 &vv, Vector3 &sup_aa, Vector3 &sup_bb)
-//	{
-//		vector = vv;
-//		sup_a = sup_aa;
-//		sup_b = sup_bb;
-//	}
-//
-//	SupportPoint()
-//	{
-//		vector = Vector3(0, 0, 0);
-//		sup_a = Vector3(0, 0, 0);
-//		sup_b = Vector3(0, 0, 0);
-//	}
-//
-//
-//	SupportPoint(Vector3 &vv)
-//	{
-//		vector = vv;
-//		sup_a = Vector3(0, 0, 0);
-//		sup_b = Vector3(0, 0, 0);
-//	}
-//
-//	BOOL operator==(const SupportPoint &r) const { return vector == r.vector; }
-//};
+#include "GJKSimplex.h"
 
 struct Triangle
 {
@@ -67,8 +35,12 @@ class GJK
 public:
 	GJK();
 	~GJK();
+
+	//Keeping nomral GJK method...might be needed somewhere (Sam)
 	bool CollisionDetection(PhysicsNode& s0, PhysicsNode& s1, CollisionData* collisionData = NULL);
 
+	//Added by Sam - optimised GJK using GJKSimplex history object to speed up collision detection in successive frames.
+	bool CollisionDetection(PhysicsNode& s0, PhysicsNode& s1, GJKSimplex simplexStore, CollisionData* collisionData = NULL);
 
 
 
@@ -93,10 +65,15 @@ private:
 	void barycentric(const Vector3 &p, const Vector3 &a, const Vector3 &b, const Vector3 &c, float *u, float *v, float *w);
 
 	SupportPoint a, b, c, d;
-	vector<Vector3> simplexVector;
 	vector <Triangle> triVector;
 	vector <Edge> edgeVector;
 	int nrPointsSimplex;
 
+
+
+	//Added by Sam for the optimised GJK
+	SupportPoint SupportWithStore(Vector3 pt0[], int point0Count, Vector3 pt1[], int point1Count, Vector3& dir);
+	bool checkTetraBaseStillValid();
+	void restoreSupportPoint(SupportPoint &point, Vector3 pt0[], int &pointIndex0, Vector3 pt1[], int &pointIndex1);
 
 };

@@ -1,6 +1,7 @@
 #pragma once
 #include "../../nclgl/Vector3.h"
 
+//Added by Sam to allow the support point to be stored outside the GJK class
 class SupportPoint
 {
 public:
@@ -8,14 +9,21 @@ public:
 	SupportPoint();
 	SupportPoint(Vector3 &point);
 	SupportPoint(Vector3 &point, Vector3 &pointInA, Vector3 &pointInB);
+	//added for optimised GJK simplex storage
+	SupportPoint(Vector3 &point, Vector3 &pointInA, Vector3 &pointInB, int indexA, int indexB);
 
 	Vector3 getPoint() { return point; }
 	Vector3 getpointInA() { return pointInA; }
 	Vector3 getpointInB() { return pointInB; }
+	int getVertIndexInA() { return vertIndexInA; }
+	int getVertIndexInB() { return vertIndexInB; }
 
-	Vector3 setPoint(Vector3 v) { point = v; }
-	Vector3 setpointInA(Vector3 v) { pointInA = v; }
-	Vector3 setpointInB(Vector3 v) { pointInB = v; }
+	void setPoint(Vector3 v) { point = v; }
+	void setpointInA(Vector3 v) { pointInA = v; }
+	void setpointInB(Vector3 v) { pointInB = v; }
+	void setVertIndexInA(int index){ vertIndexInA = index; }
+	void setVertIndexInB(int index){ vertIndexInB = index; }
+
 
 	bool operator==(const SupportPoint &r) const { return point == r.point; }
 
@@ -23,6 +31,10 @@ private:
 	Vector3 point;
 	Vector3 pointInA;
 	Vector3 pointInB;
+
+	//added so the simplex storage can work
+	int vertIndexInA;
+	int vertIndexInB;
 
 };
 
@@ -46,3 +58,8 @@ point(point), pointInA(pointInA), pointInB(pointInB)
 
 }
 
+SupportPoint::SupportPoint(Vector3 &point, Vector3 &pointInA, Vector3 &pointInB, int indexA, int indexB) :
+point(point), pointInA(pointInA), pointInB(pointInB), vertIndexInA(indexA), vertIndexInB(indexB)
+{
+
+}

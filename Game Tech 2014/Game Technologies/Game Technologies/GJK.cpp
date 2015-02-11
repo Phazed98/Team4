@@ -10,7 +10,7 @@ GJK::~GJK()
 
 }
 
-
+//Normal GJK method
 bool GJK::CollisionDetection(PhysicsNode& n0, PhysicsNode& n1, CollisionData* cd)
 {
 
@@ -20,7 +20,6 @@ bool GJK::CollisionDetection(PhysicsNode& n0, PhysicsNode& n1, CollisionData* cd
 
 	//Reset Any points
 	a = b = c = d = SupportPoint();
-	simplexVector.clear();
 	nrPointsSimplex = 0;
 
 	Mesh* mesh0 = n0.getTarget()->GetMesh();
@@ -95,37 +94,13 @@ bool GJK::CollisionDetection(PhysicsNode& n0, PhysicsNode& n1, CollisionData* cd
 			if (ContainsOrigin(dir))
 			{
 
-				/* This is the basic algorithm for EPA :
-
-				1 Take over the simplex from GJK when GJK terminated, and “blow up” the simplex to a tetrahedron if it contains less than 4 vertices.
-
-				2 Use the 4 faces(triangles) of the tetrahedron to construct an initial polytope.
-
-				3 Pick the closest face of the polytope to the origin.
-
-				4 If the closest face is no closer(by a certain threshold) to the origin than the previously picked one, go to 8.
-
-				5 Remove the closest face, use the face normal(outward pointing) as the search direction to find a support point on the CSO.
-
-				6 Remove all faces from the polytope that can be “seen” by this new support point, and add new faces to cover up the “hole” on the polytope, where all new faces share the new support
-				point as a common vertex(this is the expanding part of the algorithm).
-
-				7 Go to 3.
-
-				8 Project the origin onto the closest triangle.This is our closest point to the origin on the CSO’s boundary.Compute the barycentric coordinates of this closest point with respect to
-				the vertices from the closest triangle.The barycentric coordinates are coefficients of linear combination of vertices from the closest triangle.Linearly combining the individual
-				support points(original results from individual colliders) corresponding to the vertices from the closest triangle, with the same barycentric coordinates as coefficients, gives us
-				contact points on both colliders in their own model space.We can then convert these contact points to world space.
-
-				9 End EPA.
-				*/
 
 				//if (a == Vector3(0, 0, 0) || b == Vector3(0, 0, 0) || c == Vector3(0, 0, 0) || d == Vector3(0, 0, 0))
 				//{
 				//	return false;
 				//}
 
-				/*1 Take over the simplex from GJK when GJK terminated, and “blow up” the simplex to a tetrahedron if it contains less than 4 vertices.Assuming Now that we dont need this 
+				/*1 Take over the simplex from GJK when GJK terminated, and “blow up” the simplex to a tetrahedron if it contains less than 4 vertices.Assuming Now that we dont need this
 				*/
 
 				/*
@@ -196,11 +171,11 @@ bool GJK::CollisionDetection(PhysicsNode& n0, PhysicsNode& n1, CollisionData* cd
 
 					//Determine to remove = Iterate though triangles 
 					// If dot product of (triangles normal, SupportPoint - currentTriangleFirstpoint)
-				
+
 					/*
 					5 Remove the closest face, use the face normal(outward pointing) as the search direction to find a support point on the CSO. Remove Triangle and Add its edges to the edgeVector
 					*/
-			
+
 
 					// If dot product of (triangles normal, SupportPoint - currentTriangleFirstpoint)
 					for (auto i = triVector.begin(); i != triVector.end();)
@@ -229,14 +204,14 @@ bool GJK::CollisionDetection(PhysicsNode& n0, PhysicsNode& n1, CollisionData* cd
 					6 Remove all faces from the polytope that can be “seen” by this new support point, and add new faces to cover up the “hole” on the polytope, where all new faces share the new support point as a common vertex(this is the expanding part of the algorithm).
 					*/
 					edgeVector.clear();
-	
-					
+
+
 
 					/*
 					7 Go to 3. and Try Again
 					*/
-				} 
-				
+				}
+
 
 				/*
 				9 End EPA.
@@ -254,13 +229,14 @@ bool GJK::CollisionDetection(PhysicsNode& n0, PhysicsNode& n1, CollisionData* cd
 	return false;
 }
 
+
 bool GJK::ContainsOrigin(Vector3& dir)
 {
 	if (nrPointsSimplex == 2) // We currently have a line, build a triangle
 	{
 		return triangle(dir);
 	}
-	else if (nrPointsSimplex == 3) //We Have a triangle built a Tetrahedron
+	else if (nrPointsSimplex == 3) //We Have a triangle build a Tetrahedron
 	{
 		return tetrahedron(dir);
 	}
@@ -534,4 +510,321 @@ void GJK::barycentric(const Vector3 &p, const Vector3 &a, const Vector3 &b, cons
 	*v = (d11 * d20 - d01 * d21) / denom;
 	*w = (d00 * d21 - d01 * d20) / denom;
 	*u = 1.0f - *v - *w;
+}
+
+
+//#####################################################################################################################################################################
+//#####################################################################################################################################################################
+//#####################################################################################################################################################################
+//#####################################################################################################################################################################
+//#####################################################################################################################################################################
+//-------------------------Below is the optimised GJK method and related methods with changes. Done by Sam -----------------------------------
+
+
+//Added by Sam - optimised GJK method that uses a stored simplex to test if 'anything has changed' since the last frame
+//This reduces repetitive calculations every frame. 
+bool GJK::CollisionDetection(PhysicsNode& n0, PhysicsNode& n1, GJKSimplex simplexStore, CollisionData* cd)
+{
+	//Perform initial setup
+	Mesh* mesh0 = n0.getTarget()->GetMesh();
+	Mesh* mesh1 = n1.getTarget()->GetMesh();
+
+	Vector3* Object0Vertices = mesh0->getVertices();
+	Vector3* Object1Vertices = mesh1->getVertices();
+
+	int Object0VertexCount = n0.getTarget()->GetMesh()->getNumVertices();
+	int Object1VertexCount = n1.getTarget()->GetMesh()->getNumVertices();
+
+	Matrix4 translation0 = Matrix4::Translation(n0.GetPosition());
+	Matrix4 translation1 = Matrix4::Translation(n1.GetPosition());
+
+	Matrix4 orientation0 = n0.GetOrientation().ToMatrix();
+	Matrix4 orientation1 = n1.GetOrientation().ToMatrix();
+
+
+	Matrix4 scale0 = Matrix4::Scale(n0.getTarget()->GetModelScale());
+	Matrix4 scale1 = Matrix4::Scale(n1.getTarget()->GetModelScale());
+
+	Matrix4 Object0Matrix = translation0 * orientation0 * scale0;
+	Matrix4 Object1Matrix = translation1 * orientation1 * scale1;
+
+	Vector3* Object0FixedVertices = new Vector3[Object0VertexCount];
+	Vector3* Object1FixedVertices = new Vector3[Object1VertexCount];
+
+	for (int x = 0; x < Object0VertexCount; x++)
+		Object0FixedVertices[x] = Object0Matrix *  Object0Vertices[x];
+
+	for (int x = 0; x < Object1VertexCount; x++)
+		Object1FixedVertices[x] = Object1Matrix *  Object1Vertices[x];
+
+
+
+	Vector3 dir;
+
+	//Check if stored simplex
+	if (simplexStore.GetActiveStore())
+	{
+		//restore simplex
+
+		nrPointsSimplex = 4;
+
+		int aIndex0 = simplexStore.GetPointAIndex0();
+		int aIndex1 = simplexStore.GetPointAIndex1();
+		restoreSupportPoint(a, Object0FixedVertices, aIndex0, Object1FixedVertices, aIndex1);
+
+		int bIndex0 = simplexStore.GetPointBIndex0();
+		int bIndex1 = simplexStore.GetPointBIndex1();
+		restoreSupportPoint(b, Object0FixedVertices, bIndex0, Object1FixedVertices, bIndex1);
+
+		int cIndex0 = simplexStore.GetPointCIndex0();
+		int cIndex1 = simplexStore.GetPointCIndex1();
+		restoreSupportPoint(c, Object0FixedVertices, cIndex0, Object1FixedVertices, cIndex1);
+
+		int dIndex0 = simplexStore.GetPointDIndex0();
+		int dIndex1 = simplexStore.GetPointDIndex1();
+		restoreSupportPoint(d, Object0FixedVertices, dIndex0, Object1FixedVertices, dIndex1);
+
+		//Check simplex is still valid, perform GJK from scratch
+		if (!checkTetraBaseStillValid())
+		{
+			//Get first Point of TetraHedron
+			c = SupportWithStore(Object0FixedVertices, Object0VertexCount, Object1FixedVertices, Object1VertexCount, dir);
+
+			dir = -(c.getPoint());
+
+			//Get Point Opposite point C's normal
+			b = SupportWithStore(Object0FixedVertices, Object0VertexCount, Object1FixedVertices, Object1VertexCount, dir);
+
+			//Early Out because is invalid
+			if (Vector3::Dot(b.getPoint(), dir) < 0)
+			{
+				delete[] Object0FixedVertices;
+				delete[] Object1FixedVertices;
+				return false;
+			}
+
+			dir = Vector3::DoubleCross(c.getPoint() - b.getPoint(), -b.getPoint());
+
+			nrPointsSimplex = 2;
+		}
+	}
+	//if no stored simplex perform GJK from scratch
+	else
+	{
+		//Get first Point of TetraHedron
+		c = SupportWithStore(Object0FixedVertices, Object0VertexCount, Object1FixedVertices, Object1VertexCount, dir);
+
+		dir = -(c.getPoint());
+
+		//Get Point Opposite point C's normal
+		b = SupportWithStore(Object0FixedVertices, Object0VertexCount, Object1FixedVertices, Object1VertexCount, dir);
+
+		//Early Out because is invalid
+		if (Vector3::Dot(b.getPoint(), dir) < 0)
+		{
+			delete[] Object0FixedVertices;
+			delete[] Object1FixedVertices;
+			return false;
+		}
+
+		dir = Vector3::DoubleCross(c.getPoint() - b.getPoint(), -b.getPoint());
+
+		nrPointsSimplex = 2;
+	}
+
+
+	int steps = 0;
+	while (steps < 20) //This is a bounded while true to avoid "Going down the Rabbit Hole" if no out is possible
+	{
+		//Build A from the Updated Vector
+		a = SupportWithStore(Object0FixedVertices, Object0VertexCount, Object1FixedVertices, Object1VertexCount, dir);
+
+		//A is invalid so early out, YAY!!!
+		if (Vector3::Dot(a.getPoint(), dir) < 0)
+		{
+			delete[] Object0FixedVertices;
+			delete[] Object1FixedVertices;
+			return false;
+		}
+
+		else //Check if we have a valid solution or need to continue to iterate
+		{
+			if (ContainsOrigin(dir))
+			{
+
+
+				//if (a == Vector3(0, 0, 0) || b == Vector3(0, 0, 0) || c == Vector3(0, 0, 0) || d == Vector3(0, 0, 0))
+				//{
+				//	return false;
+				//}
+
+				/*1 Take over the simplex from GJK when GJK terminated, and “blow up” the simplex to a tetrahedron if it contains less than 4 vertices.Assuming Now that we dont need this
+				*/
+
+				/*
+				2 Use the 4 faces(triangles) of the tetrahedron to construct an initial polytope.
+				*/
+				triVector.push_back(Triangle(a, b, c));
+				triVector.push_back(Triangle(a, c, d));
+				triVector.push_back(Triangle(a, d, b));
+				triVector.push_back(Triangle(b, d, c));
+
+				float distToOrigin = -FLT_MAX;
+
+				int count = 0;
+				while (count < 100) //Should never matter, but if EPA gets stuck, have an out
+				{
+					count++;
+					/*
+					3 Pick the closest face of the polytope to the origin.
+					*/
+					Triangle tempT = triVector.at(findTriangle());
+					SupportPoint entry_cur_support = SupportWithStore(Object0FixedVertices, Object0VertexCount, Object1FixedVertices, Object1VertexCount, tempT.triNormal);
+					float vecLength = Vector3::Dot(entry_cur_support.getPoint(), tempT.triNormal);
+
+					/*4 If the closest face is no closer(by a certain threshold) to the origin than the previously picked one, go to 8. (8 = collisionData generation)
+					*/
+					if (vecLength - distToOrigin < 0.001f)
+					{
+						/*8 Project the origin onto the closest triangle.This is our closest point to the origin on the CSO’s boundary.Compute the barycentric coordinates of this closest point with respect to the vertices from the closest triangle.The barycentric coordinates are coefficients of linear combination of vertices from the closest triangle.Linearly combining the individual support points(original results from individual colliders) corresponding to the vertices from the closest triangle, with the same barycentric coordinates as coefficients, gives us contact points on both colliders in their own model space.We can then convert these contact points to world space.
+						*/
+
+						float bary_u, bary_v, bary_w;
+						barycentric(tempT.triNormal * vecLength,
+							tempT.a.getPoint(),
+							tempT.b.getPoint(),
+							tempT.c.getPoint(),
+							&bary_u,
+							&bary_v,
+							&bary_w);
+
+						// collision point on object a in world space
+						cd->m_point = (tempT.a.getpointInA() * bary_u) +
+							(tempT.b.getpointInB() * bary_v) +
+							(tempT.c.getpointInA() * bary_w);
+
+						// collision normal
+						cd->m_normal = -tempT.triNormal;
+
+						// penetration depth
+						cd->m_penetration = distToOrigin * 0.1;
+
+						triVector.clear();
+						//break;
+
+						delete[] Object0FixedVertices;
+						delete[] Object1FixedVertices;
+						return true;
+					}
+
+					distToOrigin = vecLength;
+
+					//Determine to remove = Iterate though triangles 
+					// If dot product of (triangles normal, SupportPoint - currentTriangleFirstpoint)
+
+					/*
+					5 Remove the closest face, use the face normal(outward pointing) as the search direction to find a support point on the CSO. Remove Triangle and Add its edges to the edgeVector
+					*/
+
+
+					// If dot product of (triangles normal, SupportPoint - currentTriangleFirstpoint)
+					for (auto i = triVector.begin(); i != triVector.end();)
+					{
+						Triangle& t = *i;
+						if (Vector3::Dot(t.triNormal, (entry_cur_support.getPoint() - t.a.getPoint())) > 0)
+						{
+							addEdge(t.a, t.b);
+							addEdge(t.b, t.c);
+							addEdge(t.c, t.a);
+							i = triVector.erase(i);
+							continue;
+						}
+						++i;
+					}
+
+					//if currentEdge == any other edge
+
+					//Create Triangles from EdgeList
+					for (Edge e : edgeVector)
+					{
+						triVector.push_back(Triangle(entry_cur_support, e.a, e.b));
+					}
+
+					/*
+					6 Remove all faces from the polytope that can be “seen” by this new support point, and add new faces to cover up the “hole” on the polytope, where all new faces share the new support point as a common vertex(this is the expanding part of the algorithm).
+					*/
+					edgeVector.clear();
+
+
+
+					/*
+					7 Go to 3. and Try Again
+					*/
+				}
+
+
+				/*
+				9 End EPA.
+				*/
+				delete[] Object0FixedVertices;
+				delete[] Object1FixedVertices;
+				//Here for the redundancy out of EPA. Should never be called. 
+				return false;
+			}
+
+
+
+
+		}
+		steps++;
+	}
+	delete[] Object0FixedVertices;
+	delete[] Object1FixedVertices;
+	return false;
+}
+
+//Support function Gets the minkoswki points farthest points in the provided vector in the specified direction (Reallllly usefull for future note)
+SupportPoint GJK::SupportWithStore(Vector3 pt0[], int point0Count, Vector3 pt1[], int point1Count, Vector3& dir)
+{
+	Vector3 dirCopy = dir;
+	dirCopy.Normalise();
+
+	int index0 = DirectionPoint(pt0, point0Count, dirCopy);
+	Vector3 p0 = pt0[index0];
+	int index1 = DirectionPoint(pt1, point1Count, -dirCopy);
+	Vector3 p1 = pt1[index1];
+
+	Vector3 p2 = p0 - p1;
+	SupportPoint point(p2, p0, p1, index0, index1);
+	return  point;
+}
+
+//Gets the support point valid this frame from the point indexes in a previous frame. 
+//Gives the same points but at updated locations
+void GJK::restoreSupportPoint(SupportPoint &point, Vector3 pt0[], int &pointIndex0, Vector3 pt1[], int &pointIndex1)
+{
+	Vector3 p0 = pt0[pointIndex0];
+	Vector3 p1 = pt1[pointIndex1];
+	Vector3 p2 = p0 - p1;
+	point = SupportPoint(p2, p0, p1, pointIndex0, pointIndex1);
+}
+
+
+
+//Used to check the base triangle of the simplex is still correct in the event 
+bool GJK::checkTetraBaseStillValid()
+{
+	Vector3 dO = Vector3(-d.getPoint().x, -d.getPoint().y, -d.getPoint().z);
+	Vector3 db = b.getPoint() - d.getPoint();
+	Vector3 dc = c.getPoint() - d.getPoint();
+	Vector3 dbc = Vector3::Cross(db, dc);
+
+	//Is origin above the base triangle?
+	//HACK If this is misbehaving check 1) base triangle winding 
+	if (Vector3::Dot(dbc, dc) > 0)
+	{
+		//Base still valid, so valid tetrahedron
+		return true;
+	}
+	return false;
 }

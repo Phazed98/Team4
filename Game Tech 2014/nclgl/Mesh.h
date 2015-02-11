@@ -73,6 +73,17 @@ public:
 
 	bool	TransformsTexCoords() { return transformCoords;}
 
+	//-----------------------------added by Sam --------------------------------------
+	//for creating AABB for shapes. Does NOT need to be symetrical!!!!
+	/*returns the distance of the furthest (unscaled) vector from the shape's origin
+	use this to make a AABB which is a cube. Saves having to do calculations for orientation and stuff
+	when generating advanced terrain at speed. The AABB is only for quick-outs anyway.
+	*/
+	Vector3 GetFurthestVert();
+	//--------------------------------------------------------------------------------
+
+
+
 protected:
 	//Buffers all VBO data into graphics memory. Required before drawing!
 	void	BufferData();

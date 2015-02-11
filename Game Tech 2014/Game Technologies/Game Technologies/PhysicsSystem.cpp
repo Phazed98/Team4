@@ -46,35 +46,146 @@ void	PhysicsSystem::Update(float msec)
 	}
 }
 
-void	PhysicsSystem::BroadPhaseCollisions() 
-{
 
-}
 
-void	PhysicsSystem::NarrowPhaseCollisions()
+
+//Original rubbish. Delete later
+//void	PhysicsSystem::NarrowPhaseCollisions()
+//{
+//	for (int i = 0; i < allNodes.size(); i++)
+//	{
+//		PhysicsNode& first = *allNodes[i];
+//		for (int j = i + 1; j < allNodes.size(); j++)
+//		{
+//			PhysicsNode& second = *allNodes[j];
+//
+//
+//			CollisionData* collisionData = new CollisionData();
+//			GJK* gjkObj = new GJK();
+//
+//
+//			if (gjkObj->CollisionDetection(first, second, collisionData))
+//			{
+//
+//			}
+//
+//			delete gjkObj; 
+//			delete collisionData;
+//		}
+//	}
+//}
+
+
+//Created by Sam 
+void	PhysicsSystem::BroadPhaseCollisions()
 {
-	for (int i = 0; i < allNodes.size(); i++)
+	//get current plane
+	//int currentPlaneIndex = GameClass::GetGameClass().GetCurrentPlaneIndex();
+	int currentPlaneIndex = 0; //TEMP ##################################################################
+
+	//only check collisions on the active player plane
+	//NOTE this will need changing a little if we add other physics objects in. 
+	switch (currentPlaneIndex)
 	{
-		PhysicsNode& first = *allNodes[i];
-		for (int j = i + 1; j < allNodes.size(); j++)
+	case 0:
+		for (PhysicsNode* &node : *TilePhysicsNodeArray0)
 		{
-			PhysicsNode& second = *allNodes[j];
-
-
-			CollisionData* collisionData = new CollisionData();
-			GJK* gjkObj = new GJK();
-
-
-			if (gjkObj->CollisionDetection(first, second, collisionData))
+			//Check if POTENTIAL collision with player
+			if (CheckAABBCollision(*player, *node))
 			{
+				//Perform collision check between player and object
+				CollisionData* collisionData = new CollisionData();
+				GJK* gjkObj = new GJK();
+				if (gjkObj->CollisionDetection(*player, *node, collisionData))
+				{
+					//resolve collision
+					AddCollisionImpulse(*player, *node, collisionData);
+				}
+				delete gjkObj;
+				delete collisionData;
+			}
+		}
+		break;
+	case 1:
+		for (PhysicsNode* &node : *TilePhysicsNodeArray1)
+		{
+			//Check if POTENTIAL collision with player
+			if (CheckAABBCollision(*player, *node))
+			{
+				//Perform collision check between player and object
+				CollisionData* collisionData = new CollisionData();
+				GJK* gjkObj = new GJK();
+				if (gjkObj->CollisionDetection(*player, *node, collisionData))
+				{
+					//resolve collision
+					AddCollisionImpulse(*player, *node, collisionData);
+				}
 
 			}
-
-			delete gjkObj; 
-			delete collisionData;
 		}
+		break;
+	case 2:
+		for (PhysicsNode* &node : *TilePhysicsNodeArray2)
+		{
+			//Check if POTENTIAL collision with player
+			if (CheckAABBCollision(*player, *node))
+			{
+				//Perform collision check between player and object
+				CollisionData* collisionData = new CollisionData();
+				GJK* gjkObj = new GJK();
+				if (gjkObj->CollisionDetection(*player, *node, collisionData))
+				{
+					//resolve collision
+					AddCollisionImpulse(*player, *node, collisionData);
+				}
+
+			}
+		}
+		break;
+	case 3:
+		for (PhysicsNode* &node : *TilePhysicsNodeArray3)
+		{
+			//Check if POTENTIAL collision with player
+			if (CheckAABBCollision(*player, *node))
+			{
+				//Perform collision check between player and object
+				CollisionData* collisionData = new CollisionData();
+				GJK* gjkObj = new GJK();
+				if (gjkObj->CollisionDetection(*player, *node, collisionData))
+				{
+					//resolve collision
+					AddCollisionImpulse(*player, *node, collisionData);
+				}
+
+			}
+		}
+		break;
 	}
 }
+
+//Added by Sam - basic AABB for broadphase
+bool PhysicsSystem::CheckAABBCollision(PhysicsNode &n0, PhysicsNode &n1)
+{
+	float AABBSum = n0.GetAABBHalfLength() + n1.GetAABBHalfLength();
+	float distance = n0.GetPosition().z - n1.GetPosition().z;
+	//check Z axis for early out
+	if (distance < AABBSum)
+	{
+		float distance = n0.GetPosition().x - n1.GetPosition().x;
+		//next is X axis
+		if (distance < AABBSum)
+		{
+			float distance = n0.GetPosition().y - n1.GetPosition().y;
+			//Y axis last
+			if (distance < AABBSum)
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 
 void	PhysicsSystem::AddNode(PhysicsNode* n) 
 {

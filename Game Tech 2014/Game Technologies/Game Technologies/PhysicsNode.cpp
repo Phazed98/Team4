@@ -111,21 +111,21 @@ void PhysicsNode::CalculateAvgVel()
 	m_avgVelocity = m_avgVelocity / RESTCHECKFRAMES;
 }
 
-/*
-This function simply turns the orientation and position
-of our physics node into a transformation matrix, suitable
-for plugging into our Renderer!
-
-It is cleaner to work with matrices when it comes to rendering,
-as it is what shaders expect, and allow us to keep all of our
-transforms together in a single construct. But when it comes to
-physics processing and 'game-side' logic, it is much neater to
-have seperate orientations and positions.
-*/
 
 Matrix4		PhysicsNode::BuildTransform() 
 {
 	Matrix4 m = m_orientation.ToMatrix();
 	m.SetPositionVector(m_position);
 	return m;
+}
+
+//Added by Sam for physics broadphase
+void PhysicsNode::ConfigureAABBHalfLength()
+{
+	Vector3 point = target->GetMesh()->GetFurthestVert();
+	//scale the point
+	point * target->GetModelScale();
+
+	//set the AABB half length
+	AABBHalfLength = point.Length();
 }

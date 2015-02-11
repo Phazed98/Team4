@@ -97,6 +97,7 @@
     <ClInclude Include="GameClass.h" />
     <ClInclude Include="GameEntity.h" />
     <ClInclude Include="GJK.h" />
+    <ClInclude Include="GJKSimplex.h" />
     <ClInclude Include="InertialMatrixHelper.h" />
     <ClInclude Include="MyGame.h" />
     <ClInclude Include="ObjectType.h" />
