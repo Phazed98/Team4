@@ -239,13 +239,14 @@ Makes a cube. Every game has a crate in it somewhere!
 */
 GameEntity* MyGame::BuildCubeEntity(float size) {
 	GameEntity*g = new GameEntity(new SceneNode(cube), new PhysicsNode());
-	g->ConnectToSystems();
+	
 
 	SceneNode &test = g->GetRenderNode();
 
 	test.SetModelScale(Vector3(size,size,size));
 	test.SetBoundingRadius(size);
 
+	g->ConnectToSystems();
 	return g;
 }
 /*

@@ -23,17 +23,21 @@ void	GameEntity::Update(float msec) {
 
 }
 
+//NOTE - CALL LAST DURING OBJECT CREATION
 void	GameEntity::ConnectToSystems() {
-	if(renderNode) {
+	if (renderNode) {
 		Renderer::GetRenderer().AddNode(renderNode);
 	}
 
-	if(physicsNode) {
+	if (physicsNode) {
 		PhysicsSystem::GetPhysicsSystem().AddNode(physicsNode);
 	}
 
-	if(renderNode && physicsNode) {
+	if (renderNode && physicsNode) {
 		physicsNode->SetTarget(renderNode);
+
+		//Added by Sam, sets the AABBHalfLength, best place for it really
+		physicsNode->ConfigureAABBHalfLength();
 	}
 }
 
