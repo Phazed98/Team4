@@ -3,6 +3,7 @@
 #include "GJK.h"
 
 PhysicsSystem* PhysicsSystem::instance = 0;
+int PhysicsSystem::fps = 0;
 
 PhysicsSystem::PhysicsSystem(void)
 {
@@ -19,6 +20,18 @@ PhysicsSystem::~PhysicsSystem(void)
 
 void	PhysicsSystem::Update(float msec)
 {
+	//Update FPS
+	nbFrames++;
+	time += msec;
+
+	if (time >= 1000)
+	{
+		fps = nbFrames;
+		nbFrames = 0;
+		time = 0;
+	}
+
+
 	BroadPhaseCollisions();
 	//NarrowPhaseCollisions();
 

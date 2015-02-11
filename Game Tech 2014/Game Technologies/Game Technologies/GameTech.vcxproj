@@ -84,6 +84,7 @@
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Spring.cpp" />
     <ClCompile Include="SpringDemo.cpp" />
+    <ClCompile Include="TextMesh.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CollisionHelper.h" />
@@ -103,6 +104,7 @@
     <ClInclude Include="Spring.h" />
     <ClInclude Include="SpringDemo.h" />
     <ClInclude Include="SupportPoint.h" />
+    <ClInclude Include="TextMesh.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\nclgl\nclgl.vcxproj">

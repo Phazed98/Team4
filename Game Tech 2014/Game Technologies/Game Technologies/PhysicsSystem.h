@@ -54,6 +54,10 @@ public:
 	void		BroadPhaseCollisions();
 	void		NarrowPhaseCollisions();
 
+
+	static int fps;
+	static int getFPS()				{ return fps; }
+
 	static void AddCollisionImpulse(PhysicsNode &s0, PhysicsNode &s1, CollisionData* data);
 
 	//Statics
@@ -82,6 +86,9 @@ public:
 	void	RemoveDebugDraw(DebugDrawer* d);
 
 	void    DrawDebug();
+
+	float time = 0;
+	int nbFrames = 0;				//Integer for frame count
 
 protected:
 	PhysicsSystem(void);
