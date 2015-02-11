@@ -109,6 +109,8 @@ MyGame::~MyGame(void)
 
 	elements.clear();
 	reference.clear();
+	obstacleElements.clear();
+	obstacleReference.clear();
 
 	//GameClass destructor will destroy your entities for you...
 }
@@ -376,7 +378,7 @@ void MyGame::handlePlanes()
 					allEntities.push_back(elements[i][x]);
 
 					//create obstacle
-					if ((rand() % 100 + 1) > 50)
+					//if ((rand() % 100 + 1) > 50)
 						CreateObstacle(elements[i][x]);
 				}
 				//change state
@@ -420,7 +422,7 @@ void MyGame::CreateObstacle(ObjectType* _obj)
 		}
 	}
 	//free obstacle exists 
-	else
+	else //if (empty != -1 && obstacleReference[_obj->getSubType()] != NULL)
 	{
 		//use the old object
 		if (obstacleReference[_obj->getSubType()] != NULL)
