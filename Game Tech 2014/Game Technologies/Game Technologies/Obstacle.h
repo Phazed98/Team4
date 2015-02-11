@@ -16,6 +16,8 @@ public:
 		physicsNode->SetPosition(Vector3(0, 0, 0));
 	}
 
+	void SetTile(ObjectType* _tile) { tile = _tile; }
+
 private:
 
 	int lane; // Lanes are from 0 t 7 starting from top, two lanes per tile

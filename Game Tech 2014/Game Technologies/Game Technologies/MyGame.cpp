@@ -262,7 +262,7 @@ Obstacle* MyGame::BuildObstacleEntity(float size, int type, int subType, ObjectT
 	PhysicsNode* p = new PhysicsNode();
 	p->SetUseGravity(false);
 
-	Obstacle*g = new Obstacle(_obj, s, p, type, subType, subType);
+	Obstacle*g = new Obstacle(_obj, s, p, type, subType, 0);
 	g->ConnectToSystems();
 	SceneNode &test = g->GetRenderNode();
 
@@ -378,7 +378,7 @@ void MyGame::handlePlanes()
 					allEntities.push_back(elements[i][x]);
 
 					//create obstacle
-					//if ((rand() % 100 + 1) > 50)
+					if ((rand() % 100 + 1) > 50)
 						CreateObstacle(elements[i][x]);
 				}
 				//change state
@@ -391,10 +391,10 @@ void MyGame::handlePlanes()
 				elements[i][j]->setState(4);
 
 				allEntities.erase(allEntities.begin() + getIndexOfAllEtities(elements[i][j]));
+				
 
 			}
 		}
-		
 	}
 }
 
@@ -422,7 +422,7 @@ void MyGame::CreateObstacle(ObjectType* _obj)
 		}
 	}
 	//free obstacle exists 
-	else //if (empty != -1 && obstacleReference[_obj->getSubType()] != NULL)
+	else 
 	{
 		//use the old object
 		if (obstacleReference[_obj->getSubType()] != NULL)
@@ -430,6 +430,7 @@ void MyGame::CreateObstacle(ObjectType* _obj)
 			if (obstacleReference[_obj->getSubType()]->GetPhysicsNode().GetPosition().z < -800.0f)
 			{
 				temp = obstacleElements[_obj->getSubType()][empty];
+				temp->SetTile(_obj);
 			}
 		}
 	}

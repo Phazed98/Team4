@@ -4,7 +4,7 @@
 Obstacle::Obstacle(ObjectType* _tile, SceneNode* s, PhysicsNode* p, int _type, int _subType, int _obstacleType) : ObjectType(s, p, _type, _subType)
 {
 	tile = _tile;
-	obstacleType = _obstacleType;
+	obstacleType = 0;
 	offset.y = 150;
 	random = rand() % 175 + 1;
 	this->GetRenderNode().SetColour(Vector4(0, 0, 0, 1));
@@ -57,7 +57,7 @@ void Obstacle::SetLane(int _lane)
 	}
 	else if (subType == 1) // Right tile
 	{
-		offset.x = -offset.y;
+		offset.x = -150;
 		if (lane == 2)
 		{
 			offset.y = -random;
@@ -69,7 +69,7 @@ void Obstacle::SetLane(int _lane)
 	}
 	else if (subType == 2) // Bottom tile
 	{
-		offset.y = offset.y;
+		offset.y = 150;
 		if (lane == 4)
 		{
 			offset.x = -random;
@@ -81,7 +81,7 @@ void Obstacle::SetLane(int _lane)
 	}
 	else if (subType == 3) // Left tile
 	{
-		offset.x = offset.y;
+		offset.x = 150;
 		if (lane == 6)
 		{
 			offset.y = -random;
