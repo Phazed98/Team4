@@ -1,9 +1,18 @@
-﻿Build started 11/02/2015 18:30:17.
+﻿Build started 11/02/2015 18:39:04.
      1>Project "D:\Team4\Game Tech 2014\Game Technologies\Game Technologies\GameTech.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         D:\Program Files\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt PhysicsSystem.cpp
-         PhysicsSystem.cpp
-     1>d:\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(15): warning C4018: '<' : signed/unsigned mismatch
+         D:\Program Files\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt GameEntity.cpp MyGame.cpp
+         MyGame.cpp
+     1>d:\team4\game tech 2014\game technologies\game technologies\mygame.cpp(190): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>d:\team4\game tech 2014\game technologies\game technologies\mygame.cpp(212): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>d:\team4\game tech 2014\game technologies\game technologies\mygame.cpp(351): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\team4\game tech 2014\game technologies\game technologies\mygame.cpp(365): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\team4\game tech 2014\game technologies\game technologies\mygame.cpp(395): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\team4\game tech 2014\game technologies\game technologies\mygame.cpp(410): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\team4\game tech 2014\game technologies\game technologies\mygame.cpp(423): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\team4\game tech 2014\game technologies\game technologies\mygame.cpp(524): warning C4018: '<' : signed/unsigned mismatch
+         GameEntity.cpp
+         Generating Code...
        Link:
          D:\Program Files\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.lib" /MACHINE:X86 /FORCE:MULTIPLE Debug\Bullets.obj
          Debug\CollisionHelper.obj
@@ -54,4 +63,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.92
+Time Elapsed 00:00:01.61
