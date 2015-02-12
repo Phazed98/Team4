@@ -24,7 +24,7 @@ private:
 
 	Vector3 offset;
 
-	int obstacleType;
+	int obstacleType; //0 for obstacle, 1 for enemy, 2 for coins, 3 for powerups
 
 	ObjectType* tile;
 

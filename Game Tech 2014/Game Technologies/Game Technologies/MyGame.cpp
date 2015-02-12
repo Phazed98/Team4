@@ -14,6 +14,7 @@ You can completely change all of this if you want, it's your game!
 */
 MyGame::MyGame()	
 {
+	timer = 0;
 
 	count_time = 0;    //new control shoot the bullets   4.2.2015 Daixi
 
@@ -165,7 +166,9 @@ void MyGame::UpdateGame(float msec)
 
 	count_time++;
 
-	handlePlanes();
+	timer += 0.001;
+
+	handlePlanes(timer);
 
 	//Renderer::GetRenderer().DrawDebugBox(DEBUGDRAW_PERSPECTIVE, Vector3(0,51,0), Vector3(100,100,100), Vector3(1,0,0));
 
@@ -333,7 +336,8 @@ Obstacle* MyGame::BuildObstacleEntity(float size, int type, int subType, ObjectT
 	PhysicsNode* p = new PhysicsNode();
 	p->SetUseGravity(false);
 
-	Obstacle*g = new Obstacle(_obj, s, p, type, subType, 0);
+	int obstacleType = rand() % 4 + 0;
+	Obstacle*g = new Obstacle(_obj, s, p, type, subType, obstacleType);
 	g->ConnectToSystems();
 	SceneNode &test = g->GetRenderNode();
 
@@ -402,7 +406,7 @@ int MyGame::getEmptyIndex(int _subType)
 	return -1;
 }
 
-void MyGame::handlePlanes()
+void MyGame::handlePlanes(float msec)
 {
 	for (int i = 0; i < 4; i++)
 	{
@@ -449,7 +453,8 @@ void MyGame::handlePlanes()
 					allEntities.push_back(elements[i][x]);
 
 					//create obstacle
-					if ((rand() % 100 + 1) > 50)
+					//cout << timer << endl;
+					if ((rand() % 100 + 1) < 50)
 						CreateObstacle(elements[i][x]);
 				}
 				//change state

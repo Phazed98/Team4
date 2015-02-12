@@ -60,7 +60,7 @@ public:
 
 	int getEmptyIndex(int subType);
 
-	void handlePlanes();
+	void handlePlanes(float msec);
 
 	void CreateObstacle(ObjectType* _obj);
 	int getObstacleEmptyIndex(int _subType,int);
@@ -124,5 +124,6 @@ protected:
 	int count_time;  //new 4.2.2015 Daixi
 	int Speed_Player; //4.2.2015 Daixi
 	
+	float timer;
 };
 
