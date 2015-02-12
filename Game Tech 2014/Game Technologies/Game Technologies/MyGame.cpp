@@ -46,7 +46,15 @@ MyGame::MyGame()
 	Car = new Vehicle();
 	PlayerMesh = new OBJMesh(MESHDIR"Player.obj"); // 3.2.2015 Daixi
 
+	/*
+	We're going to manage the meshes we need in our game in the game class!
 
+	You can do this with textures, too if you want - but you might want to make
+	some sort of 'get / load texture' part of the Renderer or OGLRenderer, so as
+	to encapsulate the API-specific parts of texture loading behind a class so
+	we don't care whether the renderer is OpenGL / Direct3D / using SOIL or 
+	something else...
+	*/
 	cube	= new OBJMesh(MESHDIR"cube.obj");
 	quad	= Mesh::GenerateQuad();
 	sphere	= new OBJMesh(MESHDIR"ico.obj");
@@ -129,7 +137,11 @@ MyGame::~MyGame(void)
 	//GameClass destructor will destroy your entities for you...
 }
 
-
+/*
+Here's the base 'skeleton' of your game update loop! You will presumably
+want your games to have some sort of internal logic to them, and this
+logic will be added to this function.
+*/
 void MyGame::UpdateGame(float msec) 
 {
 	if(gameCamera) 
