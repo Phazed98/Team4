@@ -22,6 +22,7 @@ _-_-_-_-_-_-_-""  ""
 #pragma once
 #include "Renderer.h"
 #include "PhysicsSystem.h"
+#include "../../nclgl/SoundSystem.h"
 #include "GameEntity.h"
 
 #include <vector>

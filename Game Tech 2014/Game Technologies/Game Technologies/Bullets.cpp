@@ -20,6 +20,7 @@ GameEntity* Bullets::BuildBulletEntity(float radius, Vector3 pos) {
 	test->SetColour(Vector4(0.2,0.2,0.5,1));
 	PhysicsNode*p = new PhysicsNode();
 
+	p->SetMass(10);
 	p->SetUseGravity(false);
 	p->SetPosition(pos);
 	p->SetCollisionVolume(new CollisionSphere(radius));    //new 4.2.2015  Daixi

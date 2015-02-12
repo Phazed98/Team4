@@ -78,6 +78,7 @@
     <ClCompile Include="PhysicsNode.cpp" />
     <ClCompile Include="PhysicsSystem.cpp" />
     <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="SoundEntity.cpp" />
     <ClCompile Include="Spring.cpp" />
     <ClCompile Include="SpringDemo.cpp" />
     <ClCompile Include="Vehicle.cpp" />
@@ -95,6 +96,7 @@
     <ClInclude Include="PhysicsNode.h" />
     <ClInclude Include="PhysicsSystem.h" />
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="SoundEntity.h" />
     <ClInclude Include="Spring.h" />
     <ClInclude Include="SpringDemo.h" />
     <ClInclude Include="Vehicle.h" />

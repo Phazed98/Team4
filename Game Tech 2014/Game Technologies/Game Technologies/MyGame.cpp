@@ -5,6 +5,7 @@
 #include "Vehicle.h"
 #include "Bullets.h"
 
+
 /*
 Creates a really simple scene for our game - A cube robot standing on
 a floor. As the module progresses you'll see how to get the robot moving
@@ -27,6 +28,9 @@ MyGame::MyGame()	{
 
 	Car = new Vehicle();
 
+	//allEntities.push_back(Car->GetPlayer());
+
+
 	/*
 	We're going to manage the meshes we need in our game in the game class!
 
@@ -48,17 +52,25 @@ MyGame::MyGame()	{
 	GameEntity* quadEntity = BuildQuadEntity(1000.0f);
 	allEntities.push_back(quadEntity);
 	allEntities.push_back(BuildRobotEntity());
+
 	
 	GameEntity* ball0 = BuildSphereEntity(100.0f, Vector3(-300, 300, -100), Vector3(0, 0, 0));
 	allEntities.push_back(ball0);
 	GameEntity* ball1 = BuildSphereEntity(100.0f, Vector3(-100, 300, -100), Vector3(0, 0, 0));
 	allEntities.push_back(ball1);
 
+	sound0 = BuildSoundEntity(); 
+	
+	//allEntities.push_back(sound0);
+
 	//GameEntity* charactor = BuildPlayerEntity(20.0f,Vector3(0,0,0));   //new 2.2.2015  Daixi
 	//Player = charactor;   
 
 	Enemy = BuildPlayerEntity(20.0f, Vector3(-300,100,-300)); //new 4.2.2015 Daixi
 	Enemy->GetPhysicsNode().SetPosition(Vector3(300,100,-100));
+	Enemy->GetPhysicsNode().SetMass(10);
+
+	//allEntities.push_back(Enemy);
 
 	Position0 = Enemy->GetPhysicsNode().GetPosition(); //5.2.2015 Daixi ------------------This is the straight line bullet
 	Position0.z = Position0.z -20;
@@ -113,6 +125,7 @@ void MyGame::UpdateGame(float msec) {
 	if(gameCamera) {
 		Car->UpdatePlayer(msec);
 		gameCamera->SetPosition(Car->tempPosition);
+		
 	}
 
 	for(vector<GameEntity*>::iterator i = allEntities.begin(); i != allEntities.end(); ++i) {
@@ -125,8 +138,9 @@ void MyGame::UpdateGame(float msec) {
 	}
 	
 	count_time++;
-
 	
+	
+
 	/*
 	Here's how we can use OGLRenderer's inbuilt debug-drawing functions! 
 	I meant to talk about these in the graphics module - Oops!
@@ -289,3 +303,30 @@ GameEntity* MyGame::BuildQuadEntity(float size) {
 	return g;
 }
 
+GameEntity* MyGame::BuildSoundEntity () {
+	float size = 300 + (rand()%300);
+
+	SceneNode* s = new SceneNode(sphere);
+
+	s -> SetModelScale (Vector3(size, size, size));
+	s -> SetBoundingRadius(size);
+	s -> SetColour(Vector4(1,1,1,0.6)); // Make node transparent , too
+	// Pick a sound from a list of filenames
+	PhysicsNode*p = NULL;
+	Sound* snd = SoundManager::GetSound("D:/Team 4/Team4/Game Tech 2014/Sounds/56900__syna-max__war.wav");
+
+	SoundEmitter* sndemt = new SoundEmitter(snd);
+	sndemt->SetLooping(true);
+	sndemt->SetIsGlobal(true);
+	// and set it on a new SoundEntity
+	SoundEntity* g = new SoundEntity (sndemt,s ,p);
+	// Randomly place it in the world somewhere
+	Vector3 randpos = Vector3 ((rand()%10)*256, 0.0f,(rand()%10)*256);
+	randpos -= Vector3 ((rand()%10)*256,0.0f,(rand()%10)*256);
+
+	s -> SetTransform(Matrix4::Translation(randpos));
+	// Connect it to all of our core systems
+	g -> ConnectToSystems();
+
+	return g ;
+}

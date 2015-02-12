@@ -7,6 +7,7 @@ public:
 	~Vehicle(void);
 	GameEntity* BuildPlayerEntity(float size, Vector3 pos);
 	void UpdatePlayer(float msec);
+	GameEntity* GetPlayer(){return Player;}
 
 	Vector3 tempPosition;
 protected:

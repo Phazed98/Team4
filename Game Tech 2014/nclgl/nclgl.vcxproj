@@ -24,15 +24,21 @@
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="OBJMesh.cpp" />
+    <ClCompile Include="OggSound.cpp" />
     <ClCompile Include="OGLRenderer.cpp" />
     <ClCompile Include="Plane.cpp" />
     <ClCompile Include="Quaternion.cpp" />
     <ClCompile Include="SceneNode.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Sound.cpp" />
+    <ClCompile Include="SoundEmitter.cpp" />
+    <ClCompile Include="SoundManager.cpp" />
+    <ClCompile Include="SoundSystem.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="CameraNode.h" />
     <ClInclude Include="ChildMeshInterface.h" />
     <ClInclude Include="common.h" />
     <ClInclude Include="CubeRobot.h" />
@@ -48,15 +54,25 @@
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="OBJMesh.h" />
+    <ClInclude Include="OggSound.h" />
     <ClInclude Include="OGLRenderer.h" />
     <ClInclude Include="Plane.h" />
     <ClInclude Include="Quaternion.h" />
     <ClInclude Include="SceneNode.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="Sound.h" />
+    <ClInclude Include="SoundEmitter.h" />
+    <ClInclude Include="SoundManager.h" />
+    <ClInclude Include="SoundSystem.h" />
     <ClInclude Include="Vector2.h" />
     <ClInclude Include="Vector3.h" />
     <ClInclude Include="Vector4.h" />
     <ClInclude Include="Window.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\OpenAL 1.1 SDK\libs\Win32\EFX-Util_MTDLL\EFX-Util.lib" />
+    <Library Include="..\OpenAL 1.1 SDK\libs\Win32\EFX-Util_MT\EFX-Util.lib" />
+    <Library Include="..\OpenAL 1.1 SDK\libs\Win32\OpenAL32.lib" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{98D6B51B-CB0A-4389-ADC6-24082B967C3F}</ProjectGuid>

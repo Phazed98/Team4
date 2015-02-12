@@ -35,9 +35,14 @@ _-_-_-_-_-_-_-""  ""
 
 #pragma once
 #include "GameEntity.h"
+#include "SoundEntity.h"
 #include "GameClass.h"
 #include "../nclgl/Camera.h"
 #include "../nclgl/CubeRobot.h"
+#include "../nclgl/Sound.h"
+#include "../nclgl/SoundEmitter.h"
+#include "../nclgl/SoundManager.h"
+#include "../nclgl/SoundSystem.h"
 #include <queue>
 
 class Vehicle;
@@ -66,9 +71,13 @@ protected:
 
 	GameEntity* BuildPlayerEntity(float size, Vector3 pos);
 
+	GameEntity* BuildSoundEntity();
+
 	GameEntity* Enemy;  //new 4.2.2015 Daixi  just for test i create some enemy
 
 	GameEntity* BuffEntity;
+
+	GameEntity* sound0;
 
 	Vehicle* Car;
 
@@ -88,6 +97,7 @@ protected:
 
 	int count_time;  //new 4.2.2015 Daixi
 	int Speed_Player; //4.2.2015 Daixi
+
 
 };
 

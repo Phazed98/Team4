@@ -125,6 +125,7 @@ void Vehicle::UpdatePlayer(float msec){
 			Player->GetPhysicsNode().SetLinearVelocity(temp1);	
 		}
 	}
+
 }
 
 /*
@@ -138,13 +139,11 @@ GameEntity* Vehicle::BuildPlayerEntity(float size, Vector3 pos) {
 	test->SetBoundingRadius(size);
 	test->SetColour(Vector4(0.2,0.2,0.5,1));
 	PhysicsNode*p = new PhysicsNode();
-
+	p->SetMass(10);
 	p->SetUseGravity(false);
 	pos = Vector3(0,100,-400);
 	p->SetPosition(pos);
 	p->SetCollisionVolume(new CollisionSphere(size));    
-
-
 	GameEntity*g = new GameEntity(test, p);
 	g->ConnectToSystems();
 	return g;

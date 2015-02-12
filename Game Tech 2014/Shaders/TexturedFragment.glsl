@@ -5,8 +5,8 @@ in Vertex {
 	vec2 texCoord;
 } IN;
 
-out vec4 gl_FragColor;
+out vec4 OutFrag;
 
 void main(void){
-	gl_FragColor = texture(diffuseTex, IN.texCoord);
+	OutFrag = texture(diffuseTex, IN.texCoord);
 }
