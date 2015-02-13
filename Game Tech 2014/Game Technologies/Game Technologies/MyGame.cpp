@@ -331,13 +331,13 @@ ObjectType* MyGame::BuildObjectEntity(float size, int type, int subType) {
 }
 
 //creates a new Obstacle
-Obstacle* MyGame::BuildObstacleEntity(float size, int type, int subType, ObjectType* _obj) {
+Obstacle* MyGame::BuildObstacleEntity(float size, int type, int subType, ObjectType* _obj, int _obstacle_type) {
 	SceneNode* s = new SceneNode(sphere);
 	PhysicsNode* p = new PhysicsNode();
 	p->SetUseGravity(false);
 
-	int obstacleType = rand() % 4 + 0;
-	Obstacle*g = new Obstacle(_obj, s, p, type, subType, obstacleType);
+	Obstacle *g = new Obstacle(_obj, s, p, type, subType, _obstacle_type);
+
 	g->ConnectToSystems();
 	SceneNode &test = g->GetRenderNode();
 
@@ -478,11 +478,14 @@ void MyGame::CreateObstacle(ObjectType* _obj)
 {
 	int random_number = rand() % 2 + 1;
 	Obstacle* temp = NULL;
-	int empty = getObstacleEmptyIndex(_obj->getSubType(),0);
+	//select random obstacle 
+
+	int obstacleType = rand() % 5 + 0;
+	int empty = getObstacleEmptyIndex(_obj->getSubType(),obstacleType);
 	// for the first obstacle created
 	if (obstacleReference[_obj->getSubType()] == NULL)
 	{
-		temp = BuildObstacleEntity(50, 1, _obj->getSubType(), _obj);
+		temp = BuildObstacleEntity(50, 1, _obj->getSubType(), _obj, obstacleType);
 		obstacleElements[_obj->getSubType()].push_back(temp);
 	}
 	//reference exists, but everything is running/working
@@ -492,7 +495,7 @@ void MyGame::CreateObstacle(ObjectType* _obj)
 		{
 			if (obstacleReference[_obj->getSubType()]->GetPhysicsNode().GetPosition().z < -800.0f)
 			{
-				temp = BuildObstacleEntity(50, 1, _obj->getSubType(), _obj);
+				temp = BuildObstacleEntity(50, 1, _obj->getSubType(), _obj, obstacleType);
 				obstacleElements[_obj->getSubType()].push_back(temp);
 			}
 		}

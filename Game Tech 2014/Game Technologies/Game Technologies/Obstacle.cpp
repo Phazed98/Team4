@@ -21,7 +21,7 @@ Obstacle::Obstacle(ObjectType* _tile, SceneNode* s, PhysicsNode* p, int _type, i
 	{
 		renderNode->SetColour(Vector4(0.564, 0.043, 0.835, 1));
 	}
-	
+	goingLeft = true;
 
 }
 
@@ -46,8 +46,53 @@ void Obstacle::Update(float msec)
 				physicsNode->SetPosition(tile->GetPhysicsNode().GetPosition() + offset);
 			}
 		}
+
+		if (obstacleType == 4)
+		{
+			if (subType == 0 || subType == 2) // Top and bottom tile
+			{
+				if (goingLeft)
+				{
+					offset.x += -10;
+					if (offset.x < -180)
+					{
+						goingLeft = false;
+					}
+				}
+				else
+				{
+					 offset.x += 10;
+					 if (offset.x > 180)
+					{
+						goingLeft = true;
+					}
+				}
+				
+			}
+			else
+			{
+				if (goingLeft)
+				{
+					offset.y += -10;
+					if (offset.y < -180)
+					{
+						goingLeft = false;
+					}
+				}
+				else
+				{
+					offset.y += 10;
+					if (offset.y > 180)
+					{
+						goingLeft = true;
+					}
+				}
+			}
+		}
 		
 	}
+
+	
 }
 
 void Obstacle::SetLane(int _lane)

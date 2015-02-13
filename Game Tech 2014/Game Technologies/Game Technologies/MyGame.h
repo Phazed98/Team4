@@ -80,7 +80,7 @@ protected:
 
 	ObjectType* BuildObjectEntity(float size, int type, int subType);
 
-	Obstacle* BuildObstacleEntity(float size, int type, int subType, ObjectType*);
+	Obstacle* BuildObstacleEntity(float size, int type, int subType, ObjectType*, int);
 
 	GameEntity* BuildBuffEntity(float radius, Vector3 pos); //new 6.2.2015 Daixi
 

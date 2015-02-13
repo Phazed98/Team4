@@ -24,9 +24,11 @@ private:
 
 	Vector3 offset;
 
-	int obstacleType; //0 for obstacle, 1 for enemy, 2 for coins, 3 for powerups
+	int obstacleType; //0 for obstacle, 1 for enemy, 2 for coins, 3 for powerups, 4 for moving obstacle
 
 	ObjectType* tile;
+
+	bool goingLeft;
 
 };
 
