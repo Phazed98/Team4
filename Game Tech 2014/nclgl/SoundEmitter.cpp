@@ -2,10 +2,12 @@
 
 SoundEmitter::SoundEmitter (void) {
 	Reset();
+	pitch = 1;
 }
 SoundEmitter::SoundEmitter (Sound* s) {
 	Reset();
 	SetSound(s);
+	pitch = 1;
 }
 
 void SoundEmitter::Reset() {
@@ -81,6 +83,7 @@ void SoundEmitter::AttachSource (OALSource* s) {
 		alSourcei(currentSource -> source, AL_BUFFER, sound -> GetBuffer());
 		alSourcef(currentSource -> source, AL_SEC_OFFSET,
 			(sound -> GetLength ()/ 1000.0) - (timeLeft / 1000.0));
+	
 	}
 	alSourcePlay (currentSource -> source);
 }
@@ -92,7 +95,7 @@ void SoundEmitter::DetachSource (){
 	alSourcef (currentSource -> source, AL_GAIN, 0.0f );
 	alSourceStop (currentSource -> source);
 
-	if(sound&&sound -> IsStreaming()) { // Part 2
+	if(sound && sound->IsStreaming()) { // Part 2
 		int numProcessed = 0;
 		ALuint tempBuffer;
 		alGetSourcei(currentSource -> source, AL_BUFFERS_PROCESSED, &numProcessed);
@@ -108,7 +111,7 @@ void SoundEmitter::DetachSource (){
 }
 
 void SoundEmitter::Update (float msec) {
-	timeLeft -= msec;
+	timeLeft -= (msec*pitch);
 
 	while (isLooping && timeLeft < 0.0f ) {
 		timeLeft += sound -> GetLength ();
@@ -153,6 +156,11 @@ void SoundEmitter::Update (float msec) {
 		else{
 			alSourcei(currentSource -> source, AL_LOOPING, isLooping ? 1 : 0);
 		}
+
+		alSourcef (currentSource -> source, AL_GAIN, volume);
+		//alSourcef (currentSource -> source, AL_LOOPING, isLooping ? 1 : 0);
+		//alSourcef (currentSource -> source, AL_PITCH, pitch);
+
 
 		alSourcef (currentSource -> source, AL_MAX_DISTANCE, radius);
 		alSourcef (currentSource -> source, AL_REFERENCE_DISTANCE, radius *0.2f);

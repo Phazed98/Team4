@@ -73,4 +73,5 @@ protected:
 	bool isGlobal;
 	double streamPos;
 	ALuint streamBuffers [NUM_STREAM_BUFFERS];
+	float pitch;
 };

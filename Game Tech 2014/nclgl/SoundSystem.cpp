@@ -214,11 +214,11 @@ void SoundSystem::UpdateTemporaryEmitters(float msec) {
 }
 
 void SoundSystem::PlaySoundA(Sound* s, Vector3 position) {
-	SoundEmitter* n = new SoundEmitter();
+	SoundEmitter* n = new SoundEmitter(s);
 	n -> SetLooping (false);
 	//n -> SetTransform (Matrix4::Translation(position));
-	n -> SetSound(s);
-	//n->SetIsGlobal(true);
+	//n -> SetSound(s);
+	n->SetIsGlobal(true);
 	temporaryEmitters.push_back(n);
 }
 //void SoundSystem::PlaySound (Sound* s, SoundPriority p) {
