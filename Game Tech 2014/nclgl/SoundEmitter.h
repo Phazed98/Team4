@@ -4,12 +4,7 @@
 #include "SoundSystem.h"
 
 #define NUM_STREAM_BUFFERS 3 
-enum SoundPriority {
-	SOUNDPRIORTY_LOW,
-	SOUNDPRIORITY_MEDIUM,
-	SOUNDPRIORITY_HIGH,
-	SOUNDPRIORITY_ALWAYS
-};
+
 
 struct OALSource;
 

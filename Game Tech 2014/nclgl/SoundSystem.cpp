@@ -221,11 +221,11 @@ void SoundSystem::PlaySoundA(Sound* s, Vector3 position) {
 	//n->SetIsGlobal(true);
 	temporaryEmitters.push_back(n);
 }
-//void SoundSystem::PlaySound (Sound* s, SoundPriority p) {
-//	SoundEmitter* n = new SoundEmitter();
-//	n -> SetLooping(false);
-//	n -> SetSound(s);
-//	n -> SetIsGlobal(true);
-//	n -> SetPriority(p);
-//	temporaryEmitters.push_back(n);
-//}
+void SoundSystem::PlaySound (Sound* s, SoundPriority p) {
+	SoundEmitter* n = new SoundEmitter();
+	n -> SetLooping(false);
+	n -> SetSound(s);
+	n -> SetIsGlobal(true);
+	n -> SetPriority(p);
+	temporaryEmitters.push_back(n);
+}

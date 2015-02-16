@@ -2,16 +2,25 @@
 
 #include <vector>
 #include <algorithm>
-#include "SoundEmitter.h"
 #include "Sound.h"
 #include "SoundManager.h"
 #include "../OpenAL 1.1 SDK/include/al.h"
 #include "../OpenAL 1.1 SDK/include/alc.h"
 
+#include "Matrix4.h"
+#include "SceneNode.h"
+
 
 using std::vector;
 
 class SoundEmitter;
+
+enum SoundPriority {
+	SOUNDPRIORTY_LOW,
+	SOUNDPRIORITY_MEDIUM,
+	SOUNDPRIORITY_HIGH,
+	SOUNDPRIORITY_ALWAYS
+};
 
 struct OALSource {
 	ALuint source;
@@ -45,7 +54,7 @@ public:
 	void Update (float msec);
 	void SetMasterVolume (float value);
 	void PlaySoundA(Sound* s, Vector3 position);
-	//void PlaySound(Sound* s, SoundPriority p = SOUNDPRIORTY_LOW);
+	void PlaySound(Sound* s, SoundPriority p = SOUNDPRIORTY_LOW);
 
 protected:
 	SoundSystem (unsigned int channels = 32);
