@@ -119,6 +119,7 @@ void SoundSystem::Update (float msec) {
 	}
 
 	frameEmitters.clear();
+	//vector<SoundEmitter*>().swap(frameEmitters);
 }
 
 void SoundSystem::CullNodes () {
@@ -217,7 +218,7 @@ void SoundSystem::PlaySoundA(Sound* s, Vector3 position) {
 	n -> SetLooping (false);
 	//n -> SetTransform (Matrix4::Translation(position));
 	n -> SetSound(s);
-	n->SetIsGlobal(true);
+	//n->SetIsGlobal(true);
 	temporaryEmitters.push_back(n);
 }
 //void SoundSystem::PlaySound (Sound* s, SoundPriority p) {

@@ -4,6 +4,7 @@
 #include "SpringDemo.h"
 #include "Vehicle.h"
 #include "Bullets.h"
+#include "Powerups.h"
 
 
 /*
@@ -28,6 +29,7 @@ MyGame::MyGame()	{
 
 	Car = new Vehicle();
 
+	AllBuff = new Powerups();
 	//allEntities.push_back(Car->GetPlayer());
 
 
@@ -59,7 +61,7 @@ MyGame::MyGame()	{
 	GameEntity* ball1 = BuildSphereEntity(100.0f, Vector3(-100, 300, -100), Vector3(0, 0, 0));
 	allEntities.push_back(ball1);
 
-	sound0 = BuildSoundEntity(); 
+	//sound0 = BuildSoundEntity(); 
 	
 	//allEntities.push_back(sound0);
 
@@ -76,8 +78,8 @@ MyGame::MyGame()	{
 	Position0.z = Position0.z -20;
 	bullet = new Bullets(Position0);
 
-	BuffEntity = BuildBuffEntity(6,Vector3(0,100,-200)); //6.2.2015 Daixi ------------------ This is the buff object, and when player hit it, will speed up
-	BuffEntity->GetRenderNode().SetColour(Vector4(1,1,0,1));
+	//BuffEntity = BuildBuffEntity(6,Vector3(0,100,-200)); //6.2.2015 Daixi ------------------ This is the buff object, and when player hit it, will speed up
+	//BuffEntity->GetRenderNode().SetColour(Vector4(1,1,0,1));
 
 	Spring* s = new Spring(&ball0->GetPhysicsNode(), Vector3(0,100,0), &ball1->GetPhysicsNode(), Vector3(0,-100,0));
 	
@@ -108,6 +110,7 @@ MyGame::~MyGame(void)
 	delete Enemy;   //new 5.2.2015 Daixi
 	delete Car;
 	delete bullet;
+	delete AllBuff;
 
 	CubeRobot::DeleteCube();
 	
@@ -137,6 +140,8 @@ void MyGame::UpdateGame(float msec) {
 		count_time = 0;
 	}
 	
+	AllBuff->UpdatePowerup(Car,msec);
+
 	count_time++;
 	
 	
@@ -304,7 +309,7 @@ GameEntity* MyGame::BuildQuadEntity(float size) {
 }
 
 GameEntity* MyGame::BuildSoundEntity () {
-	float size = 300 + (rand()%300);
+	float size = 30 + (rand()%30);
 
 	SceneNode* s = new SceneNode(sphere);
 
@@ -314,6 +319,7 @@ GameEntity* MyGame::BuildSoundEntity () {
 	// Pick a sound from a list of filenames
 	PhysicsNode*p = NULL;
 	Sound* snd = SoundManager::GetSound("D:/Team 4/Team4/Game Tech 2014/Sounds/56900__syna-max__war.wav");
+	//snd->
 
 	SoundEmitter* sndemt = new SoundEmitter(snd);
 	sndemt->SetLooping(true);

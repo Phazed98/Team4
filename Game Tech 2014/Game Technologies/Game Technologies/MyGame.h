@@ -45,6 +45,7 @@ _-_-_-_-_-_-_-""  ""
 #include "../nclgl/SoundSystem.h"
 #include <queue>
 
+class Powerups;
 class Vehicle;
 class Bullets;
 class MyGame : public GameClass	{
@@ -83,6 +84,8 @@ protected:
 
 	Bullets* bullet;
 
+	Powerups* AllBuff;
+
 	Vector3 PositionEnemy;  //new 4.2.2015 Daixi
 	Vector3 Position0;
 	Vector3 Position1;
@@ -100,4 +103,5 @@ protected:
 
 
 };
+
 

@@ -5,7 +5,9 @@ Vehicle::Vehicle(){
 
 	PlayerPosition=Vector3(0,100,-400);
 
-	Player = BuildPlayerEntity(20.0f,PlayerPosition);
+	size = 20.0f;
+
+	Player = BuildPlayerEntity(size,PlayerPosition);
 
 	Speed_Player = 1;
 

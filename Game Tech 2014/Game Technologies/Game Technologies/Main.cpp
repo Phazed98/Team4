@@ -55,7 +55,7 @@ void physicsLoop(GameClass* game, bool& running) {
 
 int main() {
 //----------------------------------------------------
-	SoundSystem::Initialise();
+	SoundSystem::Initialise(1);
 //------------------------------------------------------
 
 	if(!Window::Initialise("Game Technologies", 1280,800,false)) {
@@ -82,7 +82,7 @@ int main() {
 
 		if( Window::GetKeyboard() -> KeyTriggered (KEYBOARD_2)) {
 			SoundSystem::GetSoundSystem() -> PlaySound (
-				SoundManager::GetSound("D:/Team 4/Team4/Game Tech 2014/Sounds/36847__ecodtr__laserrocket2.wav"), Vector3());
+				SoundManager::GetSound("D:/Team 4/Team4/Game Tech 2014/Sounds/56900__syna-max__war.wav"), Vector3());
 		}
 
 		game->UpdateRendering(msec);	//Update our 'sybsystem' logic (renderer and physics!)
@@ -101,4 +101,3 @@ int main() {
 
 	return 0;
 }
-
