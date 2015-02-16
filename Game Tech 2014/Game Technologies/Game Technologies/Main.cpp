@@ -85,8 +85,6 @@ int main() {
 				SoundManager::GetSound("D:/Team 4/Team4/Game Tech 2014/Sounds/36847__ecodtr__laserrocket2.wav"), Vector3());
 		}
 
-		//SoundSystem :: GetSoundSystem () -> Update ((1000.0f / ( float ) RENDER_HZ ));
-		//SoundSystem::GetSoundSystem () -> Update(msec);
 		game->UpdateRendering(msec);	//Update our 'sybsystem' logic (renderer and physics!)
 		game->UpdateGame(msec);	//Update our game logic
 	}

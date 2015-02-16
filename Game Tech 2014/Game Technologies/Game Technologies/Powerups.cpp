@@ -51,10 +51,6 @@ void Powerups::UpdatePowerup(Vehicle* Car, float msec){
 			ColorTemp = Speed_boost->GetRenderNode().GetColour();
 			ColorTemp.w = 0;
 			Speed_boost->GetRenderNode().SetColour(ColorTemp);
-			
-			
-			//SoundSystem::GetSoundSystem() -> PlaySoundA(SoundManager::GetSound("D:/Team 4/Team4/Game Tech 2014/Sounds/36847__ecodtr__laserrocket2.wav"), Vector3());
-
 		}
 	}
 
