@@ -22,7 +22,7 @@ void ObjectType::Update(float msec)
 {
 	if (type == 0)
 	{
-		physicsNode->SetPosition(physicsNode->GetPosition() + Vector3(0, 0, -50.0f));
+		physicsNode->SetPosition(physicsNode->GetPosition() + Vector3(0, 0, -10.0f));
 
 		if (state == 0)
 		{

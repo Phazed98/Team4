@@ -1,5 +1,7 @@
 #pragma once
 #include "ObjectType.h"
+
+
 class Obstacle : public ObjectType
 {
 public:
@@ -18,6 +20,10 @@ public:
 
 	void SetTile(ObjectType* _tile) { tile = _tile; }
 
+	void SetBullet(GameEntity* _bullet) { bullet = _bullet; }
+
+	void ResetBullet();
+
 private:
 
 	int lane; // Lanes are from 0 t 7 starting from top, two lanes per tile
@@ -29,6 +35,10 @@ private:
 	ObjectType* tile;
 
 	bool goingLeft;
+
+	GameEntity* bullet;
+
+	int count_time;
 
 };
 
