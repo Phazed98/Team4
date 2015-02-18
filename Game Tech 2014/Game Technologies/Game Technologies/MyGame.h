@@ -35,6 +35,7 @@ _-_-_-_-_-_-_-""  ""
 
 #pragma once
 #include "GameEntity.h"
+#include "ObjectType.h"
 #include "GameClass.h"
 #include "../nclgl/Camera.h"
 #include "../nclgl/CubeRobot.h"
@@ -46,6 +47,16 @@ public:
 
 	virtual void UpdateGame(float msec);
 
+	int getIndexOfAllEtities(GameEntity* _G);
+
+	int getIndexOfElements(ObjectType* _G);
+
+	int getDrawingPlanes(int);
+
+	int getEmptyIndex(int subType);
+
+	void handlePlanes();
+
 protected:
 	GameEntity* BuildRobotEntity();
 
@@ -55,9 +66,22 @@ protected:
 
 	GameEntity* BuildQuadEntity(float size);
 
+	ObjectType* BuildObjectEntity(float size, int type, int subType);
+
 
 	Mesh* cube;
 	Mesh* quad;
 	Mesh* sphere;
+
+	vector<ObjectType*> top;
+	vector<ObjectType*> right;
+	vector<ObjectType*> bottom;
+	vector<ObjectType*> left;
+
+	//vector<ObjectType*> elements[4] = { top, right, bottom, left };
+
+	vector<vector<ObjectType*>> elements;
+	vector<vector<ObjectType*>> reference;
+	
 };
 

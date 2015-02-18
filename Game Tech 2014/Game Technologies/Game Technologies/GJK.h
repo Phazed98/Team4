@@ -1,39 +1,40 @@
 #pragma once
 #include "../../nclgl/Vector3.h"
 #include "PhysicsNode.h"
+#include "SupportPoint.h"
 
-struct SupportPoint
-{
-	Vector3 vector; // the minkowski difference point
-
-	// the individual support points
-	Vector3 sup_a;
-	Vector3 sup_b; // not actually necessary
-
-	SupportPoint(Vector3 &vv, Vector3 &sup_aa, Vector3 &sup_bb)
-	{
-		vector = vv;
-		sup_a = sup_aa;
-		sup_b = sup_bb;
-	}
-
-	SupportPoint()
-	{
-		vector = Vector3(0, 0, 0);
-		sup_a = Vector3(0, 0, 0);
-		sup_b = Vector3(0, 0, 0);
-	}
-
-
-	SupportPoint(Vector3 &vv)
-	{
-		vector = vv;
-		sup_a = Vector3(0, 0, 0);
-		sup_b = Vector3(0, 0, 0);
-	}
-
-	BOOL operator==(const SupportPoint &r) const { return vector == r.vector; }
-};
+//struct SupportPoint
+//{
+//	Vector3 vector; // the minkowski difference point
+//
+//	// the individual support points
+//	Vector3 sup_a;
+//	Vector3 sup_b; // not actually necessary
+//
+//	SupportPoint(Vector3 &vv, Vector3 &sup_aa, Vector3 &sup_bb)
+//	{
+//		vector = vv;
+//		sup_a = sup_aa;
+//		sup_b = sup_bb;
+//	}
+//
+//	SupportPoint()
+//	{
+//		vector = Vector3(0, 0, 0);
+//		sup_a = Vector3(0, 0, 0);
+//		sup_b = Vector3(0, 0, 0);
+//	}
+//
+//
+//	SupportPoint(Vector3 &vv)
+//	{
+//		vector = vv;
+//		sup_a = Vector3(0, 0, 0);
+//		sup_b = Vector3(0, 0, 0);
+//	}
+//
+//	BOOL operator==(const SupportPoint &r) const { return vector == r.vector; }
+//};
 
 struct Triangle
 {
@@ -45,7 +46,7 @@ struct Triangle
 		a = aa;
 		b = bb;
 		c = cc;
-		triNormal = Vector3::Cross((bb.vector - aa.vector), (cc.vector - aa.vector));
+		triNormal = Vector3::Cross((bb.getPoint() - aa.getPoint()), (cc.getPoint() - aa.getPoint()));
 		triNormal.Normalise();
 	}
 };

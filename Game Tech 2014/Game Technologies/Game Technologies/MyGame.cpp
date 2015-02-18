@@ -14,6 +14,16 @@ You can completely change all of this if you want, it's your game!
 */
 MyGame::MyGame()	
 {
+	elements.push_back(top);
+	elements.push_back(right);
+	elements.push_back(bottom);
+	elements.push_back(left);
+
+	reference.push_back(top);
+	reference.push_back(right);
+	reference.push_back(bottom);
+	reference.push_back(left);
+
 	gameCamera = new Camera(-30.0f,0.0f,Vector3(0,450,850));
 
 	Renderer::GetRenderer().SetCamera(gameCamera);
@@ -46,7 +56,6 @@ MyGame::MyGame()
 	GameEntity* ball1 = BuildSphereEntity(100.0f, Vector3(-100, 300, -100), Vector3(0, 0, 0));
 	allEntities.push_back(ball1);
 
-
 	Spring* s = new Spring(&ball0->GetPhysicsNode(), Vector3(0,100,0), &ball1->GetPhysicsNode(), Vector3(0,-100,0));
 	
 	PhysicsSystem::GetPhysicsSystem().AddConstraint(s);
@@ -62,7 +71,21 @@ MyGame::MyGame()
 	
 	PhysicsSystem::GetPhysicsSystem().AddConstraint(demo);
 	PhysicsSystem::GetPhysicsSystem().AddDebugDraw(demo);
-	
+
+	//-------------------------------------------------Planes---------------------------------------------------------//
+
+	GameEntity* plane = BuildObjectEntity(200, 0, 0);
+	allEntities.push_back(plane);
+
+	plane = BuildObjectEntity(200, 0, 1);
+	allEntities.push_back(plane);
+
+	plane = BuildObjectEntity(200, 0, 2);
+	allEntities.push_back(plane);
+
+	plane = BuildObjectEntity(200, 0, 3);
+	allEntities.push_back(plane);
+
 }
 
 MyGame::~MyGame(void)	
@@ -76,6 +99,9 @@ MyGame::~MyGame(void)
 
 	CubeRobot::DeleteCube();
 
+	elements.clear();
+	reference.clear();
+
 	//GameClass destructor will destroy your entities for you...
 }
 
@@ -86,6 +112,7 @@ logic will be added to this function.
 */
 void MyGame::UpdateGame(float msec) 
 {
+	//cout << "\nObject Count:" << allEntities.size() << "  elements:" << elements[0].size();
 	if(gameCamera) 
 	{
 		gameCamera->UpdateCamera(msec);
@@ -94,43 +121,10 @@ void MyGame::UpdateGame(float msec)
 	for(vector<GameEntity*>::iterator i = allEntities.begin(); i != allEntities.end(); ++i) 
 	{
 		(*i)->Update(msec);
+	
 	}
 
-	/*
-	Here's how we can use OGLRenderer's inbuilt debug-drawing functions! 
-	I meant to talk about these in the graphics module - Oops!
-
-	We can draw squares, lines, crosses and circles, of varying size and
-	colour - in either perspective or orthographic mode.
-
-	Orthographic debug drawing uses a 'virtual canvas' of 720 * 480 - 
-	that is 0,0 is the top left, and 720,480 is the bottom right. A function
-	inside OGLRenderer is provided to convert clip space coordinates into
-	this canvas space coordinates. How you determine clip space is up to you -
-	maybe your renderer has getters for the view and projection matrix?
-
-	Or maybe your Camera class could be extended to contain a projection matrix?
-	Then your game would be able to determine clip space coordinates for its
-	active Camera without having to involve the Renderer at all?
-
-	Perspective debug drawing relies on the view and projection matrices inside
-	the renderer being correct at the point where 'SwapBuffers' is called. As
-	long as these are valid, your perspective drawing will appear in the world.
-
-	This gets a bit more tricky with advanced rendering techniques like deferred
-	rendering, as there's no guarantee of the state of the depth buffer, or that
-	the perspective matrix isn't orthographic. Therefore, you might want to draw
-	your debug lines before the inbuilt position before SwapBuffers - there are
-	two OGLRenderer functions DrawDebugPerspective and DrawDebugOrtho that can
-	be called at the appropriate place in the pipeline. Both take in a viewProj
-	matrix as an optional parameter.
-
-	Debug rendering uses its own debug shader, and so should be unaffected by
-	and shader changes made 'outside' of debug drawing
-
-
-	Lets draw a box around the cube robot!
-	*/
+	handlePlanes();
 
 	Renderer::GetRenderer().DrawDebugBox(DEBUGDRAW_PERSPECTIVE, Vector3(0,51,0), Vector3(100,100,100), Vector3(1,0,0));
 
@@ -217,4 +211,144 @@ GameEntity* MyGame::BuildQuadEntity(float size)
 	GameEntity*g = new GameEntity(s, p);
 	g->ConnectToSystems();
 	return g;
+}
+
+ObjectType* MyGame::BuildObjectEntity(float size, int type, int subType) {
+	SceneNode* s = new SceneNode(cube);
+	PhysicsNode* p = new PhysicsNode();
+	p->SetUseGravity(false);
+
+	ObjectType*g = new ObjectType(s, p, type, subType);
+	g->ConnectToSystems();
+	SceneNode &test = g->GetRenderNode();
+
+	test.SetModelScale(Vector3(size, size / 2, size * 2));
+	test.SetBoundingRadius(size);
+
+	//50% chance that we set the random value of this plane to a random value from 1 - 5
+	if ((rand() % 100 + 1) > 50)
+	{
+		if (getDrawingPlanes(subType) > 1)
+		{
+			g->setRandom(rand() % 5 + 1);
+		}
+	}
+
+	elements[subType].push_back(g);
+
+	/*if reference vector of this subtype has objects inside delete them all
+	  so it contains only the one that was created last */
+	while(reference[subType].size() > 0)
+	{
+		reference[subType].pop_back();
+	}
+	reference[subType].push_back(g);
+	
+	return g;
+}
+
+int MyGame::getIndexOfAllEtities(GameEntity* _G)
+{
+	int index = -1;
+	for (int i = 0; i < allEntities.size(); i++)
+	{
+		if (_G == allEntities[i])
+		{
+			index = i;
+			break;
+		}
+	}
+
+	return index;
+}
+
+int MyGame::getIndexOfElements(ObjectType* _G)
+{
+	for (int j = 0; j < elements[_G->getSubType()].size(); j++)
+	{
+		if (_G == elements[_G->getSubType()][j])
+		{
+			return j;
+		}
+	}
+	return 0;
+}
+
+/* We get the number of planes that are not generating gaps infront of them 
+   which should always be at least one*/
+int MyGame::getDrawingPlanes(int _subType)
+{
+	int count = 0;
+	for (int i = 0; i <4; i++)
+	{
+		if (reference[i].size() > 0)
+		{
+			if (reference[i][0]->getRandom() == 1 && i != _subType)
+			{
+				count++;
+			}
+		}
+	}
+	return count;
+}
+
+int MyGame::getEmptyIndex(int _subType)
+{
+	for (int i = 0; i < elements[_subType].size(); i++)
+	{
+		if (elements[_subType][i]->getState() == 4)
+		{
+			return i;
+		}
+	}
+	return -1;
+}
+
+void MyGame::handlePlanes()
+{
+	for (int i = 0; i < 4; i++)
+	{
+
+		for (int j = 0; j < elements[i].size(); j++)
+		{
+			if (elements[i][j]->getState() == 1)
+			{
+
+				//create new
+				if (getEmptyIndex(i) == -1)
+				{
+					allEntities.push_back(BuildObjectEntity(200, 0, i));
+				}
+				else
+				{
+					int x = getEmptyIndex(i);
+
+					elements[i][x]->reset();
+					while (reference[i].size()>0)
+						reference[i].pop_back();
+
+					reference[i].push_back(elements[i][x]);
+					if ((rand() % 100 + 1) > 50)
+					{
+						if (getDrawingPlanes(i) > 0)
+						{
+							elements[i][x]->setRandom(rand() % 5 + 1);
+						}
+					}
+					allEntities.push_back(elements[i][x]);
+				}
+				//change state
+				elements[i][j]->setState(2);
+
+			}
+			else if (elements[i][j]->getState() == 3)
+			{
+
+				elements[i][j]->setState(4);
+
+				allEntities.erase(allEntities.begin() + getIndexOfAllEtities(elements[i][j]));
+
+			}
+		}
+	}
 }

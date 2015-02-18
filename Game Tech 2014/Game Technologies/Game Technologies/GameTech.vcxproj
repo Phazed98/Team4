@@ -53,6 +53,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalOptions>/FORCE:MULTIPLE %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -66,39 +67,47 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalOptions>/FORCE:MULTIPLE %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CollisionHelper.cpp" />
-    <ClCompile Include="EarthPlane.cpp" />
+    <ClCompile Include="EarthParticleSystem.cpp" />
+    <ClCompile Include="FireParticleSystem.cpp" />
     <ClCompile Include="GameClass.cpp" />
     <ClCompile Include="GameEntity.cpp" />
     <ClCompile Include="GJK.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MyGame.cpp" />
+    <ClCompile Include="ObjectType.cpp" />
     <ClCompile Include="PhysicsNode.cpp" />
     <ClCompile Include="PhysicsSystem.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Spring.cpp" />
     <ClCompile Include="SpringDemo.cpp" />
+    <ClCompile Include="texturedQuads.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CollisionHelper.h" />
     <ClInclude Include="CollisionVolume.h" />
     <ClInclude Include="Constraint.h" />
     <ClInclude Include="DebugDrawer.h" />
-    <ClInclude Include="EarthPlane.h" />
+    <ClInclude Include="EarthParticleSystem.h" />
+    <ClInclude Include="FireParticleSystem.h" />
     <ClInclude Include="GameClass.h" />
     <ClInclude Include="GameEntity.h" />
     <ClInclude Include="GJK.h" />
     <ClInclude Include="InertialMatrixHelper.h" />
     <ClInclude Include="MyGame.h" />
+    <ClInclude Include="ObjectType.h" />
     <ClInclude Include="PhysicsNode.h" />
     <ClInclude Include="PhysicsSystem.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Spring.h" />
     <ClInclude Include="SpringDemo.h" />
     <ClInclude Include="SupportPoint.h" />
+    <ClInclude Include="Technique.h" />
+    <ClInclude Include="texturedQuads.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\nclgl\nclgl.vcxproj">

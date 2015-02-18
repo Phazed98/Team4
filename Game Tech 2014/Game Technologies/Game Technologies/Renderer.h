@@ -37,7 +37,10 @@ _-_-_-_-_-_-_-""  ""
 #include "../../nclgl/Camera.h"
 #include "../../nclgl/Frustum.h"
 #include <algorithm>
-#include "EarthPlane.h"
+
+#include "FireParticleSystem.h"
+#include "EarthParticleSystem.h"
+
 
 class Renderer : public OGLRenderer	{
 public:
@@ -72,9 +75,13 @@ protected:
 	void	DrawNodes();
 	void	DrawNode(SceneNode*n);
 
+	void	DrawQuads();
+
 	SceneNode*	root;
+	SceneNode*	bbScene;
 	Camera*		camera;
 	Shader*		simpleShader;
+	Shader*		billboardShader;
 
 	Frustum		frameFrustum;
 
@@ -82,5 +89,12 @@ protected:
 	vector<SceneNode*> nodeList;
 
 	static Renderer*	instance;
+
+	FireParticleSystem fireParticleSystem;
+
+	EarthParticleSystem earthParticleSystem;
+	float msec;
+
+	Mesh* quad;
 };
 

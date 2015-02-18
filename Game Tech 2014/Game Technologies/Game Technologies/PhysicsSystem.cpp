@@ -20,7 +20,7 @@ PhysicsSystem::~PhysicsSystem(void)
 void	PhysicsSystem::Update(float msec)
 {
 	BroadPhaseCollisions();
-	NarrowPhaseCollisions();
+	//NarrowPhaseCollisions();
 
 	for (vector<Constraint*>::iterator i = allSprings.begin(); i != allSprings.end(); ++i) 
 	{
@@ -46,12 +46,19 @@ void	PhysicsSystem::NarrowPhaseCollisions()
 		for (int j = i + 1; j < allNodes.size(); j++)
 		{
 			PhysicsNode& second = *allNodes[j];
+
+
 			CollisionData* collisionData = new CollisionData();
-			GJK* gkjObj = new GJK();
-			if (gkjObj->CollisionDetection(first, second, collisionData))
+			GJK* gjkObj = new GJK();
+
+
+			if (gjkObj->CollisionDetection(first, second, collisionData))
 			{
 
 			}
+
+			delete gjkObj; 
+			delete collisionData;
 		}
 	}
 }
