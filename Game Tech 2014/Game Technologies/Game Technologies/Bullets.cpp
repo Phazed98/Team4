@@ -26,7 +26,6 @@ GameEntity* Bullets::BuildBulletEntity(float radius, Vector3 pos)
 	p->SetPosition(pos);
 	p->SetCollisionVolume(new CollisionSphere(radius));    //new 4.2.2015  Daixi
 
-
 	GameEntity*g = new GameEntity(test, p);
 	g->ConnectToSystems();
 	return g;

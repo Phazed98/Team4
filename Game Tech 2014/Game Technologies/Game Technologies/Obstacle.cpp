@@ -23,6 +23,9 @@ Obstacle::Obstacle(ObjectType* _tile, SceneNode* s, PhysicsNode* p, int _type, i
 	}
 	goingLeft = true;
 
+	bullet = NULL;
+
+	count_time = 0;
 }
 
 
@@ -33,6 +36,19 @@ Obstacle::~Obstacle()
 
 void Obstacle::Update(float msec)
 {
+
+	if (obstacleType == 1 && bullet != NULL)
+	{
+		if (count_time == 80)
+		{    //new control when shoot the bullets   4.2.2015 Daixi
+			bullet->GetPhysicsNode().SetPosition(physicsNode->GetPosition());
+			count_time = 0;
+		}
+
+		count_time++;
+		bullet->GetPhysicsNode().SetPosition(bullet->GetPhysicsNode().GetPosition() + Vector3(0, 0, 10.0f));
+	}
+
 	if (type == 1)
 	{
 		if (state == 0)
