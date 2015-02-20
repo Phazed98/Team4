@@ -72,6 +72,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Bullets.cpp" />
+    <ClCompile Include="Button.cpp" />
     <ClCompile Include="CollisionHelper.cpp" />
     <ClCompile Include="GameClass.cpp" />
     <ClCompile Include="GameEntity.cpp" />
@@ -90,6 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bullets.h" />
+    <ClInclude Include="Button.h" />
     <ClInclude Include="CollisionHelper.h" />
     <ClInclude Include="CollisionVolume.h" />
     <ClInclude Include="Constraint.h" />

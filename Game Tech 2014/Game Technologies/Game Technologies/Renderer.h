@@ -13,7 +13,7 @@ Implements:OGLRendere
 #include <algorithm>
 #include "textmesh.h"
 #include "PhysicsSystem.h"
-
+#include "Button.h"
 class Renderer : public OGLRenderer	
 {
 public:
@@ -23,6 +23,7 @@ public:
 	void	SetCamera(Camera*c);
 	void	AddNode(SceneNode* n);
 	void	RemoveNode(SceneNode* n);
+	void	RenderMenu();
 
 	//Statics
 	static bool Initialise() 
@@ -59,7 +60,15 @@ protected:
 	Camera*		camera;
 	Shader*		simpleShader;
 	Shader*		textShader;				//Basic Shader for Drawing 2D text on screen (TexVertex, TexFragment)
+	Shader*		texturedShader;
+	Shader*		menuShader;
 	Font*		basicFont;			//Font for drawing text to screen
+	Mesh*		quad;
+
+	Button*	playButton;
+	Button*	resetButton;
+	Button*	exitButton;
+
 
 
 	Frustum		frameFrustum;

@@ -10,8 +10,8 @@ around in a physically accurate manner, and how to stop it falling
 through the floor as gravity is added to the scene. 
 
 You can completely change all of this if you want, it's your game!
-
 */
+
 MyGame::MyGame()	
 {
 	timer = 0;
@@ -145,10 +145,14 @@ logic will be added to this function.
 */
 void MyGame::UpdateGame(float msec) 
 {
+	if (currentGameState != GAME_PLAYING)
+		return;
+
+
 	if(gameCamera) 
 	{
 		Car->UpdatePlayer(msec);
-		gameCamera->SetPosition(Car->tempPosition);
+		//gameCamera->SetPosition(Car->tempPosition);
 		gameCamera->UpdateCamera(msec);
 	}
 
@@ -240,7 +244,8 @@ GameEntity* MyGame::BuildRobotEntity()
 /*
 Makes a cube. Every game has a crate in it somewhere!
 */
-GameEntity* MyGame::BuildCubeEntity(float size) {
+GameEntity* MyGame::BuildCubeEntity(float size)
+{
 	GameEntity*g = new GameEntity(new SceneNode(cube), new PhysicsNode());
 	
 
@@ -296,7 +301,8 @@ GameEntity* MyGame::BuildQuadEntity(float size)
 	return g;
 }
 
-ObjectType* MyGame::BuildObjectEntity(float size, int type, int subType) {
+ObjectType* MyGame::BuildObjectEntity(float size, int type, int subType) 
+{
 	SceneNode* s = new SceneNode(cube);
 	PhysicsNode* p = new PhysicsNode();
 	p->SetUseGravity(false);
@@ -331,7 +337,8 @@ ObjectType* MyGame::BuildObjectEntity(float size, int type, int subType) {
 }
 
 //creates a new Obstacle
-Obstacle* MyGame::BuildObstacleEntity(float size, int type, int subType, ObjectType* _obj, int _obstacle_type) {
+Obstacle* MyGame::BuildObstacleEntity(float size, int type, int subType, ObjectType* _obj, int _obstacle_type) 
+{
 	SceneNode* s = new SceneNode(sphere);
 	PhysicsNode* p = new PhysicsNode();
 	p->SetUseGravity(false);

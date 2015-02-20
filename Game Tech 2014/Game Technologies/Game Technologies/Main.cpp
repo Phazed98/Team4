@@ -32,12 +32,14 @@ _-_-_-_-_-_-_-""  ""
 
 #pragma comment(lib, "nclgl.lib")
 
-int Quit(bool pause = false, const string &reason = "") {
+int Quit(bool pause = false, const string &reason = "") 
+{
 	PhysicsSystem::Destroy();
 	Window::Destroy();
 	Renderer::Destroy();
 
-	if(pause) {
+	if(pause) 
+	{
 		std::cout << reason << std::endl;
 		system("PAUSE");
 	}
@@ -45,20 +47,25 @@ int Quit(bool pause = false, const string &reason = "") {
 	return 0;
 }
 
-void physicsLoop(GameClass* game, bool& running) {
+void physicsLoop(GameClass* game, bool& running) 
+{
 	GameTimer timer;
-	while (running) {
+	while (running) 
+	{
 		float msec = timer.GetTimedMS();
 		game->UpdatePhysics(msec);
 	}
 }
 
-int main() {
-	if(!Window::Initialise("Game Technologies", 1280,800,false)) {
+int main() 
+{
+	if(!Window::Initialise("Game Technologies", 1280,800,false)) 
+	{
 		return Quit(true, "Window failed to initialise!");
 	}
 
-	if(!Renderer::Initialise()) {
+	if(!Renderer::Initialise()) 
+	{
 		return Quit(true, "Renderer failed to initialise!");
 	}
 
@@ -71,9 +78,9 @@ int main() {
 
 	bool running = true;
 	std::thread physics(physicsLoop, game, std::ref(running));
-	while(Window::GetWindow().UpdateWindow() && !Window::GetKeyboard()->KeyDown(KEYBOARD_ESCAPE)){
+	while(Window::GetWindow().UpdateWindow() && GameClass::GetGameClass().getCurrentState() != GAME_EXIT)
+	{
 		float msec = Window::GetWindow().GetTimer()->GetTimedMS();	//How many milliseconds since last update?
-
 		game->UpdateRendering(msec);	//Update our 'sybsystem' logic (renderer and physics!)
 		game->UpdateGame(msec);	//Update our game logic
 	}

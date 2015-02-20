@@ -30,6 +30,8 @@ _-_-_-_-_-_-_-""  ""
 #define PHYSICS_HZ	120
 
 #define PHYSICS_TIMESTEP (1000.0f / (float)PHYSICS_HZ)
+enum GameState { GAME_PLAYING, GAME_PAUSED, GAME_EXIT };
+
 
 class GameClass	{
 public:
@@ -42,6 +44,8 @@ public:
 	virtual void UpdateGame(float msec) = 0;
 
 	static GameClass& GetGameClass() { return *instance;}
+	void setCurrentState(GameState newGameState);
+	GameState getCurrentState() { return currentGameState; }
 
 protected:
 	float renderCounter;
@@ -51,5 +55,6 @@ protected:
 
 	Camera* gameCamera;
 	static GameClass* instance;
+	GameState currentGameState;
 };
 

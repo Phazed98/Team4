@@ -12,8 +12,33 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)
 
 	simpleShader	= new Shader(SHADERDIR"TechVertex.glsl", SHADERDIR"TechFragment.glsl");
 	textShader = new Shader(SHADERDIR"TexVertex.glsl", SHADERDIR"TexFragment.glsl");
+	texturedShader = new Shader(SHADERDIR"TexturedVertex.glsl", SHADERDIR"TexturedFragment.glsl");
+	menuShader = new Shader(SHADERDIR"menuVertex.glsl", SHADERDIR"menuFragment.glsl");
 
-	if (!simpleShader->LinkProgram() || !textShader->LinkProgram())
+	quad = Mesh::GenerateQuad();
+	quad->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"Background.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
+	quad->SetColour(new Vector4(1, 0, 0, 1));
+
+	playButton = new Button(Mesh::GenerateQuad(), Vector2(30,50), Vector2(376,178));
+	playButton->SetDefaultTexture(SOIL_load_OGL_texture(TEXTUREDIR"resume.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
+	playButton->SetHighlightTexture(SOIL_load_OGL_texture(TEXTUREDIR"resumeHighlighted.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
+	playButton->SetPressedTexture(SOIL_load_OGL_texture(TEXTUREDIR"resumeClicked.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
+
+	//resetButton = new Button(Mesh::GenerateQuad(), Vector2(100,150), Vector2(200,300));
+	//resetButton->getMesh()->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"Barren Grey.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
+
+	exitButton = new Button(Mesh::GenerateQuad(), Vector2(30,200), Vector2(376,350));
+	exitButton->SetDefaultTexture(SOIL_load_OGL_texture(TEXTUREDIR"ExitButton.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
+	exitButton->SetHighlightTexture(SOIL_load_OGL_texture(TEXTUREDIR"ExitButtonHighlighted.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
+	exitButton->SetPressedTexture(SOIL_load_OGL_texture(TEXTUREDIR"ExitButtonPressed.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
+
+
+	if (!quad->GetTexture())
+	{
+		return;
+	}
+
+	if (!simpleShader->LinkProgram() || !textShader->LinkProgram() || !texturedShader->LinkProgram() || !menuShader->LinkProgram())
 	{
 		return;
 	}
@@ -61,6 +86,7 @@ void Renderer::UpdateScene(float msec)
 
 void Renderer::RenderScene()	
 {
+	cout << "Drawing Scene" << endl;
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	if(camera) 
@@ -102,6 +128,90 @@ void Renderer::RenderScene()
 		}
 	}
 
+	glUseProgram(0);
+	SwapBuffers();
+}
+
+void Renderer::RenderMenu()
+{
+	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+	if (camera)
+	{
+		SetCurrentShader(simpleShader);
+		glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), 0);
+
+		textureMatrix.ToIdentity();
+		modelMatrix.ToIdentity();
+		viewMatrix = camera->BuildViewMatrix();
+		projMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float)width / (float)height, 45.0f);
+		frameFrustum.FromMatrix(projMatrix * viewMatrix);
+		UpdateShaderMatrices();
+
+		//Return to default 'usable' state every frame!
+		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_CULL_FACE);
+		glDisable(GL_STENCIL_TEST);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		BuildNodeLists(root);
+		SortNodeLists();
+		DrawNodes();
+		ClearNodeLists();
+	}
+
+
+	//Set Shader to TexturedShader
+	SetCurrentShader(menuShader);
+	
+	//Reset Matrixes
+	projMatrix = Matrix4::Orthographic(-1, 1, 1, -1, -1, 1);
+	viewMatrix.ToIdentity();
+	textureMatrix.ToIdentity();
+	modelMatrix.ToIdentity();
+	UpdateShaderMatrices();
+
+
+	//Display HUD
+	if (wireFrame)
+	{
+		toggleWireFrame();
+	}
+
+	//Draw Background Image
+	//quad->Draw();
+
+
+	//X = -1 to 1 on resolution 1280,800 -1 = 0, 1 = 1280
+	//Y = -1 to 1 on resolution 1280,800 -1 = 0, 1 = 800
+
+	Vector2 mousePos = Window::GetWindow().GetMouse()->GetAbsolutePosition();
+	bool mousePressed = Window::GetWindow().GetMouse()->ButtonDown(MOUSE_LEFT);
+
+	float correctedX = mousePos.x + -0.7 * 1280;
+	float correctedY = mousePos.y + -0.7 * 800;
+
+	cout << mousePos.x << ", " << mousePos.y << endl;
+
+	modelMatrix = Matrix4::Translation(Vector3(-0.7, -0.7, 0)) *  Matrix4::Scale(Vector3(0.25, 0.25, 0.25));
+	UpdateShaderMatrices();
+	if (playButton->checkAndDraw(mousePos, mousePressed))
+	{
+		GameClass::GetGameClass().setCurrentState(GAME_PLAYING);
+	}
+
+	//modelMatrix = Matrix4::Translation(Vector3(-0.7, -0.3, 0)) *  Matrix4::Scale(Vector3(0.25, 0.15, 100.25));
+	//UpdateShaderMatrices();
+	//resetButton->Draw(mousePos);
+
+	modelMatrix = Matrix4::Translation(Vector3(-0.7, -0.3, 0)) *  Matrix4::Scale(Vector3(0.25, 0.25, 0.25));
+	UpdateShaderMatrices();
+	if (exitButton->checkAndDraw(mousePos, mousePressed))
+	{
+		GameClass::GetGameClass().setCurrentState(GAME_EXIT);
+	}
+	
 	glUseProgram(0);
 	SwapBuffers();
 }
