@@ -71,6 +71,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BillboardTexture.cpp" />
     <ClCompile Include="CollisionHelper.cpp" />
     <ClCompile Include="EarthParticleSystem.cpp" />
     <ClCompile Include="FireParticleSystem.cpp" />
@@ -85,9 +86,9 @@
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Spring.cpp" />
     <ClCompile Include="SpringDemo.cpp" />
-    <ClCompile Include="texturedQuads.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BillboardTexture.h" />
     <ClInclude Include="CollisionHelper.h" />
     <ClInclude Include="CollisionVolume.h" />
     <ClInclude Include="Constraint.h" />
@@ -107,7 +108,6 @@
     <ClInclude Include="SpringDemo.h" />
     <ClInclude Include="SupportPoint.h" />
     <ClInclude Include="Technique.h" />
-    <ClInclude Include="texturedQuads.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\nclgl\nclgl.vcxproj">

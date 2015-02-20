@@ -57,7 +57,7 @@
     <ClCompile Include="EarthParticleSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="texturedQuads.cpp">
+    <ClCompile Include="BillboardTexture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -119,7 +119,7 @@
     <ClInclude Include="Technique.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="texturedQuads.h">
+    <ClInclude Include="BillboardTexture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

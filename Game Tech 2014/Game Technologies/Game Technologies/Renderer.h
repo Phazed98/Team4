@@ -40,6 +40,7 @@ _-_-_-_-_-_-_-""  ""
 
 #include "FireParticleSystem.h"
 #include "EarthParticleSystem.h"
+#include "BillboardTexture.h"
 
 
 class Renderer : public OGLRenderer	{
@@ -93,6 +94,8 @@ protected:
 	FireParticleSystem fireParticleSystem;
 
 	EarthParticleSystem earthParticleSystem;
+
+	BillboardTexture* billtexture;
 	float msec;
 
 	Mesh* quad;

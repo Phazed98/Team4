@@ -9,9 +9,13 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)	{
 	bbScene = new SceneNode();
 
 	quad = Mesh::GenerateQuad();
-	quad->SetTexture(SOIL_load_OGL_texture( TEXTUREDIR"bbgrass.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, 0));
+	quad->SetTexture(SOIL_load_OGL_texture("../../Textures/bbgrass.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
+	//quad->SetTexture(SOIL_load_OGL_texture( TEXTUREDIR"bbgrass.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, 0));
+	/*billtexture = new BillboardTexture();
+	billtexture->CreateBillboard();*/
 	
 
+	
 	
 	simpleShader = new Shader(SHADERDIR"TechVertex.glsl", SHADERDIR"TechFragment.glsl");
 	billboardShader = new Shader(SHADERDIR"billboardVS.glsl", SHADERDIR"billboardFS.glsl", SHADERDIR"billboardGS.glsl");
@@ -19,19 +23,22 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)	{
 		return;
 	}
 	
-	
+	/*
 	SceneNode* testQuad = new SceneNode();
 	testQuad->SetTransform(Matrix4::Translation(Vector3(0, 400, 0)));
 	testQuad->SetModelScale(Vector3(100.0f, 100.0f, 100.0f));
 	testQuad->SetBoundingRadius(1000.0f);
-	testQuad->SetMesh(quad);
+	testQuad->SetMesh(quad);*/
 
 	//bbScene->AddChild(testQuad);
-	root->AddChild(testQuad);
+	//root->AddChild(testQuad);
 
 	fireParticleSystem.InitParticleSystem(0, Vector3(0, 500, 0));//NEW!!
 
 	earthParticleSystem.InitParticleSystem(0, Vector3(100, 500, 0));
+
+	
+
 
 	instance		= this;
 
@@ -58,7 +65,7 @@ void Renderer::RenderScene()	{
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	if(camera) {
-		
+		DrawQuads();
 
 		SetCurrentShader(simpleShader);
 
@@ -78,13 +85,14 @@ void Renderer::RenderScene()	{
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+		
 
 		BuildNodeLists(root);
 		SortNodeLists();
 		DrawNodes();
 		ClearNodeLists();
 		
-		DrawQuads();
+		
 		/*SetCurrentShader(billboardShader);
 
 		BuildNodeLists(bbScene);
@@ -116,10 +124,9 @@ void	Renderer::DrawQuads(){
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useTexture"), 1);
 	glUniform4f(glGetUniformLocation(currentShader->GetProgram(), "nodeColour"), 1, 1, 1, 1);
 
-	BuildNodeLists(bbScene);
-	SortNodeLists();
-	DrawNodes();
-	ClearNodeLists();
+	UpdateShaderMatrices();
+
+	quad->Draw();
 
 }
 

@@ -6,7 +6,7 @@ layout(points, max_vertices = 101) out;
 #define PARTICLE_TYPE_LAUNCHER 0.0f                                                 
 #define PARTICLE_TYPE_SHELL 1.0f                                                    
      
-#define PARTICLE_AMOUNT 10.0	//the amount of generated particles each time
+#define PARTICLE_AMOUNT 20.0	//the amount of generated particles each time
 
 uniform float gDeltaTimeMillis;
 uniform float gTime;
@@ -37,12 +37,26 @@ out particles{
 }OUT;
 
 
+vec3 GetRandomDir(float n)
+{
+	// float xx = 2.5*texture(gRandomTexture2, vec2(x, y)).x-1;
+	// float yy = 0.3*texture(gRandomTexture2, vec2(x,y)).y;
+	// vec3 Dir = vec3(xx, yy, 0);
+	// return Dir;
+	
+	float xx = sin(36*n/3.14 );
+	float yy = cos(36*n/3.14 );
+	vec3 Dir= vec3(xx,yy,0);
+	return Dir;
+	
+}
 vec3 GetRandomDir(float x, float y)
 {
-	float xx = 2*texture(gRandomTexture1, vec2(x, y)).x-1;
+	float xx = 2*texture(gRandomTexture1, vec2(x, y)).x;
 	float yy = 0.3*texture(gRandomTexture2, vec2(x,y)).z;
 	vec3 Dir = vec3(xx, yy, 0);
 	return Dir;
+
 }
 
 void main()
@@ -60,8 +74,9 @@ void main()
 				OUT.pos = IN[0].Position0;
 
 				//velocity level 1
-				vec3 Dir = GetRandomDir(random_index, gTime / 10000.0);
-				
+				vec3 Dir = GetRandomDir(random_index,  10000.0);
+				//vec3 Dir = vec3(100, 10, 0);
+				//vec3 Dir = GetRandomDir(i);
 			
 				OUT.vel = normalize(Dir);
 
@@ -95,10 +110,12 @@ void main()
 			if (Age < gShellLifetime) {
 				OUT.type = PARTICLE_TYPE_SHELL;
 				OUT.pos = IN[0].Position0 + DeltaP;
-				vec3 Dir = GetRandomDir(IN[0].Index0, gTime / 10000.0);
-			
-				OUT.vel = normalize(Dir);
-			
+				
+				//vec3 Dir = GetRandomDir(IN[0].Index0, gTime / 10000.0);
+				vec3 Dir = GetRandomDir(IN[0].Index0);
+				
+				OUT.vel = normalize(Dir)  ;
+				
 				OUT.age = Age;
 				OUT.index = IN[0].Index0;
 				EmitVertex();

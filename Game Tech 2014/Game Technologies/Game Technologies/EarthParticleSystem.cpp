@@ -9,7 +9,7 @@
 #define PARTICLE_TYPE_SHELL 1.0f
 #define PARTICLE_TYPE_SECONDARY_SHELL 2.0f
 
-#define EARTH_SHADER_DIR "../../Shaders/fire-shader/"
+#define EARTH_SHADER_DIR "../../Shaders/EarthShaders/"
 
 #define ZERO_MEM(a) memset(a, 0, sizeof(a))
 #define SAFE_DELETE(p) if (p){ delete p; p = NULL;}
@@ -63,7 +63,7 @@ bool EarthParticleSystem::InitParticleSystem(int shape_type, const Vector3& Pos)
 		particle_lifetime = 10000.f;
 		particle_size = 20;
 		particleUpdateShader = new Shader(EARTH_SHADER_DIR"vs_update.glsl", EARTH_SHADER_DIR"fs_update.glsl", EARTH_SHADER_DIR"gs_update.glsl");
-		flame_texture = SOIL_load_OGL_texture(TEXTUREDIR"flameColor.jpg",
+		flame_texture = SOIL_load_OGL_texture(TEXTUREDIR"dust2.jpg",
 			SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_COMPRESS_TO_DXT);
 		break;
 	}
