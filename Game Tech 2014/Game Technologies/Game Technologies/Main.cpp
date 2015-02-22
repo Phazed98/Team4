@@ -26,9 +26,12 @@ _-_-_-_-_-_-_-|   /\_/\   NYANYANYAN
 _-_-_-_-_-_-_-""  ""   
 
 *//////////////////////////////////////////////////////////////////////////////
+#include "NetworkServer.h"
+#include "NetworkClient.h"
 #include <thread>
 #include "../../nclgl/Window.h"
 #include "MyGame.h"
+
 
 #pragma comment(lib, "nclgl.lib")
 
@@ -57,6 +60,13 @@ void physicsLoop(GameClass* game, bool& running)
 	}
 }
 
+void networkLoop()
+{
+	NetworkServer NWS;
+	//NWS.init();
+	NWS.sendRecv();
+}
+
 int main() 
 {
 	if(!Window::Initialise("Game Technologies", 1280,800,false)) 
@@ -78,14 +88,24 @@ int main()
 
 	bool running = true;
 	std::thread physics(physicsLoop, game, std::ref(running));
+	std::thread Networking(networkLoop);
+
 	while(Window::GetWindow().UpdateWindow() && GameClass::GetGameClass().getCurrentState() != GAME_EXIT)
 	{
 		float msec = Window::GetWindow().GetTimer()->GetTimedMS();	//How many milliseconds since last update?
 		game->UpdateRendering(msec);	//Update our 'sybsystem' logic (renderer and physics!)
 		game->UpdateGame(msec);	//Update our game logic
+
+		if(Window::GetKeyboard()->KeyTriggered(KEYBOARD_N))
+		{
+			NetworkClient NWC;
+			NWC.init();
+			NWC.sendRecv();
+		}
 	}
 	running = false;
 	physics.join();
+	Networking.join();
 
 	delete game;	//Done with our game now...bye bye!
 	return Quit();

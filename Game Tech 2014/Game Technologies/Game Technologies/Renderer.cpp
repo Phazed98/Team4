@@ -86,7 +86,7 @@ void Renderer::UpdateScene(float msec)
 
 void Renderer::RenderScene()	
 {
-	cout << "Drawing Scene" << endl;
+//	cout << "Drawing Scene" << endl;
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	if(camera) 
@@ -192,7 +192,7 @@ void Renderer::RenderMenu()
 	float correctedX = mousePos.x + -0.7 * 1280;
 	float correctedY = mousePos.y + -0.7 * 800;
 
-	cout << mousePos.x << ", " << mousePos.y << endl;
+	//cout << mousePos.x << ", " << mousePos.y << endl;
 
 	modelMatrix = Matrix4::Translation(Vector3(-0.7, -0.7, 0)) *  Matrix4::Scale(Vector3(0.25, 0.25, 0.25));
 	UpdateShaderMatrices();

@@ -79,6 +79,8 @@
     <ClCompile Include="GJK.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MyGame.cpp" />
+    <ClCompile Include="NetworkClient.cpp" />
+    <ClCompile Include="NetworkServer.cpp" />
     <ClCompile Include="ObjectType.cpp" />
     <ClCompile Include="Obstacle.cpp" />
     <ClCompile Include="PhysicsNode.cpp" />
@@ -102,6 +104,9 @@
     <ClInclude Include="GJKSimplex.h" />
     <ClInclude Include="InertialMatrixHelper.h" />
     <ClInclude Include="MyGame.h" />
+    <ClInclude Include="NetworkClient.h" />
+    <ClInclude Include="NetworkCommon.h" />
+    <ClInclude Include="NetworkServer.h" />
     <ClInclude Include="ObjectType.h" />
     <ClInclude Include="Obstacle.h" />
     <ClInclude Include="PhysicsNode.h" />
