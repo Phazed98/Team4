@@ -48,6 +48,7 @@ _-_-_-_-_-_-_-""  ""
 class Powerups;
 class Vehicle;
 class Bullets;
+class Coins;
 class MyGame : public GameClass	{
 public:
 	MyGame();
@@ -86,6 +87,8 @@ protected:
 
 	Powerups* AllBuff;
 
+	Coins* AllCoins;
+
 	Vector3 PositionEnemy;  //new 4.2.2015 Daixi
 	Vector3 Position0;
 	Vector3 Position1;
@@ -100,7 +103,7 @@ protected:
 
 	int count_time;  //new 4.2.2015 Daixi
 	int Speed_Player; //4.2.2015 Daixi
-
+	int distance;
 
 };
 

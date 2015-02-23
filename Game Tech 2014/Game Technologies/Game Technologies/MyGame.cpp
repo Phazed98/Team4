@@ -5,6 +5,7 @@
 #include "Vehicle.h"
 #include "Bullets.h"
 #include "Powerups.h"
+#include "Coins.h"
 
 
 /*
@@ -29,7 +30,11 @@ MyGame::MyGame()	{
 
 	Car = new Vehicle();
 
+	AllCoins = new Coins(10);
+
 	AllBuff = new Powerups();
+
+	distance = 1200; //this variable means every seconds the board will move 1200.
 	//allEntities.push_back(Car->GetPlayer());
 
 
@@ -140,10 +145,15 @@ void MyGame::UpdateGame(float msec) {
 		count_time = 0;
 	}
 	
-	AllBuff->UpdatePowerup(Car,msec);
+	AllBuff->UpdatePowerup(Car,AllCoins,msec);
 
+	if (distance <= 20){
+		AllCoins->UpdateCoins(Car);
+		distance = 1200;
+	}
+	AllCoins->UpdatePickupCoins(Car);
 	count_time++;
-	
+	distance -= 5;
 	
 
 	/*

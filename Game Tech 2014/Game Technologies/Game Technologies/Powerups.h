@@ -2,11 +2,12 @@
 #include"MyGame.h"
 
 class Vehicle;
+class Coins;
 class Powerups {
 public:
 	Powerups();
 	~Powerups(void);
-	void UpdatePowerup(Vehicle* Car, float msec);
+	void UpdatePowerup(Vehicle* Car, Coins* coins, float msec);
 	GameEntity* BuildPowerupEntity(float size, Vector3 pos);
 	GameEntity* GetTime_warp(){return Time_warp;}
 	GameEntity* GetSpeed_boost(){return Speed_boost;}
@@ -22,6 +23,7 @@ public:
 protected:
 	Vector3 SpeedboostPosition;
 	Vector3 InvulnerabilityPosition;
+	Vector3 PickupmagnetPosition;
 	Vector3 temp,temp1,temp2,temp3; 
 	Vector4 ColorTemp;
 
@@ -35,4 +37,5 @@ protected:
 	float size;
 	float SpeedboostTime;
 	float InvulnerabilityTime;
+	float PickupmagnetTime;
 };

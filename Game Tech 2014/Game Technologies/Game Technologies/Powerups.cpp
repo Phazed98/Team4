@@ -1,12 +1,15 @@
 #include "Powerups.h"
 #include "Vehicle.h"
+#include "Coins.h"
 
 Powerups::Powerups(){
 	PowerupMesh = new OBJMesh(MESHDIR"ico.obj");
 
-	SpeedboostPosition=Vector3(0,100,-200);
+	SpeedboostPosition=Vector3(0,100,-300);
 
-	InvulnerabilityPosition = Vector3(200,100,-200);
+	InvulnerabilityPosition = Vector3(200,100,-300);
+
+	PickupmagnetPosition = Vector3(-200, 100, -300);
 
 	size = 20.0f;
 
@@ -14,7 +17,11 @@ Powerups::Powerups(){
 
 	Invulnerability = BuildPowerupEntity(size,InvulnerabilityPosition);
 
+	Pickup_magnet = BuildPowerupEntity(size, PickupmagnetPosition);
+
 	Invulnerability->GetRenderNode().SetColour(Vector4(1,0,0,1));
+
+	Pickup_magnet->GetRenderNode().SetColour(Vector4(0, 1, 0, 1));
 
 	tempPosition = Vector3(0,350,-800);
 }
@@ -42,7 +49,7 @@ GameEntity* Powerups::BuildPowerupEntity(float size, Vector3 pos) {
 	return g;
 }
 
-void Powerups::UpdatePowerup(Vehicle* Car, float msec){
+void Powerups::UpdatePowerup(Vehicle* Car, Coins* coins, float msec){
 	if(Speed_boost!=NULL){
 		TestLength = (Speed_boost->GetPhysicsNode().GetPosition() - Car->GetPlayer()->GetPhysicsNode().GetPosition()).Length();
 		if(TestLength<=size+Car->GetSize()){
@@ -72,6 +79,35 @@ void Powerups::UpdatePowerup(Vehicle* Car, float msec){
 	if(InvulnerabilityTime<=msec){
 		Car->GetPlayer()->GetPhysicsNode().SetCollisionVolume(new CollisionSphere(size));
 	}
+
+	if (Pickup_magnet != NULL){
+		TestLength = (Pickup_magnet->GetPhysicsNode().GetPosition() - Car->GetPlayer()->GetPhysicsNode().GetPosition()).Length();
+		if (TestLength <= size + Car->GetSize()){
+			PickupmagnetTime = 20000 * msec;
+		}
+	}
+
+	if (PickupmagnetTime >= msec){
+		for (int i = 0; i < coins->GetCoinsnum(); i++){
+			if ((Car->GetPlayer()->GetPhysicsNode().GetPosition() - coins->GetAllcoins()[i]->GetPhysicsNode().GetPosition()).Length() <= 300){
+				temp1 = Car->GetPlayer()->GetPhysicsNode().GetPosition() - coins->GetAllcoins()[i]->GetPhysicsNode().GetPosition();
+				temp1.Normalise();
+				temp1 = temp1 * 0.2;
+				coins->GetAllcoins()[i]->GetPhysicsNode().SetLinearVelocity(temp1);
+			}
+			else{
+				coins->GetAllcoins()[i]->GetPhysicsNode().SetLinearVelocity(Vector3(0, 0, 0));
+			}
+		}
+	}
+	else{
+		for (int i = 0; i < coins->GetCoinsnum(); i++){
+			coins->GetAllcoins()[i]->GetPhysicsNode().SetLinearVelocity(Vector3(0,0,0));
+		}
+	}
+	
+
 	SpeedboostTime -= msec;
 	InvulnerabilityTime -=msec;
+	PickupmagnetTime -= msec;
 }
