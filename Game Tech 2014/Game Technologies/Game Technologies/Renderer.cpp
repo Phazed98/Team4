@@ -16,7 +16,7 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)
 	menuShader = new Shader(SHADERDIR"menuVertex.glsl", SHADERDIR"menuFragment.glsl");
 
 	quad = Mesh::GenerateQuad();
-	quad->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"borg.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
+	quad->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"Loading Screen.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
 	quad->SetColour(new Vector4(1, 0, 0, 1));
 
 	playButton = new Button(Mesh::GenerateQuad(), Vector2(30,50), Vector2(376,178));

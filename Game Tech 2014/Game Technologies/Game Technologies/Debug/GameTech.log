@@ -1,18 +1,18 @@
-﻿Build started 23/02/2015 14:40:59.
-     1>Project "C:\Users\cmdadmin\Desktop\Github\Team4\Game Tech 2014\Game Technologies\Game Technologies\GameTech.vcxproj" on node 2 (Build target(s)).
+﻿Build started 23/02/2015 15:45:41.
+     1>Project "D:\Github\Team4\Game Tech 2014\Game Technologies\Game Technologies\GameTech.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Renderer.cpp
          Renderer.cpp
-     1>c:\users\cmdadmin\desktop\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(192): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\cmdadmin\desktop\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(193): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\cmdadmin\desktop\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(197): warning C4305: 'argument' : truncation from 'double' to 'const float'
-     1>c:\users\cmdadmin\desktop\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(208): warning C4305: 'argument' : truncation from 'double' to 'const float'
-     1>c:\users\cmdadmin\desktop\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(256): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
-     1>c:\users\cmdadmin\desktop\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(256): warning C4244: 'argument' : conversion from 'unsigned int' to 'const float', possible loss of data
-     1>c:\users\cmdadmin\desktop\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(257): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
-     1>c:\users\cmdadmin\desktop\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(257): warning C4244: 'argument' : conversion from 'unsigned int' to 'const float', possible loss of data
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(192): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(193): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(197): warning C4305: 'argument' : truncation from 'double' to 'const float'
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(208): warning C4305: 'argument' : truncation from 'double' to 'const float'
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(256): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(256): warning C4244: 'argument' : conversion from 'unsigned int' to 'const float', possible loss of data
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(257): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(257): warning C4244: 'argument' : conversion from 'unsigned int' to 'const float', possible loss of data
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\cmdadmin\Desktop\Github\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\cmdadmin\Desktop\Github\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\cmdadmin\Desktop\Github\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.lib" /MACHINE:X86 /FORCE:MULTIPLE Debug\Bullets.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\Github\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\Github\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\Github\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.lib" /MACHINE:X86 /FORCE:MULTIPLE Debug\Bullets.obj
          Debug\Button.obj
          Debug\CollisionHelper.obj
          Debug\GameClass.obj
@@ -31,7 +31,7 @@
          Debug\SpringDemo.obj
          Debug\TextMesh.obj
          Debug\Vehicle.obj
-         "C:\Users\cmdadmin\Desktop\Github\Team4\Game Tech 2014\Game Technologies\Debug\nclgl.lib"
+         "D:\Github\Team4\Game Tech 2014\Game Technologies\Debug\nclgl.lib"
      1>LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/FORCE' specification
      1>Bullets.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/OPT:LBR' specification
      1>GameClass.obj : warning LNK4006: "public: __thiscall GJKSimplex::GJKSimplex(void)" (??0GJKSimplex@@QAE@XZ) already defined in Bullets.obj; second definition ignored
@@ -59,15 +59,24 @@
      1>Renderer.obj : warning LNK4049: locally defined symbol ___glewUniform4fv imported
      1>Renderer.obj : warning LNK4049: locally defined symbol ___glewUniformMatrix4fv imported
      1>Renderer.obj : warning LNK4049: locally defined symbol ___glewUseProgram imported
-     1>C:\Users\cmdadmin\Desktop\Github\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.exe : warning LNK4088: image being generated due to /FORCE option; image may not run
-     1>glew32.lib(glew.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'glew32.lib(glew.obj)' or at 'C:\Users\cmdadmin\Desktop\Github\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
-     1>SOIL.lib(image_DXT.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'SOIL.lib(image_DXT.obj)' or at 'C:\Users\cmdadmin\Desktop\Github\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
-     1>SOIL.lib(image_helper.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'SOIL.lib(image_helper.obj)' or at 'C:\Users\cmdadmin\Desktop\Github\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
-     1>SOIL.lib(SOIL.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'SOIL.lib(SOIL.obj)' or at 'C:\Users\cmdadmin\Desktop\Github\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
-     1>SOIL.lib(stb_image_aug.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'SOIL.lib(stb_image_aug.obj)' or at 'C:\Users\cmdadmin\Desktop\Github\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
-         GameTech.vcxproj -> C:\Users\cmdadmin\Desktop\Github\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.exe
-     1>Done Building Project "C:\Users\cmdadmin\Desktop\Github\Team4\Game Tech 2014\Game Technologies\Game Technologies\GameTech.vcxproj" (Build target(s)).
+     1>D:\Github\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.exe : warning LNK4088: image being generated due to /FORCE option; image may not run
+     1>SpringDemo.obj : warning LNK4099: PDB 'vc120.pdb' was not found with 'SpringDemo.obj' or at 'D:\Github\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
+     1>Spring.obj : warning LNK4099: PDB 'vc120.pdb' was not found with 'Spring.obj' or at 'D:\Github\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
+     1>PhysicsSystem.obj : warning LNK4099: PDB 'vc120.pdb' was not found with 'PhysicsSystem.obj' or at 'D:\Github\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
+     1>PhysicsNode.obj : warning LNK4099: PDB 'vc120.pdb' was not found with 'PhysicsNode.obj' or at 'D:\Github\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
+     1>MyGame.obj : warning LNK4099: PDB 'vc120.pdb' was not found with 'MyGame.obj' or at 'D:\Github\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
+     1>Main.obj : warning LNK4099: PDB 'vc120.pdb' was not found with 'Main.obj' or at 'D:\Github\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
+     1>GameEntity.obj : warning LNK4099: PDB 'vc120.pdb' was not found with 'GameEntity.obj' or at 'D:\Github\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
+     1>GameClass.obj : warning LNK4099: PDB 'vc120.pdb' was not found with 'GameClass.obj' or at 'D:\Github\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
+     1>CollisionHelper.obj : warning LNK4099: PDB 'vc120.pdb' was not found with 'CollisionHelper.obj' or at 'D:\Github\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
+     1>glew32.lib(glew.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'glew32.lib(glew.obj)' or at 'D:\Github\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
+     1>SOIL.lib(image_DXT.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'SOIL.lib(image_DXT.obj)' or at 'D:\Github\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
+     1>SOIL.lib(image_helper.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'SOIL.lib(image_helper.obj)' or at 'D:\Github\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
+     1>SOIL.lib(SOIL.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'SOIL.lib(SOIL.obj)' or at 'D:\Github\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
+     1>SOIL.lib(stb_image_aug.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'SOIL.lib(stb_image_aug.obj)' or at 'D:\Github\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
+         GameTech.vcxproj -> D:\Github\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.exe
+     1>Done Building Project "D:\Github\Team4\Game Tech 2014\Game Technologies\Game Technologies\GameTech.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:01.02
+Time Elapsed 00:00:02.85
