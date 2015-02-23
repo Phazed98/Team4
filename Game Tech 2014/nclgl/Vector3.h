@@ -13,6 +13,7 @@ _-_-_-_-_-_-_-""  ""
 */
 #include <cmath>
 #include <iostream>
+#include "common.h"
 
 class Vector3	{
 public:

@@ -1,4 +1,4 @@
-//Added by Sam
+//Added by Sam (Matt's Idea)
 //.h file is being used to store and provide easy access to the information of the planes/tiles
 //Kind of a hacky method buts its the easiest to work with, and allows quick changes that should
 //filter down to all relevant places in the program

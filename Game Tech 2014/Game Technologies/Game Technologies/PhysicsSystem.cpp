@@ -50,6 +50,9 @@ void	PhysicsSystem::Update(float msec)
 	{
 		(*i)->Update(msec);
 	}
+
+	playerVehicle->UpdatePlayer(msec);
+	playerPhysNode->Update(msec);
 }
 
 

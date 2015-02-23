@@ -176,7 +176,7 @@ void MyGame::UpdateGame(float msec)
 		gameCamera->UpdateCamera(msec);
 	}
 
-	vector<messageInfo> message;
+	/*vector<messageInfo> message;
 	for(vector<GameEntity*>::iterator i = allEntities.begin(); i != allEntities.end(); ++i) 
 	{
 		NetworkClient NWC;
@@ -189,7 +189,7 @@ void MyGame::UpdateGame(float msec)
 		message.push_back(mi);
 	}
 	NetworkClient NWC;
-	NWC.sendData(message);
+	NWC.sendData(message);*/
 
 
 	if (count_time == 80)
