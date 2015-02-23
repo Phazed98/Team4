@@ -1,17 +1,16 @@
-﻿Build started 23/02/2015 14:28:05.
+﻿Build started 23/02/2015 14:40:59.
      1>Project "C:\Users\cmdadmin\Desktop\Github\Team4\Game Tech 2014\Game Technologies\Game Technologies\GameTech.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt MyGame.cpp
-         MyGame.cpp
-     1>c:\users\cmdadmin\desktop\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(200): warning C4305: '+=' : truncation from 'double' to 'float'
-     1>c:\users\cmdadmin\desktop\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(224): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\cmdadmin\desktop\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(246): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\cmdadmin\desktop\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(389): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\cmdadmin\desktop\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(403): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\cmdadmin\desktop\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(433): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\cmdadmin\desktop\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(448): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\cmdadmin\desktop\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(461): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\cmdadmin\desktop\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(566): warning C4018: '<' : signed/unsigned mismatch
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Renderer.cpp
+         Renderer.cpp
+     1>c:\users\cmdadmin\desktop\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(192): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\cmdadmin\desktop\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(193): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\cmdadmin\desktop\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(197): warning C4305: 'argument' : truncation from 'double' to 'const float'
+     1>c:\users\cmdadmin\desktop\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(208): warning C4305: 'argument' : truncation from 'double' to 'const float'
+     1>c:\users\cmdadmin\desktop\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(256): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
+     1>c:\users\cmdadmin\desktop\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(256): warning C4244: 'argument' : conversion from 'unsigned int' to 'const float', possible loss of data
+     1>c:\users\cmdadmin\desktop\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(257): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
+     1>c:\users\cmdadmin\desktop\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(257): warning C4244: 'argument' : conversion from 'unsigned int' to 'const float', possible loss of data
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\cmdadmin\Desktop\Github\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\cmdadmin\Desktop\Github\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\cmdadmin\Desktop\Github\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.lib" /MACHINE:X86 /FORCE:MULTIPLE Debug\Bullets.obj
          Debug\Button.obj
@@ -71,4 +70,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.11
+Time Elapsed 00:00:01.02

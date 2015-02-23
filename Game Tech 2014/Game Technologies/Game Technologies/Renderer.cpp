@@ -219,6 +219,12 @@ void Renderer::RenderMenu()
 void Renderer::RenderLoading(int percent, string message)
 {
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	//Return to default 'usable' state every frame!
+
+	glEnable(GL_CULL_FACE);
+	glDisable(GL_STENCIL_TEST);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	//Set Shader to TexturedShader
 	SetCurrentShader(menuShader);
@@ -247,8 +253,8 @@ void Renderer::RenderLoading(int percent, string message)
 	glBlendFunc(GL_SRC_ALPHA, GL_SRC_ALPHA);
 
 
-	DrawText(a, Vector3(width / 2 - a.length()*10, height / 2, 0), 30, false);
-	DrawText(message, Vector3(width / 2 - message.length()*10, height / 2 + 30, 0), 30, false);
+	DrawText(a, Vector3(width / 2 - a.length()*15, height / 2 - 60, 0), 30, false);
+	DrawText(message, Vector3(width / 2 - message.length()*15, height / 2 - 30, 0), 30, false);
 
 	glDepthMask(true);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -258,13 +264,13 @@ void Renderer::RenderLoading(int percent, string message)
 	SwapBuffers();
 
 	//Delay to read load screen :P
-	for (int x = 0; x < 10000; x++)
-	{
-		for (int y = 0; y < 10000; y++)
-		{
+	//for (int x = 0; x < 10000; x++)
+	//{
+	//	for (int y = 0; y < 100000; y++)
+	//	{
 
-		}
-	}
+	//	}
+	//}
 }
 
 void	Renderer::DrawNode(SceneNode*n)	
