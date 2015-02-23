@@ -5,6 +5,8 @@
 # include <ws2tcpip.h>
 #include <string>
 #include <iostream>
+#include "../../nclgl/Matrix4.h"
+#include "MyGame.h"
 
 # define HIGHVERSION 2
 # define LOWVERSION 2
@@ -26,5 +28,3 @@ struct messageInfo
 	float b;
 };
 
-WSAData wsaData;
-struct addrinfo * addr;

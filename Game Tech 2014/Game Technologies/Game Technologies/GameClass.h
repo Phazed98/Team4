@@ -30,7 +30,11 @@ _-_-_-_-_-_-_-""  ""
 #define PHYSICS_HZ	120
 
 #define PHYSICS_TIMESTEP (1000.0f / (float)PHYSICS_HZ)
-enum GameState { GAME_PLAYING, GAME_PAUSED, GAME_EXIT };
+enum GameState { 
+	GAME_PLAYING, 
+	GAME_PAUSED,
+	Game_LOADING,
+	GAME_EXIT };
 
 
 class GameClass	{
@@ -46,6 +50,7 @@ public:
 	static GameClass& GetGameClass() { return *instance;}
 	void setCurrentState(GameState newGameState);
 	GameState getCurrentState() { return currentGameState; }
+	vector<GameEntity*> getAllentitities() { return allEntities; }
 
 protected:
 	float renderCounter;

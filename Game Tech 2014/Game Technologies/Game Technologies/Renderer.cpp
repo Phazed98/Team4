@@ -16,7 +16,7 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)
 	menuShader = new Shader(SHADERDIR"menuVertex.glsl", SHADERDIR"menuFragment.glsl");
 
 	quad = Mesh::GenerateQuad();
-	quad->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"Background.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
+	quad->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"borg.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
 	quad->SetColour(new Vector4(1, 0, 0, 1));
 
 	playButton = new Button(Mesh::GenerateQuad(), Vector2(30,50), Vector2(376,178));
@@ -214,6 +214,57 @@ void Renderer::RenderMenu()
 	
 	glUseProgram(0);
 	SwapBuffers();
+}
+
+void Renderer::RenderLoading(int percent, string message)
+{
+	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+	//Set Shader to TexturedShader
+	SetCurrentShader(menuShader);
+
+	//Reset Matrixes
+	projMatrix = Matrix4::Orthographic(-1, 1, 1, -1, -1, 1);
+	viewMatrix.ToIdentity();
+	textureMatrix.ToIdentity();
+	modelMatrix.ToIdentity();
+	UpdateShaderMatrices();
+
+
+	//Display HUD
+	if (wireFrame)
+	{
+		toggleWireFrame();
+	}
+
+	cout << message << endl;
+	//Draw Background Image
+	quad->Draw();
+	string a = "Loading..." + std::to_string(percent) + "/100";
+	cout << a << endl;
+
+	glDepthMask(false);
+	glBlendFunc(GL_SRC_ALPHA, GL_SRC_ALPHA);
+
+
+	DrawText(a, Vector3(width / 2 - a.length()*10, height / 2, 0), 30, false);
+	DrawText(message, Vector3(width / 2 - message.length()*10, height / 2 + 30, 0), 30, false);
+
+	glDepthMask(true);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+
+	glUseProgram(0);
+	SwapBuffers();
+
+	//Delay to read load screen :P
+	for (int x = 0; x < 10000; x++)
+	{
+		for (int y = 0; y < 10000; y++)
+		{
+
+		}
+	}
 }
 
 void	Renderer::DrawNode(SceneNode*n)	

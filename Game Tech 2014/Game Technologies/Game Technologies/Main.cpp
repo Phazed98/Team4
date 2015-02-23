@@ -35,6 +35,9 @@ _-_-_-_-_-_-_-""  ""
 
 #pragma comment(lib, "nclgl.lib")
 
+bool loaded = false;
+MyGame* game;
+
 int Quit(bool pause = false, const string &reason = "") 
 {
 	PhysicsSystem::Destroy();
@@ -63,8 +66,13 @@ void physicsLoop(GameClass* game, bool& running)
 void networkLoop()
 {
 	NetworkServer NWS;
-	//NWS.init();
 	NWS.sendRecv();
+}
+
+void loadGame()
+{
+	while (!loaded)
+		Renderer::GetRenderer().RenderLoading(0, "Loading...");
 }
 
 int main() 
@@ -81,7 +89,11 @@ int main()
 
 	PhysicsSystem::Initialise();
 
+
+	//std::thread Loading(loadGame);
 	MyGame* game = new MyGame();
+	loaded = true;
+
 
 	Window::GetWindow().LockMouseToWindow(true);
 	Window::GetWindow().ShowOSPointer(false);
@@ -90,20 +102,24 @@ int main()
 	std::thread physics(physicsLoop, game, std::ref(running));
 	std::thread Networking(networkLoop);
 
+
+
 	while(Window::GetWindow().UpdateWindow() && GameClass::GetGameClass().getCurrentState() != GAME_EXIT)
 	{
 		float msec = Window::GetWindow().GetTimer()->GetTimedMS();	//How many milliseconds since last update?
 		game->UpdateRendering(msec);	//Update our 'sybsystem' logic (renderer and physics!)
 		game->UpdateGame(msec);	//Update our game logic
 
-		if(Window::GetKeyboard()->KeyTriggered(KEYBOARD_N))
+		if (GameClass::GetGameClass().getCurrentState() == GAME_PLAYING)
 		{
 			NetworkClient NWC;
 			NWC.init();
 			NWC.sendRecv();
-		}
+		}		
 	}
+
 	running = false;
+
 	physics.join();
 	Networking.join();
 

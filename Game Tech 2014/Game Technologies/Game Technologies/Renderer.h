@@ -24,6 +24,7 @@ public:
 	void	AddNode(SceneNode* n);
 	void	RemoveNode(SceneNode* n);
 	void	RenderMenu();
+	void	RenderLoading(int percent, string Message);
 
 	//Statics
 	static bool Initialise() 

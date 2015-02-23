@@ -1,4 +1,5 @@
 #include "NetworkServer.h"
+#include "../../nclgl/Matrix4.h"
 
 
 int NetworkServer::init()
@@ -145,8 +146,9 @@ int NetworkServer::sendRecv(void)
 	}
 
 	// continually accept new connections
-	while (1)
+	while (GameClass::GetGameClass().getCurrentState()!= GAME_EXIT)
 	{
+		cout << GameClass::GetGameClass().getCurrentState() << endl;
 		printf("\n Waiting for connections ... \n");
 		SOCKET inc = NULL;
 		struct sockaddr_storage inc_addr;
@@ -171,8 +173,9 @@ int NetworkServer::sendRecv(void)
 		char buff[BUFFSIZE];
 		int int_data;
 		messageInfo info_data;
+		Matrix4 mat_data;
 
-		if ((bytesreceived = recv(inc, (char*)&info_data, BUFFSIZE - 1, 0)) == -1)
+		if ((bytesreceived = recv(inc, (char*)&mat_data, BUFFSIZE - 1, 0)) == -1)
 		{
 			printf(" Error receiving \n");
 			printf(" Failed with error : %d\n%s\n", WSAGetLastError(), gai_strerror(WSAGetLastError()));
@@ -181,7 +184,7 @@ int NetworkServer::sendRecv(void)
 		{
 			std::cout << " Server Message Recieved. " << std::endl;
 			std::cout << " Recieved " << bytesreceived << " Bytes." << std::endl;
-			std::cout << " Message is : " << info_data.a << ", " << info_data.b << std::endl;
+			std::cout << " Message is : " << mat_data << std::endl;
 		}
 
 		closesocket(inc);

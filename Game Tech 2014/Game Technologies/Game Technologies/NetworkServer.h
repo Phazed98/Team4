@@ -1,6 +1,9 @@
+#pragma once;
+
 #include "NetworkCommon.h"
 
-
+WSAData wsaData;
+struct addrinfo * addr;
 
 class NetworkServer
 {

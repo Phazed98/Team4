@@ -1,8 +1,9 @@
 #include "NetworkClient.h"
+
 int NetworkClient::init()
 {
 	// call to startup
-	int error = WSAStartup(MAKEWORD(HIGHVERSION, LOWVERSION), &wsaData);
+	int error = WSAStartup(MAKEWORD(HIGHVERSION, LOWVERSION), &wsaClientData);
 	if (error != 0)
 	{
 		fprintf(stderr, " WSAStartup failed with error : %d.\n", error);
@@ -10,20 +11,17 @@ int NetworkClient::init()
 	}
 	// check version values
 
-	if (LOBYTE(wsaData.wVersion) != LOWVERSION || HIBYTE(wsaData.wVersion) != HIGHVERSION)
+	if (LOBYTE(wsaClientData.wVersion) != LOWVERSION || HIBYTE(wsaClientData.wVersion) != HIGHVERSION)
 	{
 		printf(" The version requested cannot be supported .\n");
-		printf(" Version set is %d.%d\n", LOBYTE(wsaData.wVersion),
-			HIBYTE(wsaData.wVersion));
+		printf(" Version set is %d.%d\n", LOBYTE(wsaClientData.wVersion), HIBYTE(wsaClientData.wVersion));
 		WSACleanup();
 		return 1;
 	}
 	else
 	{
 		printf(" The Winsock API has been successfully initialised .\n"
-			" You are using version %d.%d.\n\n",
-			HIBYTE(wsaData.wVersion),
-			LOBYTE(wsaData.wVersion));
+			" You are using version %d.%d.\n\n", HIBYTE(wsaClientData.wVersion), LOBYTE(wsaClientData.wVersion));
 		return 0;
 	}
 }
@@ -41,7 +39,7 @@ int NetworkClient::addressing()
 	hints.ai_flags = FLAGS;
 	hints.ai_protocol = PROTOCOL;
 
-	result = getaddrinfo(HOST, PORT, &hints, &addr);
+	result = getaddrinfo(HOST, PORT, &hints, &clientaddr);
 
 	if (result != 0)
 	{
@@ -54,7 +52,7 @@ int NetworkClient::addressing()
 	printf(" Addressing information :\n");
 
 	int i = 0;
-	for (temp = addr; temp != NULL; temp = temp->ai_next)
+	for (temp = clientaddr; temp != NULL; temp = temp->ai_next)
 	{
 		printf("\n Entry %d:\n", ++i);
 		switch (temp->ai_family)
@@ -106,7 +104,7 @@ int NetworkClient::sendRecv(void)
 		exit(1);
 	}
 	// create a socket for the server to listen on
-	if ((s = socket(addr->ai_family, addr->ai_socktype, addr->ai_protocol)) == INVALID_SOCKET)
+	if ((s = socket(clientaddr->ai_family, clientaddr->ai_socktype, clientaddr->ai_protocol)) == INVALID_SOCKET)
 	{
 		printf(" Unable to create a socket \n");
 		printf(" Failed with error : %d\n%s\n", WSAGetLastError(), gai_strerror(WSAGetLastError()));
@@ -118,7 +116,7 @@ int NetworkClient::sendRecv(void)
 	}
 
 	// connect to the server
-	if (connect(s, addr->ai_addr, addr->ai_addrlen) != 0)
+	if (connect(s, clientaddr->ai_addr, clientaddr->ai_addrlen) != 0)
 	{
 		printf(" Unable to connect to server \n");
 		printf(" Failed with error : %d\n%s\n", WSAGetLastError(), gai_strerror(WSAGetLastError()));
@@ -129,7 +127,7 @@ int NetworkClient::sendRecv(void)
 	}
 
 	// finished with addrinfo struct now
-	freeaddrinfo(addr);
+	freeaddrinfo(clientaddr);
 
 	// accept message from server and close
 	int bytesreceived;
@@ -150,10 +148,12 @@ int NetworkClient::sendRecv(void)
 
 	int int_data = 191123;
 	messageInfo info_data;
+	Matrix4 mat_data;
+	mat_data.ToIdentity();
 	info_data.a = 5;
 	info_data.b = 3.08f;
 
-	send(s, (char*)&info_data, sizeof(messageInfo), 0);
+	send(s, (char*)&mat_data, sizeof(messageInfo), 0);
 
 	closesocket(s);
 	WSACleanup();

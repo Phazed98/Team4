@@ -14,38 +14,55 @@ You can completely change all of this if you want, it's your game!
 
 MyGame::MyGame()	
 {
+	Renderer::GetRenderer().RenderLoading(0, "Initializing...");
+	setCurrentState(Game_LOADING);
 	timer = 0;
 
 	count_time = 0;    //new control shoot the bullets   4.2.2015 Daixi
 
 	Speed_Player = 1;  //control the player speed
 
+	Renderer::GetRenderer().RenderLoading(5, "Loading Elements...");
+
 	elements.push_back(top);
 	elements.push_back(right);
 	elements.push_back(bottom);
 	elements.push_back(left);
+
+	Renderer::GetRenderer().RenderLoading(15,"Feeding Hamsters..." );
 
 	reference.push_back(top);
 	reference.push_back(right);
 	reference.push_back(bottom);
 	reference.push_back(left);
 
+	Renderer::GetRenderer().RenderLoading(25,"Creating Obtsacles...");
+
 	obstacleElements.resize(4);
 	obstacleReference.resize(4);
 
+	Renderer::GetRenderer().RenderLoading(30,"Referencing Obstacles..."); 
 	for (int i = 0; i < 4; i++)
 	{
 		obstacleReference[i] = NULL;
 	}
+	Renderer::GetRenderer().RenderLoading(40,"Attaching Mooses...");
 
 	gameCamera = new Camera(-30.0f, 0.0f, Vector3(0, 350, -800)); //changed the location Daixi 3.2.2015
+	Renderer::GetRenderer().RenderLoading(50, "I knew A Moose Once...");
 
 	Renderer::GetRenderer().SetCamera(gameCamera);
 
 	CubeRobot::CreateCube();
+	Renderer::GetRenderer().RenderLoading(70, "He was a really good moose...");
 
 	Car = new Vehicle();
-	PlayerMesh = new OBJMesh(MESHDIR"Player.obj"); // 3.2.2015 Daixi
+	Renderer::GetRenderer().RenderLoading(75, "The moose never bit anyone...");
+	Renderer::GetRenderer().RenderLoading(76, "I called him George...");
+	PlayerMesh = new OBJMesh(MESHDIR"Wraith Raider Starship.obj"); // 3.2.2015 Daixi
+	Renderer::GetRenderer().RenderLoading(91, "Sorry about that...");
+	Renderer::GetRenderer().RenderLoading(92, "The person responsible for the loading screen...");
+	Renderer::GetRenderer().RenderLoading(93, "...has been sacked...");
 
 	/*
 	We're going to manage the meshes we need in our game in the game class!
@@ -60,16 +77,20 @@ MyGame::MyGame()
 	quad	= Mesh::GenerateQuad();
 	sphere	= new OBJMesh(MESHDIR"ico.obj");
 	PlayerMesh = new OBJMesh(MESHDIR"Player.obj"); // 3.2.2015 Daixi
+	Renderer::GetRenderer().RenderLoading(95, "Lammas are nice creatures...");
 
 	Enemy = BuildPlayerEntity(20.0f, Vector3(-300, 100, -300)); //new 4.2.2015 Daixi
 	Enemy->GetPhysicsNode().SetPosition(Vector3(300, 100, -100));
+	Renderer::GetRenderer().RenderLoading(96,"Hold it,  Were not getting into Lammas now...");
 
 	Position0 = Enemy->GetPhysicsNode().GetPosition(); //5.2.2015 Daixi ------------------This is the straight line bullet
 	Position0.z = Position0.z - 20;
 	bullet = new Bullets(Position0);
+	Renderer::GetRenderer().RenderLoading(97, "The loading system is obviously faulty, we will continue now without any further updates...");
 
 	BuffEntity = BuildBuffEntity(6, Vector3(0, 100, -200)); //6.2.2015 Daixi ------------------ This is the buff object, and when player hit it, will speed up
 	BuffEntity->GetRenderNode().SetColour(Vector4(1, 1, 0, 1));
+	Renderer::GetRenderer().RenderLoading(98, "Except this to say we love Mooses? Meese? Multiple Moose? ...");
 
 	/*
 	A more 'robust' system would check the entities vector for duplicates so as
@@ -114,10 +135,15 @@ MyGame::MyGame()
 	plane = BuildObjectEntity(200, 0, 3);
 	allEntities.push_back(plane);
 
+	setCurrentState(GAME_PLAYING);
+
+	Renderer::GetRenderer().RenderLoading(100, "Done...");
+
 }
 
 MyGame::~MyGame(void)	
 {
+
 	/*
 	We're done with our assets now, so we can delete them
 	*/
@@ -136,6 +162,7 @@ MyGame::~MyGame(void)
 	obstacleReference.clear();
 
 	//GameClass destructor will destroy your entities for you...
+	setCurrentState(GAME_EXIT);
 }
 
 /*

@@ -1,13 +1,17 @@
-﻿Build started 22/02/2015 14:28:34.
+﻿Build started 23/02/2015 14:28:05.
      1>Project "C:\Users\cmdadmin\Desktop\Github\Team4\Game Tech 2014\Game Technologies\Game Technologies\GameTech.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt NetworkClient.cpp NetworkServer.cpp
-         NetworkServer.cpp
-     1>c:\users\cmdadmin\desktop\github\team4\game tech 2014\game technologies\game technologies\networkserver.cpp(171): warning C4101: 'buff' : unreferenced local variable
-     1>c:\users\cmdadmin\desktop\github\team4\game tech 2014\game technologies\game technologies\networkserver.cpp(172): warning C4101: 'int_data' : unreferenced local variable
-         NetworkClient.cpp
-         Generating Code...
-     1>c:\users\cmdadmin\desktop\github\team4\game tech 2014\game technologies\game technologies\networkclient.cpp(160): warning C4715: 'NetworkClient::sendRecv' : not all control paths return a value
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt MyGame.cpp
+         MyGame.cpp
+     1>c:\users\cmdadmin\desktop\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(200): warning C4305: '+=' : truncation from 'double' to 'float'
+     1>c:\users\cmdadmin\desktop\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(224): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\cmdadmin\desktop\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(246): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\cmdadmin\desktop\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(389): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\cmdadmin\desktop\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(403): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\cmdadmin\desktop\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(433): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\cmdadmin\desktop\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(448): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\cmdadmin\desktop\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(461): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\cmdadmin\desktop\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(566): warning C4018: '<' : signed/unsigned mismatch
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\cmdadmin\Desktop\Github\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\cmdadmin\Desktop\Github\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\cmdadmin\Desktop\Github\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.lib" /MACHINE:X86 /FORCE:MULTIPLE Debug\Bullets.obj
          Debug\Button.obj
@@ -36,8 +40,10 @@
      1>GJK.obj : warning LNK4006: "public: __thiscall GJKSimplex::GJKSimplex(void)" (??0GJKSimplex@@QAE@XZ) already defined in Bullets.obj; second definition ignored
      1>Main.obj : warning LNK4006: "public: __thiscall GJKSimplex::GJKSimplex(void)" (??0GJKSimplex@@QAE@XZ) already defined in Bullets.obj; second definition ignored
      1>MyGame.obj : warning LNK4006: "public: __thiscall GJKSimplex::GJKSimplex(void)" (??0GJKSimplex@@QAE@XZ) already defined in Bullets.obj; second definition ignored
-     1>NetworkClient.obj : warning LNK4006: "struct WSAData wsaData" (?wsaData@@3UWSAData@@A) already defined in Main.obj; second definition ignored
-     1>NetworkClient.obj : warning LNK4006: "struct addrinfo * addr" (?addr@@3PAUaddrinfo@@A) already defined in Main.obj; second definition ignored
+     1>NetworkClient.obj : warning LNK4006: "public: __thiscall GJKSimplex::GJKSimplex(void)" (??0GJKSimplex@@QAE@XZ) already defined in Bullets.obj; second definition ignored
+     1>NetworkClient.obj : warning LNK4006: "struct WSAData wsaClientData" (?wsaClientData@@3UWSAData@@A) already defined in Main.obj; second definition ignored
+     1>NetworkClient.obj : warning LNK4006: "struct addrinfo * clientaddr" (?clientaddr@@3PAUaddrinfo@@A) already defined in Main.obj; second definition ignored
+     1>NetworkServer.obj : warning LNK4006: "public: __thiscall GJKSimplex::GJKSimplex(void)" (??0GJKSimplex@@QAE@XZ) already defined in Bullets.obj; second definition ignored
      1>NetworkServer.obj : warning LNK4006: "struct WSAData wsaData" (?wsaData@@3UWSAData@@A) already defined in Main.obj; second definition ignored
      1>NetworkServer.obj : warning LNK4006: "struct addrinfo * addr" (?addr@@3PAUaddrinfo@@A) already defined in Main.obj; second definition ignored
      1>PhysicsSystem.obj : warning LNK4006: "public: __thiscall GJKSimplex::GJKSimplex(void)" (??0GJKSimplex@@QAE@XZ) already defined in Bullets.obj; second definition ignored
@@ -65,4 +71,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.60
+Time Elapsed 00:00:01.11
