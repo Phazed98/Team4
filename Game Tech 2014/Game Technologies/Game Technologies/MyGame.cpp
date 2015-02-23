@@ -57,7 +57,6 @@ MyGame::MyGame()
 	CubeRobot::CreateCube();
 	Renderer::GetRenderer().RenderLoading(70, "He was a really good moose...");
 
-	Car = new Vehicle();
 	Renderer::GetRenderer().RenderLoading(75, "The moose never bit anyone...");
 	Renderer::GetRenderer().RenderLoading(76, "I called him George...");
 	//PlayerMesh = new OBJMesh(MESHDIR"Wraith Raider Starship.obj"); // 3.2.2015 Daixi
@@ -174,8 +173,6 @@ void MyGame::UpdateGame(float msec)
 
 	if(gameCamera) 
 	{
-		Car->UpdatePlayer(msec);
-		//gameCamera->SetPosition(Car->tempPosition);
 		gameCamera->UpdateCamera(msec);
 	}
 

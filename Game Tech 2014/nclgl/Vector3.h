@@ -127,5 +127,36 @@ public:
 
 	inline bool	operator==(const Vector3 &A)const {return (A.x == x && A.y == y && A.z == z) ? true : false;};
 	inline bool	operator!=(const Vector3 &A)const {return (A.x == x && A.y == y && A.z == z) ? false : true;};
+
+	//NOTE - please use normalised vectors
+	//Added by Sam 
+	static inline float get360AngleBetweenTwoVecs(const Vector3  &origin, const Vector3  &other)
+	{
+		float dot = Dot(origin, other);
+
+		Vector3 planeNormal = Cross(origin, other);
+		planeNormal.Normalise();
+
+		//xx*yy*zz + xy*yz*zx + xz*yx*zy - zx*yy*xz - zy*yz*xx - zz*yx*xy
+
+		float det = (origin.x * other.y * planeNormal.z) +
+			(origin.y * other.z * planeNormal.x) +
+			(origin.z * other.x * planeNormal.y) -
+			(planeNormal.x * other.y * origin.z) -
+			(planeNormal.y * other.z * origin.x) -
+			(planeNormal.z * other.x * origin.y);
+
+		float angle = atan2(det, dot);
+
+		angle = RadToDeg(angle);
+
+		if (planeNormal.z > 0.0f)
+		{
+			angle = -angle;
+		}
+
+		return angle;
+	}
+
 };
 

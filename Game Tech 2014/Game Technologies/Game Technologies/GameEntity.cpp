@@ -9,10 +9,15 @@ GameEntity::GameEntity(void)	{
 	physicsNode = NULL;
 }
 
-GameEntity::GameEntity(SceneNode* s, PhysicsNode* p) 
+//Added by Sam for creating vehicles
+GameEntity::GameEntity(SceneNode* s) : renderNode(s)
 {
-	renderNode	= s;
-	physicsNode = p;
+
+}
+
+GameEntity::GameEntity(SceneNode* s, PhysicsNode* p) :
+renderNode(s), physicsNode(p)
+{
 	objectID = globalID++;
 }
 

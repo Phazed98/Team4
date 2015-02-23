@@ -71,6 +71,8 @@ public:
 	void ConfigureAABBHalfLength();
 
 	float GetAABBHalfLength() { return AABBHalfLength; }
+
+	void SetMovable(bool flag) { m_moveable = flag; }
 	//-----------------------------------------------
 
 protected:

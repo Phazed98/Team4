@@ -1,29 +1,62 @@
 #pragma once
-#include"MyGame.h"
+#include"GameEntity.h"
+
+//Written by Sam, adapted from Daixi's vehicle code to allow the vehicle to retain its behaviour over all planes
 
 
-/*
-Author: Daixi Zhang
-Date: 11/02/2015
-*/
+//Sam - added a min/max rotation define (negative for min)
+#define MAX_VEHICLE_X_ROTATION 55.0f
+
+//Sam - added planeInfo for positioning in game
+#include "PlaneInfo.h"
 
 class Vehicle
 {
 public:
-	Vehicle();
+	//Sam - made some alterations to the constructor to bring it more in line with other objects for consistency
+	Vehicle(Mesh* mesh, float playerScale, float speedTurn, int startingPlaneID, float steeringResponsiveness);
 	~Vehicle(void);
-	GameEntity* BuildPlayerEntity(float size, Vector3 pos);
+
 	void UpdatePlayer(float msec);
 
 	Vector3 tempPosition;
+
+	//Sam - added a way to get the physics node for the physics system
+	PhysicsNode* GetPhysicsNode() { return PhysNode; }
+
 protected:
-	Vector3 PlayerPosition;
+
+	//Sam - changed to a void
+	void BuildPlayerEntity(Mesh* mesh, float size, Vector3 pos, Vector3 orient);
+
+	//Vector3 PlayerPosition; Sam - no longer needed as a class variable
+
 	Vector3 temp, temp1, temp2, temp3;
 
-	Mesh* PlayerMesh;
-	GameEntity* Player;
+	//Mesh* PlayerMesh; Sam - moved to MyGame
 
-	int Speed_Player;
-	float Speed_Rotate;
-	float Speed_Reduce;
+	//GameEntity* Player; Sam - not needed given the structure of the physics system
+	PhysicsNode* PhysNode;
+
+	//float Speed_Linear; Sam - not needed as we are moving the world not the player
+	float Speed_Turn;
+
+	//Added by Sam for physics management and player placement
+	int currentPlaneID;
+	Vector3 CalculatePlayerLocation();
+	float rotationOnPlane; //a rotation relative to the current plane for the if comparisons 
+	float xLocationOnPlane; //player's x location on the current plane
+	void UpdatePlayerVelocity();
+	//weighting value of how quickly the hover vehicle will react to direction changes (lower = more inertia)
+	//MUST BE <=1.0
+	float steeringResponsiveness;
+	Vector3 CalculateStartingOrientation();
+	void UpdatePlayerRotationOnPlane();
+	float shipWidth;
+	float tileShipWidthDelta;
+	void SwitchPlane();
+
+	void debug();
+
+
 };

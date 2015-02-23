@@ -1,12 +1,18 @@
 #include "PhysicsSystem.h"
 #include "CollisionHelper.h"
 #include "GJK.h"
+#include "../../nclgl/OBJMesh.h"
 
 PhysicsSystem* PhysicsSystem::instance = 0;
 int PhysicsSystem::fps = 0;
 
 PhysicsSystem::PhysicsSystem(void)
 {
+	//Sam - moving here for scoping reasons
+	OBJMesh* PlayerMesh = new OBJMesh(MESHDIR"SR-71_Blackbird.obj");
+	this->playerVehicle = new Vehicle(PlayerMesh, 4, 0.0023, 2, 0.02);
+	this->playerPhysNode = playerVehicle->GetPhysicsNode();
+	playerPhysNode->SetLinearVelocity(Vector3(0, 0, 0));
 
 }
 
@@ -91,15 +97,15 @@ void	PhysicsSystem::BroadPhaseCollisions()
 		for (PhysicsNode* &node : *TilePhysicsNodeArray0)
 		{
 			//Check if POTENTIAL collision with player
-			if (CheckAABBCollision(*player, *node))
+			if (CheckAABBCollision(*playerPhysNode, *node))
 			{
 				//Perform collision check between player and object
 				CollisionData* collisionData = new CollisionData();
 				GJK* gjkObj = new GJK();
-				if (gjkObj->CollisionDetection(*player, *node, collisionData))
+				if (gjkObj->CollisionDetection(*playerPhysNode, *node, collisionData))
 				{
 					//resolve collision
-					AddCollisionImpulse(*player, *node, collisionData);
+					AddCollisionImpulse(*playerPhysNode, *node, collisionData);
 				}
 				delete gjkObj;
 				delete collisionData;
@@ -110,15 +116,15 @@ void	PhysicsSystem::BroadPhaseCollisions()
 		for (PhysicsNode* &node : *TilePhysicsNodeArray1)
 		{
 			//Check if POTENTIAL collision with player
-			if (CheckAABBCollision(*player, *node))
+			if (CheckAABBCollision(*playerPhysNode, *node))
 			{
 				//Perform collision check between player and object
 				CollisionData* collisionData = new CollisionData();
 				GJK* gjkObj = new GJK();
-				if (gjkObj->CollisionDetection(*player, *node, collisionData))
+				if (gjkObj->CollisionDetection(*playerPhysNode, *node, collisionData))
 				{
 					//resolve collision
-					AddCollisionImpulse(*player, *node, collisionData);
+					AddCollisionImpulse(*playerPhysNode, *node, collisionData);
 				}
 
 			}
@@ -128,15 +134,15 @@ void	PhysicsSystem::BroadPhaseCollisions()
 		for (PhysicsNode* &node : *TilePhysicsNodeArray2)
 		{
 			//Check if POTENTIAL collision with player
-			if (CheckAABBCollision(*player, *node))
+			if (CheckAABBCollision(*playerPhysNode, *node))
 			{
 				//Perform collision check between player and object
 				CollisionData* collisionData = new CollisionData();
 				GJK* gjkObj = new GJK();
-				if (gjkObj->CollisionDetection(*player, *node, collisionData))
+				if (gjkObj->CollisionDetection(*playerPhysNode, *node, collisionData))
 				{
 					//resolve collision
-					AddCollisionImpulse(*player, *node, collisionData);
+					AddCollisionImpulse(*playerPhysNode, *node, collisionData);
 				}
 
 			}
@@ -146,15 +152,15 @@ void	PhysicsSystem::BroadPhaseCollisions()
 		for (PhysicsNode* &node : *TilePhysicsNodeArray3)
 		{
 			//Check if POTENTIAL collision with player
-			if (CheckAABBCollision(*player, *node))
+			if (CheckAABBCollision(*playerPhysNode, *node))
 			{
 				//Perform collision check between player and object
 				CollisionData* collisionData = new CollisionData();
 				GJK* gjkObj = new GJK();
-				if (gjkObj->CollisionDetection(*player, *node, collisionData))
+				if (gjkObj->CollisionDetection(*playerPhysNode, *node, collisionData))
 				{
 					//resolve collision
-					AddCollisionImpulse(*player, *node, collisionData);
+					AddCollisionImpulse(*playerPhysNode, *node, collisionData);
 				}
 
 			}

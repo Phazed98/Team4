@@ -89,6 +89,7 @@
     <ClCompile Include="Spring.cpp" />
     <ClCompile Include="SpringDemo.cpp" />
     <ClCompile Include="TextMesh.cpp" />
+    <ClCompile Include="Vehicle%28old%29.cpp" />
     <ClCompile Include="Vehicle.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -111,11 +112,13 @@
     <ClInclude Include="Obstacle.h" />
     <ClInclude Include="PhysicsNode.h" />
     <ClInclude Include="PhysicsSystem.h" />
+    <ClInclude Include="PlaneInfo.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Spring.h" />
     <ClInclude Include="SpringDemo.h" />
     <ClInclude Include="SupportPoint.h" />
     <ClInclude Include="TextMesh.h" />
+    <ClInclude Include="Vehicle%28old%29.h" />
     <ClInclude Include="Vehicle.h" />
   </ItemGroup>
   <ItemGroup>

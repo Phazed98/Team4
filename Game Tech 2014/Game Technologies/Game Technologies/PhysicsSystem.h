@@ -6,6 +6,7 @@
 #include "GameClass.h"
 #include "GJKSimplex.h"
 #include <vector>
+#include "Vehicle.h"
 
 using std::vector;
 
@@ -69,8 +70,10 @@ protected:
 
 
 	//<---------Added by Sam for physics--- DO NOT TRUST IT ---->
-	//player pointer for collision checks. A list of additional interactive moving objects can be added later
-	PhysicsNode* player;
+	//player physicspointer for collision checks. A list of additional interactive moving objects can be added later
+	PhysicsNode* playerPhysNode; //shortcut only DO NOT DELETE IN DESTRUCTOR
+	//Player vehicle pointer for updating the player via inputs - this feeds back into the physNode so should be updated first?
+	Vehicle* playerVehicle;
 
 	//array holds 1 trailing tile, current tile, 8x (adjust later) approaching tile
 	//Each vector will then hold the static obstacles on their respective tile

@@ -58,22 +58,24 @@ void PhysicsNode::updateLinear(float msec)
 		//Adds current Velocity to an Array and determines the average velocity over the last few updates
 		CalculateAvgVel();
 
+		//---------------------------Removed by Sam not needed----------------------------------------------------
 		//If The Object has been close to zero velocity for several frames set it to rest
-		bool stopped = true;
-		for (int x = 0; x < RESTCHECKFRAMES; x++)
-		{
-			if (avgVel[x].LengthSqrd() > 0.00000001)
-			{
-				stopped = false;
-			}
-		}
+		//bool stopped = true;
+		//for (int x = 0; x < RESTCHECKFRAMES; x++)
+		//{
+		//	if (avgVel[x].LengthSqrd() > 0.00000001)
+		//	{
+		//		stopped = false;
+		//	}
+		//}
 
-		if (stopped)
-		{
-			m_angularVelocity = Vector3(0, 0, 0);
-			m_linearVelocity = Vector3(0, 0, 0);
-			m_atRest = true;
-		}
+		//if (stopped)
+		//{
+		//	m_angularVelocity = Vector3(0, 0, 0);
+		//	m_linearVelocity = Vector3(0, 0, 0);
+		//	m_atRest = true;
+		//}
+		//---------------------------------------------------------------------------------------------------------
 	}
 }
 

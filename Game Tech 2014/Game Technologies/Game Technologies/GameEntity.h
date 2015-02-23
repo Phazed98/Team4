@@ -48,10 +48,11 @@ public:
 
 	static int globalID;
 
-
 	friend class GameClass;
 
 	GameEntity(void);
+	//Sam - new constructor added for vehicle - not having the physics node connect to systems!
+	GameEntity(SceneNode* s);
 	GameEntity(SceneNode* s, PhysicsNode* p);
 	virtual ~GameEntity(void);
 
@@ -65,8 +66,8 @@ public:
 	int objectID;
 
 protected:
-	SceneNode*		renderNode;
-	PhysicsNode*	physicsNode;
+	SceneNode*		renderNode = NULL;
+	PhysicsNode*	physicsNode = NULL;
 	
 };
 

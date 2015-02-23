@@ -124,5 +124,16 @@ public:
 		o << "\t\t" << m.values[12] << "," << m.values[13] << "," << m.values[14] << "," << m.values [15] << " )" <<std::endl;
 		return o;
 	}
+
+	//Added by Sam - needed to retreive rotation from quat for Vehicle
+	inline Vector3 applyMat3RotToVec3(Vector3 &v)
+	{
+		Vector3 retVec = Vector3(0, 0, 0);
+		retVec.x = (values[0] * v.x) + (values[1] * v.y) + (values[2] * v.z);
+		retVec.y = (values[4] * v.x) + (values[5] * v.y) + (values[6] * v.z);
+		retVec.z = (values[8] * v.x) + (values[9] * v.y) + (values[10] * v.z);
+
+		return retVec;
+	}
 };
 
