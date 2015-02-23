@@ -1,4 +1,4 @@
-﻿Build started 16/02/2015 16:25:31.
+﻿Build started 17/02/2015 10:02:05.
      1>Project "D:\Team 4\Team4\Game Tech 2014\Game Technologies\Game Technologies\GameTech.vcxproj" on node 2 (Build target(s)).
        Project file contains ToolsVersion="12.0". This toolset may be unknown or missing, in which case you may be able to resolve this by installing the appropriate version of MSBuild, or the build may have been forced to a particular ToolsVersion for policy reasons. Treating the project as if it had ToolsVersion="4.0". For more information, please see http://go.microsoft.com/fwlink/?LinkId=291333.
      1>Link:
@@ -32,4 +32,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.49
+Time Elapsed 00:00:02.00
