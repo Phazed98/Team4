@@ -147,13 +147,92 @@ int NetworkClient::sendRecv(void)
 
 
 	int int_data = 191123;
-	messageInfo info_data;
+	messageInfo info_data; 
 	Matrix4 mat_data;
 	mat_data.ToIdentity();
-	info_data.a = 5;
-	info_data.b = 3.08f;
+	if (GameClass::GetGameClass().getCurrentState() == GAME_PLAYING)
+	{
+		
+	}
+	
+
 
 	send(s, (char*)&mat_data, sizeof(messageInfo), 0);
+
+	closesocket(s);
+	WSACleanup();
+}
+
+bool NetworkClient::sendData(vector<messageInfo> messInfo)
+{
+	SOCKET s = NULL;
+
+	// initialise socket library
+	if (init())
+	{
+		printf(" Unable to initialise the Winsock library \n");
+		exit(1);
+	}
+
+	// intiailise addressing information
+	if (addressing() != 0)
+	{
+		printf(" Uanble to initialise addressing information \n");
+		exit(1);
+	}
+	// create a socket for the server to listen on
+	if ((s = socket(clientaddr->ai_family, clientaddr->ai_socktype, clientaddr->ai_protocol)) == INVALID_SOCKET)
+	{
+		printf(" Unable to create a socket \n");
+		printf(" Failed with error : %d\n%s\n", WSAGetLastError(), gai_strerror(WSAGetLastError()));
+		exit(1);
+	}
+	else
+	{
+		printf("\n Socket created successfully .\n");
+	}
+
+	// connect to the server
+	if (connect(s, clientaddr->ai_addr, clientaddr->ai_addrlen) != 0)
+	{
+		printf(" Unable to connect to server \n");
+		printf(" Failed with error : %d\n%s\n", WSAGetLastError(), gai_strerror(WSAGetLastError()));
+	}
+	else
+	{
+		printf("\n Connected to the server .\n");
+	}
+
+	// finished with addrinfo struct now
+	freeaddrinfo(clientaddr);
+
+	// accept message from server and close
+	int bytesreceived;
+	char buff[BUFFSIZE];
+
+	if ((bytesreceived = recv(s, buff, BUFFSIZE - 1, 0)) == -1)
+	{
+		printf(" Error receiving \n");
+		printf(" Failed with error : %d\n%s\n", WSAGetLastError(), gai_strerror(WSAGetLastError()));
+	}
+	else
+	{
+		buff[bytesreceived] = '\0';
+		printf("\n\n Client Message received . Received %d bytes. \n Message is: %s", bytesreceived, buff);
+		printf("\n\n");
+	}
+
+
+	int int_data = 191123;
+	messageInfo info_data;
+	Matrix4 mat_data;
+	//mat_data.ToIdentity();
+	if (GameClass::GetGameClass().getCurrentState() == GAME_PLAYING)
+	{
+
+	}
+
+	send(s, (char*)&messInfo[0], sizeof(messageInfo)*messInfo.size(), 0);
 
 	closesocket(s);
 	WSACleanup();

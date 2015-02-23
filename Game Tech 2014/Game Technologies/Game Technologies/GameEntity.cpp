@@ -2,14 +2,18 @@
 #include "Renderer.h"
 #include "PhysicsSystem.h"
 
+int GameEntity::globalID = 0;
+
 GameEntity::GameEntity(void)	{
 	renderNode	= NULL;
 	physicsNode = NULL;
 }
 
-GameEntity::GameEntity(SceneNode* s, PhysicsNode* p) {
+GameEntity::GameEntity(SceneNode* s, PhysicsNode* p) 
+{
 	renderNode	= s;
 	physicsNode = p;
+	objectID = globalID++;
 }
 
 GameEntity::~GameEntity(void)	{

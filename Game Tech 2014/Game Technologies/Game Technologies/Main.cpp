@@ -102,20 +102,11 @@ int main()
 	std::thread physics(physicsLoop, game, std::ref(running));
 	std::thread Networking(networkLoop);
 
-
-
 	while(Window::GetWindow().UpdateWindow() && GameClass::GetGameClass().getCurrentState() != GAME_EXIT)
 	{
 		float msec = Window::GetWindow().GetTimer()->GetTimedMS();	//How many milliseconds since last update?
 		game->UpdateRendering(msec);	//Update our 'sybsystem' logic (renderer and physics!)
-		game->UpdateGame(msec);	//Update our game logic
-
-		if (GameClass::GetGameClass().getCurrentState() == GAME_PLAYING)
-		{
-			NetworkClient NWC;
-			NWC.init();
-			NWC.sendRecv();
-		}		
+		game->UpdateGame(msec);	//Update our game logic	
 	}
 
 	running = false;

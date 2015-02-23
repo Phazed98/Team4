@@ -40,8 +40,15 @@ _-_-_-_-_-_-_-""  ""
 #include "../../nclgl/SceneNode.h"
 #include "PhysicsNode.h"
 
-class GameEntity	{
+
+
+class GameEntity	
+{
 public:
+
+	static int globalID;
+
+
 	friend class GameClass;
 
 	GameEntity(void);
@@ -55,9 +62,11 @@ public:
 
 	void			ConnectToSystems();
 	void			DisconnectFromSystems();
+	int objectID;
 
 protected:
 	SceneNode*		renderNode;
 	PhysicsNode*	physicsNode;
+	
 };
 

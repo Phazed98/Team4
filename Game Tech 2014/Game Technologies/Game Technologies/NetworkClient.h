@@ -12,6 +12,7 @@ public:
 	int init();
 	int addressing();
 	int sendRecv();
+	bool sendData(vector<messageInfo> mI);
 protected:
 private:
 };

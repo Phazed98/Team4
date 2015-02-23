@@ -6,6 +6,8 @@
 #include <string>
 #include <iostream>
 #include "../../nclgl/Matrix4.h"
+#include "../../nclgl/Vector3.h"
+
 #include "MyGame.h"
 
 # define HIGHVERSION 2
@@ -17,14 +19,14 @@
 # define FLAGS AI_PASSIVE
 # define PROTOCOL IPPROTO_TCP
 # define BACKLOG 10
-# define BUFFSIZE 100
+# define BUFFSIZE 2048
 
 #pragma comment(lib, "Ws2_32.lib")
 
 
 struct messageInfo
 {
-	int a;
-	float b;
+	int objectID;
+	Matrix4 transformation;
 };
 

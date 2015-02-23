@@ -93,6 +93,8 @@ int NetworkServer::addressing()
 }
 
 
+char buffer[2048];
+char buff[BUFFSIZE];
 int NetworkServer::sendRecv(void)
 {
 	SOCKET s = NULL;
@@ -170,21 +172,42 @@ int NetworkServer::sendRecv(void)
 
 		// receive message from client
 		int bytesreceived;
-		char buff[BUFFSIZE];
+
 		int int_data;
 		messageInfo info_data;
 		Matrix4 mat_data;
 
-		if ((bytesreceived = recv(inc, (char*)&mat_data, BUFFSIZE - 1, 0)) == -1)
+		vector<messageInfo> message;
+
+		if ((bytesreceived = recv(inc, buffer, BUFFSIZE - 1, 0)) == -1)
 		{
 			printf(" Error receiving \n");
 			printf(" Failed with error : %d\n%s\n", WSAGetLastError(), gai_strerror(WSAGetLastError()));
 		}
 		else
 		{
+			message.resize(bytesreceived / sizeof(messageInfo));
+			memcpy(&message[0], buffer, bytesreceived);
+
+
+
 			std::cout << " Server Message Recieved. " << std::endl;
 			std::cout << " Recieved " << bytesreceived << " Bytes." << std::endl;
-			std::cout << " Message is : " << mat_data << std::endl;
+			for (messageInfo s : message)
+			{
+				std::cout << s.objectID << ": "<< s.transformation << std::endl;
+
+				vector<GameEntity*>  entityVector = GameClass::GetGameClass().getAllentitities();
+				for (GameEntity* entity : entityVector)
+				{
+					if (entity->objectID == s.objectID)
+					{
+						//entity->GetPhysicsNode().SetPosition(s.transformation.GetPositionVector());
+						//entity->GetPhysicsNode().SetOrientation(s.transformation.)
+					}
+				}
+			}
+			
 		}
 
 		closesocket(inc);

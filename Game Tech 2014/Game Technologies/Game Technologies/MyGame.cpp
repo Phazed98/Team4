@@ -2,6 +2,7 @@
 #include "InertialMatrixHelper.h"
 #include "Spring.h"
 #include "SpringDemo.h"
+#include "NetworkClient.h"
 
 /*
 Creates a really simple scene for our game - A cube robot standing on
@@ -59,7 +60,7 @@ MyGame::MyGame()
 	Car = new Vehicle();
 	Renderer::GetRenderer().RenderLoading(75, "The moose never bit anyone...");
 	Renderer::GetRenderer().RenderLoading(76, "I called him George...");
-	PlayerMesh = new OBJMesh(MESHDIR"Wraith Raider Starship.obj"); // 3.2.2015 Daixi
+	//PlayerMesh = new OBJMesh(MESHDIR"Wraith Raider Starship.obj"); // 3.2.2015 Daixi
 	Renderer::GetRenderer().RenderLoading(91, "Sorry about that...");
 	Renderer::GetRenderer().RenderLoading(92, "The person responsible for the loading screen...");
 	Renderer::GetRenderer().RenderLoading(93, "...has been sacked...");
@@ -92,10 +93,6 @@ MyGame::MyGame()
 	BuffEntity->GetRenderNode().SetColour(Vector4(1, 1, 0, 1));
 	Renderer::GetRenderer().RenderLoading(98, "Except this to say we love Mooses? Meese? Multiple Moose? ...");
 
-	/*
-	A more 'robust' system would check the entities vector for duplicates so as
-	to not cause problems...why not give it a go?
-	*/
 	//GameEntity* quadEntity = BuildQuadEntity(1000.0f);
 	//allEntities.push_back(quadEntity);
 	//allEntities.push_back(BuildRobotEntity());
@@ -138,7 +135,6 @@ MyGame::MyGame()
 	setCurrentState(GAME_PLAYING);
 
 	Renderer::GetRenderer().RenderLoading(100, "Done...");
-
 }
 
 MyGame::~MyGame(void)	
@@ -183,11 +179,21 @@ void MyGame::UpdateGame(float msec)
 		gameCamera->UpdateCamera(msec);
 	}
 
+	vector<messageInfo> message;
 	for(vector<GameEntity*>::iterator i = allEntities.begin(); i != allEntities.end(); ++i) 
 	{
+		NetworkClient NWC;
 		(*i)->Update(msec);
-	
+
+		messageInfo mi;
+		mi.transformation = (*i)->GetRenderNode().GetTransform();
+		mi.objectID = (*i)->objectID;
+
+		message.push_back(mi);
 	}
+	NetworkClient NWC;
+	NWC.sendData(message);
+
 
 	if (count_time == 80)
 	{    //new control when shoot the bullets   4.2.2015 Daixi
