@@ -8,12 +8,12 @@
 Creates a really simple scene for our game - A cube robot standing on
 a floor. As the module progresses you'll see how to get the robot moving
 around in a physically accurate manner, and how to stop it falling
-through the floor as gravity is added to the scene. 
+through the floor as gravity is added to the scene.
 
 You can completely change all of this if you want, it's your game!
 */
 
-MyGame::MyGame()	
+MyGame::MyGame()
 {
 	Renderer::GetRenderer().RenderLoading(0, "Initializing...");
 	setCurrentState(Game_LOADING);
@@ -30,24 +30,24 @@ MyGame::MyGame()
 	elements.push_back(bottom);
 	elements.push_back(left);
 
-	Renderer::GetRenderer().RenderLoading(15,"Feeding Hamsters..." );
+	Renderer::GetRenderer().RenderLoading(15, "Feeding Hamsters...");
 
 	reference.push_back(top);
 	reference.push_back(right);
 	reference.push_back(bottom);
 	reference.push_back(left);
 
-	Renderer::GetRenderer().RenderLoading(25,"Creating Obtsacles...");
+	Renderer::GetRenderer().RenderLoading(25, "Creating Obtsacles...");
 
 	obstacleElements.resize(4);
 	obstacleReference.resize(4);
 
-	Renderer::GetRenderer().RenderLoading(30,"Referencing Obstacles..."); 
+	Renderer::GetRenderer().RenderLoading(30, "Referencing Obstacles...");
 	for (int i = 0; i < 4; i++)
 	{
 		obstacleReference[i] = NULL;
 	}
-	Renderer::GetRenderer().RenderLoading(40,"Attaching Mooses...");
+	Renderer::GetRenderer().RenderLoading(40, "Attaching Mooses...");
 
 	gameCamera = new Camera(-30.0f, 0.0f, Vector3(0, 350, -800)); //changed the location Daixi 3.2.2015
 	Renderer::GetRenderer().RenderLoading(50, "I knew A Moose Once...");
@@ -70,18 +70,18 @@ MyGame::MyGame()
 	You can do this with textures, too if you want - but you might want to make
 	some sort of 'get / load texture' part of the Renderer or OGLRenderer, so as
 	to encapsulate the API-specific parts of texture loading behind a class so
-	we don't care whether the renderer is OpenGL / Direct3D / using SOIL or 
+	we don't care whether the renderer is OpenGL / Direct3D / using SOIL or
 	something else...
 	*/
-	cube	= new OBJMesh(MESHDIR"cube.obj");
-	quad	= Mesh::GenerateQuad();
-	sphere	= new OBJMesh(MESHDIR"ico.obj");
+	cube = new OBJMesh(MESHDIR"cube.obj");
+	quad = Mesh::GenerateQuad();
+	sphere = new OBJMesh(MESHDIR"ico.obj");
 	PlayerMesh = new OBJMesh(MESHDIR"Player.obj"); // 3.2.2015 Daixi
 	Renderer::GetRenderer().RenderLoading(95, "Lammas are nice creatures...");
 
 	Enemy = BuildPlayerEntity(20.0f, Vector3(-300, 100, -300)); //new 4.2.2015 Daixi
 	Enemy->GetPhysicsNode().SetPosition(Vector3(300, 100, -100));
-	Renderer::GetRenderer().RenderLoading(96,"Hold it,  Were not getting into Lammas now...");
+	Renderer::GetRenderer().RenderLoading(96, "Hold it,  Were not getting into Lammas now...");
 
 	Position0 = Enemy->GetPhysicsNode().GetPosition(); //5.2.2015 Daixi ------------------This is the straight line bullet
 	Position0.z = Position0.z - 20;
@@ -119,24 +119,51 @@ MyGame::MyGame()
 
 	//-------------------------------------------------Planes---------------------------------------------------------//
 
-	GameEntity* plane = BuildObjectEntity(0, 0);
-	allEntities.push_back(plane);
+	for (int i = 0; i < 7; i++)
+	{
+		ObjectType* plane = BuildObjectEntity(0, 2);
+		plane->SetPos(Vector3(0, -500, -i * 800));
+		if (i != 6)
+			plane->setState(2);
+		allEntities.push_back(plane);
+	}
 
-	plane = BuildObjectEntity(0, 1);
-	allEntities.push_back(plane);
+	for (int i = 0; i < 7; i++)
+	{
+		ObjectType* plane = BuildObjectEntity(0, 0);
+		plane->SetPos(Vector3(0, 500, -i * 800));
+		if (i != 6)
+			plane->setState(2);
+		allEntities.push_back(plane);
+	}
 
-	plane = BuildObjectEntity(0, 2);
-	allEntities.push_back(plane);
+	for (int i = 0; i < 7; i++)
+	{
+		ObjectType* plane = BuildObjectEntity(0, 1);
+		plane->SetPos(Vector3(500, 0, -i * 800));
+		if (i != 6)
+			plane->setState(2);
+		allEntities.push_back(plane);
+	}
 
-	plane = BuildObjectEntity(0, 3);
-	allEntities.push_back(plane);
+	for (int i = 0; i < 7; i++)
+	{
+		ObjectType* plane = BuildObjectEntity(0, 3);
+		plane->SetPos(Vector3(-500, 0, -i * 800));
+		if (i != 6)
+			plane->setState(2);
+		allEntities.push_back(plane);
+	}
+
+
+
 
 	setCurrentState(GAME_PLAYING);
 
 	Renderer::GetRenderer().RenderLoading(100, "Done...");
 }
 
-MyGame::~MyGame(void)	
+MyGame::~MyGame(void)
 {
 
 	/*
@@ -165,19 +192,19 @@ Here's the base 'skeleton' of your game update loop! You will presumably
 want your games to have some sort of internal logic to them, and this
 logic will be added to this function.
 */
-void MyGame::UpdateGame(float msec) 
+void MyGame::UpdateGame(float msec)
 {
 	if (currentGameState != GAME_PLAYING)
 		return;
 
 
-	if(gameCamera) 
+	if (gameCamera)
 	{
 		gameCamera->UpdateCamera(msec);
 	}
 
 	vector<messageInfo> message;
-	for(vector<GameEntity*>::iterator i = allEntities.begin(); i != allEntities.end(); ++i) 
+	for (vector<GameEntity*>::iterator i = allEntities.begin(); i != allEntities.end(); ++i)
 	{
 		NetworkClient NWC;
 		(*i)->Update(msec);
@@ -262,7 +289,7 @@ Makes an entity that looks like a CubeRobot! You'll probably want to modify
 this so that you can have different sized robots, with different masses and
 so on!
 */
-GameEntity* MyGame::BuildRobotEntity() 
+GameEntity* MyGame::BuildRobotEntity()
 {
 	GameEntity*g = new GameEntity(new CubeRobot(), new PhysicsNode());
 
@@ -277,11 +304,11 @@ Makes a cube. Every game has a crate in it somewhere!
 GameEntity* MyGame::BuildCubeEntity(float size)
 {
 	GameEntity*g = new GameEntity(new SceneNode(cube), new PhysicsNode());
-	
+
 
 	SceneNode &test = g->GetRenderNode();
 
-	test.SetModelScale(Vector3(size,size,size));
+	test.SetModelScale(Vector3(size, size, size));
 	test.SetBoundingRadius(size);
 
 	g->ConnectToSystems();
@@ -290,17 +317,17 @@ GameEntity* MyGame::BuildCubeEntity(float size)
 /*
 Makes a sphere.
 */
-GameEntity* MyGame::BuildSphereEntity(float radius, Vector3 pos, Vector3 vel) 
+GameEntity* MyGame::BuildSphereEntity(float radius, Vector3 pos, Vector3 vel)
 {
 	SceneNode* s = new SceneNode(sphere);
 
-	s->SetModelScale(Vector3(radius,radius,radius));
+	s->SetModelScale(Vector3(radius, radius, radius));
 	s->SetBoundingRadius(radius);
-	s->SetColour(Vector4(0.0,1.0,0.5,1));
+	s->SetColour(Vector4(0.0, 1.0, 0.5, 1));
 	PhysicsNode*p = new PhysicsNode();
 	p->SetPosition(pos);
 	p->SetLinearVelocity(vel);
-	p->SetAngularVelocity(Vector3(0,0,0.01f));
+	p->SetAngularVelocity(Vector3(0, 0, 0.01f));
 	p->SetInverseInertia(InertialMatrixHelper::createSphereInvInertial(1.0f, radius));
 	p->SetInverseMass(1.0f);
 	p->SetCollisionVolume(new CollisionSphere(radius));
@@ -311,27 +338,27 @@ GameEntity* MyGame::BuildSphereEntity(float radius, Vector3 pos, Vector3 vel)
 
 /*
 Makes a flat quad, initially oriented such that we can use it as a simple
-floor. 
+floor.
 */
-GameEntity* MyGame::BuildQuadEntity(float size) 
+GameEntity* MyGame::BuildQuadEntity(float size)
 {
 	SceneNode* s = new SceneNode(quad);
 
-	s->SetModelScale(Vector3(size,size,size));
+	s->SetModelScale(Vector3(size, size, size));
 	//Oh if only we had a set texture function...we could make our brick floor again WINK WINK
 	s->SetBoundingRadius(size);
 
-	PhysicsNode*p = new PhysicsNode(Quaternion::AxisAngleToQuaterion(Vector3(1,0,0), 90.0f), Vector3());
+	PhysicsNode*p = new PhysicsNode(Quaternion::AxisAngleToQuaterion(Vector3(1, 0, 0), 90.0f), Vector3());
 	p->SetUseGravity(false);
 	p->SetInverseMass(0.0f);
 	p->SetInverseInertia(InertialMatrixHelper::createImmovableInvInertial());
-	p->SetCollisionVolume(new CollisionPlane(Vector3(0,1,0), 0));
+	p->SetCollisionVolume(new CollisionPlane(Vector3(0, 1, 0), 0));
 	GameEntity*g = new GameEntity(s, p);
 	g->ConnectToSystems();
 	return g;
 }
 
-ObjectType* MyGame::BuildObjectEntity(int type, int subType) 
+ObjectType* MyGame::BuildObjectEntity(int type, int subType)
 {
 	SceneNode* s = new SceneNode(cube);
 	PhysicsNode* p = new PhysicsNode();
@@ -356,18 +383,18 @@ ObjectType* MyGame::BuildObjectEntity(int type, int subType)
 	elements[subType].push_back(g);
 
 	/*if reference vector of this subtype has objects inside delete them all
-	  so it contains only the one that was created last */
-	while(reference[subType].size() > 0)
+	so it contains only the one that was created last */
+	while (reference[subType].size() > 0)
 	{
 		reference[subType].pop_back();
 	}
 	reference[subType].push_back(g);
-	
+
 	return g;
 }
 
 //creates a new Obstacle
-Obstacle* MyGame::BuildObstacleEntity(float size, int type, int subType, ObjectType* _obj, int _obstacle_type) 
+Obstacle* MyGame::BuildObstacleEntity(float size, int type, int subType, ObjectType* _obj, int _obstacle_type)
 {
 	SceneNode* s = new SceneNode(sphere);
 	PhysicsNode* p = new PhysicsNode();
@@ -413,8 +440,8 @@ int MyGame::getIndexOfElements(ObjectType* _G)
 	return 0;
 }
 
-/* We get the number of planes that are not generating gaps infront of them 
-   which should always be at least one*/
+/* We get the number of planes that are not generating gaps infront of them
+which should always be at least one*/
 int MyGame::getDrawingPlanes(int _subType)
 {
 	int count = 0;
@@ -455,7 +482,7 @@ void MyGame::handlePlanes(float msec)
 			{
 				//set the new state so that it can be re used
 				obstacleElements[i][j]->setState(2);
-
+				//obstacleElements[i][j]->SetTile(NULL);
 				//remove from all Entities so that we dont waste the update calls when not moving.
 				allEntities.erase(allEntities.begin() + getIndexOfAllEtities(obstacleElements[i][j]));
 			}
@@ -504,7 +531,7 @@ void MyGame::handlePlanes(float msec)
 				elements[i][j]->setState(4);
 
 				allEntities.erase(allEntities.begin() + getIndexOfAllEtities(elements[i][j]));
-				
+
 
 			}
 		}
@@ -518,7 +545,7 @@ void MyGame::CreateObstacle(ObjectType* _obj)
 	//select random obstacle 
 
 	int obstacleType = rand() % 5 + 0;
-	int empty = getObstacleEmptyIndex(_obj->getSubType(),obstacleType);
+	int empty = getObstacleEmptyIndex(_obj->getSubType(), obstacleType);
 	// for the first obstacle created
 	if (obstacleReference[_obj->getSubType()] == NULL)
 	{
@@ -530,7 +557,8 @@ void MyGame::CreateObstacle(ObjectType* _obj)
 	{
 		if (obstacleReference[_obj->getSubType()] != NULL)
 		{
-			if (obstacleReference[_obj->getSubType()]->GetPhysicsNode().GetPosition().z < -800.0f)
+			//if (obstacleReference[_obj->getSubType()]->GetPhysicsNode().GetPosition().z < -800.0f)
+			if (obstacleReference[_obj->getSubType()]->GetPhysicsNode().GetPosition().z > -4750.0f)
 			{
 				temp = BuildObstacleEntity(50, 1, _obj->getSubType(), _obj, obstacleType);
 				obstacleElements[_obj->getSubType()].push_back(temp);
@@ -538,12 +566,13 @@ void MyGame::CreateObstacle(ObjectType* _obj)
 		}
 	}
 	//free obstacle exists 
-	else 
+	else
 	{
 		//use the old object
 		if (obstacleReference[_obj->getSubType()] != NULL)
 		{
-			if (obstacleReference[_obj->getSubType()]->GetPhysicsNode().GetPosition().z < -800.0f)
+			//if (obstacleReference[_obj->getSubType()]->GetPhysicsNode().GetPosition().z < -800.0f)
+			if (obstacleReference[_obj->getSubType()]->GetPhysicsNode().GetPosition().z > -4750.0f)
 			{
 				temp = obstacleElements[_obj->getSubType()][empty];
 				temp->SetTile(_obj);
@@ -568,11 +597,11 @@ int MyGame::getObstacleEmptyIndex(int _subType, int _obstacleType)
 {
 	for (int i = 0; i < obstacleElements[_subType].size(); i++)
 	{
-		if (obstacleElements[_subType][i]!=NULL)
-		if (obstacleElements[_subType][i]->getState() == 2 && _obstacleType == obstacleElements[_subType][i]->getObstacleType())
-		{
+		if (obstacleElements[_subType][i] != NULL)
+			if (obstacleElements[_subType][i]->getState() == 2 && _obstacleType == obstacleElements[_subType][i]->getObstacleType())
+			{
 			return i;
-		}
+			}
 	}
 	return -1;
 }
