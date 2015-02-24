@@ -47,23 +47,23 @@ void ObjectType::SetInitialAttributes()
 	
 	if (subType == 0) // Top
 	{
-		physicsNode->SetPosition(Vector3(0, 500, 0));
+		physicsNode->SetPosition(Vector3(0, TILE_CENTRE_OFFSET, 0));
 		renderNode->SetColour(Vector4(1, 0, 0, 1));
 	}
 	else if (subType == 1) // Right
 	{
-		physicsNode->SetPosition(Vector3(500, 0, 0));
+		physicsNode->SetPosition(Vector3(TILE_CENTRE_OFFSET, 0, 0));
 		physicsNode->SetOrientation(Quaternion(0, 0, 1, 1));
 		renderNode->SetColour(Vector4(0, 0, 1, 1));
 	}
 	else if (subType == 2) // Bottom
 	{
-		physicsNode->SetPosition(Vector3(0, -500, 0));
+		physicsNode->SetPosition(Vector3(0, -TILE_CENTRE_OFFSET, 0));
 		renderNode->SetColour(Vector4(1, 1, 1, 1));
 	}
 	else if (subType == 3) // Left
 	{
-		physicsNode->SetPosition(Vector3(-500, 0, 0));
+		physicsNode->SetPosition(Vector3(-TILE_CENTRE_OFFSET, 0, 0));
 		physicsNode->SetOrientation(Quaternion(0, 0, 1, 1));
 		renderNode->SetColour(Vector4(0, 1, 0, 1));
 	}

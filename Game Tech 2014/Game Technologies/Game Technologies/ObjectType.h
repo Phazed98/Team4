@@ -1,5 +1,7 @@
 #pragma once
 #include "GameEntity.h"
+#include "PlaneInfo.h"
+
 class ObjectType : 	public GameEntity
 {
 public:

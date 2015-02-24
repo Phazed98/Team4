@@ -78,7 +78,7 @@ protected:
 
 	GameEntity* BuildQuadEntity(float size);
 
-	ObjectType* BuildObjectEntity(float size, int type, int subType);
+	ObjectType* BuildObjectEntity(int type, int subType);
 
 	Obstacle* BuildObstacleEntity(float size, int type, int subType, ObjectType*, int);
 

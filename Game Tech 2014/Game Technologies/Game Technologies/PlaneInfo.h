@@ -12,5 +12,5 @@
 #define TILE_DEPTH 400
 
 
-//distance from the centre of the game world X/Y axes to the surface of a tile....TILE_CENTRE_OFFSET - TILE_HEIGHT
-#define SURFACE_CENTRE_OFFSET 400
+//distance from the centre of the game world X/Y axes to the surface of a tile....( TILE_CENTRE_OFFSET - TILE_HEIGHT - 40 for correction )
+#define SURFACE_CENTRE_OFFSET 360

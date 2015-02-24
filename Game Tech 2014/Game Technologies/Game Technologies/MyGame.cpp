@@ -119,16 +119,16 @@ MyGame::MyGame()
 
 	//-------------------------------------------------Planes---------------------------------------------------------//
 
-	GameEntity* plane = BuildObjectEntity(200, 0, 0);
+	GameEntity* plane = BuildObjectEntity(0, 0);
 	allEntities.push_back(plane);
 
-	plane = BuildObjectEntity(200, 0, 1);
+	plane = BuildObjectEntity(0, 1);
 	allEntities.push_back(plane);
 
-	plane = BuildObjectEntity(200, 0, 2);
+	plane = BuildObjectEntity(0, 2);
 	allEntities.push_back(plane);
 
-	plane = BuildObjectEntity(200, 0, 3);
+	plane = BuildObjectEntity(0, 3);
 	allEntities.push_back(plane);
 
 	setCurrentState(GAME_PLAYING);
@@ -331,7 +331,7 @@ GameEntity* MyGame::BuildQuadEntity(float size)
 	return g;
 }
 
-ObjectType* MyGame::BuildObjectEntity(float size, int type, int subType) 
+ObjectType* MyGame::BuildObjectEntity(int type, int subType) 
 {
 	SceneNode* s = new SceneNode(cube);
 	PhysicsNode* p = new PhysicsNode();
@@ -341,8 +341,8 @@ ObjectType* MyGame::BuildObjectEntity(float size, int type, int subType)
 	g->ConnectToSystems();
 	SceneNode &test = g->GetRenderNode();
 
-	test.SetModelScale(Vector3(size, size / 2, size * 2));
-	test.SetBoundingRadius(size);
+	test.SetModelScale(Vector3(TILE_WIDTH, TILE_HEIGHT, TILE_DEPTH));
+	test.SetBoundingRadius(TILE_DEPTH);
 
 	//50% chance that we set the random value of this plane to a random value from 1 - 5
 	if ((rand() % 100 + 1) > 50)
@@ -469,7 +469,7 @@ void MyGame::handlePlanes(float msec)
 				//create new
 				if (getEmptyIndex(i) == -1)
 				{
-					allEntities.push_back(BuildObjectEntity(200, 0, i));
+					allEntities.push_back(BuildObjectEntity(0, i));
 				}
 				else
 				{
