@@ -176,20 +176,20 @@ void MyGame::UpdateGame(float msec)
 		gameCamera->UpdateCamera(msec);
 	}
 
-	/*vector<messageInfo> message;
+	vector<messageInfo> message;
 	for(vector<GameEntity*>::iterator i = allEntities.begin(); i != allEntities.end(); ++i) 
 	{
 		NetworkClient NWC;
 		(*i)->Update(msec);
 
-		messageInfo mi;
-		mi.transformation = (*i)->GetRenderNode().GetTransform();
-		mi.objectID = (*i)->objectID;
+		//messageInfo mi;
+		//mi.transformation = (*i)->GetRenderNode().GetTransform();
+		//mi.objectID = (*i)->objectID;
 
-		message.push_back(mi);
+		//message.push_back(mi);
 	}
-	NetworkClient NWC;
-	NWC.sendData(message);*/
+	//NetworkClient NWC;
+	//NWC.sendData(message);
 
 
 	if (count_time == 80)
