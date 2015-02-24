@@ -42,7 +42,7 @@ void Coins::UpdateCoins(Vehicle* car){
 		random_num0 = rand() % 600 - 200;
 		random_num1 = rand() % 1200 ;
 		temp = car->GetPlayer()->GetPhysicsNode().GetPosition();
-		temp.x = temp.x + random_num0;
+		temp.x = random_num0;
 		temp.z = temp.z + abs(random_num1);
 		Allcoins[i]->GetPhysicsNode().SetPosition(temp);
 		Allcoins[i]->GetRenderNode().SetColour(colourtemp1);
