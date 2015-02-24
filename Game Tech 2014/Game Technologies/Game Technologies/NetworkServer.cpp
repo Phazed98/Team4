@@ -189,21 +189,19 @@ int NetworkServer::sendRecv(void)
 			message.resize(bytesreceived / sizeof(messageInfo));
 			memcpy(&message[0], buffer, bytesreceived);
 
-
-
 			std::cout << " Server Message Recieved. " << std::endl;
 			std::cout << " Recieved " << bytesreceived << " Bytes." << std::endl;
 			for (messageInfo s : message)
 			{
-				std::cout << s.objectID << ": "<< s.transformation << std::endl;
+				std::cout << s.objectID << ": "<< s.Position << std::endl;
 
 				vector<GameEntity*>  entityVector = GameClass::GetGameClass().getAllentitities();
 				for (GameEntity* entity : entityVector)
 				{
 					if (entity->objectID == s.objectID)
 					{
-						//entity->GetPhysicsNode().SetPosition(s.transformation.GetPositionVector());
-						//entity->GetPhysicsNode().SetOrientation(s.transformation.)
+						entity->GetPhysicsNode().SetPosition(s.Position);
+						entity->GetPhysicsNode().SetOrientation(s.Orientation);
 					}
 				}
 			}

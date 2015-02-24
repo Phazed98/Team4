@@ -27,6 +27,7 @@
 struct messageInfo
 {
 	int objectID;
-	Matrix4 transformation;
+	Vector3 Position;
+	Quaternion Orientation;
 };
 
