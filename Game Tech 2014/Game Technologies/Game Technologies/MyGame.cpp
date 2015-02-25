@@ -410,6 +410,23 @@ Obstacle* MyGame::BuildObstacleEntity(float size, int type, int subType, ObjectT
 	return g;
 }
 
+GameEntity* MyGame::BuildBulletEntity(float radius, Vector3 pos)
+{
+	SceneNode* test = new SceneNode(sphere);
+	test->SetModelScale(Vector3(radius, radius, radius));
+	test->SetBoundingRadius(radius);
+	test->SetColour(Vector4(0.2, 0.2, 0.5, 1));
+	PhysicsNode*p = new PhysicsNode();
+
+	p->SetUseGravity(false);
+	p->SetPosition(pos);
+	p->SetCollisionVolume(new CollisionSphere(radius));    //new 4.2.2015  Daixi
+
+	GameEntity*g = new GameEntity(test, p);
+	g->ConnectToSystems();
+	return g;
+}
+
 int MyGame::getIndexOfAllEtities(GameEntity* _G)
 {
 	int index = -1;
@@ -547,6 +564,13 @@ void MyGame::CreateObstacle(ObjectType* _obj)
 	if (obstacleReference[_obj->getSubType()] == NULL)
 	{
 		temp = BuildObstacleEntity(50, 1, _obj->getSubType(), _obj, obstacleType);
+		if (temp->getObstacleType() == 1)
+		{
+			GameEntity* bul = BuildBulletEntity(20, temp->GetPhysicsNode().GetPosition());
+			temp->SetBullet(bul);
+			allEntities.push_back(bul);
+
+		}
 		obstacleElements[_obj->getSubType()].push_back(temp);
 	}
 	//reference exists, but everything is running/working
@@ -557,6 +581,13 @@ void MyGame::CreateObstacle(ObjectType* _obj)
 			if (obstacleReference[_obj->getSubType()]->GetPhysicsNode().GetPosition().z > -4750.0f)
 			{
 				temp = BuildObstacleEntity(50, 1, _obj->getSubType(), _obj, obstacleType);
+				if (temp->getObstacleType() == 1)
+				{
+					GameEntity* bul = BuildBulletEntity(20, temp->GetPhysicsNode().GetPosition());
+					temp->SetBullet(bul);
+					allEntities.push_back(bul);
+
+				}
 				obstacleElements[_obj->getSubType()].push_back(temp);
 			}
 		}

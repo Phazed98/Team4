@@ -76,6 +76,8 @@ protected:
 
 	GameEntity* BuildSphereEntity(float radius, Vector3 pos, Vector3 vel);
 
+	GameEntity* BuildBulletEntity(float radius, Vector3 pos);
+
 	GameEntity* BuildQuadEntity(float size);
 
 	ObjectType* BuildObjectEntity(int type, int subType);

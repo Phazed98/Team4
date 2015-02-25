@@ -1,7 +1,20 @@
-﻿Build started 25/02/2015 14:43:44.
+﻿Build started 25/02/2015 15:46:22.
      1>Project "D:\GitHub\Team4\Game Tech 2014\Game Technologies\Game Technologies\GameTech.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt MyGame.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt MyGame.cpp Obstacle.cpp
+         Obstacle.cpp
+     1>d:\github\team4\game tech 2014\nclgl\vector3.h(152): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(14): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(18): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(22): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(123): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(127): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(135): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(139): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(147): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(151): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(159): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(163): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
          MyGame.cpp
      1>d:\github\team4\game tech 2014\nclgl\vector3.h(152): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
      1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(125): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
@@ -12,12 +25,14 @@
      1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(206): warning C4101: 'NWC' : unreferenced local variable
      1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(251): warning C4305: 'argument' : truncation from 'double' to 'float'
      1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(273): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(416): warning C4018: '<' : signed/unsigned mismatch
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(430): warning C4018: '<' : signed/unsigned mismatch
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(460): warning C4018: '<' : signed/unsigned mismatch
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(475): warning C4018: '<' : signed/unsigned mismatch
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(488): warning C4018: '<' : signed/unsigned mismatch
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(593): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(418): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(433): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(447): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(477): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(492): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(505): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(624): warning C4018: '<' : signed/unsigned mismatch
+         Generating Code...
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.lib" /MACHINE:X86 /FORCE:MULTIPLE Debug\Bullets.obj
          Debug\Button.obj
@@ -94,4 +109,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.10
+Time Elapsed 00:00:01.49

@@ -46,7 +46,7 @@ void Obstacle::Update(float msec)
 		}
 
 		count_time++;
-		bullet->GetPhysicsNode().SetPosition(bullet->GetPhysicsNode().GetPosition() + Vector3(0, 0, 10.0f));
+		bullet->GetPhysicsNode().SetPosition(bullet->GetPhysicsNode().GetPosition() + Vector3(0, 0, 50.0f));
 	}
 
 	if (type == 1)
