@@ -84,5 +84,18 @@ protected:
 	float time = 0;						//Float variable to hold milliseconds, counts to 1000 useing msec to attain framerate
 	int fps = 0;				//FPS string to use with DrawText
 	bool wireFrame = false;
+
+	//for motion blur
+	GLuint motion_blur_FBO;
+	GLuint motion_blur_ColourTex;
+	GLuint motion_blur_DepthTex;
+	bool CreatMotionBlurBuffer();
+	void PresentMotionBlur();
+	Mesh* quad_motion_blur;
+	Shader* motion_blur_shader;
+	Matrix4 previous_viewMatrix;
+	Matrix4 current_viewMatrix;
+	void RenderMotionBlur();
+	bool render_motion_blur;
 };
 
