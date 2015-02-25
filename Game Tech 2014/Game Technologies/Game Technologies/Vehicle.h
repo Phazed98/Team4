@@ -1,7 +1,7 @@
 #pragma once
 #include"GameEntity.h"
 
-//Written by Sam, adapted from Daixi's vehicle code to allow the vehicle to retain its behaviour over all planes
+//Written by Sam, adapted from Daixi's vehicle code to allow the vehicle to retain its behaviour over all planes, as well as adding improved hover mechanics and plane switching
 
 
 //Sam - added a min/max rotation define (negative for min)
@@ -26,19 +26,21 @@ public:
 
 protected:
 
-	//Sam - changed to a void
+
 	void BuildPlayerEntity(Mesh* mesh, float size, Vector3 pos, Vector3 orient);
 
-	//Vector3 PlayerPosition; Sam - no longer needed as a class variable
+	void UpdatePlayerVelocity();
 
-	Vector3 temp, temp1, temp2, temp3;
+	void SwitchPlane();
 
-	//Mesh* PlayerMesh; Sam - moved to MyGame
+	void UpdatePlayerRotationOnPlane();
 
-	//GameEntity* Player; Sam - not needed given the structure of the physics system
+	Vector3 CalculateStartingOrientation();
+
+
+
 	PhysicsNode* PhysNode;
 
-	//float Speed_Linear; Sam - not needed as we are moving the world not the player
 	float Speed_Turn;
 
 	//Added by Sam for physics management and player placement
@@ -46,16 +48,21 @@ protected:
 	Vector3 CalculatePlayerLocation();
 	float rotationOnPlane; //a rotation relative to the current plane for the if comparisons 
 	float xLocationOnPlane; //player's x location on the current plane
-	void UpdatePlayerVelocity();
+
 	//weighting value of how quickly the hover vehicle will react to direction changes (lower = more inertia)
 	//MUST BE <=1.0
 	float steeringResponsiveness;
-	Vector3 CalculateStartingOrientation();
-	void UpdatePlayerRotationOnPlane();
+
+
 	float shipWidth;
 	float tileShipWidthDelta;
-	void SwitchPlane();
 
+	bool coolingDownPlaneSwitch = false;
+	float PlaneSwitchCDTime;
+	float PlaneSwitchCDRemaining;
+
+
+	//Debug method, doesnt do anything, only for triggering breaks when needed.
 	void debug();
 
 

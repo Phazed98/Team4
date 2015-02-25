@@ -11,6 +11,9 @@ Speed_Turn(speedTurn), currentPlaneID(startingPlaneID), steeringResponsiveness(s
 	xLocationOnPlane = 0;
 
 	BuildPlayerEntity(mesh, playerScale, CalculatePlayerLocation(), CalculateStartingOrientation());
+
+	//set plane switch cooldown period. Add a parameter later if needed
+	PlaneSwitchCDTime = 500;
 }
 
 Vehicle::~Vehicle(void)
@@ -23,6 +26,16 @@ Vehicle::~Vehicle(void)
 //Modified by Sam to fit into game
 void Vehicle::UpdatePlayer(float msec)
 {
+	//update cooldowns
+	if (coolingDownPlaneSwitch)
+	{
+		PlaneSwitchCDRemaining -= msec;
+		if (PlaneSwitchCDRemaining <= 0)
+		{
+			coolingDownPlaneSwitch = false;
+		}
+	}
+
 	//update xLocationOnPlane
 	switch (currentPlaneID)
 	{
@@ -98,7 +111,7 @@ void Vehicle::BuildPlayerEntity(Mesh* mesh, float size, Vector3 pos, Vector3 ori
 	SceneNode* SNode = new SceneNode(mesh);
 	SNode->SetModelScale(Vector3(size, size, size));
 
-	SNode->SetColour(Vector4(1, 1, 1, 1));
+	SNode->SetColour(Vector4(1.0f, 1.0f, 0.0f, 1.0f));
 
 	//Connect just the renderNode to systems as phys node will be called seperately
 	GameEntity*g = new GameEntity(SNode);
@@ -362,18 +375,198 @@ void Vehicle::debug()
 
 void Vehicle::SwitchPlane()
 {
+	//Vector3 currentPos = PhysNode->GetPosition();
+	//if (Window::GetKeyboard()->KeyDown(KEYBOARD_UP) && currentPlaneID != 0)
+	//{
+	//	//set new position then change the plane of current velocity (maintain in a new direction relative to new plane
+	//	Vector3 currentVelocity = PhysNode->GetLinearVelocity();
+	//	switch (currentPlaneID)
+	//	{
+	//	case 1:
+	//		//move player to relative position on plane
+	//		PhysNode->SetPosition(Vector3(-xLocationOnPlane, SURFACE_CENTRE_OFFSET, 0));
+	//		//flip both plane and direction of movement
+	//		PhysNode->SetLinearVelocity(Vector3(-currentVelocity.y, 0, 0));
+	//		break;
+
+	//	case 2:
+	//		//move player to relative position on plane
+	//		PhysNode->SetPosition(Vector3(-xLocationOnPlane, SURFACE_CENTRE_OFFSET, 0));
+	//		//flip only direction of movement
+	//		PhysNode->SetLinearVelocity(Vector3(-currentVelocity.x, 0, 0));
+	//		break;
+
+	//	case 3:
+	//		//move player to relative position on plane
+	//		PhysNode->SetPosition(Vector3(xLocationOnPlane, SURFACE_CENTRE_OFFSET, 0));
+	//		//flip only plane of movement
+	//		PhysNode->SetLinearVelocity(Vector3(currentVelocity.y, 0, 0));
+	//		break;
+	//	}
+
+	//	//correct rotation of ship
+	//	Vector3 EulerOrientation = Vector3(0, 0, 180);
+	//	EulerOrientation.z += rotationOnPlane;
+	//	PhysNode->SetOrientation(
+	//		Quaternion::EulerAnglesToQuaternion(EulerOrientation.x, EulerOrientation.y, EulerOrientation.z));
+
+	//	//change currentPlaneID
+	//	currentPlaneID = 0;
+	//}
+
+	//if (Window::GetKeyboard()->KeyDown(KEYBOARD_RIGHT) && currentPlaneID != 1)
+	//{
+	//	//set new position then change the plane of current velocity (maintain in a new direction relative to new plane
+	//	Vector3 currentVelocity = PhysNode->GetLinearVelocity();
+	//	switch (currentPlaneID)
+	//	{
+	//	case 0:
+	//		//move player to relative position on plane
+	//		PhysNode->SetPosition(Vector3(SURFACE_CENTRE_OFFSET, -xLocationOnPlane, 0));
+	//		//flip both plane and direction of movement
+	//		PhysNode->SetLinearVelocity(Vector3(0, -currentVelocity.x, 0));
+	//		break;
+
+	//	case 2:
+	//		//move player to relative position on plane
+	//		PhysNode->SetPosition(Vector3(SURFACE_CENTRE_OFFSET, xLocationOnPlane, 0));
+	//		//flip only plane of movement
+	//		PhysNode->SetLinearVelocity(Vector3(0, currentVelocity.x, 0));
+	//		break;
+
+	//	case 3:
+	//		//move player to relative position on plane
+	//		PhysNode->SetPosition(Vector3(SURFACE_CENTRE_OFFSET, -xLocationOnPlane, 0));
+	//		//flip only direction of movement
+	//		PhysNode->SetLinearVelocity(Vector3(0, -currentVelocity.y, 0));
+	//		break;
+	//	}
+
+	//	//correct rotation of ship
+	//	Vector3 EulerOrientation = Vector3(0, 0, 90);
+	//	EulerOrientation.z += rotationOnPlane;
+	//	PhysNode->SetOrientation(
+	//		Quaternion::EulerAnglesToQuaternion(EulerOrientation.x, EulerOrientation.y, EulerOrientation.z));
+
+	//	//change currentPlaneID
+	//	currentPlaneID = 1;
+	//}
+
+	//if (Window::GetKeyboard()->KeyDown(KEYBOARD_DOWN) && currentPlaneID != 2)
+	//{
+	//	//change the plane of current velocity (maintain in a new direction relative to new plane
+	//	Vector3 currentVelocity = PhysNode->GetLinearVelocity();
+	//	switch (currentPlaneID)
+	//	{
+	//	case 0:
+	//		//move player to relative position on plane
+	//		PhysNode->SetPosition(Vector3(-xLocationOnPlane, -SURFACE_CENTRE_OFFSET, 0));
+	//		//flip only direction of movement
+	//		PhysNode->SetLinearVelocity(Vector3(-currentVelocity.x, 0, 0));
+	//		break;
+
+	//	case 1:
+	//		//move player to relative position on plane
+	//		PhysNode->SetPosition(Vector3(xLocationOnPlane, -SURFACE_CENTRE_OFFSET, 0));
+	//		//flip only plane of movement
+	//		PhysNode->SetLinearVelocity(Vector3(currentVelocity.y, 0, 0));
+	//		break;
+
+	//	case 3:
+	//		//move player to relative position on plane
+	//		PhysNode->SetPosition(Vector3(-xLocationOnPlane, -SURFACE_CENTRE_OFFSET, 0));
+	//		//flip plane and direction of movement
+	//		PhysNode->SetLinearVelocity(Vector3(-currentVelocity.y, 0, 0));
+	//		break;
+	//	}
+
+	//	//correct rotation of ship
+	//	Vector3 EulerOrientation = Vector3(0, 0, 0);
+	//	EulerOrientation.z += rotationOnPlane;
+	//	PhysNode->SetOrientation(
+	//		Quaternion::EulerAnglesToQuaternion(EulerOrientation.x, EulerOrientation.y, EulerOrientation.z));
+
+	//	//change currentPlaneID
+	//	currentPlaneID = 2;
+	//}
+
+	//if (Window::GetKeyboard()->KeyDown(KEYBOARD_LEFT) && currentPlaneID != 3)
+	//{
+	//	//change the plane of current velocity (maintain in a new direction relative to new plane
+	//	Vector3 currentVelocity = PhysNode->GetLinearVelocity();
+	//	switch (currentPlaneID)
+	//	{
+	//	case 0:
+	//		//move player to relative position on plane
+	//		PhysNode->SetPosition(Vector3(-SURFACE_CENTRE_OFFSET, xLocationOnPlane, 0));
+	//		//flip only plane of movement
+	//		PhysNode->SetLinearVelocity(Vector3(0, currentVelocity.x, 0));
+	//		break;
+
+	//	case 1:
+	//		//move player to relative position on plane
+	//		PhysNode->SetPosition(Vector3(-SURFACE_CENTRE_OFFSET, -xLocationOnPlane, 0));
+	//		//flip only direction of movement
+	//		PhysNode->SetLinearVelocity(Vector3(0, -currentVelocity.y, 0));
+	//		break;
+
+	//	case 2:
+	//		//move player to relative position on plane
+	//		PhysNode->SetPosition(Vector3(-SURFACE_CENTRE_OFFSET, -xLocationOnPlane, 0));
+	//		//flip plane and direction of movement
+	//		PhysNode->SetLinearVelocity(Vector3(0, -currentVelocity.x, 0));
+	//		break;
+	//	}
+
+	//	//correct rotation of ship
+	//	Vector3 EulerOrientation = Vector3(0, 0, 270);
+	//	EulerOrientation.z += rotationOnPlane;
+	//	PhysNode->SetOrientation(
+	//		Quaternion::EulerAnglesToQuaternion(EulerOrientation.x, EulerOrientation.y, EulerOrientation.z));
+
+	//	//change currentPlaneID
+	//	currentPlaneID = 3;
+	//}
+
+
 	Vector3 currentPos = PhysNode->GetPosition();
-	if (Window::GetKeyboard()->KeyDown(KEYBOARD_UP) && currentPlaneID != 0)
+
+	//go to plane 180 degrees from the current
+	if (Window::GetKeyboard()->KeyDown(KEYBOARD_UP) && !coolingDownPlaneSwitch)
 	{
+		Vector3 EulerOrientation;
 		//set new position then change the plane of current velocity (maintain in a new direction relative to new plane
 		Vector3 currentVelocity = PhysNode->GetLinearVelocity();
 		switch (currentPlaneID)
 		{
+		case 0:
+			//move player to relative position on plane
+			PhysNode->SetPosition(Vector3(-xLocationOnPlane, -SURFACE_CENTRE_OFFSET, 0));
+			//flip only direction of movement
+			PhysNode->SetLinearVelocity(Vector3(-currentVelocity.x, 0, 0));
+
+			//correct rotation of ship
+			EulerOrientation = Vector3(0, 0, 0);
+			EulerOrientation.z += rotationOnPlane;
+			PhysNode->SetOrientation(Quaternion::EulerAnglesToQuaternion(EulerOrientation.x, EulerOrientation.y, EulerOrientation.z));
+
+			//change currentPlaneID
+			currentPlaneID = 2;
+			break;
+
 		case 1:
 			//move player to relative position on plane
-			PhysNode->SetPosition(Vector3(-xLocationOnPlane, SURFACE_CENTRE_OFFSET, 0));
-			//flip both plane and direction of movement
-			PhysNode->SetLinearVelocity(Vector3(-currentVelocity.y, 0, 0));
+			PhysNode->SetPosition(Vector3(-SURFACE_CENTRE_OFFSET, -xLocationOnPlane, 0));
+			//flip only direction of movement
+			PhysNode->SetLinearVelocity(Vector3(0, -currentVelocity.y, 0));
+
+			//correct rotation of ship
+			EulerOrientation = Vector3(0, 0, 270);
+			EulerOrientation.z += rotationOnPlane;
+			PhysNode->SetOrientation(Quaternion::EulerAnglesToQuaternion(EulerOrientation.x, EulerOrientation.y, EulerOrientation.z));
+
+			//change currentPlaneID
+			currentPlaneID = 3;
 			break;
 
 		case 2:
@@ -381,44 +574,14 @@ void Vehicle::SwitchPlane()
 			PhysNode->SetPosition(Vector3(-xLocationOnPlane, SURFACE_CENTRE_OFFSET, 0));
 			//flip only direction of movement
 			PhysNode->SetLinearVelocity(Vector3(-currentVelocity.x, 0, 0));
-			break;
 
-		case 3:
-			//move player to relative position on plane
-			PhysNode->SetPosition(Vector3(xLocationOnPlane, SURFACE_CENTRE_OFFSET, 0));
-			//flip only plane of movement
-			PhysNode->SetLinearVelocity(Vector3(currentVelocity.y, 0, 0));
-			break;
-		}
+			//correct rotation of ship
+			EulerOrientation = Vector3(0, 0, 180);
+			EulerOrientation.z += rotationOnPlane;
+			PhysNode->SetOrientation(Quaternion::EulerAnglesToQuaternion(EulerOrientation.x, EulerOrientation.y, EulerOrientation.z));
 
-		//correct rotation of ship
-		Vector3 EulerOrientation = Vector3(0, 0, 180);
-		EulerOrientation.z += rotationOnPlane;
-		PhysNode->SetOrientation(
-			Quaternion::EulerAnglesToQuaternion(EulerOrientation.x, EulerOrientation.y, EulerOrientation.z));
-
-		//change currentPlaneID
-		currentPlaneID = 0;
-	}
-
-	if (Window::GetKeyboard()->KeyDown(KEYBOARD_RIGHT) && currentPlaneID != 1)
-	{
-		//set new position then change the plane of current velocity (maintain in a new direction relative to new plane
-		Vector3 currentVelocity = PhysNode->GetLinearVelocity();
-		switch (currentPlaneID)
-		{
-		case 0:
-			//move player to relative position on plane
-			PhysNode->SetPosition(Vector3(SURFACE_CENTRE_OFFSET, -xLocationOnPlane, 0));
-			//flip both plane and direction of movement
-			PhysNode->SetLinearVelocity(Vector3(0, -currentVelocity.x, 0));
-			break;
-
-		case 2:
-			//move player to relative position on plane
-			PhysNode->SetPosition(Vector3(SURFACE_CENTRE_OFFSET, xLocationOnPlane, 0));
-			//flip only plane of movement
-			PhysNode->SetLinearVelocity(Vector3(0, currentVelocity.x, 0));
+			//change currentPlaneID
+			currentPlaneID = 0;
 			break;
 
 		case 3:
@@ -426,60 +589,27 @@ void Vehicle::SwitchPlane()
 			PhysNode->SetPosition(Vector3(SURFACE_CENTRE_OFFSET, -xLocationOnPlane, 0));
 			//flip only direction of movement
 			PhysNode->SetLinearVelocity(Vector3(0, -currentVelocity.y, 0));
+
+			//correct rotation of ship
+			Vector3 EulerOrientation = Vector3(0, 0, 90);
+			EulerOrientation.z += rotationOnPlane;
+			PhysNode->SetOrientation(Quaternion::EulerAnglesToQuaternion(EulerOrientation.x, EulerOrientation.y, EulerOrientation.z));
+
+			//change currentPlaneID
+			currentPlaneID = 1;
 			break;
 		}
 
-		//correct rotation of ship
-		Vector3 EulerOrientation = Vector3(0, 0, 90);
-		EulerOrientation.z += rotationOnPlane;
-		PhysNode->SetOrientation(
-			Quaternion::EulerAnglesToQuaternion(EulerOrientation.x, EulerOrientation.y, EulerOrientation.z));
+		//set cooldown
+		coolingDownPlaneSwitch = true;
+		PlaneSwitchCDRemaining = PlaneSwitchCDTime;
 
-		//change currentPlaneID
-		currentPlaneID = 1;
 	}
 
-	if (Window::GetKeyboard()->KeyDown(KEYBOARD_DOWN) && currentPlaneID != 2)
+	if (Window::GetKeyboard()->KeyDown(KEYBOARD_RIGHT) && !coolingDownPlaneSwitch)
 	{
-		//change the plane of current velocity (maintain in a new direction relative to new plane
-		Vector3 currentVelocity = PhysNode->GetLinearVelocity();
-		switch (currentPlaneID)
-		{
-		case 0:
-			//move player to relative position on plane
-			PhysNode->SetPosition(Vector3(-xLocationOnPlane, -SURFACE_CENTRE_OFFSET, 0));
-			//flip only direction of movement
-			PhysNode->SetLinearVelocity(Vector3(-currentVelocity.x, 0, 0));
-			break;
-
-		case 1:
-			//move player to relative position on plane
-			PhysNode->SetPosition(Vector3(xLocationOnPlane, -SURFACE_CENTRE_OFFSET, 0));
-			//flip only plane of movement
-			PhysNode->SetLinearVelocity(Vector3(currentVelocity.y, 0, 0));
-			break;
-
-		case 3:
-			//move player to relative position on plane
-			PhysNode->SetPosition(Vector3(-xLocationOnPlane, -SURFACE_CENTRE_OFFSET, 0));
-			//flip plane and direction of movement
-			PhysNode->SetLinearVelocity(Vector3(-currentVelocity.y, 0, 0));
-			break;
-		}
-
-		//correct rotation of ship
-		Vector3 EulerOrientation = Vector3(0, 0, 0);
-		EulerOrientation.z += rotationOnPlane;
-		PhysNode->SetOrientation(
-			Quaternion::EulerAnglesToQuaternion(EulerOrientation.x, EulerOrientation.y, EulerOrientation.z));
-
-		//change currentPlaneID
-		currentPlaneID = 2;
-	}
-
-	if (Window::GetKeyboard()->KeyDown(KEYBOARD_LEFT) && currentPlaneID != 3)
-	{
-		//change the plane of current velocity (maintain in a new direction relative to new plane
+		Vector3 EulerOrientation;
+		//set new position then change the plane of current velocity (maintain in a new direction relative to new plane
 		Vector3 currentVelocity = PhysNode->GetLinearVelocity();
 		switch (currentPlaneID)
 		{
@@ -488,13 +618,103 @@ void Vehicle::SwitchPlane()
 			PhysNode->SetPosition(Vector3(-SURFACE_CENTRE_OFFSET, xLocationOnPlane, 0));
 			//flip only plane of movement
 			PhysNode->SetLinearVelocity(Vector3(0, currentVelocity.x, 0));
+
+			//correct rotation of ship
+			EulerOrientation = Vector3(0, 0, 270);
+			EulerOrientation.z += rotationOnPlane;
+			PhysNode->SetOrientation(Quaternion::EulerAnglesToQuaternion(EulerOrientation.x, EulerOrientation.y, EulerOrientation.z));
+
+			//change currentPlaneID
+			currentPlaneID = 3;
 			break;
 
 		case 1:
 			//move player to relative position on plane
-			PhysNode->SetPosition(Vector3(-SURFACE_CENTRE_OFFSET, -xLocationOnPlane, 0));
-			//flip only direction of movement
-			PhysNode->SetLinearVelocity(Vector3(0, -currentVelocity.y, 0));
+			PhysNode->SetPosition(Vector3(-xLocationOnPlane, SURFACE_CENTRE_OFFSET, 0));
+			//flip both plane and direction of movement
+			PhysNode->SetLinearVelocity(Vector3(-currentVelocity.y, 0, 0));
+
+			//correct rotation of ship
+			EulerOrientation = Vector3(0, 0, 180);
+			EulerOrientation.z += rotationOnPlane;
+			PhysNode->SetOrientation(Quaternion::EulerAnglesToQuaternion(EulerOrientation.x, EulerOrientation.y, EulerOrientation.z));
+
+			//change currentPlaneID
+			currentPlaneID = 0;
+			break;
+
+		case 2:
+			//move player to relative position on plane
+			PhysNode->SetPosition(Vector3(SURFACE_CENTRE_OFFSET, xLocationOnPlane, 0));
+			//flip only plane of movement
+			PhysNode->SetLinearVelocity(Vector3(0, currentVelocity.x, 0));
+
+			//correct rotation of ship
+			EulerOrientation = Vector3(0, 0, 90);
+			EulerOrientation.z += rotationOnPlane;
+			PhysNode->SetOrientation(Quaternion::EulerAnglesToQuaternion(EulerOrientation.x, EulerOrientation.y, EulerOrientation.z));
+
+			//change currentPlaneID
+			currentPlaneID = 1;
+			break;
+
+		case 3:
+			//move player to relative position on plane
+			PhysNode->SetPosition(Vector3(-xLocationOnPlane, -SURFACE_CENTRE_OFFSET, 0));
+			//flip plane and direction of movement
+			PhysNode->SetLinearVelocity(Vector3(-currentVelocity.y, 0, 0));
+
+			//correct rotation of ship
+			EulerOrientation = Vector3(0, 0, 0);
+			EulerOrientation.z += rotationOnPlane;
+			PhysNode->SetOrientation(Quaternion::EulerAnglesToQuaternion(EulerOrientation.x, EulerOrientation.y, EulerOrientation.z));
+
+			//change currentPlaneID
+			currentPlaneID = 2;
+			break;
+		}
+
+		//set cooldown
+		coolingDownPlaneSwitch = true;
+		PlaneSwitchCDRemaining = PlaneSwitchCDTime;
+	}
+
+	if (Window::GetKeyboard()->KeyDown(KEYBOARD_LEFT) && !coolingDownPlaneSwitch)
+	{
+		Vector3 EulerOrientation;
+		//change the plane of current velocity (maintain in a new direction relative to new plane
+		Vector3 currentVelocity = PhysNode->GetLinearVelocity();
+		switch (currentPlaneID)
+		{
+		case 0:
+			//move player to relative position on plane
+			PhysNode->SetPosition(Vector3(SURFACE_CENTRE_OFFSET, -xLocationOnPlane, 0));
+			//flip both plane and direction of movement
+			PhysNode->SetLinearVelocity(Vector3(0, -currentVelocity.x, 0));
+
+
+			//correct rotation of ship
+			EulerOrientation = Vector3(0, 0, 90);
+			EulerOrientation.z += rotationOnPlane;
+			PhysNode->SetOrientation(Quaternion::EulerAnglesToQuaternion(EulerOrientation.x, EulerOrientation.y, EulerOrientation.z));
+
+			//change currentPlaneID
+			currentPlaneID = 1;
+			break;
+
+		case 1:
+			//move player to relative position on plane
+			PhysNode->SetPosition(Vector3(xLocationOnPlane, -SURFACE_CENTRE_OFFSET, 0));
+			//flip only plane of movement
+			PhysNode->SetLinearVelocity(Vector3(currentVelocity.y, 0, 0));
+
+			//correct rotation of ship
+			EulerOrientation = Vector3(0, 0, 0);
+			EulerOrientation.z += rotationOnPlane;
+			PhysNode->SetOrientation(Quaternion::EulerAnglesToQuaternion(EulerOrientation.x, EulerOrientation.y, EulerOrientation.z));
+
+			//change currentPlaneID
+			currentPlaneID = 2;
 			break;
 
 		case 2:
@@ -502,17 +722,34 @@ void Vehicle::SwitchPlane()
 			PhysNode->SetPosition(Vector3(-SURFACE_CENTRE_OFFSET, -xLocationOnPlane, 0));
 			//flip plane and direction of movement
 			PhysNode->SetLinearVelocity(Vector3(0, -currentVelocity.x, 0));
+
+			//correct rotation of ship
+			EulerOrientation = Vector3(0, 0, 270);
+			EulerOrientation.z += rotationOnPlane;
+			PhysNode->SetOrientation(Quaternion::EulerAnglesToQuaternion(EulerOrientation.x, EulerOrientation.y, EulerOrientation.z));
+
+			//change currentPlaneID
+			currentPlaneID = 3;
+			break;
+
+		case 3:
+			//move player to relative position on plane
+			PhysNode->SetPosition(Vector3(xLocationOnPlane, SURFACE_CENTRE_OFFSET, 0));
+			//flip only plane of movement
+			PhysNode->SetLinearVelocity(Vector3(currentVelocity.y, 0, 0));
+
+			//correct rotation of ship
+			EulerOrientation = Vector3(0, 0, 180);
+			EulerOrientation.z += rotationOnPlane;
+			PhysNode->SetOrientation(Quaternion::EulerAnglesToQuaternion(EulerOrientation.x, EulerOrientation.y, EulerOrientation.z));
+
+			//change currentPlaneID
+			currentPlaneID = 0;
 			break;
 		}
 
-		//correct rotation of ship
-		Vector3 EulerOrientation = Vector3(0, 0, 270);
-		EulerOrientation.z += rotationOnPlane;
-		PhysNode->SetOrientation(
-			Quaternion::EulerAnglesToQuaternion(EulerOrientation.x, EulerOrientation.y, EulerOrientation.z));
-
-		//change currentPlaneID
-		currentPlaneID = 3;
+		//set cooldown
+		coolingDownPlaneSwitch = true;
+		PlaneSwitchCDRemaining = PlaneSwitchCDTime;
 	}
-
 }
