@@ -85,5 +85,7 @@ void GameClass::UpdateRendering(float msec)
 			}
 		}
 		renderCounter += (1000.0f / (float)RENDER_HZ);
+
+		SoundSystem::GetSoundSystem()->Update(msec); //SoundSystem update 25.2.2015
 	}
 }

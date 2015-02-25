@@ -31,6 +31,12 @@
     <Filter Include="Header Files\Rendering">
       <UniqueIdentifier>{7154bdad-b80b-4e38-831f-6501cb010799}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Sound">
+      <UniqueIdentifier>{d39a5013-39dc-413e-b564-e40f0ac0dd2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Sound">
+      <UniqueIdentifier>{730c865e-9e41-4563-bb1e-b68cb5ba86d8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameEntity.cpp">
@@ -95,6 +101,18 @@
     </ClCompile>
     <ClCompile Include="GamePadController.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound.cpp">
+      <Filter>Source Files\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundEmitter.cpp">
+      <Filter>Source Files\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>Source Files\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundSystem.cpp">
+      <Filter>Source Files\Sound</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -182,5 +200,22 @@
     <ClInclude Include="GamePadController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Sound.h">
+      <Filter>Header Files\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundEmitter.h">
+      <Filter>Header Files\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>Header Files\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundSystem.h">
+      <Filter>Header Files\Sound</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\..\OpenAL 1.1 SDK\libs\Win32\OpenAL32.lib" />
+    <Library Include="..\..\OpenAL 1.1 SDK\libs\Win32\EFX-Util_MT\EFX-Util.lib" />
+    <Library Include="..\..\OpenAL 1.1 SDK\libs\Win32\EFX-Util_MTDLL\EFX-Util.lib" />
   </ItemGroup>
 </Project>

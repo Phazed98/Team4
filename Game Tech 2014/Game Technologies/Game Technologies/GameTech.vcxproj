@@ -87,6 +87,10 @@
     <ClCompile Include="PhysicsNode.cpp" />
     <ClCompile Include="PhysicsSystem.cpp" />
     <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="Sound.cpp" />
+    <ClCompile Include="SoundEmitter.cpp" />
+    <ClCompile Include="SoundManager.cpp" />
+    <ClCompile Include="SoundSystem.cpp" />
     <ClCompile Include="Spring.cpp" />
     <ClCompile Include="SpringDemo.cpp" />
     <ClCompile Include="TextMesh.cpp" />
@@ -116,6 +120,10 @@
     <ClInclude Include="PhysicsSystem.h" />
     <ClInclude Include="PlaneInfo.h" />
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="Sound.h" />
+    <ClInclude Include="SoundEmitter.h" />
+    <ClInclude Include="SoundManager.h" />
+    <ClInclude Include="SoundSystem.h" />
     <ClInclude Include="Spring.h" />
     <ClInclude Include="SpringDemo.h" />
     <ClInclude Include="SupportPoint.h" />
@@ -127,6 +135,11 @@
     <ProjectReference Include="..\..\nclgl\nclgl.vcxproj">
       <Project>{98d6b51b-cb0a-4389-adc6-24082b967c3f}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\..\OpenAL 1.1 SDK\libs\Win32\EFX-Util_MTDLL\EFX-Util.lib" />
+    <Library Include="..\..\OpenAL 1.1 SDK\libs\Win32\EFX-Util_MT\EFX-Util.lib" />
+    <Library Include="..\..\OpenAL 1.1 SDK\libs\Win32\OpenAL32.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -77,6 +77,8 @@ void loadGame()
 
 int main() 
 {
+	SoundSystem::Initialise(); //Build SoundSystem
+
 	if(!Window::Initialise("Game Technologies", 1280,800,false)) 
 	{
 		return Quit(true, "Window failed to initialise!");
@@ -105,6 +107,12 @@ int main()
 	while(Window::GetWindow().UpdateWindow() && GameClass::GetGameClass().getCurrentState() != GAME_EXIT)
 	{
 		float msec = Window::GetWindow().GetTimer()->GetTimedMS();	//How many milliseconds since last update?
+
+		if (Window::GetKeyboard()->KeyTriggered(KEYBOARD_2)) {
+			SoundSystem::GetSoundSystem()->PlaySound(
+				SoundManager::GetSound("../../Sounds/56900__syna-max__war.wav"), Vector3());
+		}
+
 		game->UpdateRendering(msec);	//Update our 'sybsystem' logic (renderer and physics!)
 		game->UpdateGame(msec);	//Update our game logic	
 	}
@@ -113,6 +121,9 @@ int main()
 
 	physics.join();
 	Networking.join();
+
+	SoundManager::DeleteSounds();
+	SoundSystem::Destroy();
 
 	delete game;	//Done with our game now...bye bye!
 	return Quit();
