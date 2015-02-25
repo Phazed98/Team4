@@ -22,19 +22,19 @@ void ObjectType::Update(float msec)
 {
 	if (type == 0)
 	{
-		physicsNode->SetPosition(physicsNode->GetPosition() + Vector3(0, 0, -10.0f));
+		physicsNode->SetPosition(physicsNode->GetPosition() + Vector3(0, 0, 55.0f));
 
 		if (state == 0)
 		{
-			
-			if (physicsNode->GetPosition().z < -(length)* random)
+
+			if (abs(physicsNode->GetPosition().z - -5550) > length* random)
 			{
 				state = 1;
 			}
 		}
 		else if (state == 2)
 		{
-			if (physicsNode->GetPosition().z < -(length*15))
+			if (physicsNode->GetPosition().z > (5000))
 			{
 				state = 3;
 			}
@@ -42,28 +42,29 @@ void ObjectType::Update(float msec)
 	}
 }
 
+
 void ObjectType::SetInitialAttributes()
 {
-	
+
 	if (subType == 0) // Top
 	{
-		physicsNode->SetPosition(Vector3(0, TILE_CENTRE_OFFSET, 0));
+		physicsNode->SetPosition(Vector3(0, TILE_CENTRE_OFFSET, -5550));
 		renderNode->SetColour(Vector4(1, 0, 0, 1));
 	}
 	else if (subType == 1) // Right
 	{
-		physicsNode->SetPosition(Vector3(TILE_CENTRE_OFFSET, 0, 0));
+		physicsNode->SetPosition(Vector3(TILE_CENTRE_OFFSET, 0, -5550));
 		physicsNode->SetOrientation(Quaternion(0, 0, 1, 1));
 		renderNode->SetColour(Vector4(0, 0, 1, 1));
 	}
 	else if (subType == 2) // Bottom
 	{
-		physicsNode->SetPosition(Vector3(0, -TILE_CENTRE_OFFSET, 0));
-		renderNode->SetColour(Vector4(1, 1, 1, 1));
+		physicsNode->SetPosition(Vector3(0, -TILE_CENTRE_OFFSET, -5550));
+		renderNode->SetColour(Vector4(0.1, 0.1, 0.1, 1));
 	}
 	else if (subType == 3) // Left
 	{
-		physicsNode->SetPosition(Vector3(-TILE_CENTRE_OFFSET, 0, 0));
+		physicsNode->SetPosition(Vector3(-TILE_CENTRE_OFFSET, 0, -5550));
 		physicsNode->SetOrientation(Quaternion(0, 0, 1, 1));
 		renderNode->SetColour(Vector4(0, 1, 0, 1));
 	}
@@ -79,3 +80,7 @@ void ObjectType::reset()
 	//create obstacle
 }
 
+void ObjectType::SetPos(Vector3 pos)
+{
+	physicsNode->SetPosition(pos);
+}

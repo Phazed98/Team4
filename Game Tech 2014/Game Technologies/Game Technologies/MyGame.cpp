@@ -119,17 +119,41 @@ MyGame::MyGame()
 
 	//-------------------------------------------------Planes---------------------------------------------------------//
 
-	GameEntity* plane = BuildObjectEntity(0, 0);
-	allEntities.push_back(plane);
+	for (int i = 0; i < 7; i++)
+	{
+		ObjectType* plane = BuildObjectEntity(0, 2);
+		plane->SetPos(Vector3(0, -500, -i * 800));
+		if (i != 6)
+			plane->setState(2);
+		allEntities.push_back(plane);
+	}
 
-	plane = BuildObjectEntity(0, 1);
-	allEntities.push_back(plane);
+	for (int i = 0; i < 7; i++)
+	{
+		ObjectType* plane = BuildObjectEntity(0, 0);
+		plane->SetPos(Vector3(0, 500, -i * 800));
+		if (i != 6)
+			plane->setState(2);
+		allEntities.push_back(plane);
+	}
 
-	plane = BuildObjectEntity(0, 2);
-	allEntities.push_back(plane);
+	for (int i = 0; i < 7; i++)
+	{
+		ObjectType* plane = BuildObjectEntity(0, 1);
+		plane->SetPos(Vector3(500, 0, -i * 800));
+		if (i != 6)
+			plane->setState(2);
+		allEntities.push_back(plane);
+	}
 
-	plane = BuildObjectEntity(0, 3);
-	allEntities.push_back(plane);
+	for (int i = 0; i < 7; i++)
+	{
+		ObjectType* plane = BuildObjectEntity(0, 3);
+		plane->SetPos(Vector3(-500, 0, -i * 800));
+		if (i != 6)
+			plane->setState(2);
+		allEntities.push_back(plane);
+	}
 
 	setCurrentState(GAME_PLAYING);
 
@@ -530,7 +554,7 @@ void MyGame::CreateObstacle(ObjectType* _obj)
 	{
 		if (obstacleReference[_obj->getSubType()] != NULL)
 		{
-			if (obstacleReference[_obj->getSubType()]->GetPhysicsNode().GetPosition().z < -800.0f)
+			if (obstacleReference[_obj->getSubType()]->GetPhysicsNode().GetPosition().z > -4750.0f)
 			{
 				temp = BuildObstacleEntity(50, 1, _obj->getSubType(), _obj, obstacleType);
 				obstacleElements[_obj->getSubType()].push_back(temp);
@@ -543,7 +567,7 @@ void MyGame::CreateObstacle(ObjectType* _obj)
 		//use the old object
 		if (obstacleReference[_obj->getSubType()] != NULL)
 		{
-			if (obstacleReference[_obj->getSubType()]->GetPhysicsNode().GetPosition().z < -800.0f)
+			if (obstacleReference[_obj->getSubType()]->GetPhysicsNode().GetPosition().z > -4750.0f)
 			{
 				temp = obstacleElements[_obj->getSubType()][empty];
 				temp->SetTile(_obj);

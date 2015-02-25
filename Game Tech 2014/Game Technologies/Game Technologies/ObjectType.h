@@ -2,7 +2,7 @@
 #include "GameEntity.h"
 #include "PlaneInfo.h"
 
-class ObjectType : 	public GameEntity
+class ObjectType : public GameEntity
 {
 public:
 	ObjectType(SceneNode* s, PhysicsNode* p, int _type, int _subType);
@@ -21,6 +21,8 @@ public:
 
 	void reset();
 
+	void SetPos(Vector3 pos);
+
 
 
 protected:
@@ -34,5 +36,7 @@ protected:
 	void SetInitialAttributes(); // Initialise the position of an object depending on its type and subtype
 	float length;
 	int random;
+
+
 };
 

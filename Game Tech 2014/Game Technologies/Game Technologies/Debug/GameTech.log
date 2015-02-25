@@ -1,17 +1,23 @@
-﻿Build started 25/02/2015 14:31:07.
+﻿Build started 25/02/2015 14:43:44.
      1>Project "D:\GitHub\Team4\Game Tech 2014\Game Technologies\Game Technologies\GameTech.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Renderer.cpp
-         Renderer.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt MyGame.cpp
+         MyGame.cpp
      1>d:\github\team4\game tech 2014\nclgl\vector3.h(152): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(192): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(193): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(197): warning C4305: 'argument' : truncation from 'double' to 'const float'
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(208): warning C4305: 'argument' : truncation from 'double' to 'const float'
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(256): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(256): warning C4244: 'argument' : conversion from 'unsigned int' to 'const float', possible loss of data
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(257): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(257): warning C4244: 'argument' : conversion from 'unsigned int' to 'const float', possible loss of data
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(125): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(134): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(143): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(152): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(227): warning C4305: '+=' : truncation from 'double' to 'float'
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(206): warning C4101: 'NWC' : unreferenced local variable
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(251): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(273): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(416): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(430): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(460): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(475): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(488): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(593): warning C4018: '<' : signed/unsigned mismatch
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.lib" /MACHINE:X86 /FORCE:MULTIPLE Debug\Bullets.obj
          Debug\Button.obj
@@ -75,8 +81,6 @@
      1>Spring.obj : warning LNK4099: PDB 'vc120.pdb' was not found with 'Spring.obj' or at 'D:\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
      1>PhysicsSystem.obj : warning LNK4099: PDB 'vc120.pdb' was not found with 'PhysicsSystem.obj' or at 'D:\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
      1>PhysicsNode.obj : warning LNK4099: PDB 'vc120.pdb' was not found with 'PhysicsNode.obj' or at 'D:\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
-     1>MyGame.obj : warning LNK4099: PDB 'vc120.pdb' was not found with 'MyGame.obj' or at 'D:\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
-     1>Main.obj : warning LNK4099: PDB 'vc120.pdb' was not found with 'Main.obj' or at 'D:\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
      1>GameEntity.obj : warning LNK4099: PDB 'vc120.pdb' was not found with 'GameEntity.obj' or at 'D:\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
      1>GameClass.obj : warning LNK4099: PDB 'vc120.pdb' was not found with 'GameClass.obj' or at 'D:\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
      1>CollisionHelper.obj : warning LNK4099: PDB 'vc120.pdb' was not found with 'CollisionHelper.obj' or at 'D:\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
@@ -90,4 +94,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.99
+Time Elapsed 00:00:01.10
