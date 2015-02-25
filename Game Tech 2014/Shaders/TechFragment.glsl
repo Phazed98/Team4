@@ -13,6 +13,8 @@ out vec4 gl_FragColor;
 void main(void)	{
 	gl_FragColor = IN.colour;
 	if(useTexture > 0) {
-		gl_FragColor	*= texture(diffuseTex, IN.texCoord);
+		gl_FragColor	= texture(diffuseTex, IN.texCoord);
 	}
+	else
+		gl_FragColor	= IN.colour;
 }

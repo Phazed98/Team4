@@ -279,6 +279,10 @@ void	Renderer::DrawNode(SceneNode*n)
 	{
 		glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(), "modelMatrix"),	1,false, (float*)&(n->GetWorldTransform()*Matrix4::Scale(n->GetModelScale())));
 		glUniform4fv(glGetUniformLocation(currentShader->GetProgram(), "nodeColour"),1,(float*)&n->GetColour());
+		if (n->GetMesh()->GetTexture() != NULL)
+			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useTexture"), 1);
+		else
+			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useTexture"), 0);
 
 		n->Draw(*this);
 	}
