@@ -1,17 +1,17 @@
-﻿Build started 25/02/2015 17:01:16.
+﻿Build started 26/02/2015 10:55:32.
      1>Project "D:\GitHub\Team4\Game Tech 2014\Game Technologies\Game Technologies\GameTech.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Renderer.cpp
          Renderer.cpp
      1>d:\github\team4\game tech 2014\nclgl\vector3.h(152): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(256): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(257): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(261): warning C4305: 'argument' : truncation from 'double' to 'const float'
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(272): warning C4305: 'argument' : truncation from 'double' to 'const float'
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(320): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(320): warning C4244: 'argument' : conversion from 'unsigned int' to 'const float', possible loss of data
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(321): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(321): warning C4244: 'argument' : conversion from 'unsigned int' to 'const float', possible loss of data
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(331): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(332): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(336): warning C4305: 'argument' : truncation from 'double' to 'const float'
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(347): warning C4305: 'argument' : truncation from 'double' to 'const float'
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(395): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(395): warning C4244: 'argument' : conversion from 'unsigned int' to 'const float', possible loss of data
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(396): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(396): warning C4244: 'argument' : conversion from 'unsigned int' to 'const float', possible loss of data
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.lib" /MACHINE:X86 /FORCE:MULTIPLE Debug\Bullets.obj
          Debug\Button.obj
@@ -73,6 +73,7 @@
      1>Renderer.obj : warning LNK4049: locally defined symbol ___glewUseProgram imported
      1>Renderer.obj : warning LNK4049: locally defined symbol ___glewBindFramebuffer imported
      1>Renderer.obj : warning LNK4049: locally defined symbol ___glewCheckFramebufferStatus imported
+     1>Renderer.obj : warning LNK4049: locally defined symbol ___glewDeleteFramebuffers imported
      1>Renderer.obj : warning LNK4049: locally defined symbol ___glewFramebufferTexture2D imported
      1>Renderer.obj : warning LNK4049: locally defined symbol ___glewGenFramebuffers imported
      1>D:\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.exe : warning LNK4088: image being generated due to /FORCE option; image may not run
@@ -86,4 +87,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.98
+Time Elapsed 00:00:00.93

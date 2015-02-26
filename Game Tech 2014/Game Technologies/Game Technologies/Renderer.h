@@ -96,6 +96,7 @@ protected:
 	Matrix4 previous_viewMatrix;
 	Matrix4 current_viewMatrix;
 	void RenderMotionBlur();
+	void RenderWithoutPostProcessing();
 	bool render_motion_blur;
 };
 

@@ -33,7 +33,7 @@ float ddd = texture2D(depthTex, texCoord).x;
 float zOverW = texture(depthTex, texCoord).r;
 	//H is the viewport position at this pixel in the range -1 to 1.
 
-   vec4 H = vec4((1 - texCoord.x) * 2 - 1, (1 - texCoord.y) * 2 - 1, zOverW, 1);  
+   vec4 H = vec4(texCoord.x * 2 - 1, (1 - texCoord.y) * 2 - 1, zOverW, 1);  
 //	vec4 H = vec4(texCoord.x * 2 - 1, texCoord.y * 2 - 1, zOverW, 1);
 	//Transform by the view-projection inverse.  
    vec4 D = inversePVMatrix * H;
@@ -53,13 +53,14 @@ float zOverW = texture(depthTex, texCoord).r;
 
 	// Use this frame's position and last frame's to compute the pixel  
 	// velocity.  
-   vec2 velocity = ((currentPos - previousPos)/2.f).xy;  
+//   vec2 velocity = ((currentPos - previousPos)/2.f).xy; 
+      vec2 velocity = ((previousPos-currentPos)/2.f).xy; 
 
 	// Get the initial color at this pixel.  
    vec4 color = texture(diffuseTex, texCoord);
    texCoord += velocity;  
 
-   for(int i = 1; i < 5; ++i, texCoord += velocity){  
+   for(int i = 1; i < 10; ++i, texCoord += velocity){  
   	// Sample the color buffer along the velocity vector.  
 		vec4 currentColor = texture(diffuseTex, texCoord);
   	// Add the current color to our color sum.  
@@ -67,15 +68,12 @@ float zOverW = texture(depthTex, texCoord).r;
 	}
 
 	// Average all of the samples to get the final blur color.  
-   vec4 outputColor = FragColor = color / 5; 
+   vec4 outputColor = color / 10; 
 
    float fFogCoord = abs(LinearizeDepth(zOverW) );
-   float fResult = exp(-pow(fFogCoord, 2.0));
+   float fResult = exp(-pow(fFogCoord*2, 2.0));
 
    fResult = 1.0-clamp(fResult, 0.0, 1.0);
    FragColor = mix(outputColor, vec4(0.7,0.7,0.7,1), fResult);
 
-
-
-//  FragColor  = vec4(ddd,ddd ,ddd ,1);
 }
