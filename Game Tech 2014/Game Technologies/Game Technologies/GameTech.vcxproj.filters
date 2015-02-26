@@ -37,6 +37,12 @@
     <Filter Include="Source Files\Sound">
       <UniqueIdentifier>{730c865e-9e41-4563-bb1e-b68cb5ba86d8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Powerups">
+      <UniqueIdentifier>{016322d7-15db-49a7-a00b-50ede252ca37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Powerups">
+      <UniqueIdentifier>{5e641921-1ba8-47bc-8a5f-47ded2a7d588}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameEntity.cpp">
@@ -119,6 +125,12 @@
     </ClCompile>
     <ClCompile Include="SpaceshipSceneNode.cpp">
       <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Coins.cpp">
+      <Filter>Source Files\Powerups</Filter>
+    </ClCompile>
+    <ClCompile Include="Powerups.cpp">
+      <Filter>Source Files\Powerups</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -223,6 +235,12 @@
     </ClInclude>
     <ClInclude Include="SpaceshipSceneNode.h">
       <Filter>Header Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Coins.h">
+      <Filter>Header Files\Powerups</Filter>
+    </ClInclude>
+    <ClInclude Include="Powerups.h">
+      <Filter>Header Files\Powerups</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

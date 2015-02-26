@@ -3,6 +3,8 @@
 #include "Spring.h"
 #include "SpringDemo.h"
 #include "NetworkClient.h"
+#include "Powerups.h"
+#include "Coins.h"
 
 /*
 Creates a really simple scene for our game - A cube robot standing on
@@ -73,6 +75,11 @@ MyGame::MyGame()
 	we don't care whether the renderer is OpenGL / Direct3D / using SOIL or 
 	something else...
 	*/
+
+	//add all powerup variable!!!
+	AllCoins = new Coins(10);
+	AllPowerups = new Powerups();
+
 	cube	= new OBJMesh(MESHDIR"cube.obj");
 	quad	= Mesh::GenerateQuad();
 	sphere	= new OBJMesh(MESHDIR"ico.obj");
@@ -172,6 +179,8 @@ MyGame::~MyGame(void)
 	delete Enemy;   //new 5.2.2015 Daixi
 	delete Car;
 	delete bullet;
+	delete AllCoins;
+	delete AllPowerups;
 
 	CubeRobot::DeleteCube();
 
@@ -221,6 +230,11 @@ void MyGame::UpdateGame(float msec)
 		bullet->ShootBullets();
 		count_time = 0;
 	}
+
+	Car = PhysicsSystem::GetPhysicsSystem().GetVehicle();
+	AllPowerups->UpdatePowerup(Car, AllCoins, msec);
+	AllCoins->UpdateCoins(Car);
+	AllCoins->UpdatePickupCoins(Car);
 
 	count_time++;
 

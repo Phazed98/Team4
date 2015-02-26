@@ -73,6 +73,7 @@
   <ItemGroup>
     <ClCompile Include="Bullets.cpp" />
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="Coins.cpp" />
     <ClCompile Include="CollisionHelper.cpp" />
     <ClCompile Include="FireParticleSystem.cpp" />
     <ClCompile Include="GameClass.cpp" />
@@ -87,6 +88,7 @@
     <ClCompile Include="Obstacle.cpp" />
     <ClCompile Include="PhysicsNode.cpp" />
     <ClCompile Include="PhysicsSystem.cpp" />
+    <ClCompile Include="Powerups.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="SoundEmitter.cpp" />
@@ -102,6 +104,7 @@
   <ItemGroup>
     <ClInclude Include="Bullets.h" />
     <ClInclude Include="Button.h" />
+    <ClInclude Include="Coins.h" />
     <ClInclude Include="CollisionHelper.h" />
     <ClInclude Include="CollisionVolume.h" />
     <ClInclude Include="Constraint.h" />
@@ -122,6 +125,7 @@
     <ClInclude Include="PhysicsNode.h" />
     <ClInclude Include="PhysicsSystem.h" />
     <ClInclude Include="PlaneInfo.h" />
+    <ClInclude Include="Powerups.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="SoundEmitter.h" />

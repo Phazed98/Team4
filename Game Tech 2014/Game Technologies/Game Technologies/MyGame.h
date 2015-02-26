@@ -43,6 +43,8 @@ _-_-_-_-_-_-_-""  ""
 #include "Vehicle.h"
 #include "Bullets.h"
 
+class Coins;
+class Powerups;
 class Vehicle;
 class Bullets;
 class MyGame : public GameClass	{
@@ -112,6 +114,8 @@ protected:
 	Vehicle* Car;
 
 	Bullets* bullet;
+	Powerups* AllPowerups;
+	Coins* AllCoins;
 
 	Vector3 PositionEnemy;  //new 4.2.2015 Daixi
 	Vector3 Position0;

@@ -56,6 +56,7 @@ public:
 	float time = 0;
 	int nbFrames = 0;				//Integer for frame count
 
+	Vehicle* GetVehicle(){ return playerVehicle; }
 protected:
 	PhysicsSystem(void);
 	~PhysicsSystem(void);
