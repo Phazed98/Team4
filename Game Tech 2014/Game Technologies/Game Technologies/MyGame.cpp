@@ -431,7 +431,7 @@ GameEntity* MyGame::BuildBulletEntity(float radius, Vector3 pos)
 	test->SetBoundingRadius(radius);
 	test->SetColour(Vector4(0.2, 0.2, 0.5, 1));
 	PhysicsNode*p = new PhysicsNode();
-
+	p->SetUseDamping(false);
 	p->SetUseGravity(false);
 	p->SetPosition(pos);
 	p->SetCollisionVolume(new CollisionSphere(radius));    //new 4.2.2015  Daixi
@@ -582,6 +582,7 @@ void MyGame::CreateObstacle(ObjectType* _obj)
 		{
 			GameEntity* bul = BuildBulletEntity(20, temp->GetPhysicsNode().GetPosition());
 			temp->SetBullet(bul);
+			temp->SetPlayer(PhysicsSystem::GetPhysicsSystem().GetPlayer());
 			allEntities.push_back(bul);
 
 		}
@@ -599,6 +600,7 @@ void MyGame::CreateObstacle(ObjectType* _obj)
 				{
 					GameEntity* bul = BuildBulletEntity(20, temp->GetPhysicsNode().GetPosition());
 					temp->SetBullet(bul);
+					temp->SetPlayer(PhysicsSystem::GetPhysicsSystem().GetPlayer());
 					allEntities.push_back(bul);
 
 				}

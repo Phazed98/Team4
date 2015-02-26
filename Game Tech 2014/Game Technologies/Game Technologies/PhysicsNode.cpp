@@ -7,6 +7,8 @@ PhysicsNode::PhysicsNode(void): vol(NULL)
 	target = NULL;
 	useGravity = true;
 	m_elasticity = 1.0f;
+	useDamping = true;
+
 }
 
 PhysicsNode::PhysicsNode(Quaternion orientation, Vector3 position): vol(NULL) 
@@ -15,6 +17,8 @@ PhysicsNode::PhysicsNode(Quaternion orientation, Vector3 position): vol(NULL)
 	m_position		= position;
 	m_elasticity = 1.0f;
 	useGravity = true;
+	useDamping = true;
+
 }
 
 PhysicsNode::~PhysicsNode(void)	
@@ -26,8 +30,11 @@ PhysicsNode::~PhysicsNode(void)
 void	PhysicsNode::Update(float msec) 
 {
 	//Damping Factor
-	m_linearVelocity = m_linearVelocity * 0.98;
-	m_angularVelocity = m_angularVelocity * 0.98;
+	if (useDamping)
+	{
+		m_linearVelocity = m_linearVelocity * 0.98;
+		m_angularVelocity = m_angularVelocity * 0.98;
+	}
 
 	//Linear and Angular Updates
 	updateLinear(msec);

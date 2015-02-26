@@ -54,6 +54,8 @@ public:
 
 	void    DrawDebug();
 
+	PhysicsNode* GetPlayer() { return playerPhysNode; }
+
 	float time = 0;
 	int nbFrames = 0;				//Integer for frame count
 

@@ -37,16 +37,29 @@ Obstacle::~Obstacle()
 void Obstacle::Update(float msec)
 {
 
-	if (obstacleType == 1 && bullet != NULL)
+	if (obstacleType == 1)
 	{
-		if (count_time == 80)
-		{    //new control when shoot the bullets   4.2.2015 Daixi
+		if (abs(player->GetPosition().y - physicsNode->GetPosition().y) < 400
+			&& abs(player->GetPosition().x - physicsNode->GetPosition().x) < 400
+			&& physicsNode->GetPosition().z < player->GetPosition().z)
+		{
+			//if (count_time == 80)
+			if (count_time == 200)//&& bullet->GetPhysicsNode().GetPosition().z > player->GetPosition().z)
+			{    //new control when shoot the bullets   4.2.2015 Daixi
+				bullet->GetPhysicsNode().SetPosition(physicsNode->GetPosition());
+				count_time = 0;
+				Shoot();
+			}
+
+			count_time++;
+
+		}
+		else
+		{
 			bullet->GetPhysicsNode().SetPosition(physicsNode->GetPosition());
-			count_time = 0;
 		}
 
-		count_time++;
-		bullet->GetPhysicsNode().SetPosition(bullet->GetPhysicsNode().GetPosition() + Vector3(0, 0, 50.0f));
+
 	}
 
 	if (type == 1)
@@ -163,4 +176,11 @@ void Obstacle::SetLane(int _lane)
 			offset.y = random;
 		}
 	}
+}
+
+void Obstacle::Shoot()
+{
+	Vector3 direction = player->GetPosition() - physicsNode->GetPosition();
+	direction.Normalise();
+	bullet->GetPhysicsNode().SetLinearVelocity(direction * 2);
 }

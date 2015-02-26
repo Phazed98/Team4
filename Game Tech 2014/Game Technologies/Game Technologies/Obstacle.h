@@ -22,6 +22,10 @@ public:
 
 	void SetBullet(GameEntity* _bullet) { bullet = _bullet; }
 
+	void SetPlayer(PhysicsNode* _player) { player = _player; }
+
+	void Shoot();
+
 	void ResetBullet();
 
 private:
@@ -37,6 +41,9 @@ private:
 	bool goingLeft;
 
 	GameEntity* bullet;
+
+	PhysicsNode* player;
+
 
 	int count_time;
 

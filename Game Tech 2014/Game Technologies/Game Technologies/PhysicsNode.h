@@ -66,6 +66,11 @@ public:
 	static const Vector3 gravity;
 
 	//------------------------------------------
+	//Added by Kostas for bullets
+	void SetUseDamping(bool value) { useDamping = value; }
+	//-----------------------------------------------
+
+	//------------------------------------------
 	//Added by Sam for physics
 	//sets the AABBHalfLenth by pulling data from the target scene node mesh
 	void ConfigureAABBHalfLength();
@@ -79,6 +84,7 @@ protected:
 	bool useGravity;
 	bool m_moveable;
 	bool m_atRest;
+	bool useDamping; //Added by Kostas and used in bullets.
 	float m_elasticity;
 
 	//<---------LINEAR-------------->
