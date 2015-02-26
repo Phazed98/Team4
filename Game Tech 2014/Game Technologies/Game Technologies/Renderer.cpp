@@ -87,7 +87,7 @@ Renderer::~Renderer(void)
 
 void Renderer::UpdateScene(float msec)
 {
-
+	this->msec = msec;
 	if (Window::GetKeyboard()->KeyTriggered(KEYBOARD_T)) //Build Cube
 	{
 		toggleWireFrame();
@@ -162,6 +162,7 @@ void Renderer::RenderWithoutPostProcessing(){
 		DrawNodes();
 		ClearNodeLists();
 
+		DrawAfterBurner();
 
 		//Display HUD
 		if (wireFrame)
@@ -594,5 +595,15 @@ bool Renderer::CreatMotionBlurBuffer(){
 	}
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	return true;
+}
+void Renderer::DrawAfterBurner(){
+	Matrix4 model_matrix = spaceship_scene_node->GetAfterburnerNode()->GetWorldTransform();
+//	Matrix4 model_matrix = Matrix4::Translation(Vector3(0,0,0));
+	if (camera){
+
+		viewMatrix = camera->BuildViewMatrix();
+	}
+	spaceship_scene_node->afterburner_system[0].Render(msec, model_matrix, projMatrix, viewMatrix);
+	spaceship_scene_node->afterburner_system[1].Render(msec, model_matrix, projMatrix, viewMatrix);
 }
 

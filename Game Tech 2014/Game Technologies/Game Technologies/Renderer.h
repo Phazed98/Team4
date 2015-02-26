@@ -15,6 +15,8 @@ Implements:OGLRendere
 #include "PhysicsSystem.h"
 #include "Button.h"
 #include "SpaceshipSceneNode.h"
+#include "FireParticleSystem.h"
+
 class Renderer : public OGLRenderer	
 {
 public:
@@ -103,5 +105,7 @@ protected:
 	bool render_motion_blur;
 
 	SpaceshipSceneNode* spaceship_scene_node;
+	void DrawAfterBurner();
+	float msec;
 };
 

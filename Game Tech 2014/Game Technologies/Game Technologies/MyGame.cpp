@@ -51,7 +51,7 @@ MyGame::MyGame()
 	}
 	Renderer::GetRenderer().RenderLoading(40,"Attaching Mooses...");
 
-	gameCamera = new Camera(-30.0f, 0.0f, Vector3(0, 350, -800)); //changed the location Daixi 3.2.2015
+	gameCamera = new Camera(0.0f, 0.0f, Vector3(0, 0, 0));
 	Renderer::GetRenderer().RenderLoading(50, "I knew A Moose Once...");
 
 	Renderer::GetRenderer().SetCamera(gameCamera);

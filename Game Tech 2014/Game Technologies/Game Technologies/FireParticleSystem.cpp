@@ -20,7 +20,7 @@
 
 FireParticleSystem::FireParticleSystem()
 {
-
+	
 	
 	m_currVB = 0;
 	m_currTFB = 1;
@@ -103,8 +103,9 @@ bool FireParticleSystem::InitParticleSystem(int shape_type, const Vector3& Pos, 
 		break;
 	}
 	case 2:{
+		//this is afterburner
 		particle_lifetime = 50.f;
-		particle_size = 20;
+		particle_size = 10;
 		first_particle_launch_time = 50.f;
 		second_particle_lifetime = 1000.f;
 		render_particle_lifetime = second_particle_lifetime;
@@ -189,8 +190,10 @@ bool FireParticleSystem::InitRenderSystem(){
 	return true;
 }
 
-void FireParticleSystem::Render(int DeltaTimeMillis, const Matrix4& modelMatrix)
+void FireParticleSystem::Render(int DeltaTimeMillis, const Matrix4& modelMatrix, const Matrix4& projMatrix, const Matrix4& viewMatrix)
 {
+	project_matrix = projMatrix;
+	view_matrix = viewMatrix;
 	m_time += DeltaTimeMillis;
 //	cout << m_time << endl;
 	glDisable(GL_DEPTH_TEST);
@@ -333,7 +336,8 @@ void FireParticleSystem::UpdateParticles(int DeltaTimeMillis)
 void FireParticleSystem::RenderParticles(const Matrix4& modelMatrix)
 {
 	Matrix4 model_matrix = modelMatrix*Matrix4::Scale(Vector3(5, 5, 5));
-	Matrix4 view_matrix = camera->BuildViewMatrix();
+	/*if (camera!=NULL)
+		Matrix4 view_matrix = camera->BuildViewMatrix();*/
 	Matrix4 textureMatrix;
 
 	glUseProgram(particleRenderShader->GetProgram());

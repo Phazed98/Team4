@@ -12,6 +12,7 @@
 #include "./nclgl/Mesh.h"
 #include "./nclgl/camera.h"
 
+
 struct FireParticle
 {
 	float Type;
@@ -32,7 +33,7 @@ public:
 
 	bool InitParticleSystem(int shape_type, const Vector3& Pos, Camera* camera, Matrix4 project_matrix);
 
-	void Render(int DeltaTimeMillis, const Matrix4& modelMatrix = Matrix4());
+	void Render(int DeltaTimeMillis, const Matrix4& modelMatrix = Matrix4(), const Matrix4& projMatrix = Matrix4(), const Matrix4& viewMatrix = Matrix4());
 
 private:
 	void UpdateParticles(int DeltaTimeMillis);
