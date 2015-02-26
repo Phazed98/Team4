@@ -67,13 +67,9 @@ FireParticleSystem::~FireParticleSystem(){
 	}
 }
 
-bool FireParticleSystem::InitParticleSystem(int shape_type, const Vector3& Pos, Camera* camera, Matrix4 pm)
+bool FireParticleSystem::InitParticleSystem(int shape_type, const Vector3& Pos)
 {
 	_shape = shape_type;
-
-	this->camera = camera;
-
-	project_matrix = pm;
 
 	//this is basic fire shaders, you can change the geomertry shader to get different types
 	//the fragment shader does not do anything
@@ -85,7 +81,11 @@ bool FireParticleSystem::InitParticleSystem(int shape_type, const Vector3& Pos, 
 		first_particle_launch_time = 10.f;
 		second_particle_lifetime = 2000.f;
 
-		particleUpdateShader = new Shader(FIRE_SHADER_DIR"vs_update.glsl", FIRE_SHADER_DIR"fs_update.glsl", FIRE_SHADER_DIR"gs_update.glsl");
+		particleUpdateShader = new Shader(
+			FIRE_SHADER_DIR"vs_update.glsl",
+			FIRE_SHADER_DIR"fs_update.glsl",
+			FIRE_SHADER_DIR"gs_update.glsl");
+
 		flame_texture = SOIL_load_OGL_texture(TEXTUREDIR"flameColor.jpg",
 			SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_COMPRESS_TO_DXT);
 		break;
@@ -97,7 +97,11 @@ bool FireParticleSystem::InitParticleSystem(int shape_type, const Vector3& Pos, 
 		second_particle_lifetime = 2000.f;
 		render_particle_lifetime = second_particle_lifetime;
 
-		particleUpdateShader = new Shader(FIRE_SHADER_DIR"vs_update.glsl", FIRE_SHADER_DIR"fs_update.glsl", FIRE_SHADER_DIR"gs_explorsion.glsl");
+		particleUpdateShader = new Shader(
+			FIRE_SHADER_DIR"vs_update.glsl", 
+			FIRE_SHADER_DIR"fs_update.glsl", 
+			FIRE_SHADER_DIR"gs_explorsion.glsl");
+
 		flame_texture = SOIL_load_OGL_texture(TEXTUREDIR"explosionColor.jpg",
 			SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_COMPRESS_TO_DXT);
 		break;
@@ -109,7 +113,10 @@ bool FireParticleSystem::InitParticleSystem(int shape_type, const Vector3& Pos, 
 		first_particle_launch_time = 50.f;
 		second_particle_lifetime = 1000.f;
 		render_particle_lifetime = second_particle_lifetime;
-		particleUpdateShader = new Shader(FIRE_SHADER_DIR"vs_update.glsl", FIRE_SHADER_DIR"fs_update.glsl", FIRE_SHADER_DIR"gs_afterburner.glsl");
+		particleUpdateShader = new Shader(
+			FIRE_SHADER_DIR"vs_update.glsl", 
+			FIRE_SHADER_DIR"fs_update.glsl", 
+			FIRE_SHADER_DIR"gs_afterburner.glsl");
 
 		//	flame_texture = yellow_afterburner_texture;
 		afterburner_texture[0] = SOIL_load_OGL_texture(TEXTUREDIR"afterburner_yellow.png",
@@ -181,7 +188,10 @@ bool FireParticleSystem::InitUpdateSystem(){
 }
 
 bool FireParticleSystem::InitRenderSystem(){
-	particleRenderShader = new Shader(FIRE_SHADER_DIR"vertex.glsl", FIRE_SHADER_DIR"fragment.glsl", FIRE_SHADER_DIR"geometry.glsl");
+	particleRenderShader = new Shader(
+		FIRE_SHADER_DIR"vertex.glsl", 
+		FIRE_SHADER_DIR"fragment.glsl", 
+		FIRE_SHADER_DIR"geometry.glsl");
 	if (!particleRenderShader->LinkProgram()) {
 		return false;
 	}
@@ -190,12 +200,13 @@ bool FireParticleSystem::InitRenderSystem(){
 	return true;
 }
 
-void FireParticleSystem::Render(int DeltaTimeMillis, const Matrix4& modelMatrix, const Matrix4& projMatrix, const Matrix4& viewMatrix)
+void FireParticleSystem::Render(float DeltaTimeMillis, const Matrix4& modelMatrix, 
+	const Matrix4& projMatrix, const Matrix4& viewMatrix)
 {
 	project_matrix = projMatrix;
 	view_matrix = viewMatrix;
 	m_time += DeltaTimeMillis;
-//	cout << m_time << endl;
+
 	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE);

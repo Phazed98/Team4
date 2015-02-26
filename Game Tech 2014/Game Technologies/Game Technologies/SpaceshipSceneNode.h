@@ -4,10 +4,12 @@
 #include "FireParticleSystem.h"
 #include "../../nclgl/Matrix4.h"
 
+//this is the space ship render node
+//basically it is for the particle system of the ship
 
 class SpaceshipSceneNode :public SceneNode{
 public:
-	SpaceshipSceneNode(Mesh* shipMesh, Camera* camera, Matrix4 pm);
+	SpaceshipSceneNode(Mesh* shipMesh);
 //	virtual void Draw(const OGLRenderer & r);
 	virtual void	Update(float msec);
 

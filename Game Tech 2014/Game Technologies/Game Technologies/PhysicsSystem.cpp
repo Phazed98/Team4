@@ -12,7 +12,8 @@ PhysicsSystem::PhysicsSystem(void)
 	OBJMesh* PlayerMesh = new OBJMesh(MESHDIR"SR-71_Blackbird.obj");
 
 	//add by steven because it should use render instance
-	spaceship_scene_node = new SpaceshipSceneNode(PlayerMesh, Renderer::GetRenderer().GetCamera(), Renderer::GetRenderer().GetProjMatrix());
+	spaceship_scene_node = new SpaceshipSceneNode(PlayerMesh);
+	//store the ssn in render to render the particle system at the end of everything
 	Renderer::GetRenderer().SetSpaceshipSceneNode(spaceship_scene_node);
 
 	this->playerVehicle = new Vehicle(PlayerMesh, 4, 0.0023, 2, 0.02, spaceship_scene_node);

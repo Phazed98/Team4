@@ -600,7 +600,6 @@ bool Renderer::CreatMotionBlurBuffer(){
 }
 void Renderer::DrawAfterBurner(){
 	Matrix4 model_matrix = spaceship_scene_node->GetAfterburnerNode()->GetWorldTransform();
-//	Matrix4 model_matrix = Matrix4::Translation(Vector3(0,0,0));
 	if (camera){
 
 		viewMatrix = camera->BuildViewMatrix();

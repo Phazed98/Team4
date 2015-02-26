@@ -31,23 +31,33 @@ public:
 
 	~FireParticleSystem();
 
-	bool InitParticleSystem(int shape_type, const Vector3& Pos, Camera* camera, Matrix4 project_matrix);
+	//set the type we want to render, then get its postion
+	bool InitParticleSystem(int shape_type, const Vector3& Pos);
 
-	void Render(int DeltaTimeMillis, const Matrix4& modelMatrix = Matrix4(), const Matrix4& projMatrix = Matrix4(), const Matrix4& viewMatrix = Matrix4());
+	//get everything we need then render it
+	void Render(float DeltaTimeMillis, const Matrix4& modelMatrix = Matrix4(), 
+		const Matrix4& projMatrix = Matrix4(), const Matrix4& viewMatrix = Matrix4());
 
 private:
+	//go through the transform feedback system to update each particles' position...
 	void UpdateParticles(int DeltaTimeMillis);
+
+	//render particles acconding to the modelmatrix
 	void RenderParticles(const Matrix4& modelMatrix);
+	
+	//initilize the update system and render system
 	bool InitUpdateSystem();
 	bool InitRenderSystem();
 
+	//for the first time render 1 particle to system
 	bool m_isFirst;
+
 	unsigned int m_currVB;
 	unsigned int m_currTFB;
 	GLuint m_particleBuffer[2];
 	GLuint m_transformFeedback[2];
 
-	int m_time;
+	float m_time;
 	GLuint particle_texture;
 	GLuint flame_texture;
 	GLuint random_texture1;
