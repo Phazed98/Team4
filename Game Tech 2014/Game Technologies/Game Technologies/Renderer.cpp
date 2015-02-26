@@ -209,6 +209,8 @@ void Renderer::RenderMotionBlur(){
 		SortNodeLists();
 		DrawNodes();
 		ClearNodeLists();
+
+		DrawAfterBurner();
 	}
 
 	glUseProgram(0);
