@@ -14,6 +14,7 @@ Implements:OGLRendere
 #include "textmesh.h"
 #include "PhysicsSystem.h"
 #include "Button.h"
+#include "SpaceshipSceneNode.h"
 class Renderer : public OGLRenderer	
 {
 public:
@@ -25,7 +26,9 @@ public:
 	void	RemoveNode(SceneNode* n);
 	void	RenderMenu();
 	void	RenderLoading(int percent, string Message);
-
+	Camera* GetCamera(){ return camera; }
+	Matrix4 GetProjMatrix(){ return projMatrix; }
+	void SetSpaceshipSceneNode(SpaceshipSceneNode* ssn){ spaceship_scene_node = ssn; }
 	//Statics
 	static bool Initialise() 
 	{
@@ -98,5 +101,7 @@ protected:
 	void RenderMotionBlur();
 	void RenderWithoutPostProcessing();
 	bool render_motion_blur;
+
+	SpaceshipSceneNode* spaceship_scene_node;
 };
 

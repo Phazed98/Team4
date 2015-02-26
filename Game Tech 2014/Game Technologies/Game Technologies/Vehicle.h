@@ -9,12 +9,13 @@
 
 //Sam - added planeInfo for positioning in game
 #include "PlaneInfo.h"
+#include "SpaceshipSceneNode.h"
 
 class Vehicle
 {
 public:
 	//Sam - made some alterations to the constructor to bring it more in line with other objects for consistency
-	Vehicle(Mesh* mesh, float playerScale, float speedTurn, int startingPlaneID, float steeringResponsiveness);
+	Vehicle(Mesh* mesh, float playerScale, float speedTurn, int startingPlaneID, float steeringResponsiveness, SpaceshipSceneNode* ssn);
 	~Vehicle(void);
 
 	void UpdatePlayer(float msec);
@@ -65,5 +66,6 @@ protected:
 	//Debug method, doesnt do anything, only for triggering breaks when needed.
 	void debug();
 
+	SpaceshipSceneNode* spaceship_scene_node;
 
 };

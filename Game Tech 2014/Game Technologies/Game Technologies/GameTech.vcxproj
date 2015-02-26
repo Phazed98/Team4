@@ -74,6 +74,7 @@
     <ClCompile Include="Bullets.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="CollisionHelper.cpp" />
+    <ClCompile Include="FireParticleSystem.cpp" />
     <ClCompile Include="GameClass.cpp" />
     <ClCompile Include="GameEntity.cpp" />
     <ClCompile Include="GamePadController.cpp" />
@@ -91,6 +92,7 @@
     <ClCompile Include="SoundEmitter.cpp" />
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="SoundSystem.cpp" />
+    <ClCompile Include="SpaceshipSceneNode.cpp" />
     <ClCompile Include="Spring.cpp" />
     <ClCompile Include="SpringDemo.cpp" />
     <ClCompile Include="TextMesh.cpp" />
@@ -104,6 +106,7 @@
     <ClInclude Include="CollisionVolume.h" />
     <ClInclude Include="Constraint.h" />
     <ClInclude Include="DebugDrawer.h" />
+    <ClInclude Include="FireParticleSystem.h" />
     <ClInclude Include="GameClass.h" />
     <ClInclude Include="GameEntity.h" />
     <ClInclude Include="GamePadController.h" />
@@ -124,6 +127,7 @@
     <ClInclude Include="SoundEmitter.h" />
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="SoundSystem.h" />
+    <ClInclude Include="SpaceshipSceneNode.h" />
     <ClInclude Include="Spring.h" />
     <ClInclude Include="SpringDemo.h" />
     <ClInclude Include="SupportPoint.h" />

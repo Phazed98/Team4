@@ -3,12 +3,13 @@
 //Altered by Sam - I've just changed this so it can take data in as parameters, 
 //in case we want to have a selection of vehicles or something, and for multiplayer
 //Also going to pass the obj as a parameter to speed it up. 
-Vehicle::Vehicle(Mesh* mesh, float playerScale, float speedTurn, int startingPlaneID, float steeringResponsiveness) :
-Speed_Turn(speedTurn), currentPlaneID(startingPlaneID), steeringResponsiveness(steeringResponsiveness)
+Vehicle::Vehicle(Mesh* mesh, float playerScale, float speedTurn, int startingPlaneID, float steeringResponsiveness, SpaceshipSceneNode* ssn) :
+Speed_Turn(speedTurn), currentPlaneID(startingPlaneID), steeringResponsiveness(steeringResponsiveness), spaceship_scene_node(ssn)
 {
 	//initialise variables;
 	rotationOnPlane = 0;
 	xLocationOnPlane = 0;
+
 
 	BuildPlayerEntity(mesh, playerScale, CalculatePlayerLocation(), CalculateStartingOrientation());
 
@@ -21,7 +22,30 @@ Vehicle::~Vehicle(void)
 	delete PhysNode;
 }
 
+//Sam - made some changes in here to bring in line with the rest of the game objects
+void Vehicle::BuildPlayerEntity(Mesh* mesh, float size, Vector3 pos, Vector3 orient)
+{
+	spaceship_scene_node->SetModelScale(Vector3(size, size, size));
 
+	spaceship_scene_node->SetColour(Vector4(1.0f, 1.0f, 0.0f, 1.0f));
+
+	//Connect just the renderNode to systems as phys node will be called seperately
+	GameEntity*g = new GameEntity(spaceship_scene_node);
+	g->ConnectToSystems();
+
+
+	//create the physics node locally, do not connect to systems
+	PhysNode = new PhysicsNode();
+	PhysNode->SetUseGravity(false);
+	PhysNode->SetPosition(pos);
+	PhysNode->SetTarget(spaceship_scene_node);
+	PhysNode->ConfigureAABBHalfLength();
+	PhysNode->SetMovable(true);
+	PhysNode->SetOrientation(Quaternion::EulerAnglesToQuaternion(orient.x, orient.y, orient.z));
+
+	this->shipWidth = PhysNode->GetAABBHalfLength();
+	this->tileShipWidthDelta = TILE_WIDTH - shipWidth;
+}
 
 //Modified by Sam to fit into game
 void Vehicle::UpdatePlayer(float msec)
@@ -105,31 +129,7 @@ void Vehicle::UpdatePlayer(float msec)
 }
 
 
-//Sam - made some changes in here to bring in line with the rest of the game objects
-void Vehicle::BuildPlayerEntity(Mesh* mesh, float size, Vector3 pos, Vector3 orient)
-{
-	SceneNode* SNode = new SceneNode(mesh);
-	SNode->SetModelScale(Vector3(size, size, size));
 
-	SNode->SetColour(Vector4(1.0f, 1.0f, 0.0f, 1.0f));
-
-	//Connect just the renderNode to systems as phys node will be called seperately
-	GameEntity*g = new GameEntity(SNode);
-	g->ConnectToSystems();
-
-
-	//create the physics node locally, do not connect to systems
-	PhysNode = new PhysicsNode();
-	PhysNode->SetUseGravity(false);
-	PhysNode->SetPosition(pos);
-	PhysNode->SetTarget(SNode);
-	PhysNode->ConfigureAABBHalfLength();
-	PhysNode->SetMovable(true);
-	PhysNode->SetOrientation(Quaternion::EulerAnglesToQuaternion(orient.x, orient.y, orient.z));
-
-	this->shipWidth = PhysNode->GetAABBHalfLength();
-	this->tileShipWidthDelta = TILE_WIDTH - shipWidth;
-}
 
 //Added by Sam to calculate the vehicle location on the current plane it is occupying
 Vector3 Vehicle::CalculatePlayerLocation()

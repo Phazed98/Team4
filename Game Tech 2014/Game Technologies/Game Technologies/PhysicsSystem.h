@@ -7,6 +7,7 @@
 #include "GJKSimplex.h"
 #include <vector>
 #include "Vehicle.h"
+#include "SpaceshipSceneNode.h"
 
 using std::vector;
 
@@ -94,6 +95,9 @@ protected:
 	bool CheckAABBCollision(PhysicsNode &n0, PhysicsNode &n1);
 
 	//<---------------------------------------------------->
+
+	//add by steven to catch it by render
+	SpaceshipSceneNode* spaceship_scene_node;
 
 };
 
