@@ -19,12 +19,6 @@
     <Filter Include="Source Files\Physics">
       <UniqueIdentifier>{d1fbe2ac-dad6-42ad-bf12-397ef355ddf8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Networking">
-      <UniqueIdentifier>{e7bf2bab-e26e-4351-8f9b-8b1716dedca6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Networking">
-      <UniqueIdentifier>{397ae1d9-3bff-4164-bdee-a2e064661a70}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Rendering">
       <UniqueIdentifier>{82f937df-fe36-4083-b7d7-e4f6798232ba}</UniqueIdentifier>
     </Filter>
@@ -43,35 +37,17 @@
     <Filter Include="Source Files\Powerups">
       <UniqueIdentifier>{5e641921-1ba8-47bc-8a5f-47ded2a7d588}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\General">
+      <UniqueIdentifier>{ff116e43-8501-4730-8903-be6c25af5700}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\General">
+      <UniqueIdentifier>{d75b1965-38c1-4c0e-a232-e967fb4cbd2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Networking">
+      <UniqueIdentifier>{e7bf2bab-e26e-4351-8f9b-8b1716dedca6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GameEntity.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MyGame.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GameClass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ObjectType.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Obstacle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Bullets.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="NetworkClient.cpp">
-      <Filter>Source Files\Networking</Filter>
-    </ClCompile>
-    <ClCompile Include="NetworkServer.cpp">
-      <Filter>Source Files\Networking</Filter>
-    </ClCompile>
     <ClCompile Include="CollisionHelper.cpp">
       <Filter>Source Files\Physics</Filter>
     </ClCompile>
@@ -99,15 +75,6 @@
     <ClCompile Include="Button.cpp">
       <Filter>Source Files\Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="Vehicle%28old%29.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Vehicle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GamePadController.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Sound.cpp">
       <Filter>Source Files\Sound</Filter>
     </ClCompile>
@@ -132,32 +99,50 @@
     <ClCompile Include="Powerups.cpp">
       <Filter>Source Files\Powerups</Filter>
     </ClCompile>
+    <ClCompile Include="Bullets.cpp">
+      <Filter>Source Files\General</Filter>
+    </ClCompile>
     <ClCompile Include="ChaseCamera.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\General</Filter>
+    </ClCompile>
+    <ClCompile Include="GameClass.cpp">
+      <Filter>Source Files\General</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEntity.cpp">
+      <Filter>Source Files\General</Filter>
+    </ClCompile>
+    <ClCompile Include="GamePadController.cpp">
+      <Filter>Source Files\General</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source Files\General</Filter>
+    </ClCompile>
+    <ClCompile Include="MyGame.cpp">
+      <Filter>Source Files\General</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectType.cpp">
+      <Filter>Source Files\General</Filter>
+    </ClCompile>
+    <ClCompile Include="Obstacle.cpp">
+      <Filter>Source Files\General</Filter>
+    </ClCompile>
+    <ClCompile Include="Vehicle%28old%29.cpp">
+      <Filter>Source Files\General</Filter>
+    </ClCompile>
+    <ClCompile Include="Vehicle.cpp">
+      <Filter>Source Files\General</Filter>
+    </ClCompile>
+    <ClCompile Include="NetworkClient.cpp">
+      <Filter>Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="NetworkServer.cpp">
+      <Filter>Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="NetworkServices.cpp">
+      <Filter>Networking</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GameEntity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MyGame.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DebugDrawer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ObjectType.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Obstacle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Bullets.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="CollisionHelper.h">
       <Filter>Header Files\Physics</Filter>
     </ClInclude>
@@ -189,13 +174,13 @@
       <Filter>Header Files\Physics</Filter>
     </ClInclude>
     <ClInclude Include="NetworkClient.h">
-      <Filter>Header Files\Networking</Filter>
+      <Filter>Networking</Filter>
     </ClInclude>
     <ClInclude Include="NetworkCommon.h">
-      <Filter>Header Files\Networking</Filter>
+      <Filter>Networking</Filter>
     </ClInclude>
     <ClInclude Include="NetworkServer.h">
-      <Filter>Header Files\Networking</Filter>
+      <Filter>Networking</Filter>
     </ClInclude>
     <ClInclude Include="TextMesh.h">
       <Filter>Header Files\Rendering</Filter>
@@ -208,18 +193,6 @@
     </ClInclude>
     <ClInclude Include="SupportPoint.h">
       <Filter>Header Files\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="Vehicle%28old%29.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Vehicle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PlaneInfo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GamePadController.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sound.h">
       <Filter>Header Files\Sound</Filter>
@@ -245,8 +218,47 @@
     <ClInclude Include="Powerups.h">
       <Filter>Header Files\Powerups</Filter>
     </ClInclude>
+    <ClInclude Include="Bullets.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
     <ClInclude Include="ChaseCamera.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugDrawer.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClass.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEntity.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="GamePadController.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="MyGame.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectType.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="Obstacle.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="PlaneInfo.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="Vehicle%28old%29.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="Vehicle.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="NetworkData.h">
+      <Filter>Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="NetworkServices.h">
+      <Filter>Networking</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

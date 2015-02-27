@@ -63,12 +63,6 @@ void physicsLoop(GameClass* game, bool& running)
 	}
 }
 
-void networkLoop()
-{
-	NetworkServer NWS;
-	NWS.sendRecv();
-}
-
 void loadGame()
 {
 	while (!loaded)
@@ -102,7 +96,6 @@ int main()
 
 	bool running = true;
 	std::thread physics(physicsLoop, game, std::ref(running));
-	std::thread Networking(networkLoop);
 
 	while(Window::GetWindow().UpdateWindow() && GameClass::GetGameClass().getCurrentState() != GAME_EXIT)
 	{
@@ -120,7 +113,6 @@ int main()
 	running = false;
 
 	physics.join();
-	Networking.join();
 
 	SoundManager::DeleteSounds();
 	SoundSystem::Destroy();

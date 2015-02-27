@@ -17,8 +17,38 @@ through the floor as gravity is added to the scene.
 You can completely change all of this if you want, it's your game!
 */
 
+unsigned int MyGame::client_id;
+
 MyGame::MyGame()	
 {
+
+	if (USE_NETWORKING)
+	{
+		if (IS_HOST)
+		{
+			//Init client list to nothing
+			client_id = 0;
+			//Spawn Server Which listens for clients
+			networkServer = new NetworkServer();
+		}
+
+		if (IS_CLIENT)
+		{
+			//Spawn a New Client which will attempt to connect to a server
+			networkClient = new NetworkClient();
+
+			// send init packet
+			const unsigned int packet_size = sizeof(Packet);
+			char packet_data[packet_size];
+
+			Packet packet;
+			packet.packet_type = INIT_CONNECTION;
+			packet.serialize(packet_data);
+			NetworkServices::sendMessage(networkClient->ConnectSocket, packet_data, packet_size);
+		}
+	}
+
+
 	Renderer::GetRenderer().RenderLoading(0, "Initializing...");
 	setCurrentState(Game_LOADING);
 	timer = 0;
@@ -214,21 +244,10 @@ void MyGame::UpdateGame(float msec)
 		gameCamera->UpdateCamera(msec);
 	}
 
-	vector<messageInfo> message;
 	for(vector<GameEntity*>::iterator i = allEntities.begin(); i != allEntities.end(); ++i) 
 	{
-		NetworkClient NWC;
 		(*i)->Update(msec);
-
-		//messageInfo mi;
-		//mi.transformation = (*i)->GetRenderNode().GetTransform();
-		//mi.objectID = (*i)->objectID;
-
-		//message.push_back(mi);
 	}
-	//NetworkClient NWC;
-	//NWC.sendData(message);
-
 
 	if (count_time == 80)
 	{    //new control when shoot the bullets   4.2.2015 Daixi
@@ -245,21 +264,21 @@ void MyGame::UpdateGame(float msec)
 
 	timer += 0.001;
 
-	handlePlanes(timer);
 
-	//Renderer::GetRenderer().DrawDebugBox(DEBUGDRAW_PERSPECTIVE, Vector3(0,51,0), Vector3(100,100,100), Vector3(1,0,0));
+	if (!USE_NETWORKING)
+	{
+		handlePlanes(timer);
+	}
 
-	//////We'll assume he's aiming at something...so let's draw a line from the cube robot to the target
-	//////The 1 on the y axis is simply to prevent z-fighting!
-	//Renderer::GetRenderer().DrawDebugLine(DEBUGDRAW_PERSPECTIVE, Vector3(0,1,0),Vector3(200,1,200), Vector3(0,0,1), Vector3(1,0,0));
+	if (USE_NETWORKING)
+	{
+		if (IS_HOST)
+		{
+			handlePlanes(timer);
+		}
 
-	//////Maybe he's looking for treasure? X marks the spot!
-	//Renderer::GetRenderer().DrawDebugCross(DEBUGDRAW_PERSPECTIVE, Vector3(200,1,200),Vector3(50,50,50), Vector3(0,0,0));
-
-	//////CubeRobot is looking at his treasure map upside down!, the treasure's really here...
-	//Renderer::GetRenderer().DrawDebugCircle(DEBUGDRAW_PERSPECTIVE, Vector3(-200,1,-200), 50.0f, Vector3(0,1,0));
-
-	//PhysicsSystem::GetPhysicsSystem().DrawDebug();
+		handleNetworking();
+	}
 }
 
 GameEntity* MyGame::BuildPlayerEntity(float size, Vector3 pos)
@@ -651,4 +670,208 @@ int MyGame::getObstacleEmptyIndex(int _subType, int _obstacleType)
 		}
 	}
 	return -1;
+}
+
+void MyGame::receiveFromClients()
+{
+
+	Packet packet;
+
+	// go through all clients
+	std::map<unsigned int, SOCKET>::iterator iter;
+
+	for (iter = networkServer->sessions.begin(); iter != networkServer->sessions.end(); iter++)
+	{
+		int data_length = networkServer->receiveData(iter->first, server_network_data);
+
+		if (data_length <= 0)
+		{
+			//no data recieved
+			continue;
+		}
+
+		int i = 0;
+		while (i < (unsigned int)data_length)
+		{
+			packet.deserialize(&(server_network_data[i]));
+			i += sizeof(Packet);
+
+			switch (packet.packet_type)
+			{
+
+			case INIT_CONNECTION:
+
+				printf("server received init packet from client\n");
+
+				sendServerActionPackets();
+
+				break;
+
+			case ACTION_EVENT:
+
+				printf("server received action event packet from client\n");
+
+				sendServerActionPackets();
+
+				break;
+
+			default:
+
+				printf("error in packet types\n");
+
+				break;
+			}
+		}
+	}
+}
+
+
+void MyGame::sendToClients()
+{
+	Packet packet;
+	// go through all clients
+	std::map<unsigned int, SOCKET>::iterator iter;
+
+	for (iter = networkServer->sessions.begin(); iter != networkServer->sessions.end(); iter++)
+	{
+		int data_length = networkServer->receiveData(iter->first, server_network_data);
+
+		if (data_length <= 0)
+		{
+			//no data recieved
+			continue;
+		}
+
+		int i = 0;
+		while (i < (unsigned int)data_length)
+		{
+			packet.deserialize(&(server_network_data[i]));
+			i += sizeof(Packet);
+
+			switch (packet.packet_type)
+			{
+
+			case INIT_CONNECTION:
+
+				cout << "Server received init packet from client." << endl;
+
+				sendServerActionPackets();
+
+				break;
+
+			case ACTION_EVENT:
+
+				cout << "Server received action event packet from client." << endl;
+
+				sendServerActionPackets();
+
+				break;
+
+			default:
+
+				cout << "Error in packet types." << endl;
+
+				break;
+			}
+		}
+	}
+}
+
+
+void MyGame::sendServerActionPackets()
+{
+	vector <messageInfo> message;
+	for (int i = 0; i < allEntities.size(); ++i)
+	{
+		messageInfo mi;
+		mi.objectID = allEntities[i]->objectID;
+		mi.Position = allEntities[i]->GetPhysicsNode().GetPosition();
+		mi.Orientation = allEntities[i]->GetPhysicsNode().GetOrientation();
+		mi.objectType = allEntities[i]->GetRenderNode().nodeType;
+		message.push_back(mi);
+	}
+
+	if (message.size() != 0)
+	{
+		networkServer->sendToAll((char*)&message[0], sizeof(messageInfo)* message.size());
+	}
+}
+
+void MyGame::sendClientActionPackets()
+{
+	// send action packet
+	const unsigned int packet_size = sizeof(Packet);
+	char packet_data[packet_size];
+
+	Packet packet;
+	packet.packet_type = ACTION_EVENT;
+	packet.packet_integer = 0;
+	packet.serialize(packet_data);
+
+	NetworkServices::sendMessage(networkClient->ConnectSocket, packet_data, packet_size);
+}
+
+void MyGame::handleNetworking()
+{
+	if (IS_HOST)
+	{
+		// get new clients
+		if (networkServer->acceptNewClient(client_id))
+		{
+			cout << "Client " << client_id << " has been connected to the server." << endl;
+			client_id++;
+		}
+
+		receiveFromClients();
+	}
+
+
+	if (IS_CLIENT)
+	{
+		sendClientActionPackets();
+
+		Packet packet;
+		int data_length = networkClient->receivePackets(client_network_data);
+
+		if (data_length <= 0)
+		{
+			return;
+		}
+
+		vector<messageInfo> message; //Create a vector to hold our data
+		message.resize(data_length / sizeof(messageInfo)); //Resize it to hold the correct number of messageInfo
+		memcpy(&message[0], client_network_data, data_length);	//Copy the clientData bytes into the vector
+
+		std::cout << " Message Recieved from Server." << std::endl;
+		std::cout << " Recieved " << data_length << " Bytes." << std::endl;
+
+		bool exists = false;
+
+
+		for (int x = 0; x < message.size(); x++) // For each Node in the message
+		{
+			for (int y = 0; y < allEntities.size(); y++) // For each existing Node
+			{
+				if (message[x].objectID == allEntities[y]->objectID) // If the Node in message corresponds to the Existing Node
+				{
+					allEntities[y]->GetPhysicsNode().SetPosition(message[x].Position);
+					allEntities[y]->GetPhysicsNode().SetOrientation(message[x].Orientation);
+					exists = true;
+					break;
+				}
+			}
+			if (!exists) //If not create it
+			{
+				if (message[x].objectType == OBJ_PLANE)
+				{
+					allEntities.push_back(BuildObjectEntity(0, 1));
+				}
+				else if (message[x].objectType = OBJ_SPHERE)
+				{
+					allEntities.push_back(BuildBuffEntity(20, Vector3(0, 0, 0)));
+				}
+			}
+
+		}
+	}
 }

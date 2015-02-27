@@ -24,6 +24,14 @@ _-_-_-_-_-_-_-""  ""
 #include "Mesh.h"
 #include <vector>
 
+enum OBJType
+{
+	OBJ_DEFAULT,
+	OBJ_PLANE,
+	OBJ_SPHERE,
+};
+
+
 class SceneNode	{
 public:
 	 SceneNode(Mesh*m = NULL, Vector4 colour = Vector4(1,1,1,1));
@@ -63,6 +71,8 @@ public:
 
 	static bool		CompareByCameraDistance(SceneNode*a,SceneNode*b) ;
 	static bool		CompareByZ(SceneNode*a,SceneNode*b) ;
+
+	OBJType nodeType;
 
 protected:
 	Matrix4		worldTransform;

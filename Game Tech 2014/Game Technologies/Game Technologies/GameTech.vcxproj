@@ -85,6 +85,7 @@
     <ClCompile Include="MyGame.cpp" />
     <ClCompile Include="NetworkClient.cpp" />
     <ClCompile Include="NetworkServer.cpp" />
+    <ClCompile Include="NetworkServices.cpp" />
     <ClCompile Include="ObjectType.cpp" />
     <ClCompile Include="Obstacle.cpp" />
     <ClCompile Include="PhysicsNode.cpp" />
@@ -121,7 +122,9 @@
     <ClInclude Include="MyGame.h" />
     <ClInclude Include="NetworkClient.h" />
     <ClInclude Include="NetworkCommon.h" />
+    <ClInclude Include="NetworkData.h" />
     <ClInclude Include="NetworkServer.h" />
+    <ClInclude Include="NetworkServices.h" />
     <ClInclude Include="ObjectType.h" />
     <ClInclude Include="Obstacle.h" />
     <ClInclude Include="PhysicsNode.h" />

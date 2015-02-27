@@ -42,6 +42,25 @@ _-_-_-_-_-_-_-""  ""
 #include "../nclgl/CubeRobot.h"
 #include "Vehicle.h"
 #include "Bullets.h"
+#include "NetworkClient.h"
+#include "NetworkServer.h"
+#include "NetworkData.h"
+
+
+#define IS_HOST true
+#define IS_CLIENT true
+#define USE_NETWORKING true
+
+struct sendData
+{
+	int resetNum;
+	int randomPlane;
+	int createObstacleNumber;
+	int objectRandValue;
+	int objectRandPlane;
+	int obstRandValue;
+};
+
 
 class Coins;
 class Powerups;
@@ -63,6 +82,7 @@ public:
 	int getEmptyIndex(int subType);
 
 	void handlePlanes(float msec);
+	void handleNetworking();
 
 	void CreateObstacle(ObjectType* _obj);
 	int getObstacleEmptyIndex(int _subType,int);
@@ -70,6 +90,21 @@ public:
 	void UpdatePlayer(float msec);
 
 	void ShootBullets();  //new 4.2.2015 Daixi
+
+	/*---------------------
+	NETWORKING METHODS
+	---------------------*/
+	//Server
+	void receiveFromClients();
+	void sendToClients();
+	void sendServerActionPackets();
+	char server_network_data[MAX_PACKET_SIZE];
+
+	//Client
+	void sendClientActionPackets();
+	char client_network_data[MAX_PACKET_SIZE];
+
+
 
 protected:
 	GameEntity* BuildRobotEntity();
@@ -131,5 +166,12 @@ protected:
 	int Speed_Player; //4.2.2015 Daixi
 	
 	float timer;
+
+	/*
+	NETWORKING OBJECTS - MATTHEW BATTISON
+	*/
+	static unsigned int client_id;
+	NetworkServer* networkServer;
+	NetworkClient* networkClient;
 };
 
