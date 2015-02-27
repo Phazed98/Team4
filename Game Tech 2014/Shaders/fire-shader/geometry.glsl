@@ -2,6 +2,7 @@
  
 
 uniform float particleSize;
+uniform int shapeType;
 
 layout(points) in;
 layout(triangle_strip, max_vertices = 4) out;
@@ -17,8 +18,22 @@ out Vertex {
 } OUT;
  
 void main() {	
-
-	float particle_scale = particleSize*(sin(0.5+age1[0]*3.14));
+	float particle_scale;
+	switch(shapeType){
+		case 0:{
+			particle_scale = particleSize*(sin(0.5+age1[0]*3.14));
+			break;
+		}
+		case 1:{
+			particle_scale = particleSize*(sin(0.5+age1[0]*3.14));
+			break;
+		}
+		case 2:{
+			particle_scale = particleSize;
+			break;
+		}
+	}
+	
 
 	for(int i = 0; i < gl_in.length(); ++i) {
 		//top right

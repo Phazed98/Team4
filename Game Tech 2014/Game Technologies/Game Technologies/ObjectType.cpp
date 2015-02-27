@@ -1,5 +1,5 @@
 #include "ObjectType.h"
-
+#include "PhysicsSystem.h"
 
 
 ObjectType::ObjectType(SceneNode* s, PhysicsNode* p, int _type, int _subType) : GameEntity(s, p)
@@ -22,7 +22,8 @@ void ObjectType::Update(float msec)
 {
 	if (type == 0)
 	{
-		physicsNode->SetPosition(physicsNode->GetPosition() + Vector3(0, 0, 15.0f));
+		float speed = PhysicsSystem::GetTrackSpeed();
+		physicsNode->SetPosition(physicsNode->GetPosition() + Vector3(0, 0, speed));
 
 		if (state == 0)
 		{

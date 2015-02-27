@@ -83,7 +83,7 @@ private:
 	GLint input_lifetime;
 	GLint input_index;
 
-	float particle_lifetime;
+	float first_particle_lifetime;
 	float particle_size;
 	float first_particle_launch_time;
 	float second_particle_lifetime;

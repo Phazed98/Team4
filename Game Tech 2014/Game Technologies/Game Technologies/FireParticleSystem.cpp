@@ -75,8 +75,8 @@ bool FireParticleSystem::InitParticleSystem(int shape_type, const Vector3& Pos)
 	//the fragment shader does not do anything
 	switch (_shape){
 	case 0:{
-		particle_lifetime = 10000.f;
-		render_particle_lifetime = particle_lifetime;
+		first_particle_lifetime = 10000.f;
+		render_particle_lifetime = first_particle_lifetime;
 		particle_size = 20.f;
 		first_particle_launch_time = 10.f;
 		second_particle_lifetime = 2000.f;
@@ -91,7 +91,7 @@ bool FireParticleSystem::InitParticleSystem(int shape_type, const Vector3& Pos)
 		break;
 	}
 	case 1:{
-		particle_lifetime = 2000.f;
+		first_particle_lifetime = 2000.f;
 		particle_size = 25.f;
 		first_particle_launch_time = 10.f;
 		second_particle_lifetime = 2000.f;
@@ -108,8 +108,8 @@ bool FireParticleSystem::InitParticleSystem(int shape_type, const Vector3& Pos)
 	}
 	case 2:{
 		//this is afterburner
-		particle_lifetime = 50.f;
-		particle_size = 10;
+		first_particle_lifetime = 20.f;
+		particle_size = 7;
 		first_particle_launch_time = 50.f;
 		second_particle_lifetime = 1000.f;
 		render_particle_lifetime = second_particle_lifetime;
@@ -264,7 +264,7 @@ void FireParticleSystem::UpdateParticles(int DeltaTimeMillis)
 	//set the delta milliseconds
 	glUniform1f(glGetUniformLocation(particleUpdateShader->GetProgram(), "gDeltaTimeMillis"), (float)DeltaTimeMillis);
 	glUniform1f(glGetUniformLocation(particleUpdateShader->GetProgram(), "gLauncherLifetime"), first_particle_launch_time);
-	glUniform1f(glGetUniformLocation(particleUpdateShader->GetProgram(), "gShellLifetime"), particle_lifetime);
+	glUniform1f(glGetUniformLocation(particleUpdateShader->GetProgram(), "gShellLifetime"), first_particle_lifetime);
 	glUniform1f(glGetUniformLocation(particleUpdateShader->GetProgram(), "gSecondaryShellLifetime"), second_particle_lifetime);
 	glUniform1i(glGetUniformLocation(particleUpdateShader->GetProgram(), "gRandomTexture1"), 0);
 	glUniform1i(glGetUniformLocation(particleUpdateShader->GetProgram(), "gRandomTexture2"), 1);
@@ -368,6 +368,7 @@ void FireParticleSystem::RenderParticles(const Matrix4& modelMatrix)
 	glUniform1f(glGetUniformLocation(particleRenderShader->GetProgram(), "particleSize"), particle_size);
 	glUniform1i(glGetUniformLocation(particleRenderShader->GetProgram(), "diffuseTex"), 0);
 	glUniform1i(glGetUniformLocation(particleRenderShader->GetProgram(), "flameTex"), 1);
+	glUniform1i(glGetUniformLocation(particleRenderShader->GetProgram(), "shapeType"), _shape);
 	GLuint vao;
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);

@@ -1,52 +1,34 @@
-﻿Build started 27/02/2015 13:32:35.
+﻿Build started 27/02/2015 16:22:47.
      1>Project "D:\GitHub\Team4\Game Tech 2014\Game Technologies\Game Technologies\GameTech.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Bullets.cpp Coins.cpp Main.cpp MyGame.cpp NetworkClient.cpp NetworkServer.cpp Obstacle.cpp Powerups.cpp
-         Obstacle.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt MyGame.cpp PhysicsSystem.cpp
+         PhysicsSystem.cpp
      1>d:\github\team4\game tech 2014\nclgl\vector3.h(152): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(14): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(18): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(22): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(136): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(140): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(148): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(152): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(160): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(164): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(172): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(176): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
-         Generating Code...
-         Compiling...
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(22): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(30): warning C4018: '<' : signed/unsigned mismatch
          MyGame.cpp
      1>d:\github\team4\game tech 2014\nclgl\vector3.h(152): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
      1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(140): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
      1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(149): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
      1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(158): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
      1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(167): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(238): warning C4305: '+=' : truncation from 'double' to 'float'
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(262): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(284): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(429): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(444): warning C4018: '<' : signed/unsigned mismatch
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(458): warning C4018: '<' : signed/unsigned mismatch
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(488): warning C4018: '<' : signed/unsigned mismatch
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(503): warning C4018: '<' : signed/unsigned mismatch
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(516): warning C4018: '<' : signed/unsigned mismatch
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(637): warning C4018: '<' : signed/unsigned mismatch
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(667): warning C4018: '<' : signed/unsigned mismatch
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(719): warning C4018: '<' : signed/unsigned mismatch
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(757): warning C4018: '<' : signed/unsigned mismatch
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(824): warning C4018: '<' : signed/unsigned mismatch
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(826): warning C4018: '<' : signed/unsigned mismatch
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(806): warning C4101: 'packet' : unreferenced local variable
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(246): warning C4305: '+=' : truncation from 'double' to 'float'
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(270): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(292): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(437): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(452): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(466): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(496): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(511): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(524): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(645): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(675): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(727): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(765): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(832): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(834): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(814): warning C4101: 'packet' : unreferenced local variable
          Generating Code...
-         Skipping... (no relevant changes detected)
-         NetworkServer.cpp
-         NetworkClient.cpp
-         Powerups.cpp
-         Main.cpp
-         Coins.cpp
-         Bullets.cpp
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.lib" /MACHINE:X86 /FORCE:MULTIPLE Debug\Bullets.obj
          Debug\Button.obj
@@ -91,6 +73,7 @@
      1>GJK.obj : warning LNK4006: "public: __thiscall GJKSimplex::GJKSimplex(void)" (??0GJKSimplex@@QAE@XZ) already defined in Bullets.obj; second definition ignored
      1>Main.obj : warning LNK4006: "public: __thiscall GJKSimplex::GJKSimplex(void)" (??0GJKSimplex@@QAE@XZ) already defined in Bullets.obj; second definition ignored
      1>MyGame.obj : warning LNK4006: "public: __thiscall GJKSimplex::GJKSimplex(void)" (??0GJKSimplex@@QAE@XZ) already defined in Bullets.obj; second definition ignored
+     1>ObjectType.obj : warning LNK4006: "public: __thiscall GJKSimplex::GJKSimplex(void)" (??0GJKSimplex@@QAE@XZ) already defined in Bullets.obj; second definition ignored
      1>PhysicsSystem.obj : warning LNK4006: "public: __thiscall GJKSimplex::GJKSimplex(void)" (??0GJKSimplex@@QAE@XZ) already defined in Bullets.obj; second definition ignored
      1>PhysicsSystem.obj : warning LNK4006: "public: __thiscall SupportPoint::SupportPoint(class Vector3 &,class Vector3 &,class Vector3 &)" (??0SupportPoint@@QAE@AAVVector3@@00@Z) already defined in GJK.obj; second definition ignored
      1>PhysicsSystem.obj : warning LNK4006: "public: __thiscall SupportPoint::SupportPoint(class Vector3 &,class Vector3 &,class Vector3 &,int,int)" (??0SupportPoint@@QAE@AAVVector3@@00HH@Z) already defined in GJK.obj; second definition ignored
@@ -150,4 +133,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.62
+Time Elapsed 00:00:01.70

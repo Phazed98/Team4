@@ -173,5 +173,7 @@ protected:
 	static unsigned int client_id;
 	NetworkServer* networkServer;
 	NetworkClient* networkClient;
+
+	
 };
 

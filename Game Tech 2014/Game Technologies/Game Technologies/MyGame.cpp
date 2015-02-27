@@ -211,6 +211,14 @@ void MyGame::UpdateGame(float msec)
 	if (currentGameState != GAME_PLAYING)
 		return;
 
+	if (Window::GetKeyboard()->KeyTriggered(KEYBOARD_ADD)) //Build Cube
+	{
+		PhysicsSystem::SetTrackSpeed(PhysicsSystem::GetTrackSpeed() + 1);
+	}
+	if (Window::GetKeyboard()->KeyTriggered(KEYBOARD_MINUS)) //Build Cube
+	{
+		PhysicsSystem::SetTrackSpeed(PhysicsSystem::GetTrackSpeed() - 1);
+	}
 
 	if(gameCamera) 
 	{

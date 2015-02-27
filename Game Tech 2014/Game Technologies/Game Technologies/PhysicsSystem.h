@@ -60,6 +60,8 @@ public:
 	int nbFrames = 0;				//Integer for frame count
 
 	static Vehicle* GetVehicle(){ return playerVehicle; }
+	static float GetTrackSpeed(){ return track_speed; }
+	static void  SetTrackSpeed(float s){ track_speed = s; }
 
 protected:
 	PhysicsSystem(void);
@@ -103,6 +105,9 @@ protected:
 
 	//add by steven to catch it by render
 	SpaceshipSceneNode* spaceship_scene_node;
+
+	//steven added for control the track speed everywhere
+	static float track_speed;
 
 };
 
