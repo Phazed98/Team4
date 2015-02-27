@@ -77,7 +77,7 @@ void Vehicle::UpdatePlayer(float msec)
 
 	UpdatePlayerRotationOnPlane();
 
-	if (Window::GetKeyboard()->KeyDown(KEYBOARD_L))
+	if (Window::GetKeyboard()->KeyDown(KEYBOARD_D))
 	{
 		//rotate vehicle if not at max rotation
 		if (rotationOnPlane > -MAX_VEHICLE_X_ROTATION)
@@ -91,7 +91,7 @@ void Vehicle::UpdatePlayer(float msec)
 		}
 	}
 
-	if (Window::GetKeyboard()->KeyDown(KEYBOARD_J))
+	if (Window::GetKeyboard()->KeyDown(KEYBOARD_A))
 	{
 		//rotate vehicle if not at max rotation
 		if (rotationOnPlane < MAX_VEHICLE_X_ROTATION)
@@ -106,7 +106,7 @@ void Vehicle::UpdatePlayer(float msec)
 	}
 
 	//Statement to return the vehicle to flat rotation after A or D are released. 
-	if (!Window::GetKeyboard()->KeyDown(KEYBOARD_J) && !Window::GetKeyboard()->KeyDown(KEYBOARD_L))
+	if (!Window::GetKeyboard()->KeyDown(KEYBOARD_A) && !Window::GetKeyboard()->KeyDown(KEYBOARD_D))
 	{
 		if (rotationOnPlane < -0.02)
 		{
