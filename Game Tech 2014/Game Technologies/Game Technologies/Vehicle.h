@@ -25,6 +25,8 @@ public:
 	//Sam - added a way to get the physics node for the physics system
 	PhysicsNode* GetPhysicsNode() { return PhysNode; }
 
+	int GetCurrentPlaneID() { return currentPlaneID; }
+
 protected:
 
 
