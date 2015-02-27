@@ -65,4 +65,59 @@ public:
 		o << "Quat(" << q.x << "," << q.y << "," << q.z <<  "," << q.w << ")" << std::endl;
 		return o;
 	}
+
+
+	//---------------------Added by Sam - needed for chase camera-----------------------
+	static Quaternion SLERP(Quaternion &a, Quaternion &b, float weight);
+
+	static Quaternion LERP(Quaternion &a, Quaternion &b, float weight);
+
+	inline Quaternion operator *(const float &a) const
+	{
+		Quaternion ans;
+		ans.x = x * a;
+		ans.y = y * a;
+		ans.z = z * a;
+		ans.w = w * a;
+		return ans;
+	}
+
+	inline Quaternion operator /(const float &a) const
+	{
+		Quaternion ans;
+		ans.x = x / a;
+		ans.y = y / a;
+		ans.z = z / a;
+		ans.w = w / a;
+		return ans;
+	}
+
+	inline void conjugate()
+	{
+		x = -x;
+		y = -y;
+		z = -z;
+	}
+
+	inline float lengthSquared() const
+	{
+		float xsq = x * x;
+		float ysq = y * y;
+		float zsq = z * z;
+		float wsq = w * w;
+
+		return xsq + ysq + zsq + wsq;
+	}
+
+	inline void invert()
+	{
+		conjugate();
+		float LSq = lengthSquared();
+		x = x / LSq;
+		y = y / LSq;
+		z = z / LSq;
+		w = w / LSq;
+	}
+
+	//------------------------------------------------------------------------------------
 };

@@ -5,6 +5,8 @@
 #include "NetworkClient.h"
 #include "Powerups.h"
 #include "Coins.h"
+#include "ChaseCamera.h"
+
 
 /*
 Creates a really simple scene for our game - A cube robot standing on
@@ -51,7 +53,10 @@ MyGame::MyGame()
 	}
 	Renderer::GetRenderer().RenderLoading(40,"Attaching Mooses...");
 
-	gameCamera = new Camera(0.0f, 0.0f, Vector3(0, 0, 0));
+	Vehicle* player = PhysicsSystem::GetVehicle();
+	gameCamera = new ChaseCamera(player, 200, 20, 12);
+
+
 	Renderer::GetRenderer().RenderLoading(50, "I knew A Moose Once...");
 
 	Renderer::GetRenderer().SetCamera(gameCamera);

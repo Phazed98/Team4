@@ -1,4 +1,5 @@
 #include "Renderer.h"
+#include "ChaseCamera.h"
 
 Renderer* Renderer::instance = NULL;
 
@@ -476,7 +477,7 @@ void	Renderer::ClearNodeLists()	{
 	nodeList.clear();
 }
 
-void	Renderer::SetCamera(Camera*c)
+void	Renderer::SetCamera(ChaseCamera*c)
 {
 	camera = c;
 }

@@ -17,18 +17,21 @@ Implements:OGLRendere
 #include "SpaceshipSceneNode.h"
 #include "FireParticleSystem.h"
 
+
+class ChaseCamera;
+
 class Renderer : public OGLRenderer	
 {
 public:
 	virtual void RenderScene();
 	virtual void UpdateScene(float msec);
 
-	void	SetCamera(Camera*c);
+	void	SetCamera(ChaseCamera*c);
 	void	AddNode(SceneNode* n);
 	void	RemoveNode(SceneNode* n);
 	void	RenderMenu();
 	void	RenderLoading(int percent, string Message);
-	Camera* GetCamera(){ return camera; }
+	ChaseCamera* GetCamera(){ return camera; }
 	Matrix4 GetProjMatrix(){ return projMatrix; }
 	void SetSpaceshipSceneNode(SpaceshipSceneNode* ssn){ spaceship_scene_node = ssn; }
 	//Statics
@@ -63,7 +66,7 @@ protected:
 	void	toggleWireFrame();
 
 	SceneNode*	root;
-	Camera*		camera;
+	ChaseCamera*	camera;
 	Shader*		simpleShader;
 	Shader*		textShader;				//Basic Shader for Drawing 2D text on screen (TexVertex, TexFragment)
 	Shader*		texturedShader;

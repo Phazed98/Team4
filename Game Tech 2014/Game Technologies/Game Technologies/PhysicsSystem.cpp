@@ -5,6 +5,7 @@
 
 PhysicsSystem* PhysicsSystem::instance = 0;
 int PhysicsSystem::fps = 0;
+Vehicle* PhysicsSystem::playerVehicle = NULL;
 
 PhysicsSystem::PhysicsSystem(void)
 {

@@ -59,7 +59,8 @@ public:
 	float time = 0;
 	int nbFrames = 0;				//Integer for frame count
 
-	Vehicle* GetVehicle(){ return playerVehicle; }
+	static Vehicle* GetVehicle(){ return playerVehicle; }
+
 protected:
 	PhysicsSystem(void);
 	~PhysicsSystem(void);
@@ -78,7 +79,7 @@ protected:
 	//player physicspointer for collision checks. A list of additional interactive moving objects can be added later
 	PhysicsNode* playerPhysNode; //shortcut only DO NOT DELETE IN DESTRUCTOR
 	//Player vehicle pointer for updating the player via inputs - this feeds back into the physNode so should be updated first?
-	Vehicle* playerVehicle;
+	static Vehicle* playerVehicle;
 
 	//array holds 1 trailing tile, current tile, 8x (adjust later) approaching tile
 	//Each vector will then hold the static obstacles on their respective tile

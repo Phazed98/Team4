@@ -4,6 +4,8 @@
 #include "FireParticleSystem.h"
 #include "../../nclgl/Matrix4.h"
 
+class ChaseCamera;
+
 //this is the space ship render node
 //basically it is for the particle system of the ship
 
@@ -22,5 +24,4 @@ private:
 	Matrix4 view_matrix;
 	Matrix4 project_matrix;
 	float delta_time_millis;
-	Camera* camera;
 };

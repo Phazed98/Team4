@@ -159,5 +159,12 @@ public:
 		return angle;
 	}
 
+	//Added by Sam for chase camera position LERP
+	inline void getWeightedAverage(const Vector3 &rhs, float weight)
+	{
+		x = ((x * (weight - 1)) + rhs.x) / weight;
+		y = ((y * (weight - 1)) + rhs.y) / weight;
+		z = ((z * (weight - 1)) + rhs.z) / weight;
+	}
 };
 

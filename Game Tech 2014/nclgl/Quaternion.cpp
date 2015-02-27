@@ -141,9 +141,96 @@ Quaternion Quaternion::FromMatrix(const Matrix4 &m)	{
 	q.y = sqrt(max(0.0f, (1.0f - m.values[0] + m.values[5] - m.values[10]))) / 2.0f;
 	q.z = sqrt(max(0.0f, (1.0f - m.values[0] - m.values[5] + m.values[10]))) / 2.0f;
 
-	q.x = (float)_copysign( q.x, m.values[9] - m.values[6] );
-	q.y = (float)_copysign( q.y, m.values[2] - m.values[8] );
-	q.z = (float)_copysign( q.z, m.values[4] - m.values[1] );
+	q.x = (float)_copysign(q.x, m.values[9] - m.values[6]);
+	q.y = (float)_copysign(q.y, m.values[2] - m.values[8]);
+	q.z = (float)_copysign(q.z, m.values[4] - m.values[1]);
 
 	return q;
 }
+
+	//-------------------------- Added by Sam ----------------------------------------
+
+	////http://stackoverflow.com/questions/4099369/interpolate-between-rotation-matrices
+	//Quaternion Quaternion::SLERP(Quaternion &a, Quaternion &b, float weight)
+	//{
+	//	//return quat
+	//	Quaternion c = Quaternion();
+	//	//calculate angle between the quats
+	//	double cosHalfTheta = (a.x * b.x) + (a.y * b.y) + (a.z * b.z) + (a.w * b.w);
+	//	//if a=b or a=-b then theta = 0 and we can return a
+	//	if (abs(cosHalfTheta) >= 1.0)
+	//	{
+	//		c.x = a.x;
+	//		c.y = a.y;
+	//		c.z = a.z;
+	//		c.w = a.w;
+	//		return c;
+	//	}
+	//	//calculate temporary values
+	//	double halfTheta = acos(cosHalfTheta);
+	//	double sinHalfTheta = sqrt(1.0 - cosHalfTheta*cosHalfTheta);
+	//	//if theta = 180 degrees then result is not fully defined - could rotate around any axis normal to a or b
+	//	if (fabs(sinHalfTheta) < 0.001)
+	//	{
+	//		c.x = (a.x * 0.5 + b.x * 0.5);
+	//		c.y = (a.y * 0.5 + b.y * 0.5);
+	//		c.z = (a.z * 0.5 + b.z * 0.5);
+	//		c.w = (a.w * 0.5 + b.w * 0.5);
+	//		return c;
+	//	}
+	//	double ratioA = sin((1 - weight) * halfTheta) / sinHalfTheta;
+	//	double ratioB = sin(weight * halfTheta) / sinHalfTheta;
+	//	//calculate Quaternion.
+	//	c.x = (a.x * ratioA + b.x * ratioB);
+	//	c.y = (a.y * ratioA + b.y * ratioB);
+	//	c.z = (a.z * ratioA + b.z * ratioB);
+	//	c.w = (a.w * ratioA + b.w * ratioB);
+	//	return c;
+	//}
+
+
+
+	//http://willperone.net/Code/quaternion.php
+	Quaternion Quaternion::SLERP(Quaternion &a, Quaternion &b, float weight)
+	{
+		//return quat
+		Quaternion c = Quaternion();
+		//cos(theta)
+		float dot = (a.x * b.x) + (a.y * b.y) + (a.z * b.z) + (a.w * b.w);
+
+		if (dot < 0)
+		{
+			dot = -dot;
+			c.x = -b.x;
+			c.y = -b.y;
+			c.z = -b.z;
+			c.w = -b.w;
+		}
+		else
+		{
+			c = b;
+		}
+
+		if (dot < 0.95f)
+		{
+			float angle = acosf(dot);
+			return (a * sinf(angle * (1 - weight)) + c * sinf(angle * weight)) / sinf(angle);
+		}
+		else
+		{
+			//angle is small so LERP
+			return LERP(a, c, weight);
+		}
+	}
+
+	//http://willperone.net/Code/quaternion.php
+	Quaternion Quaternion::LERP(Quaternion &a, Quaternion &b, float weight)
+	{
+		Quaternion c;
+		c = a*(1 - weight) + b * weight;
+		c.Normalise();
+		return c;
+	}
+
+
+	//-----------------------------------------------------------------------------------------------

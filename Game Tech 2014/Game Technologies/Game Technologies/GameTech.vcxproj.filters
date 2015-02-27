@@ -132,6 +132,9 @@
     <ClCompile Include="Powerups.cpp">
       <Filter>Source Files\Powerups</Filter>
     </ClCompile>
+    <ClCompile Include="ChaseCamera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameEntity.h">
@@ -241,6 +244,9 @@
     </ClInclude>
     <ClInclude Include="Powerups.h">
       <Filter>Header Files\Powerups</Filter>
+    </ClInclude>
+    <ClInclude Include="ChaseCamera.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

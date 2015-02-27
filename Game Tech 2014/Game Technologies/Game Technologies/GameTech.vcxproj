@@ -73,6 +73,7 @@
   <ItemGroup>
     <ClCompile Include="Bullets.cpp" />
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="ChaseCamera.cpp" />
     <ClCompile Include="Coins.cpp" />
     <ClCompile Include="CollisionHelper.cpp" />
     <ClCompile Include="FireParticleSystem.cpp" />
@@ -104,6 +105,7 @@
   <ItemGroup>
     <ClInclude Include="Bullets.h" />
     <ClInclude Include="Button.h" />
+    <ClInclude Include="ChaseCamera.h" />
     <ClInclude Include="Coins.h" />
     <ClInclude Include="CollisionHelper.h" />
     <ClInclude Include="CollisionVolume.h" />

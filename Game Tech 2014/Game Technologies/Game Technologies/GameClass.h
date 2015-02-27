@@ -31,6 +31,10 @@ _-_-_-_-_-_-_-""  ""
 #define PHYSICS_HZ	120
 
 #define PHYSICS_TIMESTEP (1000.0f / (float)PHYSICS_HZ)
+
+
+class ChaseCamera;
+
 enum GameState { 
 	GAME_PLAYING, 
 	GAME_PAUSED,
@@ -59,7 +63,7 @@ protected:
 
 	vector<GameEntity*> allEntities;
 
-	Camera* gameCamera;
+	ChaseCamera* gameCamera;
 	static GameClass* instance;
 	GameState currentGameState;
 };
