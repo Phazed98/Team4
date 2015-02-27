@@ -25,6 +25,8 @@ Obstacle::Obstacle(ObjectType* _tile, SceneNode* s, PhysicsNode* p, int _type, i
 
 	bullet = NULL;
 
+	movingObsSpeed = 5.0f;
+
 	count_time = 0;
 }
 
@@ -36,7 +38,7 @@ Obstacle::~Obstacle()
 
 void Obstacle::Update(float msec)
 {
-
+	//Controls shooting obstacles
 	if (obstacleType == 1)
 	{
 		if (abs(player->GetPosition().y - physicsNode->GetPosition().y) < 400
@@ -45,7 +47,7 @@ void Obstacle::Update(float msec)
 		{
 			//if (count_time == 80)
 			if (count_time == 200)//&& bullet->GetPhysicsNode().GetPosition().z > player->GetPosition().z)
-			{    //new control when shoot the bullets   4.2.2015 Daixi
+			{    
 				bullet->GetPhysicsNode().SetPosition(physicsNode->GetPosition());
 				count_time = 0;
 				Shoot();
@@ -58,8 +60,6 @@ void Obstacle::Update(float msec)
 		{
 			bullet->GetPhysicsNode().SetPosition(physicsNode->GetPosition());
 		}
-
-
 	}
 
 	if (type == 1)
@@ -82,7 +82,7 @@ void Obstacle::Update(float msec)
 			{
 				if (goingLeft)
 				{
-					offset.x += -10;
+					offset.x += -movingObsSpeed;
 					if (offset.x < -180)
 					{
 						goingLeft = false;
@@ -90,7 +90,7 @@ void Obstacle::Update(float msec)
 				}
 				else
 				{
-					offset.x += 10;
+					offset.x += movingObsSpeed;
 					if (offset.x > 180)
 					{
 						goingLeft = true;
@@ -102,7 +102,7 @@ void Obstacle::Update(float msec)
 			{
 				if (goingLeft)
 				{
-					offset.y += -10;
+					offset.y += -movingObsSpeed;
 					if (offset.y < -180)
 					{
 						goingLeft = false;
@@ -110,7 +110,7 @@ void Obstacle::Update(float msec)
 				}
 				else
 				{
-					offset.y += 10;
+					offset.y += movingObsSpeed;
 					if (offset.y > 180)
 					{
 						goingLeft = true;

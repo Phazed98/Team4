@@ -91,12 +91,10 @@ MyGame::MyGame()
 
 	Renderer::GetRenderer().SetCamera(gameCamera);
 
-	CubeRobot::CreateCube();
 	Renderer::GetRenderer().RenderLoading(70, "He was a really good moose...");
 
 	Renderer::GetRenderer().RenderLoading(75, "The moose never bit anyone...");
 	Renderer::GetRenderer().RenderLoading(76, "I called him George...");
-	//PlayerMesh = new OBJMesh(MESHDIR"Wraith Raider Starship.obj"); // 3.2.2015 Daixi
 	Renderer::GetRenderer().RenderLoading(91, "Sorry about that...");
 	Renderer::GetRenderer().RenderLoading(92, "The person responsible for the loading screen...");
 	Renderer::GetRenderer().RenderLoading(93, "...has been sacked...");
@@ -112,52 +110,27 @@ MyGame::MyGame()
 	*/
 
 	//add all powerup variable!!!
-	AllCoins = new Coins(10);
-	AllPowerups = new Powerups();
+	//AllCoins = new Coins(10);
+	//AllPowerups = new Powerups();
 
 	cube	= new OBJMesh(MESHDIR"cube.obj");
 	quad	= Mesh::GenerateQuad();
 	sphere	= new OBJMesh(MESHDIR"ico.obj");
-	PlayerMesh = new OBJMesh(MESHDIR"Player.obj"); // 3.2.2015 Daixi
+	//PlayerMesh = new OBJMesh(MESHDIR"Player.obj"); // 3.2.2015 Daixi
 	Renderer::GetRenderer().RenderLoading(95, "Lammas are nice creatures...");
 
-	Enemy = BuildPlayerEntity(20.0f, Vector3(-300, 100, -300)); //new 4.2.2015 Daixi
-	Enemy->GetPhysicsNode().SetPosition(Vector3(300, 100, -100));
+	//Enemy = BuildPlayerEntity(20.0f, Vector3(-300, 100, -300)); //new 4.2.2015 Daixi
+	//Enemy->GetPhysicsNode().SetPosition(Vector3(300, 100, -100));
 	Renderer::GetRenderer().RenderLoading(96,"Hold it,  Were not getting into Lammas now...");
 
-	Position0 = Enemy->GetPhysicsNode().GetPosition(); //5.2.2015 Daixi ------------------This is the straight line bullet
-	Position0.z = Position0.z - 20;
-	bullet = new Bullets(Position0);
+	//Position0 = Enemy->GetPhysicsNode().GetPosition(); //5.2.2015 Daixi ------------------This is the straight line bullet
+	//Position0.z = Position0.z - 20;
+	//bullet = new Bullets(Position0);
 	Renderer::GetRenderer().RenderLoading(97, "The loading system is obviously faulty, we will continue now without any further updates...");
 
-	BuffEntity = BuildBuffEntity(6, Vector3(0, 100, -200)); //6.2.2015 Daixi ------------------ This is the buff object, and when player hit it, will speed up
-	BuffEntity->GetRenderNode().SetColour(Vector4(1, 1, 0, 1));
+	//BuffEntity = BuildBuffEntity(6, Vector3(0, 100, -200)); //6.2.2015 Daixi ------------------ This is the buff object, and when player hit it, will speed up
+	//BuffEntity->GetRenderNode().SetColour(Vector4(1, 1, 0, 1));
 	Renderer::GetRenderer().RenderLoading(98, "Except this to say we love Mooses? Meese? Multiple Moose? ...");
-
-	//GameEntity* quadEntity = BuildQuadEntity(1000.0f);
-	//allEntities.push_back(quadEntity);
-	//allEntities.push_back(BuildRobotEntity());
-	//
-	//GameEntity* ball0 = BuildSphereEntity(100.0f, Vector3(-300, 300, -100), Vector3(0, 0, 0));
-	//allEntities.push_back(ball0);
-	//GameEntity* ball1 = BuildSphereEntity(100.0f, Vector3(-100, 300, -100), Vector3(0, 0, 0));
-	//allEntities.push_back(ball1);
-
-	//Spring* s = new Spring(&ball0->GetPhysicsNode(), Vector3(0,100,0), &ball1->GetPhysicsNode(), Vector3(0,-100,0));
-	//
-	//PhysicsSystem::GetPhysicsSystem().AddConstraint(s);
-	//PhysicsSystem::GetPhysicsSystem().AddDebugDraw(s);
-
-	//// Note that these are relative positions and the quad is already rotated
-	//s = new Spring(&ball1->GetPhysicsNode(), Vector3(0,100,0), &quadEntity->GetPhysicsNode(), Vector3(0,-100,-600)); 
-	//
-	//PhysicsSystem::GetPhysicsSystem().AddConstraint(s);
-	//PhysicsSystem::GetPhysicsSystem().AddDebugDraw(s);
-
-	//SpringDemo* demo = new SpringDemo();
-	//
-	//PhysicsSystem::GetPhysicsSystem().AddConstraint(demo);
-	//PhysicsSystem::GetPhysicsSystem().AddDebugDraw(demo);
 
 	//-------------------------------------------------Planes---------------------------------------------------------//
 
@@ -249,18 +222,18 @@ void MyGame::UpdateGame(float msec)
 		(*i)->Update(msec);
 	}
 
-	if (count_time == 80)
-	{    //new control when shoot the bullets   4.2.2015 Daixi
-		bullet->ShootBullets();
-		count_time = 0;
-	}
+	//if (count_time == 80)
+	//{    //new control when shoot the bullets   4.2.2015 Daixi
+	//	bullet->ShootBullets();
+	//	count_time = 0;
+	//}
 
 	Car = PhysicsSystem::GetPhysicsSystem().GetVehicle();
-	AllPowerups->UpdatePowerup(Car, AllCoins, msec);
+	/*AllPowerups->UpdatePowerup(Car, AllCoins, msec);
 	AllCoins->UpdateCoins(Car);
 	AllCoins->UpdatePickupCoins(Car);
 
-	count_time++;
+	count_time++;*/
 
 	timer += 0.001;
 

@@ -44,6 +44,7 @@ private:
 
 	PhysicsNode* player;
 
+	float movingObsSpeed;
 
 	int count_time;
 
