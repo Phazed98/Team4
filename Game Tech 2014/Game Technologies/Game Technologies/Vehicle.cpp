@@ -361,7 +361,6 @@ void Vehicle::UpdatePlayerRotationOnPlane()
 	{
 		rotationOnPlane -= 360.0f;
 	}
-	cout << rotationOnPlane << endl;
 }
 
 void Vehicle::debug()

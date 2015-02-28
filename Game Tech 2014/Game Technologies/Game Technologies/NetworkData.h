@@ -28,6 +28,7 @@ struct Packet
 {
 	unsigned int packet_type;
 	int packet_integer;
+	messageInfo data[200];
 
 	void serialize(char* data)
 	{
