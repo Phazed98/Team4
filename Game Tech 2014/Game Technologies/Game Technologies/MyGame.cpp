@@ -124,7 +124,7 @@ MyGame::MyGame()
 	for (int i = 0; i < 7; i++)
 	{
 		ObjectType* plane = BuildObjectEntity(0, 2);
-		plane->SetPos(Vector3(0.0f, -500.0f, -i * 800.0f));
+		plane->SetPos(Vector3(0.0f, -TILE_CENTRE_OFFSET, -i * 800.0f));
 		if (i != 6)
 			plane->setState(2);
 		allEntities.push_back(plane);
@@ -133,7 +133,7 @@ MyGame::MyGame()
 	for (int i = 0; i < 7; i++)
 	{
 		ObjectType* plane = BuildObjectEntity(0, 0);
-		plane->SetPos(Vector3(0.0f, 500.0f, -i * 800.0f));
+		plane->SetPos(Vector3(0.0f, TILE_CENTRE_OFFSET, -i * 800.0f));
 		if (i != 6)
 			plane->setState(2);
 		allEntities.push_back(plane);
@@ -142,7 +142,7 @@ MyGame::MyGame()
 	for (int i = 0; i < 7; i++)
 	{
 		ObjectType* plane = BuildObjectEntity(0, 1);
-		plane->SetPos(Vector3(500.0f, 0.0f, -i * 800.0f));
+		plane->SetPos(Vector3(TILE_CENTRE_OFFSET, 0.0f, -i * 800.0f));
 		if (i != 6)
 			plane->setState(2);
 		allEntities.push_back(plane);
@@ -151,7 +151,7 @@ MyGame::MyGame()
 	for (int i = 0; i < 7; i++)
 	{
 		ObjectType* plane = BuildObjectEntity(0, 3);
-		plane->SetPos(Vector3(-500.0f, 0.0f, -i * 800.0f));
+		plane->SetPos(Vector3(-TILE_CENTRE_OFFSET, 0.0f, -i * 800.0f));
 		if (i != 6)
 			plane->setState(2);
 		allEntities.push_back(plane);
