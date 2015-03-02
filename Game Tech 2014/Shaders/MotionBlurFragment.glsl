@@ -60,21 +60,26 @@ void main ( void ) {
 	// Get the initial color at this pixel.  
 	vec4 motion_color = texture(diffuseTex, texCoord);
 	  
-if(texCoord.x<0.2||texCoord.x>0.8||texCoord.y<0.2||texCoord.y>0.6){
+//if(texCoord.x<0.2||texCoord.x>0.8||texCoord.y<0.2||texCoord.y>0.6){
 	//do motion blur
 	texCoord += velocity;
+	int count = 1;
 	for(int i = 1; i < 5; ++i, texCoord += velocity){  
 		// Sample the color buffer along the velocity vector.  
 		vec4 currentColor = texture(diffuseTex, texCoord);
-		// Add the current color to our color sum.  
-		motion_color += currentColor;  
+		if(currentColor.x!=0){
+			//if the color is not black
+			// Add the current color to our color sum.  
+			motion_color += currentColor;
+			count++;
+		}
+		
 	}
 
 	// Average all of the samples to get the final blur color.  
-	motion_color = motion_color / 5; 
-}
+	motion_color = motion_color / count; 
+//}
 	
-
 	/* float fFogCoord = abs(LinearizeDepth(zOverW) );
 	float fResult = exp(-pow(fFogCoord*2, 2.0));
 

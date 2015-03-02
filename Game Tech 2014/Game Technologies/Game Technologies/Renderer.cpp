@@ -75,6 +75,7 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)
 		return;
 	}
 
+	glClearColor(0, 0, 0, 1);
 	instance = this;
 
 	init = true;
@@ -253,6 +254,7 @@ void Renderer::RenderMotionBlur(){
 
 void Renderer::PresentMotionBlur(){
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 	SetCurrentShader(motion_blur_shader);
 
@@ -261,7 +263,7 @@ void Renderer::PresentMotionBlur(){
 	//update current viewMatrix
 	current_viewMatrix = viewMatrix;//get current camera view matrix
 	float track_speed = PhysicsSystem::GetTrackSpeed();
-	previous_viewMatrix = current_viewMatrix;
+//	previous_viewMatrix = current_viewMatrix;
 	previous_viewMatrix.values[14] = previous_viewMatrix.values[14] - track_speed;
 	/*
 	current_viewMatrix.values[12] = current_viewMatrix.values[12] / 1000;
