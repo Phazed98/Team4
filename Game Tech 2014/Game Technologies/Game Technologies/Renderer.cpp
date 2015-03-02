@@ -11,6 +11,8 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)
 
 	basicFont = new Font(SOIL_load_OGL_texture(TEXTUREDIR"tahoma.tga", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_COMPRESS_TO_DXT), 16, 16);
 
+	background[0] = SOIL_load_OGL_texture(TEXTUREDIR"rusted_north.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS);
+
 	//add by steven for motion blur
 	quad_motion_blur = Mesh::GenerateQuad();
 	render_motion_blur = false; 
@@ -18,7 +20,7 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)
 	
 	simpleShader = new Shader(SHADERDIR"TechVertex.glsl", SHADERDIR"TechFragment.glsl");
 	textShader = new Shader(SHADERDIR"TexVertex.glsl", SHADERDIR"TexFragment.glsl");
-	texturedShader = new Shader(SHADERDIR"TexturedVertex.glsl", SHADERDIR"TexturedFragment.glsl");
+	backgroundShader = new Shader(SHADERDIR"BackgroundVertex.glsl", SHADERDIR"TexturedFragment.glsl");
 	menuShader = new Shader(SHADERDIR"menuVertex.glsl", SHADERDIR"menuFragment.glsl");
 
 	quad = Mesh::GenerateQuad();
@@ -46,7 +48,7 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)
 	}
 
 	if (!simpleShader->LinkProgram() || !textShader->LinkProgram() ||
-		!texturedShader->LinkProgram() || !menuShader->LinkProgram() || 
+		!backgroundShader->LinkProgram() || !menuShader->LinkProgram() ||
 		!motion_blur_shader->LinkProgram())
 	{
 		cout << "error in link shaders" << endl;
@@ -58,6 +60,13 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)
 		//one depth buffer and one color buffer
 		//one frame buffer 
 		cout << "error in init motion blur buffer!!" << endl;
+		return;
+	}
+	if (!CreatParticleBuffer()){
+		//initilize the motion blur buffer
+		//one depth buffer and one color buffer
+		//one frame buffer 
+		cout << "error in init particle buffer!!" << endl;
 		return;
 	}
 
@@ -120,7 +129,11 @@ void Renderer::UpdateScene(float msec)
 
 void Renderer::RenderScene()
 {
+	
 	if (render_motion_blur){
+
+		
+		
 		RenderMotionBlur();
 
 		//Display HUD
@@ -138,25 +151,28 @@ void Renderer::RenderWithoutPostProcessing(){
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	
+	RenderBackground();
 
 	if (camera)
 	{
 		SetCurrentShader(simpleShader);
 		glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), 0);
-
+		
 		textureMatrix.ToIdentity();
 		modelMatrix.ToIdentity();
 		viewMatrix = camera->BuildViewMatrix();
 		projMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float)width / (float)height, 45.0f);
 		frameFrustum.FromMatrix(projMatrix * viewMatrix);
 		UpdateShaderMatrices();
-
+		
 		//Return to default 'usable' state every frame!
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
 		glDisable(GL_STENCIL_TEST);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		
 
 		BuildNodeLists(root);
 		SortNodeLists();
@@ -180,10 +196,15 @@ void Renderer::RenderWithoutPostProcessing(){
 	}
 
 	glUseProgram(0);
+
+	
 	SwapBuffers();
 }
 
 void Renderer::RenderMotionBlur(){
+	
+
+	//render scene need motion blur and fog
 	glBindFramebuffer(GL_FRAMEBUFFER, motion_blur_FBO);
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
@@ -211,16 +232,20 @@ void Renderer::RenderMotionBlur(){
 		DrawNodes();
 		ClearNodeLists();
 
-		DrawAfterBurner();
+		
 	}
 
 	glUseProgram(0);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
+	//render the particle to a texture firstly
+	//this scene store in particle_ColourTex
+	RenderParticleToTexture();
 
 	PresentMotionBlur();
 
 }
+
 void Renderer::PresentMotionBlur(){
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
@@ -231,10 +256,15 @@ void Renderer::PresentMotionBlur(){
 
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(),
 		"depthTex"), 4);
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(),
+		"particleTex"), 5);
 
 
 	//update current viewMatrix
 	current_viewMatrix = viewMatrix;//get current camera view matrix
+	float track_speed = PhysicsSystem::GetTrackSpeed();
+	previous_viewMatrix = current_viewMatrix;
+	previous_viewMatrix.values[14] = previous_viewMatrix.values[14] - track_speed;
 	/*
 	current_viewMatrix.values[12] = current_viewMatrix.values[12] / 1000;
 	current_viewMatrix.values[13] = current_viewMatrix.values[13] / 1000;
@@ -254,11 +284,14 @@ void Renderer::PresentMotionBlur(){
 
 	glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(),
 		"inversePVMatrix"), 1, false, (float*)&inverse_pv_matrix);
-	previous_viewMatrix = current_viewMatrix;
+
 
 
 	glActiveTexture(GL_TEXTURE4);
 	glBindTexture(GL_TEXTURE_2D, motion_blur_DepthTex);
+
+	glActiveTexture(GL_TEXTURE5);
+	glBindTexture(GL_TEXTURE_2D, particle_ColourTex);
 
 
 	projMatrix = Matrix4::Orthographic(-1, 1, 1, -1, -1, 1);
@@ -605,7 +638,89 @@ void Renderer::DrawAfterBurner(){
 
 		viewMatrix = camera->BuildViewMatrix();
 	}
+	
 	spaceship_scene_node->afterburner_system[0].Render(msec, model_matrix, projMatrix, viewMatrix);
 	spaceship_scene_node->afterburner_system[1].Render(msec, model_matrix, projMatrix, viewMatrix);
 }
 
+
+
+bool Renderer::CreatParticleBuffer(){
+
+	//colour texture ...
+	glGenTextures(1, &particle_ColourTex);
+	glBindTexture(GL_TEXTURE_2D, particle_ColourTex);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0,
+		GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+
+
+	glGenFramebuffers(1, &particle_FBO);
+
+
+	glBindFramebuffer(GL_FRAMEBUFFER, particle_FBO);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+		GL_TEXTURE_2D, particle_ColourTex, 0);
+
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE ||
+		!particle_ColourTex) {
+		//check FBO attachment success using this command
+		return false;
+	}
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	return true;
+}
+
+void Renderer::RenderParticleToTexture(){
+	glBindFramebuffer(GL_FRAMEBUFFER, particle_FBO);
+	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	
+	DrawAfterBurner();
+	
+
+	glUseProgram(0);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+}
+
+void Renderer::RenderBackground(){
+	glDepthMask(GL_FALSE);
+	SetCurrentShader(backgroundShader);
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(),"diffuseTex"), 0);
+	PushMatrix();
+	MatrixToIdentity();
+//	projMatrix = Matrix4::Perspective(0.5f, 10000.0f, (float)width / (float)height, 45.0f);
+	projMatrix = Matrix4::Orthographic(-1, 1, 1, -1, -1, 1);
+	UpdateShaderMatrices();
+	quad->SetTexture(background[0]);
+	quad->Draw();
+
+	PopMatrix();
+	glUseProgram(0);
+	glDepthMask(GL_TRUE);
+}
+
+void Renderer::PushMatrix(){
+	modeltemp = modelMatrix;
+	viewtemp = viewMatrix;
+	projtemp = projMatrix;
+	texturetemp = textureMatrix;
+}
+
+void Renderer::PopMatrix(){
+	modelMatrix = modeltemp;
+	viewMatrix = viewtemp;
+	projMatrix = projtemp;
+	textureMatrix = texturetemp;
+}
+
+void Renderer::MatrixToIdentity(){
+	modelMatrix.ToIdentity();
+	viewMatrix.ToIdentity();
+	projMatrix.ToIdentity();
+	textureMatrix.ToIdentity();
+}

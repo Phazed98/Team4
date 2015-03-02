@@ -69,7 +69,7 @@ protected:
 	ChaseCamera*	camera;
 	Shader*		simpleShader;
 	Shader*		textShader;				//Basic Shader for Drawing 2D text on screen (TexVertex, TexFragment)
-	Shader*		texturedShader;
+	
 	Shader*		menuShader;
 	Font*		basicFont;			//Font for drawing text to screen
 	Mesh*		quad;
@@ -93,7 +93,7 @@ protected:
 	int fps = 0;				//FPS string to use with DrawText
 	bool wireFrame = false;
 
-	//for motion blur
+	//steven added for motion blur
 	GLuint motion_blur_FBO;
 	GLuint motion_blur_ColourTex;
 	GLuint motion_blur_DepthTex;
@@ -110,5 +110,24 @@ protected:
 	SpaceshipSceneNode* spaceship_scene_node;
 	void DrawAfterBurner();
 	float msec;
+
+	//steven added for render particles
+	GLuint particle_FBO;
+	GLuint particle_ColourTex;
+	bool CreatParticleBuffer();
+	Mesh* quad_particle;
+	void RenderParticleToTexture();
+
+	//steven added for background
+	void RenderBackground();
+	Matrix4 modeltemp;
+	Matrix4 viewtemp;
+	Matrix4 projtemp;
+	Matrix4 texturetemp;
+	void PushMatrix();
+	void PopMatrix();
+	void MatrixToIdentity();
+	GLuint background[4];
+	Shader*	backgroundShader;
 };
 
