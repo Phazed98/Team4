@@ -104,6 +104,14 @@ MyGame::MyGame()
 	//AllPowerups = new Powerups();
 
 	cube	= new OBJMesh(MESHDIR"cube.obj");
+	cubeAir = new OBJMesh(MESHDIR"cube.obj");
+	cubeAir->SetTexture(airTexture);
+	cubeWater = new OBJMesh(MESHDIR"cube.obj");
+	cubeWater->SetTexture(waterTexture);
+	cubeFire = new OBJMesh(MESHDIR"cube.obj");
+	cubeFire->SetTexture(fireTexture);
+	cubeEarth = new OBJMesh(MESHDIR"cube.obj");
+	cubeEarth->SetTexture(earthTexture);
 	quad	= Mesh::GenerateQuad();
 	sphere	= new OBJMesh(MESHDIR"ico.obj");
 	Renderer::GetRenderer().RenderLoading(95, "Lammas are nice creatures...");
@@ -368,6 +376,23 @@ GameEntity* MyGame::BuildQuadEntity(float size)
 ObjectType* MyGame::BuildObjectEntity(int type, int subType) 
 {
 	SceneNode* s = new SceneNode(cube);
+	if (subType == 0){
+		s = new SceneNode(cubeAir);
+	}
+	else if (subType == 1){
+		s = new SceneNode(cubeFire);
+
+	}
+	else if (subType == 2){
+		s = new SceneNode(cubeEarth);
+
+	}
+	else if (subType == 3){
+		
+		s = new SceneNode(cubeWater);
+
+	}
+
 	PhysicsNode* p = new PhysicsNode();
 	p->SetUseGravity(false);
 
@@ -403,6 +428,21 @@ ObjectType* MyGame::BuildObjectEntity(int type, int subType)
 ObjectType* MyGame::BuildObjectEntityNetwork(int type, int subType, int setRandValue, int randPlane)
 {
 	SceneNode* s = new SceneNode(cube);
+	if (subType == 0){
+		s = new SceneNode(cubeAir);
+	}
+	else if (subType == 1){
+		s = new SceneNode(cubeFire);
+
+	}
+	else if (subType == 2){
+		s = new SceneNode(cubeWater);
+
+	}
+	else if (subType == 3){
+		s = new SceneNode(cubeEarth);
+
+	}
 	PhysicsNode* p = new PhysicsNode();
 	p->SetUseGravity(false);
 
