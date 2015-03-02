@@ -9,9 +9,9 @@ SpaceshipSceneNode::SpaceshipSceneNode(Mesh* shipMesh){
 
 
 
-	afterburner_system[0].InitParticleSystem(2, Vector3(-3.2, -2, 8.5));
+	afterburner_system[0].InitParticleSystem(2, Vector3(-3.2f, -2.0f, 8.5f));
 
-	afterburner_system[1].InitParticleSystem(2, Vector3( 3.2, -2, 8.5));
+	afterburner_system[1].InitParticleSystem(2, Vector3(3.2f, -2.0f, 8.5f));
 }
 
 

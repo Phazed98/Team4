@@ -318,7 +318,7 @@ Vector3 Vehicle::CalculatePlayerLocation()
 void Vehicle::UpdatePlayerVelocity()
 {
 	//calculate this frames linear velocity derived from the current rotation
-	float xVel = -rotationOnPlane * 0.05;
+	float xVel = -rotationOnPlane * 0.05f;
 
 
 

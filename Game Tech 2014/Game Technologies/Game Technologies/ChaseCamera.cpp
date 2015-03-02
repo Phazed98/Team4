@@ -6,7 +6,7 @@ chaseDistance(chaseDistance), verticalOffset(verticalOffset), chaseLagFactorLine
 	playerPhysNode = player->GetPhysicsNode();
 	cameraRotation = Quaternion();
 
-	chaseLagFactorRotation = (chaseLagFactorLinear / 1000) * 1.5;
+	chaseLagFactorRotation = (chaseLagFactorLinear / 1000) * 1.5f;
 }
 
 ChaseCamera::~ChaseCamera()

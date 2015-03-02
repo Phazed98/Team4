@@ -19,7 +19,7 @@ GameEntity* Bullets::BuildBulletEntity(float radius, Vector3 pos)
 	SceneNode* test = new SceneNode(BulletsMesh);
 	test->SetModelScale(Vector3(radius, radius, radius));
 	test->SetBoundingRadius(radius);
-	test->SetColour(Vector4(0.2, 0.2, 0.5, 1));
+	test->SetColour(Vector4(0.2f, 0.2f, 0.5f, 1.0f));
 	PhysicsNode*p = new PhysicsNode();
 
 	p->SetUseGravity(false);

@@ -466,7 +466,7 @@ Vector3 Mesh::GetFurthestVert()
 	float furthestLengh = 0;
 	int furthestVertIndex = 0;
 	//iterate all vertices
-	for (int i = 0; i < numVertices; i++)
+	for (unsigned int i = 0; i < numVertices; i++)
 	{
 		float length = vertices[i].Length();
 		if (length > furthestLengh)

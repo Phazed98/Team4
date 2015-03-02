@@ -15,9 +15,9 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)
 
 	//add by steven for motion blur
 	quad_motion_blur = Mesh::GenerateQuad();
-	render_motion_blur = false; 
+	render_motion_blur = false;
 	motion_blur_shader = new Shader(SHADERDIR"MotionBlurVertex.glsl", SHADERDIR"MotionBlurFragment.glsl");
-	
+
 	simpleShader = new Shader(SHADERDIR"TechVertex.glsl", SHADERDIR"TechFragment.glsl");
 	textShader = new Shader(SHADERDIR"TexVertex.glsl", SHADERDIR"TexFragment.glsl");
 	backgroundShader = new Shader(SHADERDIR"BackgroundVertex.glsl", SHADERDIR"TexturedFragment.glsl");
@@ -87,7 +87,7 @@ Renderer::~Renderer(void)
 	delete camera;
 
 
-	
+
 	glDeleteFramebuffers(1, &motion_blur_FBO);
 	glDeleteTextures(1, &motion_blur_ColourTex);
 	glDeleteTextures(1, &motion_blur_DepthTex);
@@ -129,11 +129,11 @@ void Renderer::UpdateScene(float msec)
 
 void Renderer::RenderScene()
 {
-	
+
 	if (render_motion_blur){
 
-		
-		
+
+
 		RenderMotionBlur();
 
 		//Display HUD
@@ -151,28 +151,28 @@ void Renderer::RenderWithoutPostProcessing(){
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	
+
 	RenderBackground();
 
 	if (camera)
 	{
 		SetCurrentShader(simpleShader);
 		glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), 0);
-		
+
 		textureMatrix.ToIdentity();
 		modelMatrix.ToIdentity();
 		viewMatrix = camera->BuildViewMatrix();
 		projMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float)width / (float)height, 45.0f);
 		frameFrustum.FromMatrix(projMatrix * viewMatrix);
 		UpdateShaderMatrices();
-		
+
 		//Return to default 'usable' state every frame!
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
 		glDisable(GL_STENCIL_TEST);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		
+
 
 		BuildNodeLists(root);
 		SortNodeLists();
@@ -197,12 +197,12 @@ void Renderer::RenderWithoutPostProcessing(){
 
 	glUseProgram(0);
 
-	
+
 	SwapBuffers();
 }
 
 void Renderer::RenderMotionBlur(){
-	
+
 
 	//render scene need motion blur and fog
 	glBindFramebuffer(GL_FRAMEBUFFER, motion_blur_FBO);
@@ -232,7 +232,7 @@ void Renderer::RenderMotionBlur(){
 		DrawNodes();
 		ClearNodeLists();
 
-		
+
 	}
 
 	glUseProgram(0);
@@ -275,7 +275,7 @@ void Renderer::PresentMotionBlur(){
 	*/
 	Matrix4 inverse_pv_matrix = Matrix4::InvertMatrix(projMatrix*current_viewMatrix);
 
-//	previous_viewMatrix.values[14] = previous_viewMatrix.values[14] - 100;
+	//	previous_viewMatrix.values[14] = previous_viewMatrix.values[14] - 100;
 
 	Matrix4 previous_pv_matrix = projMatrix * previous_viewMatrix;
 
@@ -365,12 +365,12 @@ void Renderer::RenderMenu()
 	Vector2 mousePos = Window::GetWindow().GetMouse()->GetAbsolutePosition();
 	bool mousePressed = Window::GetWindow().GetMouse()->ButtonDown(MOUSE_LEFT);
 
-	float correctedX = mousePos.x + -0.7 * 1280;
-	float correctedY = mousePos.y + -0.7 * 800;
+	float correctedX = mousePos.x + -0.7f * 1280;
+	float correctedY = mousePos.y + -0.7f * 800;
 
 	//cout << mousePos.x << ", " << mousePos.y << endl;
 
-	modelMatrix = Matrix4::Translation(Vector3(-0.7, -0.7, 0)) *  Matrix4::Scale(Vector3(0.25, 0.25, 0.25));
+	modelMatrix = Matrix4::Translation(Vector3(-0.7f, -0.7f, 0.0f)) *  Matrix4::Scale(Vector3(0.25f, 0.25f, 0.25f));
 	UpdateShaderMatrices();
 	if (playButton->checkAndDraw(mousePos, mousePressed))
 	{
@@ -381,7 +381,7 @@ void Renderer::RenderMenu()
 	//UpdateShaderMatrices();
 	//resetButton->Draw(mousePos);
 
-	modelMatrix = Matrix4::Translation(Vector3(-0.7, -0.3, 0)) *  Matrix4::Scale(Vector3(0.25, 0.25, 0.25));
+	modelMatrix = Matrix4::Translation(Vector3(-0.7f, -0.3f, 0.0f)) *  Matrix4::Scale(Vector3(0.25f, 0.25f, 0.25f));
 	UpdateShaderMatrices();
 	if (exitButton->checkAndDraw(mousePos, mousePressed))
 	{
@@ -429,8 +429,8 @@ void Renderer::RenderLoading(int percent, string message)
 	glBlendFunc(GL_SRC_ALPHA, GL_SRC_ALPHA);
 
 
-	DrawText(a, Vector3(width / 2 - a.length() * 15, height / 2 - 60, 0), 30, false);
-	DrawText(message, Vector3(width / 2 - message.length() * 15, height / 2 - 30, 0), 30, false);
+	DrawText(a, Vector3(width / 2.0f - a.length() * 15.0f, height / 2 - 60.0f, 0.0f), 30.0f, false);
+	DrawText(message, Vector3(width / 2.0f - message.length() * 15.0f, height / 2 - 30.0f, 0.0f), 30.0f, false);
 
 	glDepthMask(true);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -638,7 +638,7 @@ void Renderer::DrawAfterBurner(){
 
 		viewMatrix = camera->BuildViewMatrix();
 	}
-	
+
 	spaceship_scene_node->afterburner_system[0].Render(msec, model_matrix, projMatrix, viewMatrix);
 	spaceship_scene_node->afterburner_system[1].Render(msec, model_matrix, projMatrix, viewMatrix);
 }
@@ -678,9 +678,9 @@ bool Renderer::CreatParticleBuffer(){
 void Renderer::RenderParticleToTexture(){
 	glBindFramebuffer(GL_FRAMEBUFFER, particle_FBO);
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	
+
 	DrawAfterBurner();
-	
+
 
 	glUseProgram(0);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -690,10 +690,10 @@ void Renderer::RenderParticleToTexture(){
 void Renderer::RenderBackground(){
 	glDepthMask(GL_FALSE);
 	SetCurrentShader(backgroundShader);
-	glUniform1i(glGetUniformLocation(currentShader->GetProgram(),"diffuseTex"), 0);
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), 0);
 	PushMatrix();
 	MatrixToIdentity();
-//	projMatrix = Matrix4::Perspective(0.5f, 10000.0f, (float)width / (float)height, 45.0f);
+	//	projMatrix = Matrix4::Perspective(0.5f, 10000.0f, (float)width / (float)height, 45.0f);
 	projMatrix = Matrix4::Orthographic(-1, 1, 1, -1, -1, 1);
 	UpdateShaderMatrices();
 	quad->SetTexture(background[0]);

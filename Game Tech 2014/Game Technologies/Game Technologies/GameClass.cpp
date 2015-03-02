@@ -16,7 +16,7 @@ GameClass::~GameClass(void)
 	{
 		delete (*i);
 	}
-	delete gameCamera;
+//	delete gameCamera;
 }
 
 void GameClass::UpdatePhysics(float msec) 

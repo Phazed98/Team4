@@ -1,8 +1,8 @@
 #include "PhysicsNode.h"
 
-const Vector3 PhysicsNode::gravity = Vector3(0,-0.001,0);
+const Vector3 PhysicsNode::gravity = Vector3(0.0f, -0.001f, 0.0f);
 
-PhysicsNode::PhysicsNode(void): vol(NULL) 
+PhysicsNode::PhysicsNode(void) : vol(NULL)
 {
 	target = NULL;
 	useGravity = true;
@@ -11,29 +11,29 @@ PhysicsNode::PhysicsNode(void): vol(NULL)
 
 }
 
-PhysicsNode::PhysicsNode(Quaternion orientation, Vector3 position): vol(NULL) 
+PhysicsNode::PhysicsNode(Quaternion orientation, Vector3 position) : vol(NULL)
 {
-	m_orientation	= orientation;
-	m_position		= position;
+	m_orientation = orientation;
+	m_position = position;
 	m_elasticity = 1.0f;
 	useGravity = true;
 	useDamping = true;
 
 }
 
-PhysicsNode::~PhysicsNode(void)	
+PhysicsNode::~PhysicsNode(void)
 {
 
 }
 
 
-void	PhysicsNode::Update(float msec) 
+void	PhysicsNode::Update(float msec)
 {
 	//Damping Factor
 	if (useDamping)
 	{
-		m_linearVelocity = m_linearVelocity * 0.98;
-		m_angularVelocity = m_angularVelocity * 0.98;
+		m_linearVelocity = m_linearVelocity * 0.98f;
+		m_angularVelocity = m_angularVelocity * 0.98f;
 	}
 
 	//Linear and Angular Updates
@@ -41,11 +41,11 @@ void	PhysicsNode::Update(float msec)
 	updateAngular(msec);
 
 	//Removal of Forces
-	m_force = Vector3(0,0,0);
-	m_torque = Vector3(0,0,0);
+	m_force = Vector3(0, 0, 0);
+	m_torque = Vector3(0, 0, 0);
 
 	//Set Graphical Representation
-	if(target) 
+	if (target)
 	{
 		target->SetTransform(BuildTransform());
 	}
@@ -98,7 +98,7 @@ void PhysicsNode::updateAngular(float msec)
 }
 
 
-void PhysicsNode::AddForce(Vector3 point, Vector3 force) 
+void PhysicsNode::AddForce(Vector3 point, Vector3 force)
 {
 	m_force = m_force + force;
 	m_torque = m_torque + Vector3::Cross(point - m_position, force);
@@ -107,7 +107,7 @@ void PhysicsNode::AddForce(Vector3 point, Vector3 force)
 void PhysicsNode::CalculateAvgVel()
 {
 	m_avgVelocity = Vector3(0.0f, 0.0f, 0.0f);
-	
+
 	for (int x = 0; x < RESTCHECKFRAMES - 1; x++)
 		avgVel[x] = avgVel[x + 1];
 
@@ -121,7 +121,7 @@ void PhysicsNode::CalculateAvgVel()
 }
 
 
-Matrix4		PhysicsNode::BuildTransform() 
+Matrix4		PhysicsNode::BuildTransform()
 {
 	Matrix4 m = m_orientation.ToMatrix();
 	m.SetPositionVector(m_position);

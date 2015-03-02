@@ -150,7 +150,7 @@ bool GJK::CollisionDetection(PhysicsNode& n0, PhysicsNode& n1, CollisionData* cd
 						cd->m_normal = -tempT.triNormal;
 
 						// penetration depth
-						cd->m_penetration = distToOrigin * 0.1;
+						cd->m_penetration = distToOrigin * 0.1f;
 
 						//if (cd->m_penetration > 6 || cd->m_penetration < 0)
 						//	return false;
@@ -707,7 +707,7 @@ bool GJK::CollisionDetection(PhysicsNode& n0, PhysicsNode& n1, GJKSimplex simple
 						cd->m_normal = -tempT.triNormal;
 
 						// penetration depth
-						cd->m_penetration = distToOrigin * 0.1;
+						cd->m_penetration = distToOrigin * 0.1f;
 
 						triVector.clear();
 						//break;

@@ -61,7 +61,7 @@ void ObjectType::SetInitialAttributes()
 	else if (subType == 2) // Bottom
 	{
 		physicsNode->SetPosition(Vector3(0, -TILE_CENTRE_OFFSET, -5550));
-		renderNode->SetColour(Vector4(0.1, 0.1, 0.1, 1));
+		renderNode->SetColour(Vector4(0.1f, 0.1f, 0.1f, 1.0f));
 	}
 	else if (subType == 3) // Left
 	{

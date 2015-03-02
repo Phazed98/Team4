@@ -135,7 +135,7 @@ bool FireParticleSystem::InitParticleSystem(int shape_type, const Vector3& Pos)
 	for (int i = 0; i < LAUNCHER_AMOUNT; i++){
 		//generate 4 particle launchers
 		Particles[i].Type = PARTICLE_TYPE_LAUNCHER;
-		Vector3 position_offset = Pos + Vector3(10*i,0,0);
+		Vector3 position_offset = Pos + Vector3(10.0f*i, 0.0f, 0.0f);
 		Particles[i].Pos = position_offset;
 		Particles[i].Vel = Vector3(0.0f, 0.0001f, 0.0f);
 		Particles[i].LifetimeMillis = 0.0f;
@@ -211,7 +211,7 @@ void FireParticleSystem::Render(float DeltaTimeMillis, const Matrix4& modelMatri
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
-	UpdateParticles(DeltaTimeMillis);
+	UpdateParticles((int)DeltaTimeMillis);
 	
 	
 

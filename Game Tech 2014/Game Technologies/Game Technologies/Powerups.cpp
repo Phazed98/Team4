@@ -37,7 +37,7 @@ GameEntity* Powerups::BuildPowerupEntity(float size, Vector3 pos) {
 	SceneNode* test = new SceneNode(PowerupMesh);
 	test->SetModelScale(Vector3(size, size, size));
 	test->SetBoundingRadius(size);
-	test->SetColour(Vector4(0.2, 0.2, 0.5, 1));
+	test->SetColour(Vector4(0.2f, 0.2f, 0.5f, 1.0f));
 	PhysicsNode*p = new PhysicsNode();
 	p->SetMass(10);
 	p->SetUseGravity(false);
@@ -51,18 +51,18 @@ GameEntity* Powerups::BuildPowerupEntity(float size, Vector3 pos) {
 
 void Powerups::UpdatePowerup(Vehicle* Car, Coins* coins, float msec){
 	/*if (Speed_boost != NULL){
-		TestLength = (Speed_boost->GetPhysicsNode().GetPosition() - Car->GetPhysicsNode()->GetPosition()).Length();
-		if (TestLength <= size + 4){
-			SpeedboostTime = 200 * msec;
-			Car->SetSpeedPlayer(2);
-			ColorTemp = Speed_boost->GetRenderNode().GetColour();
-			ColorTemp.w = 0;
-			Speed_boost->GetRenderNode().SetColour(ColorTemp);
-		}
+	TestLength = (Speed_boost->GetPhysicsNode().GetPosition() - Car->GetPhysicsNode()->GetPosition()).Length();
+	if (TestLength <= size + 4){
+	SpeedboostTime = 200 * msec;
+	Car->SetSpeedPlayer(2);
+	ColorTemp = Speed_boost->GetRenderNode().GetColour();
+	ColorTemp.w = 0;
+	Speed_boost->GetRenderNode().SetColour(ColorTemp);
+	}
 	}
 
 	if (SpeedboostTime <= msec){
-		Car->SetSpeedPlayer(1);
+	Car->SetSpeedPlayer(1);
 	}*/
 
 	if (Invulnerability != NULL){
@@ -92,7 +92,7 @@ void Powerups::UpdatePowerup(Vehicle* Car, Coins* coins, float msec){
 			if ((Car->GetPhysicsNode()->GetPosition() - coins->GetAllcoins()[i]->GetPhysicsNode().GetPosition()).Length() <= 300){
 				temp1 = Car->GetPhysicsNode()->GetPosition() - coins->GetAllcoins()[i]->GetPhysicsNode().GetPosition();
 				temp1.Normalise();
-				temp1 = temp1 * 0.2;
+				temp1 = temp1 * 0.2f;
 				coins->GetAllcoins()[i]->GetPhysicsNode().SetLinearVelocity(temp1);
 			}
 			else{

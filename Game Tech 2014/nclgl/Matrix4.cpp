@@ -294,7 +294,7 @@ Matrix4 Matrix4::InvertMatrix(Matrix4 m)
 	det = 1.0 / det;
 
 	for (i = 0; i < 16; i++)
-		invOut.values[i] = inv.values[i] * det;
+		invOut.values[i] = inv.values[i] * (float)det;
 
 	return invOut;
 }

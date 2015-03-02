@@ -19,7 +19,7 @@ PhysicsSystem::PhysicsSystem(void)
 	//store the ssn in render to render the particle system at the end of everything
 	Renderer::GetRenderer().SetSpaceshipSceneNode(spaceship_scene_node);
 
-	this->playerVehicle = new Vehicle(PlayerMesh, 4, 0.0023, 2, 0.02, spaceship_scene_node);
+	this->playerVehicle = new Vehicle(PlayerMesh, 4.0f, 0.0023f, 2, 0.02f, spaceship_scene_node);
 	this->playerPhysNode = playerVehicle->GetPhysicsNode();
 	playerPhysNode->SetLinearVelocity(Vector3(0, 0, 0));
 
@@ -27,7 +27,7 @@ PhysicsSystem::PhysicsSystem(void)
 
 PhysicsSystem::~PhysicsSystem(void)
 {
-	for (int i = 0; i < allSprings.size(); i++) 
+	for (unsigned int i = 0; i < allSprings.size(); i++) 
 	{
 		delete allSprings[i];
 	}

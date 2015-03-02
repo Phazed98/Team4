@@ -124,7 +124,7 @@ MyGame::MyGame()
 	for (int i = 0; i < 7; i++)
 	{
 		ObjectType* plane = BuildObjectEntity(0, 2);
-		plane->SetPos(Vector3(0, -500, -i * 800));
+		plane->SetPos(Vector3(0.0f, -500.0f, -i * 800.0f));
 		if (i != 6)
 			plane->setState(2);
 		allEntities.push_back(plane);
@@ -133,7 +133,7 @@ MyGame::MyGame()
 	for (int i = 0; i < 7; i++)
 	{
 		ObjectType* plane = BuildObjectEntity(0, 0);
-		plane->SetPos(Vector3(0, 500, -i * 800));
+		plane->SetPos(Vector3(0.0f, 500.0f, -i * 800.0f));
 		if (i != 6)
 			plane->setState(2);
 		allEntities.push_back(plane);
@@ -142,7 +142,7 @@ MyGame::MyGame()
 	for (int i = 0; i < 7; i++)
 	{
 		ObjectType* plane = BuildObjectEntity(0, 1);
-		plane->SetPos(Vector3(500, 0, -i * 800));
+		plane->SetPos(Vector3(500.0f, 0.0f, -i * 800.0f));
 		if (i != 6)
 			plane->setState(2);
 		allEntities.push_back(plane);
@@ -151,7 +151,7 @@ MyGame::MyGame()
 	for (int i = 0; i < 7; i++)
 	{
 		ObjectType* plane = BuildObjectEntity(0, 3);
-		plane->SetPos(Vector3(-500, 0, -i * 800));
+		plane->SetPos(Vector3(-500.0f, 0.0f, -i * 800.0f));
 		if (i != 6)
 			plane->setState(2);
 		allEntities.push_back(plane);
@@ -159,17 +159,55 @@ MyGame::MyGame()
 
 	setCurrentState(GAME_PLAYING);
 	Renderer::GetRenderer().RenderLoading(100, "Done...");
-	if (USE_NETWORKING && IS_HOST)
+	
+	
+	if (USE_NETWORKING)
 	{
-		while (client_id <= 0)
+		if (IS_HOST)
 		{
-			// get new clients
-			if (networkServer->acceptNewClient(client_id))
+			while (client_id <= 0)
 			{
-				cout << "Client " << client_id << " has been connected to the server." << endl;
-				client_id++;
+				// get new clients
+				if (networkServer->acceptNewClient(client_id))
+				{
+					std::cout << "Client " << client_id << " has been connected to the server." << std::endl;
+					client_id++;
+				}
+			}
+			sendServerStartPackets();
+		}
+
+		if (IS_CLIENT)
+		{
+			bool startGame = false;
+			while (!startGame)
+			{
+				Packet packet;
+				int data_length = networkClient->receivePackets(client_network_data);
+
+				if (data_length <= 0)
+				{
+					continue;
+				}
+				unsigned int i = 1;
+				while (i < (unsigned int)data_length)
+				{
+					packet.deserialize(client_network_data);
+					i += sizeof(Packet);
+
+					if (packet.packet_type == START_GAME)
+					{
+						startGame = true;
+						srand(packet.packet_integer);
+						break;
+					}
+				}
 			}
 		}
+	}
+	else
+	{
+		srand((int)Window::GetWindow().GetTimer()->GetMS());
 	}
 }
 
@@ -235,32 +273,10 @@ void MyGame::UpdateGame(float msec)
 	AllCoins->UpdatePickupCoins(Car);
 	*/
 
-	timer += 0.001;
+	timer += 0.001f;
 
-
-	if (!USE_NETWORKING)
-	{
-		handlePlanes(timer);
-	}
-
-	if (USE_NETWORKING)
-	{
-
-		resetNumber = rand() % 100 + 1;
-		randomPlane = rand() % 5 + 1;
-		createObstacleNumber = rand() % 100 + 1;
-		objectRandValue = rand() % 100 + 1;
-		objectRandPlane = rand() % 5 + 1;
-		obstacleRandNum = rand() % 2 + 1;
-
-		if (IS_HOST)
-		{
-			//handlePlanesNetwork(resetNumber, randomPlane, createObstacleNumber, objectRandValue, objectRandPlane, obstacleRandNum);
-			//handlePlanes(timer);
-		}
-
-		handleNetworking();
-	}
+	handlePlanes(timer);
+	//handleNetworking();
 }
 
 GameEntity* MyGame::BuildPlayerEntity(float size, Vector3 pos)
@@ -268,7 +284,7 @@ GameEntity* MyGame::BuildPlayerEntity(float size, Vector3 pos)
 	SceneNode* test = new SceneNode(PlayerMesh);
 	test->SetModelScale(Vector3(size, size, size));
 	test->SetBoundingRadius(size);
-	test->SetColour(Vector4(0.2, 0.2, 0.5, 1));
+	test->SetColour(Vector4(0.2f, 0.2f, 0.5f, 1.0f));
 	PhysicsNode*p = new PhysicsNode();
 
 	p->SetUseGravity(false);
@@ -290,7 +306,7 @@ GameEntity* MyGame::BuildBuffEntity(float radius, Vector3 pos)
 	SceneNode* test = new SceneNode(sphere);
 	test->SetModelScale(Vector3(radius, radius, radius));
 	test->SetBoundingRadius(radius);
-	test->SetColour(Vector4(0.2, 0.2, 0.5, 1));
+	test->SetColour(Vector4(0.2f, 0.2f, 0.5f, 1.0f));
 	PhysicsNode*p = new PhysicsNode();
 
 	p->SetUseGravity(false);
@@ -425,56 +441,6 @@ ObjectType* MyGame::BuildObjectEntity(int type, int subType)
 	return g;
 }
 
-ObjectType* MyGame::BuildObjectEntityNetwork(int type, int subType, int setRandValue, int randPlane)
-{
-	SceneNode* s = new SceneNode(cube);
-	if (subType == 0){
-		s = new SceneNode(cubeAir);
-	}
-	else if (subType == 1){
-		s = new SceneNode(cubeFire);
-
-	}
-	else if (subType == 2){
-		s = new SceneNode(cubeWater);
-
-	}
-	else if (subType == 3){
-		s = new SceneNode(cubeEarth);
-
-	}
-	PhysicsNode* p = new PhysicsNode();
-	p->SetUseGravity(false);
-
-	ObjectType*g = new ObjectType(s, p, type, subType);
-	g->ConnectToSystems();
-	SceneNode &test = g->GetRenderNode();
-
-	test.SetModelScale(Vector3(TILE_WIDTH, TILE_HEIGHT, TILE_DEPTH));
-	test.SetBoundingRadius(TILE_DEPTH);
-
-	//50% chance that we set the random value of this plane to a random value from 1 - 5
-	if (setRandValue > 50)
-	{
-		if (getDrawingPlanes(subType) > 1)
-		{
-			g->setRandom(randPlane);
-		}
-	}
-
-	elements[subType].push_back(g);
-
-	/*if reference vector of this subtype has objects inside delete them all
-	so it contains only the one that was created last */
-	while (reference[subType].size() > 0)
-	{
-		reference[subType].pop_back();
-	}
-	reference[subType].push_back(g);
-
-	return g;
-}
-
 //creates a new Obstacle
 Obstacle* MyGame::BuildObstacleEntity(float size, int type, int subType, ObjectType* _obj, int _obstacle_type) 
 {
@@ -483,7 +449,7 @@ Obstacle* MyGame::BuildObstacleEntity(float size, int type, int subType, ObjectT
 	p->SetUseGravity(false);
 
 	Obstacle *g = new Obstacle(_obj, s, p, type, subType, _obstacle_type);
-	g->SetSize(size);
+	g->SetSize((int)size);
 	g->ConnectToSystems();
 	SceneNode &test = g->GetRenderNode();
 
@@ -500,7 +466,7 @@ GameEntity* MyGame::BuildBulletEntity(float radius, Vector3 pos)
 	SceneNode* test = new SceneNode(sphere);
 	test->SetModelScale(Vector3(radius, radius, radius));
 	test->SetBoundingRadius(radius);
-	test->SetColour(Vector4(0.2, 0.2, 0.5, 1));
+	test->SetColour(Vector4(0.2f, 0.2f, 0.5f, 1.0f));
 	PhysicsNode*p = new PhysicsNode();
 	p->SetUseDamping(false);
 	p->SetUseGravity(false);
@@ -515,7 +481,7 @@ GameEntity* MyGame::BuildBulletEntity(float radius, Vector3 pos)
 int MyGame::getIndexOfAllEtities(GameEntity* _G)
 {
 	int index = -1;
-	for (int i = 0; i < allEntities.size(); i++)
+	for (unsigned int i = 0; i < allEntities.size(); i++)
 	{
 		if (_G == allEntities[i])
 		{
@@ -529,7 +495,7 @@ int MyGame::getIndexOfAllEtities(GameEntity* _G)
 
 int MyGame::getIndexOfElements(ObjectType* _G)
 {
-	for (int j = 0; j < elements[_G->getSubType()].size(); j++)
+	for (unsigned int j = 0; j < elements[_G->getSubType()].size(); j++)
 	{
 		if (_G == elements[_G->getSubType()][j])
 		{
@@ -559,7 +525,7 @@ int MyGame::getDrawingPlanes(int _subType)
 
 int MyGame::getEmptyIndex(int _subType)
 {
-	for (int i = 0; i < elements[_subType].size(); i++)
+	for (unsigned int i = 0; i < elements[_subType].size(); i++)
 	{
 		if (elements[_subType][i]->getState() == 4)
 		{
@@ -574,7 +540,7 @@ void MyGame::handlePlanes(float msec)
 	for (int i = 0; i < 4; i++)
 	{
 		// iterate through all obstacles
-		for (int j = 0; j < obstacleElements[i].size(); j++)
+		for (unsigned int j = 0; j < obstacleElements[i].size(); j++)
 		{
 			//check if the Obstacel has reached at the end
 			if (obstacleElements[i][j]->getState() == 1)
@@ -587,7 +553,7 @@ void MyGame::handlePlanes(float msec)
 			}
 		}
 		// iterate through all Tiles
-		for (int j = 0; j < elements[i].size(); j++)
+		for (unsigned int j = 0; j < elements[i].size(); j++)
 		{
 			if (elements[i][j]->getState() == 1)
 			{
@@ -618,78 +584,6 @@ void MyGame::handlePlanes(float msec)
 					//create obstacle
 					if ((rand() % 100 + 1) < 50)
 						CreateObstacle(elements[i][x]);
-				}
-				//change state
-				elements[i][j]->setState(2);
-
-			}
-			else if (elements[i][j]->getState() == 3)
-			{
-				elements[i][j]->setState(4);
-				allEntities.erase(allEntities.begin() + getIndexOfAllEtities(elements[i][j]));
-			}
-		}
-	}
-}
-
-
-/*
-resetNumber = rand() % 100 + 1;
-randomPlane = rand() % 5 + 1;
-createObstacleNumber = rand() % 100 + 1;
-objectRandValue = rand() % 100 + 1;
-objectRandPlane = rand() % 5 + 1;
-obstacleRandNum = rand() % 2 + 1;
-*/
-void MyGame::handlePlanesNetwork(int resetNumber, int randomPlane, int createObstacleNumber, int objectRandValue, int objectRandPlane, int obstacleRandNum)
-{
-	for (int i = 0; i < 4; i++)
-	{
-		// iterate through all obstacles
-		for (int j = 0; j < obstacleElements[i].size(); j++)
-		{
-			//check if the Obstacel has reached at the end
-			if (obstacleElements[i][j]->getState() == 1)
-			{
-				//set the new state so that it can be re used
-				obstacleElements[i][j]->setState(2);
-
-				//remove from all Entities so that we dont waste the update calls when not moving.
-				allEntities.erase(allEntities.begin() + getIndexOfAllEtities(obstacleElements[i][j]));
-			}
-		}
-		// iterate through all Tiles
-		for (int j = 0; j < elements[i].size(); j++)
-		{
-			if (elements[i][j]->getState() == 1)
-			{
-
-				//create new
-				if (getEmptyIndex(i) == -1)
-				{
-					allEntities.push_back(BuildObjectEntityNetwork(0, i,objectRandValue, objectRandPlane));
-				}
-				else
-				{
-					int x = getEmptyIndex(i);
-
-					elements[i][x]->reset();
-					while (reference[i].size()>0)
-						reference[i].pop_back();
-
-					reference[i].push_back(elements[i][x]);
-					if (resetNumber > 50)
-					{
-						if (getDrawingPlanes(i) > 0)
-						{
-							elements[i][x]->setRandom(randomPlane);
-						}
-					}
-					allEntities.push_back(elements[i][x]);
-
-					//create obstacle
-					if (createObstacleNumber < 50)
-						CreateObstacleNetwork(elements[i][x],obstacleRandNum);
 				}
 				//change state
 				elements[i][j]->setState(2);
@@ -770,77 +664,11 @@ void MyGame::CreateObstacle(ObjectType* _obj)
 	}
 }
 
-void MyGame::CreateObstacleNetwork(ObjectType* _obj, int random_number)
-{
-	Obstacle* temp = NULL;
-	//select random obstacle 
-
-	int obstacleType = rand() % 5 + 0;
-	int empty = getObstacleEmptyIndex(_obj->getSubType(), obstacleType);
-	// for the first obstacle created
-	if (obstacleReference[_obj->getSubType()] == NULL)
-	{
-		temp = BuildObstacleEntity(50, 1, _obj->getSubType(), _obj, obstacleType);
-		if (temp->getObstacleType() == 1)
-		{
-			GameEntity* bul = BuildBulletEntity(20, temp->GetPhysicsNode().GetPosition());
-			temp->SetBullet(bul);
-			temp->SetPlayer(PhysicsSystem::GetPhysicsSystem().GetPlayer());
-			allEntities.push_back(bul);
-
-		}
-		obstacleElements[_obj->getSubType()].push_back(temp);
-	}
-	//reference exists, but everything is running/working
-	else if (empty == -1)
-	{
-		if (obstacleReference[_obj->getSubType()] != NULL)
-		{
-			if (obstacleReference[_obj->getSubType()]->GetPhysicsNode().GetPosition().z > -4750.0f)
-			{
-				temp = BuildObstacleEntity(50, 1, _obj->getSubType(), _obj, obstacleType);
-				if (temp->getObstacleType() == 1)
-				{
-					GameEntity* bul = BuildBulletEntity(20, temp->GetPhysicsNode().GetPosition());
-					temp->SetBullet(bul);
-					temp->SetPlayer(PhysicsSystem::GetPhysicsSystem().GetPlayer());
-					allEntities.push_back(bul);
-
-				}
-				obstacleElements[_obj->getSubType()].push_back(temp);
-			}
-		}
-	}
-	//free obstacle exists 
-	else
-	{
-		//use the old object
-		if (obstacleReference[_obj->getSubType()] != NULL)
-		{
-			if (obstacleReference[_obj->getSubType()]->GetPhysicsNode().GetPosition().z > -4750.0f)
-			{
-				temp = obstacleElements[_obj->getSubType()][empty];
-				temp->SetTile(_obj);
-			}
-		}
-	}
-	//initialize values and push to allEntities
-	if (temp != NULL)
-	{
-		int temp_lane = (_obj->getSubType() + 1) * 2 - random_number;
-		temp->SetLane(temp_lane);
-		temp->resetObstacle();
-		obstacleReference[_obj->getSubType()] = temp;
-		allEntities.push_back(temp);
-	}
-}
-
-
 
 //returns the index of the Obstacle which is free , if not , returns -1
 int MyGame::getObstacleEmptyIndex(int _subType, int _obstacleType)
 {
-	for (int i = 0; i < obstacleElements[_subType].size(); i++)
+	for (unsigned int i = 0; i < obstacleElements[_subType].size(); i++)
 	{
 		if (obstacleElements[_subType][i]!=NULL)
 		if (obstacleElements[_subType][i]->getState() == 2 && _obstacleType == obstacleElements[_subType][i]->getObstacleType())
@@ -857,7 +685,7 @@ void MyGame::receiveFromClients()
 
 	// go through all clients
 	std::map<unsigned int, SOCKET>::iterator iter;
-
+	int i = 0;
 	for (iter = networkServer->sessions.begin(); iter != networkServer->sessions.end(); iter++)
 	{
 		int data_length = networkServer->receiveData(iter->first, server_network_data);
@@ -868,7 +696,7 @@ void MyGame::receiveFromClients()
 			continue;
 		}
 
-		int i = 0;
+		unsigned int i = 1;
 		while (i < (unsigned int)data_length)
 		{
 			packet.deserialize(&(server_network_data[i]));
@@ -879,24 +707,23 @@ void MyGame::receiveFromClients()
 
 			case INIT_CONNECTION:
 
-				cout <<"server received init packet from client" << endl;
+				cout << "server received init packet from client" << endl;
 				sendServerActionPackets();
 
 				break;
 
 			case ACTION_EVENT:
 
-				cout <<"server received action event packet from client" << endl;
+				cout << "server received action event packet from client" << endl;
 				sendServerActionPackets();
-
 				break;
 
 			default:
-
-				cout <<"error in packet types" << endl;
+				cout << "error in packet types" << endl;
 
 				break;
 			}
+			++i;
 		}
 	}
 }
@@ -918,7 +745,7 @@ void MyGame::sendToClients()
 			continue;
 		}
 
-		int i = 0;
+		unsigned int i = 0;
 		while (i < (unsigned int)data_length)
 		{
 			packet.deserialize(&(server_network_data[i]));
@@ -956,42 +783,32 @@ void MyGame::sendToClients()
 
 void MyGame::sendServerActionPackets()
 {
-	sendData dts;
-	
-	dts.createObstacleNumber = createObstacleNumber;
-	dts.objectRandPlane = objectRandPlane;
-	dts.objectRandValue = objectRandValue;
-	dts.obstacleRandNum = obstacleRandNum;
-	dts.randomPlane = randomPlane;
-	dts.resetNumber = resetNumber;
-	
-	networkServer->sendToAll((char*)&dts,sizeof(sendData));
+	// send action packet
+	const unsigned int packet_size = sizeof(Packet);
+	char packet_data[packet_size];
 
-	////vector <messageInfo> message;
-	//messageInfo message[200];
-	//for (int i = 0; i < allEntities.size(); ++i)
-	//{
-	//	messageInfo mi;
-	//	mi.objectID = allEntities[i]->objectID;
-	//	mi.Position = allEntities[i]->GetPhysicsNode().GetPosition();
-	//	mi.Orientation = allEntities[i]->GetPhysicsNode().GetOrientation();
-	//	mi.objectType = allEntities[i]->GetRenderNode().nodeType;
-	//	message[i] = mi;
-	//	//message.push_back(mi);
-	//}
-	//Packet packet;
-	//packet.packet_type = ACTION_EVENT;
-	//for (int x = 0; x < 200; x++)
-	//	packet.data[x] = message[x];
-	//const unsigned int packet_size = sizeof(Packet);
-	//char packet_data[packet_size];
-	//packet.serialize(packet_data);
-	//networkServer->sendToAll(packet_data, packet_size);
-	//if (message.size() != 0)
-	//{
-		//networkServer->sendToAll((char*)&message[0], sizeof(messageInfo) * message.size());
-	//}
+	Packet packet;
+	packet.packet_type = ACTION_EVENT;
+	packet.packet_integer = 0;
+	packet.serialize(packet_data);
+
+	networkServer->sendToAll(packet_data, packet_size);
 }
+
+void MyGame::sendServerStartPackets()
+{
+	// send action packet
+	const unsigned int packet_size = sizeof(Packet);
+	char packet_data[packet_size];
+
+	Packet packet;
+	packet.packet_type = START_GAME;
+	packet.packet_integer = (int)Window::GetWindow().GetTimer()->GetMS();
+	packet.serialize(packet_data);
+
+	networkServer->sendToAll(packet_data, packet_size);
+}
+
 
 void MyGame::sendClientActionPackets()
 {
@@ -1017,101 +834,41 @@ void MyGame::handleNetworking()
 			cout << "Client " << client_id << " has been connected to the server." << endl;
 			client_id++;
 		}
-
-		receiveFromClients();
+		sendServerActionPackets();
 	}
 
 
 	if (IS_CLIENT)
 	{
-		sendClientActionPackets();
+		Packet packet;
 		int data_length = networkClient->receivePackets(client_network_data);
-		sendData dts;
-		memcpy(&dts, client_network_data, data_length);
-		handlePlanesNetwork(dts.resetNumber, dts.randomPlane, dts.createObstacleNumber, dts.objectRandValue, dts.objectRandPlane, dts.obstacleRandNum);
+
+		if (data_length <= 0)
+		{
+			return;
+		}
+
+		unsigned int i = 0;
+		while (i < (unsigned int)data_length)
+		{
+			packet.deserialize(&(client_network_data[i]));
+			i += sizeof(Packet);
+
+			switch (packet.packet_type)
+			{
+			case ACTION_EVENT:
+				break;
+
+			case INIT_CONNECTION:
+				break;
+
+			case START_GAME:
+				break;
+
+			default:
+				cout << "error in packet types" << endl;
+				break;
+			}
+		}
 	}
-
-	//	Packet packet;
-	//	int data_length = networkClient->receivePackets(client_network_data);
-
-	//	if (data_length <= 0)
-	//	{
-	//		return;
-	//	}
-
-	//	int i = 0;
-	//	while (i < (unsigned int)data_length)
-	//	{
-	//		packet.deserialize(&(client_network_data[i]));
-	//		i += sizeof(Packet);
-
-	//		switch (packet.packet_type)
-	//		{
-
-	//		case ACTION_EVENT:
-
-	//			cout << "Client received action event packet from server" << endl;
-	//			sendClientActionPackets();
-	//			for (int x = 0; x < 200; x++)
-	//			{
-	//				bool exists = false;
-	//				if (packet.data[x].objectID > 0)
-	//				{
-	//					for (int y = 0; y < allEntities.size(); y++) // For each existing Node
-	//					{
-	//						if (packet.data[x].objectID == allEntities[y]->objectID) // If the Node in message corresponds to the Existing Node
-	//						{
-	//							allEntities[y]->GetPhysicsNode().SetPosition(packet.data[x].Position);
-	//							allEntities[y]->GetPhysicsNode().SetOrientation(packet.data[x].Orientation);
-	//							exists = true;
-	//							break;
-	//						}
-	//					}
-	//				}
-	//			}
-
-	//			break;
-
-	//		default:
-
-	//			cout << "error in packet types" << endl;
-
-	//			break;
-	//		}
-	//	}
-	//}
-
-
-
-	//	vector<messageInfo> message; //Create a vector to hold our data
-	//	message.resize(data_length / sizeof(messageInfo)); //Resize it to hold the correct number of messageInfo
-	//	memcpy(&message[0], client_network_data, data_length);	//Copy the clientData bytes into the vector
-	//	std::cout << " Message Recieved from Server." << std::endl;
-	//	std::cout << " Recieved " << data_length << " Bytes." << std::endl;
-	//	bool exists = false;
-	//	for (int x = 0; x < message.size(); x++) // For each Node in the message
-	//	{
-	//		for (int y = 0; y < allEntities.size(); y++) // For each existing Node
-	//		{
-	//			if (message[x].objectID == allEntities[y]->objectID) // If the Node in message corresponds to the Existing Node
-	//			{
-	//				allEntities[y]->GetPhysicsNode().SetPosition(message[x].Position);
-	//				allEntities[y]->GetPhysicsNode().SetOrientation(message[x].Orientation);
-	//				exists = true;
-	//				break;
-	//			}
-	//		}
-	//		if (!exists) //If not create it
-	//		{
-	//			if (message[x].objectType == OBJ_PLANE)
-	//			{
-	//				allEntities.push_back(BuildObjectEntity(0, 1));
-	//			}
-	//			else if (message[x].objectType = OBJ_SPHERE)
-	//			{
-	//				allEntities.push_back(BuildBuffEntity(20, Vector3(0, 0, 0)));
-	//			}
-	//		}
-	//	}
-	//}
 }

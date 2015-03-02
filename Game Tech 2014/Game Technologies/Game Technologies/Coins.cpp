@@ -6,11 +6,11 @@ Coins::Coins(int coinsnum){
 	coin_size = 6;
 	CoinsMesh = new OBJMesh(MESHDIR"ico.obj");
 	for (int i = 0; i < Coins_num; i++){
-		Allcoins.push_back(BuildCoinsEntity(coin_size));
+		Allcoins.push_back(BuildCoinsEntity((float)coin_size));
 		Allcoins[i]->GetPhysicsNode().SetPosition(Vector3(0, 100, 0));
 	}
 
-	colourtemp1 = Vector4(0.2, 0.2, 0.5, 1);
+	colourtemp1 = Vector4(0.2f, 0.2f, 0.5f, 1.0f);
 }
 
 Coins::~Coins(void){
@@ -23,7 +23,7 @@ GameEntity* Coins::BuildCoinsEntity(float radius) {
 	SceneNode* test = new SceneNode(CoinsMesh);
 	test->SetModelScale(Vector3(radius, radius, radius));
 	test->SetBoundingRadius(radius);
-	test->SetColour(Vector4(0.2, 0.2, 0.5, 1));
+	test->SetColour(Vector4(0.2f, 0.2f, 0.5f, 1.0f));
 	PhysicsNode*p = new PhysicsNode();
 
 	p->SetMass(10);
@@ -39,8 +39,8 @@ void Coins::UpdateCoins(Vehicle* car){
 	srand((unsigned)time(NULL));
 
 	for (int i = 0; i < Coins_num; i++){
-		random_num0 = rand() % 600 - 200;
-		random_num1 = rand() % 1200;	
+		random_num0 = (float)(rand() % 600 - 200);
+		random_num1 = (float)(rand() % 1200);	
 		temp = car->GetPhysicsNode()->GetPosition();
 		temp.x = random_num0;
 		temp.z = temp.z + abs(random_num1);

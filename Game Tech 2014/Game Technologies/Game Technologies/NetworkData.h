@@ -13,6 +13,7 @@ enum PacketTypes
 {
 	INIT_CONNECTION = 0,
 	ACTION_EVENT = 1,
+	START_GAME = 2,
 };
 
 struct messageInfo

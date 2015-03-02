@@ -80,7 +80,7 @@ void SoundEmitter::AttachSource(OALSource* s) {
 	else {
 		alSourcei(currentSource->source, AL_BUFFER, sound->GetBuffer());
 		alSourcef(currentSource->source, AL_SEC_OFFSET,
-			(sound->GetLength() / 1000.0) - (timeLeft / 1000.0));
+			(sound->GetLength() / 1000.0f) - (timeLeft / 1000.0f));
 	}
 	alSourcePlay(currentSource->source);
 }

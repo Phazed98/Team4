@@ -14,7 +14,7 @@
 
 #define IS_HOST true
 #define IS_CLIENT true
-#define USE_NETWORKING false
+#define USE_NETWORKING true
 
 struct sendData
 {
@@ -68,6 +68,7 @@ public:
 	void receiveFromClients();
 	void sendToClients();
 	void sendServerActionPackets();
+	void sendServerStartPackets();
 	char server_network_data[MAX_PACKET_SIZE];
 
 	//Client

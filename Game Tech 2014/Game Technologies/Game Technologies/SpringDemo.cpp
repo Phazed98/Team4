@@ -3,7 +3,7 @@
 #include "PhysicsNode.h"
 
 float randFloat(int start, int end) {
-	float r = rand()*1.0/RAND_MAX;
+	float r = rand()*1.0f/RAND_MAX;
 	return (end - start)*r + start;
 }
 
