@@ -15,9 +15,10 @@ out Vertex
 
 
  void main ( void ) {
-	 vec3 tempPos = position - vec3 (0 ,0 ,1);
-
-	 gl_Position = projMatrix * vec4 ( tempPos , 1.0);
-	 OUT.texCoord = texCoord;
+	 vec3 tempPos = position + vec3 (0 ,0 ,1);
+	 
+	 gl_Position = projMatrix  * vec4 ( tempPos , 1.0);
+	 OUT.texCoord = (textureMatrix * vec4 ( texCoord , 0.0 , 1.0)).xy;
  //gl_Position =  vec4 ( tempPos , 1.0);
+ 
  }

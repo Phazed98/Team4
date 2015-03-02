@@ -3,6 +3,8 @@
 uniform sampler2D diffuseTex ;
 uniform sampler2D depthTex ;
 uniform sampler2D particleTex ;
+uniform sampler2D backgroundTex;
+
 uniform mat4 previousPVMatrix;
 
 uniform mat4 inversePVMatrix;
@@ -28,6 +30,9 @@ void main ( void ) {
 	vec2 texCoord = IN.texCoord;
 	//Get the current particle texture
 	vec4 particle_color = texture(particleTex, texCoord);
+	//Get the current background texture
+	vec4 background_colour = texture(backgroundTex, texCoord);
+	
 	float zOverW = texture(depthTex, texCoord).r;
 	
 	//H is the viewport position at this pixel in the range -1 to 1.
@@ -50,29 +55,39 @@ void main ( void ) {
 	previousPos /= previousPos.w;  
 
 	// Use this frame's position and last frame's to compute the pixel velocity.  
-	vec2 velocity = ((previousPos-currentPos)/2.f).xy; 
-
+//	vec2 velocity = ((previousPos-currentPos)/2.f).xy; 
+	vec2 velocity = ((currentPos-previousPos)).xy; 
 	// Get the initial color at this pixel.  
-	vec4 color = texture(diffuseTex, texCoord);
-	texCoord += velocity;  
-
-	for(int i = 1; i < 10; ++i, texCoord += velocity){  
-	// Sample the color buffer along the velocity vector.  
-	vec4 currentColor = texture(diffuseTex, texCoord);
-	// Add the current color to our color sum.  
-	color += currentColor;  
+	vec4 motion_color = texture(diffuseTex, texCoord);
+	  
+if(texCoord.x<0.2||texCoord.x>0.8||texCoord.y<0.2||texCoord.y>0.6){
+	//do motion blur
+	texCoord += velocity;
+	for(int i = 1; i < 5; ++i, texCoord += velocity){  
+		// Sample the color buffer along the velocity vector.  
+		vec4 currentColor = texture(diffuseTex, texCoord);
+		// Add the current color to our color sum.  
+		motion_color += currentColor;  
 	}
 
 	// Average all of the samples to get the final blur color.  
-	vec4 outputColor = color / 10; 
+	motion_color = motion_color / 5; 
+}
+	
 
-	float fFogCoord = abs(LinearizeDepth(zOverW) );
+	/* float fFogCoord = abs(LinearizeDepth(zOverW) );
 	float fResult = exp(-pow(fFogCoord*2, 2.0));
 
 	fResult = 1.0-clamp(fResult, 0.0, 1.0);
-	FragColor = mix(outputColor, vec4(0.7,0.7,0.7,1), fResult);
+	FragColor = mix(outputColor, vec4(0.7,0.7,0.7,1), fResult); */
 
 
+	FragColor = motion_color;
+	
+	if(LinearizeDepth(zOverW)>0.9)
+		FragColor = background_colour;
 	
 	FragColor += particle_color;
-	}
+	
+//	FragColor = vec4(velocity,0,1);
+}

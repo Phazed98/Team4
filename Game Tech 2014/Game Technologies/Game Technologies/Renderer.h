@@ -130,5 +130,7 @@ protected:
 	void MatrixToIdentity();
 	GLuint background[4];
 	Shader*	backgroundShader;
+
+	GLuint background_ColourTex;
 };
 

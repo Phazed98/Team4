@@ -11,7 +11,12 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)
 
 	basicFont = new Font(SOIL_load_OGL_texture(TEXTUREDIR"tahoma.tga", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_COMPRESS_TO_DXT), 16, 16);
 
-	background[0] = SOIL_load_OGL_texture(TEXTUREDIR"rusted_north.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS);
+	background[0] = SOIL_load_OGL_texture(TEXTUREDIR"background2.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS);
+	glBindTexture(GL_TEXTURE_2D, background[0]);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
 
 	//add by steven for motion blur
 	quad_motion_blur = Mesh::GenerateQuad();
@@ -251,14 +256,7 @@ void Renderer::PresentMotionBlur(){
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 	SetCurrentShader(motion_blur_shader);
 
-	glUniform1i(glGetUniformLocation(currentShader->GetProgram(),
-		"diffuseTex"), 0);
-
-	glUniform1i(glGetUniformLocation(currentShader->GetProgram(),
-		"depthTex"), 4);
-	glUniform1i(glGetUniformLocation(currentShader->GetProgram(),
-		"particleTex"), 5);
-
+	
 
 	//update current viewMatrix
 	current_viewMatrix = viewMatrix;//get current camera view matrix
@@ -285,7 +283,15 @@ void Renderer::PresentMotionBlur(){
 	glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(),
 		"inversePVMatrix"), 1, false, (float*)&inverse_pv_matrix);
 
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(),
+		"diffuseTex"), 0);
 
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(),
+		"depthTex"), 4);
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(),
+		"particleTex"), 5);
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(),
+		"backgroundTex"), 6);
 
 	glActiveTexture(GL_TEXTURE4);
 	glBindTexture(GL_TEXTURE_2D, motion_blur_DepthTex);
@@ -293,6 +299,8 @@ void Renderer::PresentMotionBlur(){
 	glActiveTexture(GL_TEXTURE5);
 	glBindTexture(GL_TEXTURE_2D, particle_ColourTex);
 
+	glActiveTexture(GL_TEXTURE6);
+	glBindTexture(GL_TEXTURE_2D, background_ColourTex);
 
 	projMatrix = Matrix4::Orthographic(-1, 1, 1, -1, -1, 1);
 
@@ -304,6 +312,7 @@ void Renderer::PresentMotionBlur(){
 	quad_motion_blur->SetTexture(motion_blur_ColourTex);
 	quad_motion_blur->Draw();
 
+	previous_viewMatrix = current_viewMatrix;
 
 	glUseProgram(0);
 }
@@ -658,6 +667,15 @@ bool Renderer::CreatParticleBuffer(){
 		GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 
 
+	glGenTextures(1, &background_ColourTex);
+	glBindTexture(GL_TEXTURE_2D, background_ColourTex);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0,
+		GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+
 	glGenFramebuffers(1, &particle_FBO);
 
 
@@ -678,7 +696,12 @@ bool Renderer::CreatParticleBuffer(){
 void Renderer::RenderParticleToTexture(){
 	glBindFramebuffer(GL_FRAMEBUFFER, particle_FBO);
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-
+	
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+		GL_TEXTURE_2D, background_ColourTex, 0);
+	RenderBackground();
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+		GL_TEXTURE_2D, particle_ColourTex, 0);
 	DrawAfterBurner();
 
 
@@ -688,6 +711,7 @@ void Renderer::RenderParticleToTexture(){
 }
 
 void Renderer::RenderBackground(){
+	glDisable(GL_DEPTH_TEST);
 	glDepthMask(GL_FALSE);
 	SetCurrentShader(backgroundShader);
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), 0);
@@ -695,6 +719,16 @@ void Renderer::RenderBackground(){
 	MatrixToIdentity();
 	//	projMatrix = Matrix4::Perspective(0.5f, 10000.0f, (float)width / (float)height, 45.0f);
 	projMatrix = Matrix4::Orthographic(-1, 1, 1, -1, -1, 1);
+	
+	Matrix4 pushPos = Matrix4::Translation(Vector3(0.5f, 0.5f, 0));
+	Matrix4 popPos = Matrix4::Translation(Vector3(-0.5f, -0.5f, 0));
+	Matrix4 rotation = camera->BuildViewMatrix();
+	rotation.values[12] = 0;
+	rotation.values[13] = 0;
+	rotation.values[14] = 0;
+
+	textureMatrix = pushPos * rotation *Matrix4::Scale(Vector3(0.7, 0.7, 0.7))* popPos;
+
 	UpdateShaderMatrices();
 	quad->SetTexture(background[0]);
 	quad->Draw();
@@ -702,6 +736,7 @@ void Renderer::RenderBackground(){
 	PopMatrix();
 	glUseProgram(0);
 	glDepthMask(GL_TRUE);
+	glEnable(GL_DEPTH_TEST);
 }
 
 void Renderer::PushMatrix(){
