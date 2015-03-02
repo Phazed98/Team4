@@ -14,7 +14,7 @@
 
 #define IS_HOST true
 #define IS_CLIENT true
-#define USE_NETWORKING true
+#define USE_NETWORKING false
 
 struct sendData
 {

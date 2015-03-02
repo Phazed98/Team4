@@ -151,16 +151,18 @@ MyGame::MyGame()
 
 	setCurrentState(GAME_PLAYING);
 	Renderer::GetRenderer().RenderLoading(100, "Done...");
-	
-	while (client_id <= 0)
+	if (USE_NETWORKING && IS_HOST)
 	{
-		// get new clients
-		if (networkServer->acceptNewClient(client_id))
+		while (client_id <= 0)
 		{
-			cout << "Client " << client_id << " has been connected to the server." << endl;
-			client_id++;
+			// get new clients
+			if (networkServer->acceptNewClient(client_id))
+			{
+				cout << "Client " << client_id << " has been connected to the server." << endl;
+				client_id++;
+			}
 		}
-	}	
+	}
 }
 
 MyGame::~MyGame(void)	
