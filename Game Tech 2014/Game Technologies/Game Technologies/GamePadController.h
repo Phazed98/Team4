@@ -19,14 +19,19 @@
 // XBOX Controller Class Definition
 class GamePadController
 {
-private:
-	XINPUT_STATE _controllerState;
-	int _controllerNum;
 public:
 	GamePadController(int playerNumber);
-	XINPUT_STATE GetState();
+	~GamePadController();
+	XINPUT_STATE GetState() { return controllerState; }
+	void UpdateState();
 	bool IsConnected();
-	void Vibrate(int leftVal = 0, int rightVal = 0);
+	void SetVibrate(int leftVal = 0, int rightVal = 0);
+	void StopVibrate();
+
+private:
+	XINPUT_STATE controllerState;
+	int controllerNum;
+
 };
 
 #endif

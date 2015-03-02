@@ -18,6 +18,8 @@ Description:Creates and handles the Window, including the initialisation of the 
 #include "Mouse.h"
 #include "GameTimer.h"
 
+#include "../Game Technologies/Game Technologies/GamePadController.h"
+
 #define WIN32_LEAN_AND_MEAN
 #define VC_EXTRALEAN
 #define WINDOWCLASS "WindowClass"
@@ -51,6 +53,13 @@ public:
 
 	GameTimer*   GetTimer()		{return timer;}
 
+	//--------Added by Sam for controller---------------
+	static GamePadController*		GetController()		{ return controller; }
+	static bool	GetControllerConnected() { return controllerConnected; }
+
+	void updateController(float msec);
+	//-----------------------------------------------------
+
 protected:
 	void	CheckMessages(MSG &msg);
 	static LRESULT CALLBACK WindowProc(HWND hWnd,UINT message,WPARAM wParam,LPARAM lParam);
@@ -77,6 +86,12 @@ protected:
 	float				elapsedMS;
 
 	bool				mouseLeftWindow;
+
+	//--------Added by Sam for controller---------------
+	static GamePadController* controller;
+	static bool controllerConnected;
+	static float controllerConnectTimer;
+	//-----------------------------------------------------
 
 private:
 	Window(std::string title = "OpenGL Framework", int sizeX = 800, int sizeY = 600, bool fullScreen = false);

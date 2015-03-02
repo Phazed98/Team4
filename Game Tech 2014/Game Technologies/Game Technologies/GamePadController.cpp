@@ -3,27 +3,30 @@
 GamePadController::GamePadController(int playerNumber)
 {
 	// Set the Controller Number
-	_controllerNum = playerNumber - 1;
+	controllerNum = playerNumber - 1;
 }
 
-XINPUT_STATE GamePadController::GetState()
+GamePadController::~GamePadController()
+{
+
+}
+
+void GamePadController::UpdateState()
 {
 	// Zeroise the state
-	ZeroMemory(&_controllerState, sizeof(XINPUT_STATE));
+	ZeroMemory(&controllerState, sizeof(XINPUT_STATE));
 
 	// Get the state
-	XInputGetState(_controllerNum, &_controllerState);
-
-	return _controllerState;
+	XInputGetState(controllerNum, &controllerState);
 }
 
 bool GamePadController::IsConnected()
 {
 	// Zeroise the state
-	ZeroMemory(&_controllerState, sizeof(XINPUT_STATE));
+	ZeroMemory(&controllerState, sizeof(XINPUT_STATE));
 
 	// Get the state
-	DWORD Result = XInputGetState(_controllerNum, &_controllerState);
+	DWORD Result = XInputGetState(controllerNum, &controllerState);
 
 	if (Result == ERROR_SUCCESS)
 	{
@@ -35,7 +38,9 @@ bool GamePadController::IsConnected()
 	}
 }
 
-void GamePadController::Vibrate(int leftVal, int rightVal)
+
+
+void GamePadController::SetVibrate(int leftVal, int rightVal)
 {
 	// Create a Vibraton State
 	XINPUT_VIBRATION Vibration;
@@ -48,5 +53,17 @@ void GamePadController::Vibrate(int leftVal, int rightVal)
 	Vibration.wRightMotorSpeed = rightVal;
 
 	// Vibrate the controller
-	XInputSetState(_controllerNum, &Vibration);
+	XInputSetState(controllerNum, &Vibration);
+}
+
+void GamePadController::StopVibrate()
+{
+	// Create a Vibraton State
+	XINPUT_VIBRATION Vibration;
+
+	// Zeroise the Vibration
+	ZeroMemory(&Vibration, sizeof(XINPUT_VIBRATION));
+
+	// Vibrate the controller
+	XInputSetState(controllerNum, &Vibration);
 }

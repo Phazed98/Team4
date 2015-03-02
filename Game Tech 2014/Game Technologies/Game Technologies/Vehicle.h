@@ -1,7 +1,8 @@
+//Written by Sam, adapted from Daixi's vehicle code to allow the vehicle to retain its behaviour over all planes, as well as adding improved hover mechanics and plane switching
+
 #pragma once
 #include"GameEntity.h"
-
-//Written by Sam, adapted from Daixi's vehicle code to allow the vehicle to retain its behaviour over all planes, as well as adding improved hover mechanics and plane switching
+#include "GamePadController.h"
 
 
 //Sam - added a min/max rotation define (negative for min)
@@ -34,13 +35,13 @@ protected:
 
 	void UpdatePlayerVelocity();
 
-	void SwitchPlane();
+	void SwitchPlane(float normalisedRX, float normalisedRY);
 
 	void UpdatePlayerRotationOnPlane();
 
 	Vector3 CalculateStartingOrientation();
 
-
+	bool controllerIsConnected = false;
 
 	PhysicsNode* PhysNode;
 
