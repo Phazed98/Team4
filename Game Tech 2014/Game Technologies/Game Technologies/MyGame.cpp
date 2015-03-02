@@ -444,17 +444,37 @@ ObjectType* MyGame::BuildObjectEntity(int type, int subType)
 //creates a new Obstacle
 Obstacle* MyGame::BuildObstacleEntity(float size, int type, int subType, ObjectType* _obj, int _obstacle_type) 
 {
-	SceneNode* s = new SceneNode(sphere);
+	SceneNode* s;
+	if (_obstacle_type == 5)
+	{
+		s = new SceneNode(cube);
+	}
+	else
+	{
+		s = new SceneNode(sphere);
+	}
+	
 	PhysicsNode* p = new PhysicsNode();
 	p->SetUseGravity(false);
 
 	Obstacle *g = new Obstacle(_obj, s, p, type, subType, _obstacle_type);
 	g->SetSize((int)size);
 	g->ConnectToSystems();
-	SceneNode &test = g->GetRenderNode();
+	if (_obstacle_type == 5)
+	{
+		SceneNode &test = g->GetRenderNode();
 
-	test.SetModelScale(Vector3(size, size, size));
-	test.SetBoundingRadius(size);
+		test.SetModelScale(Vector3(TILE_WIDTH, TILE_HEIGHT * 2, 20));
+		test.SetBoundingRadius(TILE_DEPTH);
+	}
+	else
+	{
+		SceneNode &test = g->GetRenderNode();
+
+		test.SetModelScale(Vector3(size, size, size));
+		test.SetBoundingRadius(size);
+	}
+	
 
 	obstacleElements[subType].push_back(g);
 
@@ -604,7 +624,7 @@ void MyGame::CreateObstacle(ObjectType* _obj)
 	Obstacle* temp = NULL;
 	//select random obstacle 
 
-	int obstacleType = rand() % 5 + 0;
+	int obstacleType = rand() % 6 + 0;
 	int empty = getObstacleEmptyIndex(_obj->getSubType(),obstacleType);
 	// for the first obstacle created
 	if (obstacleReference[_obj->getSubType()] == NULL)

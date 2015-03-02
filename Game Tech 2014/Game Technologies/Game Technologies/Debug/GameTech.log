@@ -1,33 +1,13 @@
-﻿Build started 02/03/2015 16:39:03.
+﻿Build started 02/03/2015 17:54:44.
      1>Project "D:\GitHub\Team4\Game Tech 2014\Game Technologies\Game Technologies\GameTech.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Bullets.cpp ChaseCamera.cpp Coins.cpp GameClass.cpp GameEntity.cpp Main.cpp MyGame.cpp NetworkClient.cpp NetworkServer.cpp ObjectType.cpp Obstacle.cpp PhysicsSystem.cpp Powerups.cpp Renderer.cpp Spring.cpp SpringDemo.cpp Vehicle.cpp
-         Bullets.cpp
-         Generating Code...
-         Compiling...
-         Vehicle.cpp
-         SpringDemo.cpp
-         Spring.cpp
-         Renderer.cpp
-         Powerups.cpp
-         PhysicsSystem.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Obstacle.cpp
          Obstacle.cpp
      1>d:\github\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(8): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(133): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(145): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(157): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(169): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
-         ObjectType.cpp
-         MyGame.cpp
-         Main.cpp
-         GameEntity.cpp
-         GameClass.cpp
-         Coins.cpp
-         ChaseCamera.cpp
-         Generating Code...
-         Skipping... (no relevant changes detected)
-         NetworkServer.cpp
-         NetworkClient.cpp
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(139): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(156): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(173): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(190): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.lib" /MACHINE:X86 /FORCE:MULTIPLE Debug\Bullets.obj
          Debug\Button.obj
@@ -134,4 +114,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:09.91
+Time Elapsed 00:00:00.93

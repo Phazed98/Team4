@@ -21,6 +21,7 @@ Obstacle::Obstacle(ObjectType* _tile, SceneNode* s, PhysicsNode* p, int _type, i
 	{
 		renderNode->SetColour(Vector4(0.564f, 0.043f, 0.835f, 1.0f));
 	}
+	
 	goingLeft = true;
 
 	bullet = NULL;
@@ -128,6 +129,11 @@ void Obstacle::SetLane(int _lane)
 {
 	lane = _lane;
 
+	//if (obstacleType == 5)
+	//{
+	//	lane = 10; // Just a random value to avoid getting an offset
+	//}
+
 	if (subType == 0) // Top tile
 	{
 		offset.y = -(TILE_HEIGHT + size);
@@ -138,6 +144,11 @@ void Obstacle::SetLane(int _lane)
 		else if (lane == 1)
 		{
 			offset.x = (float)random;
+		}
+
+		if (obstacleType == 5)
+		{
+			offset.x = 0;
 		}
 	}
 	else if (subType == 1) // Right tile
@@ -151,6 +162,11 @@ void Obstacle::SetLane(int _lane)
 		{
 			offset.y = (float)random;
 		}
+		
+		if (obstacleType == 5)
+		{
+			offset.y = 0;
+		}
 	}
 	else if (subType == 2) // Bottom tile
 	{
@@ -163,6 +179,11 @@ void Obstacle::SetLane(int _lane)
 		{
 			offset.x = (float)random;
 		}
+		 
+			if (obstacleType == 5)
+		{
+			offset.x = 0;
+		}
 	}
 	else if (subType == 3) // Left tile
 	{
@@ -174,6 +195,11 @@ void Obstacle::SetLane(int _lane)
 		else if (lane == 7)
 		{
 			offset.y = (float)random;
+		}
+		
+		if (obstacleType == 5)
+		{
+			offset.y = 0;
 		}
 	}
 }
