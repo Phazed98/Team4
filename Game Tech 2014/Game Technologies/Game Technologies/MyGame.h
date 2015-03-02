@@ -97,7 +97,7 @@ protected:
 
 	GameEntity* BuildPlayerEntity(float size, Vector3 pos);
 
-
+	ObjectType* BuildCheckPointEntity(int type, int subType, int size);
 
 	Mesh* cube;
 	Mesh* cubeWater;

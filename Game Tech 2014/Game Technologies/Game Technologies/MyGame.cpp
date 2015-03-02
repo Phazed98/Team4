@@ -157,6 +157,8 @@ MyGame::MyGame()
 		allEntities.push_back(plane);
 	}
 
+	allEntities.push_back(BuildCheckPointEntity(2, 4, 200));
+
 	setCurrentState(GAME_PLAYING);
 	Renderer::GetRenderer().RenderLoading(100, "Done...");
 	
@@ -891,4 +893,27 @@ void MyGame::handleNetworking()
 			}
 		}
 	}
+}
+
+ObjectType* MyGame::BuildCheckPointEntity(int type, int subType, int size)
+{
+	SceneNode* s = new SceneNode(quad);
+
+	s->SetModelScale(Vector3(size, size, size));
+	//Oh if only we had a set texture function...we could make our brick floor again WINK WINK
+	s->SetBoundingRadius(size);
+
+	PhysicsNode*p = new PhysicsNode(Quaternion::AxisAngleToQuaterion(Vector3(1, 0, 0), 180.0f), Vector3());
+	p->SetUseGravity(false);
+	p->SetInverseMass(0.0f);
+	p->SetInverseInertia(InertialMatrixHelper::createImmovableInvInertial());
+	p->SetCollisionVolume(new CollisionPlane(Vector3(0, 1, 0), 0));
+
+	ObjectType*g = new ObjectType(s, p, type, subType);
+	g->ConnectToSystems();
+
+
+
+
+	return g;
 }

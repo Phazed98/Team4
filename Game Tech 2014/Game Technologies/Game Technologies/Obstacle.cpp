@@ -77,7 +77,7 @@ void Obstacle::Update(float msec)
 			}
 		}
 
-		
+		HandleMovingObstacle();
 
 	}
 
@@ -88,10 +88,6 @@ void Obstacle::SetLane(int _lane)
 {
 	lane = _lane;
 
-	//if (obstacleType == 5)
-	//{
-	//	lane = 10; // Just a random value to avoid getting an offset
-	//}
 
 	if (subType == 0) // Top tile
 	{

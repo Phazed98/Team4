@@ -10,6 +10,9 @@ ObjectType::ObjectType(SceneNode* s, PhysicsNode* p, int _type, int _subType) : 
 	SetInitialAttributes();
 	length = 800.0f;
 	random = 1;
+	resetDistance = 5000;
+	checkPointTimer = 20000;
+	increaseTimer = true;
 }
 
 
@@ -41,6 +44,30 @@ void ObjectType::Update(float msec)
 			}
 		}
 	}
+
+	if (type == 2)
+	{
+		float speed = PhysicsSystem::GetTrackSpeed();
+		physicsNode->SetPosition(physicsNode->GetPosition() + Vector3(0, 0, speed));
+		checkPointTimer -= msec;
+		PhysicsSystem::GetPhysicsSystem().SetCheckPointTimer(checkPointTimer / 1000);
+
+		if (physicsNode->GetPosition().z > 0 && increaseTimer)
+		{
+			checkPointTimer += 10000 + resetDistance;
+
+			increaseTimer = false;
+		}
+
+		if (physicsNode->GetPosition().z > (resetDistance))
+		{
+			reset();
+			resetDistance += 1000;
+			increaseTimer = true;
+		}
+
+	}
+
 }
 
 
@@ -69,6 +96,10 @@ void ObjectType::SetInitialAttributes()
 		physicsNode->SetOrientation(Quaternion(0, 0, 1, 1));
 		renderNode->SetColour(Vector4(0, 1, 0, 1));
 	}
+	else if (subType == 4) // Middle
+	{
+		physicsNode->SetPosition(Vector3(0, 0, -5550));
+	}
 }
 
 void ObjectType::reset()
@@ -77,8 +108,6 @@ void ObjectType::reset()
 	SetInitialAttributes();
 	length = 800.0f;
 	random = 1;
-
-	//create obstacle
 }
 
 void ObjectType::SetPos(Vector3 pos)

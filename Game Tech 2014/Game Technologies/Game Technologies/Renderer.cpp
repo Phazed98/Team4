@@ -580,6 +580,7 @@ void Renderer::displayInformation()
 	DrawText("WASD = Move", Vector3(0, 144, 0), 16, false);
 	DrawText("Shift = Down", Vector3(0, 160, 0), 16, false);
 	DrawText("Space = Up", Vector3(0, 176, 0), 16, false);
+	DrawText("Timer = " + to_string(PhysicsSystem::GetPhysicsSystem().GetCheckPointTimer()), Vector3(0, 192, 0), 16, false);
 	//DrawText("(R)Reset Boxes", Vector3(0, 192, 0), 16, false);
 
 	glEnable(GL_DEPTH_TEST);

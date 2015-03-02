@@ -63,6 +63,9 @@ public:
 	static float GetTrackSpeed(){ return track_speed; }
 	static void  SetTrackSpeed(float s){ track_speed = s; }
 
+	int GetCheckPointTimer(){ return checkPointTimer; }
+	void  SetCheckPointTimer(int s){ checkPointTimer = s; }
+
 protected:
 	PhysicsSystem(void);
 	~PhysicsSystem(void);
@@ -108,6 +111,8 @@ protected:
 
 	//steven added for control the track speed everywhere
 	static float track_speed;
+
+	int checkPointTimer;
 
 };
 
