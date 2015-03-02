@@ -77,48 +77,7 @@ void Obstacle::Update(float msec)
 			}
 		}
 
-		if (obstacleType == 4)
-		{
-			if (subType == 0 || subType == 2) // Top and bottom tile
-			{
-				if (goingLeft)
-				{
-					offset.x += -movingObsSpeed;
-					if (offset.x < -180)
-					{
-						goingLeft = false;
-					}
-				}
-				else
-				{
-					offset.x += movingObsSpeed;
-					if (offset.x > 180)
-					{
-						goingLeft = true;
-					}
-				}
-
-			}
-			else
-			{
-				if (goingLeft)
-				{
-					offset.y += -movingObsSpeed;
-					if (offset.y < -180)
-					{
-						goingLeft = false;
-					}
-				}
-				else
-				{
-					offset.y += movingObsSpeed;
-					if (offset.y > 180)
-					{
-						goingLeft = true;
-					}
-				}
-			}
-		}
+		
 
 	}
 
@@ -200,6 +159,52 @@ void Obstacle::SetLane(int _lane)
 		if (obstacleType == 5)
 		{
 			offset.y = 0;
+		}
+	}
+}
+
+void Obstacle::HandleMovingObstacle()
+{
+	if (obstacleType == 4)
+	{
+		if (subType == 0 || subType == 2) // Top and bottom tile
+		{
+			if (goingLeft)
+			{
+				offset.x += -movingObsSpeed;
+				if (offset.x < -180)
+				{
+					goingLeft = false;
+				}
+			}
+			else
+			{
+				offset.x += movingObsSpeed;
+				if (offset.x > 180)
+				{
+					goingLeft = true;
+				}
+			}
+
+		}
+		else
+		{
+			if (goingLeft)
+			{
+				offset.y += -movingObsSpeed;
+				if (offset.y < -180)
+				{
+					goingLeft = false;
+				}
+			}
+			else
+			{
+				offset.y += movingObsSpeed;
+				if (offset.y > 180)
+				{
+					goingLeft = true;
+				}
+			}
 		}
 	}
 }

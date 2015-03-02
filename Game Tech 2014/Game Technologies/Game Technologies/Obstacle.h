@@ -28,6 +28,8 @@ public:
 
 	void ResetBullet();
 
+	void HandleMovingObstacle();
+
 	void SetSize(int _size) { size = _size; }
 
 private:
