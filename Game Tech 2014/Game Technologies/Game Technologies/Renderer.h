@@ -16,6 +16,7 @@ Implements:OGLRendere
 #include "Button.h"
 #include "SpaceshipSceneNode.h"
 #include "FireParticleSystem.h"
+#include "EarthParticleSystem.h"
 
 
 class ChaseCamera;
