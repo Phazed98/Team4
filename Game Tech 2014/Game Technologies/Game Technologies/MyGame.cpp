@@ -483,7 +483,7 @@ Obstacle* MyGame::BuildObstacleEntity(float size, int type, int subType, ObjectT
 	p->SetUseGravity(false);
 
 	Obstacle *g = new Obstacle(_obj, s, p, type, subType, _obstacle_type);
-
+	g->SetSize(size);
 	g->ConnectToSystems();
 	SceneNode &test = g->GetRenderNode();
 
@@ -715,7 +715,7 @@ void MyGame::CreateObstacle(ObjectType* _obj)
 	// for the first obstacle created
 	if (obstacleReference[_obj->getSubType()] == NULL)
 	{
-		temp = BuildObstacleEntity(50, 1, _obj->getSubType(), _obj, obstacleType);
+		temp = BuildObstacleEntity(25, 1, _obj->getSubType(), _obj, obstacleType);
 		if (temp->getObstacleType() == 1)
 		{
 			GameEntity* bul = BuildBulletEntity(20, temp->GetPhysicsNode().GetPosition());
@@ -733,7 +733,7 @@ void MyGame::CreateObstacle(ObjectType* _obj)
 		{
 			if (obstacleReference[_obj->getSubType()]->GetPhysicsNode().GetPosition().z > -4750.0f)
 			{
-				temp = BuildObstacleEntity(50, 1, _obj->getSubType(), _obj, obstacleType);
+				temp = BuildObstacleEntity(25, 1, _obj->getSubType(), _obj, obstacleType);
 				if (temp->getObstacleType() == 1)
 				{
 					GameEntity* bul = BuildBulletEntity(20, temp->GetPhysicsNode().GetPosition());

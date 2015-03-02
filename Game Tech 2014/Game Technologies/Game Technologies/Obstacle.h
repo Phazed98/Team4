@@ -28,6 +28,8 @@ public:
 
 	void ResetBullet();
 
+	void SetSize(int _size) { size = _size; }
+
 private:
 
 	int lane; // Lanes are from 0 t 7 starting from top, two lanes per tile
@@ -47,6 +49,8 @@ private:
 	float movingObsSpeed;
 
 	int count_time;
+
+	int size;
 
 };
 
