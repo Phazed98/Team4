@@ -4,7 +4,7 @@
 //filter down to all relevant places in the program
 
 //the distance from the centre of the game world X/Y axes to the centre of each tile
-#define TILE_CENTRE_OFFSET 500
+#define TILE_CENTRE_OFFSET 400
 //sizes of tiles
 #define TILE_HEIGHT 10
 #define TILE_WIDTH 200
@@ -13,4 +13,4 @@
 
 
 //distance from the centre of the game world X/Y axes to the surface of a tile....( TILE_CENTRE_OFFSET - TILE_HEIGHT - 40 for correction )
-#define SURFACE_CENTRE_OFFSET 450
+#define SURFACE_CENTRE_OFFSET 350

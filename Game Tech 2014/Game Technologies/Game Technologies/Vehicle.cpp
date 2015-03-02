@@ -263,6 +263,11 @@ void Vehicle::UpdatePlayer(float msec)
 		{
 			PhysNode->SetAngularVelocity(Vector3(0, 0, Speed_Turn));
 		}
+		//else clamp
+		else
+		{
+			PhysNode->SetAngularVelocity(Vector3(0, 0, 0));
+		}
 	}
 
 	if (controllerIsConnected && normalisedLX < 0)
