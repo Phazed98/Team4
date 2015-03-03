@@ -1,5 +1,6 @@
 #include "Renderer.h"
 #include "ChaseCamera.h"
+#include "GamePadController.h"
 
 Renderer* Renderer::instance = NULL;
 
@@ -422,12 +423,51 @@ void Renderer::RenderPauseMenu()
 		UpdateShaderMatrices();
 	}
 
-	if (Window::GetWindow().GetKeyboard()->KeyTriggered(KEYBOARD_UP))
+	//------------Added by Sam for controller input---------------------
+	float LY = 0;
+	XINPUT_STATE controllerState = Window::GetController()->GetState();
+
+	if (Window::GetControllerConnected())
+	{
+		//-------------------get left stick values----------------------
+		LY = controllerState.Gamepad.sThumbLY;
+		//check if the controller is outside dead zone
+		if (abs(LY) > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)
+		{
+			//clip the magnitude at its expected maximum value
+			if (LY > 32767)
+			{
+				LY = 32767;
+			}
+			if (LY < -32767)
+			{
+				LY = -32767;
+			}
+
+			//adjust magnitude relative to the end of the dead zone
+			if (LY > 0)
+			{
+				LY -= XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE;
+			}
+			else //will have to be negative due to previous ifs....so no need for if
+			{
+				LY += XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE;
+			}
+		}
+		else //if the controller is in the deadzone zero out the magnitude
+		{
+			LY = 0.0f;
+		}
+		//------------------------------------------------------------------
+		//----------------------------------------------------------------------
+	}
+
+	if ((Window::GetWindow().GetKeyboard()->KeyTriggered(KEYBOARD_UP)) || LY > 0)
 	{
 		if (pauseButtonIndex>0)
 			pauseButtonIndex--;
 	}
-	else if (Window::GetWindow().GetKeyboard()->KeyTriggered(KEYBOARD_DOWN))
+	else if ((Window::GetWindow().GetKeyboard()->KeyTriggered(KEYBOARD_DOWN)) || LY < 0)
 	{
 		if (pauseButtonIndex < PAUSE_BUTTONS_SIZE - 1)
 			pauseButtonIndex++;

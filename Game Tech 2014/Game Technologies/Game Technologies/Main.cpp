@@ -66,7 +66,7 @@ int main()
 {
 	SoundSystem::Initialise(); //Build SoundSystem
 
-	if(!Window::Initialise("Game Technologies", 1000,800,true)) 
+	if(!Window::Initialise("Game Technologies", 1000,800,false )) 
 	{
 		return Quit(true, "Window failed to initialise!");
 	}
