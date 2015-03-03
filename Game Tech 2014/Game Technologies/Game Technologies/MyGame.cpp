@@ -119,7 +119,7 @@ MyGame::MyGame(bool isHost, bool isClient, bool useNetworking, int numClients)
 	cubeEarth = new OBJMesh(MESHDIR"cube.obj");
 	cubeEarth->SetTexture(earthTexture);
 	quad	= Mesh::GenerateQuad();
-	sphere	= new OBJMesh(MESHDIR"ico.obj");
+	sphere	= new OBJMesh(MESHDIR"bigRock2.obj");
 	Renderer::GetRenderer().RenderLoading(95, "Lammas are nice creatures...");
 	Renderer::GetRenderer().RenderLoading(96,"Hold it,  Were not getting into Lammas now...");
 	Renderer::GetRenderer().RenderLoading(97, "The loading system is obviously faulty, we will continue now without any further updates...");

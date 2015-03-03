@@ -1,17 +1,11 @@
-﻿Build started 03/03/2015 17:07:57.
+﻿Build started 03/03/2015 17:55:30.
      1>Project "D:\Group Project\Team4\Game Tech 2014\Game Technologies\Game Technologies\GameTech.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         D:\Visual Studio 2013\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt EarthParticleSystem.cpp
-         EarthParticleSystem.cpp
-     1>d:\group project\team4\game tech 2014\game technologies\game technologies\earthparticlesystem.cpp(22): warning C4552: '+' : operator has no effect; expected operator with side-effect
-     1>d:\group project\team4\game tech 2014\game technologies\game technologies\earthparticlesystem.cpp(63): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
-     1>d:\group project\team4\game tech 2014\game technologies\game technologies\earthparticlesystem.cpp(72): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
-     1>d:\group project\team4\game tech 2014\game technologies\game technologies\earthparticlesystem.cpp(86): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
-     1>d:\group project\team4\game tech 2014\game technologies\game technologies\earthparticlesystem.cpp(152): warning C4244: '+=' : conversion from 'float' to 'int', possible loss of data
-     1>d:\group project\team4\game tech 2014\game technologies\game technologies\earthparticlesystem.cpp(157): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
-     1>d:\group project\team4\game tech 2014\game technologies\game technologies\earthparticlesystem.cpp(181): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
-     1>d:\group project\team4\game tech 2014\game technologies\game technologies\earthparticlesystem.cpp(281): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
-     1>d:\group project\team4\game tech 2014\game technologies\game technologies\earthparticlesystem.cpp(284): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
+         D:\Visual Studio 2013\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt MyGame.cpp
+         MyGame.cpp
+     1>d:\group project\team4\game tech 2014\game technologies\game technologies\mygame.cpp(177): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\group project\team4\game tech 2014\game technologies\game technologies\mygame.cpp(918): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
+     1>d:\group project\team4\game tech 2014\game technologies\game technologies\mygame.cpp(920): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
        Link:
          D:\Visual Studio 2013\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\Group Project\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\Group Project\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\Group Project\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.lib" /MACHINE:X86 /FORCE:MULTIPLE Debug\Bullets.obj
          Debug\Button.obj
@@ -148,4 +142,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.93
+Time Elapsed 00:00:01.18
