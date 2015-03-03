@@ -11,6 +11,7 @@
 //Sam - added planeInfo for positioning in game
 #include "PlaneInfo.h"
 #include "SpaceshipSceneNode.h"
+#include "BezierMath.h"
 
 class Vehicle
 {
@@ -35,9 +36,11 @@ protected:
 
 	void UpdatePlayerVelocity();
 
-	void SwitchPlane(float normalisedRX, float normalisedRY);
+	void GetSwitchPlaneInputs(float normalisedRX, float normalisedRY);
 
 	void UpdatePlayerRotationOnPlane();
+
+	void GetUserInput();
 
 	Vector3 CalculateStartingOrientation();
 
@@ -65,10 +68,17 @@ protected:
 	float PlaneSwitchCDTime;
 	float PlaneSwitchCDRemaining;
 
+	//--------------- plane switching animation -------------------
+	bool isSwitchingPlane = false;
+	float planeSwitchTime = 1000;
+	float planeSwitchProgress = 0;
+	Vector2 startPoint;
+	Vector2 endPoint;
+	//---------------------------------------------------------------
+
+	//Added by Siyu
+	SpaceshipSceneNode* spaceship_scene_node;
 
 	//Debug method, doesnt do anything, only for triggering breaks when needed.
 	void debug();
-
-	SpaceshipSceneNode* spaceship_scene_node;
-
 };

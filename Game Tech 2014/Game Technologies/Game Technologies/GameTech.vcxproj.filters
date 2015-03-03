@@ -260,6 +260,9 @@
     <ClInclude Include="NetworkServices.h">
       <Filter>Networking</Filter>
     </ClInclude>
+    <ClInclude Include="BezierMath.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\..\OpenAL 1.1 SDK\libs\Win32\OpenAL32.lib" />

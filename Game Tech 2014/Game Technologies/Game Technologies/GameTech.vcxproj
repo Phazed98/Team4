@@ -104,6 +104,7 @@
     <ClCompile Include="Vehicle.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BezierMath.h" />
     <ClInclude Include="Bullets.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="ChaseCamera.h" />
