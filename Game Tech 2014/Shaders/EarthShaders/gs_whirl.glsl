@@ -46,7 +46,7 @@ vec3 GetRandomDir(float n)
 	
 	float xx = cos(36*n/3.14 );
 	float zz = sin(36*n/3.14 );
-	vec3 Dir= vec3(xx,2,zz);
+	vec3 Dir= vec3(xx,-2,zz);
 	return Dir;
 	
 }

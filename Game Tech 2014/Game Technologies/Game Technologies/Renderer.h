@@ -17,6 +17,7 @@ Implements:OGLRendere
 #include "SpaceshipSceneNode.h"
 #include "FireParticleSystem.h"
 #include "EarthParticleSystem.h"
+#include "TornadoSceneNode.h"
 
 #define PAUSE_BUTTONS_SIZE 2
 #define	MAIN_BUTTONS_SIZE 6
@@ -50,6 +51,8 @@ public:
 	ChaseCamera* GetCamera(){ return camera; }
 	Matrix4 GetProjMatrix(){ return projMatrix; }
 	void SetSpaceshipSceneNode(SpaceshipSceneNode* ssn){ spaceship_scene_node = ssn; }
+
+	void SetTornadoSceneNode(TornadoSceneNode* node){ tornadoNode.push_back(node); }
 	//Statics
 	static bool Initialise() 
 	{
@@ -155,5 +158,9 @@ protected:
 	Button* mainMenuButtons[MAIN_BUTTONS_SIZE];
 	int mainButtonIndex;
 	int pauseButtonIndex;
+
+	vector<TornadoSceneNode*> tornadoNode;
+	EarthParticleSystem tornado_system;
+	void DrawTornado();
 };
 

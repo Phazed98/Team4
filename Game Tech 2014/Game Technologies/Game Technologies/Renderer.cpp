@@ -6,6 +6,7 @@ Renderer* Renderer::instance = NULL;
 
 Renderer::Renderer(Window &parent) : OGLRenderer(parent)
 {
+	tornado_system.InitParticleSystem(0, Vector3(0, 10, 0));
 	menuShader = new Shader(SHADERDIR"menuVertex.glsl", SHADERDIR"menuFragment.glsl");
 	if (!menuShader->LinkProgram())
 	{
@@ -231,6 +232,7 @@ void Renderer::RenderWithoutPostProcessing(){
 		ClearNodeLists();
 
 		DrawAfterBurner();
+		DrawTornado();
 
 		//Display HUD
 		if (wireFrame)
@@ -846,7 +848,27 @@ void Renderer::DrawAfterBurner(){
 	spaceship_scene_node->afterburner_system[0].Render(msec, model_matrix, projMatrix, viewMatrix);
 	spaceship_scene_node->afterburner_system[1].Render(msec, model_matrix, projMatrix, viewMatrix);
 }
+void Renderer::DrawTornado(){
+	for (vector<TornadoSceneNode*>::iterator i = tornadoNode.begin(); i != tornadoNode.end(); ++i)
+	{
+		Matrix4 model_matrix2 = (*i)->GetTornadoNode()->GetWorldTransform();
 
+		//Matrix4 model_matrix = spaceship_scene_node->GetAfterburnerNode()->GetWorldTransform();
+		//viewMatrix.ToIdentity();
+		if (camera){
+
+			viewMatrix = camera->BuildViewMatrix();
+		}
+
+
+
+		tornado_system.Render(msec, model_matrix2, projMatrix, viewMatrix);
+
+	}
+
+
+
+}
 
 
 bool Renderer::CreatParticleBuffer(){
@@ -898,7 +920,7 @@ void Renderer::RenderParticleToTexture(){
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
 		GL_TEXTURE_2D, particle_ColourTex, 0);
 	DrawAfterBurner();
-
+	DrawTornado();
 
 	glUseProgram(0);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);

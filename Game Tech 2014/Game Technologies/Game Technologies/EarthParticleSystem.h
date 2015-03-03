@@ -22,12 +22,11 @@ public:
 
 	bool InitParticleSystem(int shape_type, const Vector3& Pos);
 
-	void Render(int DeltaTime, const Matrix4& viewMatrix, const Matrix4& projMatrix, const Vector3& CameraPos = Vector3());
-
+	void Render(float DeltaTimeMillis, const Matrix4& modelMatrix = Matrix4(), const Matrix4& projMatrix = Matrix4(), const Matrix4& viewMatrix = Matrix4());
 private:
 
 	void UpdateParticles(int DeltaTime);
-	void RenderParticles(const Matrix4& viewMatrix, const Matrix4& projMatrix);
+	void RenderParticles(const Matrix4& modelMatrix);
 	bool InitUpdateSystem();
 	bool InitRenderSystem();
 
@@ -64,4 +63,10 @@ private:
 	int particle_size;
 
 	int _shape;
+
+	Camera* camera;
+	Matrix4 project_matrix;
+	Matrix4 view_matrix;
+
+	float render_particle_lifetime;
 };

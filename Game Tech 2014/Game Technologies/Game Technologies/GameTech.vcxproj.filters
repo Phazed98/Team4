@@ -141,6 +141,12 @@
     <ClCompile Include="NetworkServices.cpp">
       <Filter>Networking</Filter>
     </ClCompile>
+    <ClCompile Include="EarthParticleSystem.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="TornadoSceneNode.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CollisionHelper.h">
@@ -262,6 +268,12 @@
     </ClInclude>
     <ClInclude Include="BezierMath.h">
       <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="EarthParticleSystem.h">
+      <Filter>Header Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="TornadoSceneNode.h">
+      <Filter>Header Files\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

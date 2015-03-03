@@ -10,6 +10,7 @@
 #include "NetworkClient.h"
 #include "NetworkServer.h"
 #include "NetworkData.h"
+#include "TornadoSceneNode.h"
 
 
 #define IS_HOST true

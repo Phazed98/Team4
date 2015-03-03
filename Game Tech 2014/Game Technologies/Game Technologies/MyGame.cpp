@@ -461,6 +461,12 @@ Obstacle* MyGame::BuildObstacleEntity(float size, int type, int subType, ObjectT
 	{
 		s = new SceneNode(cube);
 	}
+	else if (subType == 0 && _obstacle_type == 4)
+	{
+		s = new TornadoSceneNode(sphere);
+		Renderer::GetRenderer().SetTornadoSceneNode((TornadoSceneNode*)s);
+		size = size / size;
+	}
 	else
 	{
 		s = new SceneNode(sphere);

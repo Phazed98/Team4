@@ -76,6 +76,7 @@
     <ClCompile Include="ChaseCamera.cpp" />
     <ClCompile Include="Coins.cpp" />
     <ClCompile Include="CollisionHelper.cpp" />
+    <ClCompile Include="EarthParticleSystem.cpp" />
     <ClCompile Include="FireParticleSystem.cpp" />
     <ClCompile Include="GameClass.cpp" />
     <ClCompile Include="GameEntity.cpp" />
@@ -100,6 +101,7 @@
     <ClCompile Include="Spring.cpp" />
     <ClCompile Include="SpringDemo.cpp" />
     <ClCompile Include="TextMesh.cpp" />
+    <ClCompile Include="TornadoSceneNode.cpp" />
     <ClCompile Include="Vehicle%28old%29.cpp" />
     <ClCompile Include="Vehicle.cpp" />
   </ItemGroup>
@@ -113,6 +115,7 @@
     <ClInclude Include="CollisionVolume.h" />
     <ClInclude Include="Constraint.h" />
     <ClInclude Include="DebugDrawer.h" />
+    <ClInclude Include="EarthParticleSystem.h" />
     <ClInclude Include="FireParticleSystem.h" />
     <ClInclude Include="GameClass.h" />
     <ClInclude Include="GameEntity.h" />
@@ -142,6 +145,7 @@
     <ClInclude Include="SpringDemo.h" />
     <ClInclude Include="SupportPoint.h" />
     <ClInclude Include="TextMesh.h" />
+    <ClInclude Include="TornadoSceneNode.h" />
     <ClInclude Include="Vehicle%28old%29.h" />
     <ClInclude Include="Vehicle.h" />
   </ItemGroup>

@@ -63,7 +63,7 @@ bool EarthParticleSystem::InitParticleSystem(int shape_type, const Vector3& Pos)
 		particle_lifetime = 10000.f;
 		particle_size = 40;
 		particleUpdateShader = new Shader(EARTH_SHADER_DIR"vs_update.glsl", EARTH_SHADER_DIR"fs_update.glsl", EARTH_SHADER_DIR"gs_whirl.glsl");
-		flame_texture = SOIL_load_OGL_texture(TEXTUREDIR"TornadoColor.jpg",
+		flame_texture = SOIL_load_OGL_texture(TEXTUREDIR"TornadoColor2.jpg",
 			SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_COMPRESS_TO_DXT);
 		break;
 
@@ -145,8 +145,10 @@ bool EarthParticleSystem::InitRenderSystem(){
 	return true;
 }
 
-void EarthParticleSystem::Render(int DeltaTime, const Matrix4& viewMatrix, const Matrix4& projMatrix, const Vector3& CameraPos){
+void EarthParticleSystem::Render(float DeltaTime, const Matrix4& modelMatrix, const Matrix4& projMatrix , const Matrix4& viewMatrix ){
 
+	project_matrix = projMatrix;
+	view_matrix = viewMatrix;
 	m_time += DeltaTime;
 	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
@@ -154,7 +156,7 @@ void EarthParticleSystem::Render(int DeltaTime, const Matrix4& viewMatrix, const
 
 	UpdateParticles(DeltaTime);
 
-	RenderParticles(viewMatrix, projMatrix);
+	RenderParticles(modelMatrix);
 
 	m_currVB = m_currTFB; //toggle input
 	m_currTFB = (m_currTFB +1) & 0x1 ; //toggle output
@@ -258,10 +260,10 @@ void EarthParticleSystem::UpdateParticles(int DeltaTime){
 }
 
 
-void EarthParticleSystem::RenderParticles(const Matrix4& viewMatrix, const Matrix4& projMatrix)
+void EarthParticleSystem::RenderParticles(const Matrix4& modelMatrix)
 {
-	Matrix4 modelMatrix = Matrix4::Scale(Vector3(5, 5, 5));
-
+	Matrix4 model_matrix = modelMatrix*Matrix4::Scale(Vector3(5, 5, 5));
+	//cout << model_matrix.values[12] << " " << model_matrix.values[13] << " " << model_matrix.values[14] << endl;
 	Matrix4 textureMatrix;
 
 	glUseProgram(particleRenderShader->GetProgram());
@@ -272,9 +274,9 @@ void EarthParticleSystem::RenderParticles(const Matrix4& viewMatrix, const Matri
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, flame_texture);
 
-	glUniformMatrix4fv(glGetUniformLocation(particleRenderShader->GetProgram(), "modelMatrix"), 1, false, (float*)&modelMatrix);
-	glUniformMatrix4fv(glGetUniformLocation(particleRenderShader->GetProgram(), "viewMatrix"), 1, false, (float*)&viewMatrix);
-	glUniformMatrix4fv(glGetUniformLocation(particleRenderShader->GetProgram(), "projMatrix"), 1, false, (float*)&projMatrix);
+	glUniformMatrix4fv(glGetUniformLocation(particleRenderShader->GetProgram(), "modelMatrix"), 1, false, (float*)&model_matrix);
+	glUniformMatrix4fv(glGetUniformLocation(particleRenderShader->GetProgram(), "viewMatrix"), 1, false, (float*)&view_matrix);
+	glUniformMatrix4fv(glGetUniformLocation(particleRenderShader->GetProgram(), "projMatrix"), 1, false, (float*)&project_matrix);
 	if (_shape == 0)
 		glUniform1f(glGetUniformLocation(particleRenderShader->GetProgram(), "MaxLifeTime"), particle_lifetime);
 	if (_shape == 1)
