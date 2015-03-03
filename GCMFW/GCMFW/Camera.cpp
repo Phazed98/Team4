@@ -35,8 +35,8 @@ void Camera::Update(float msec)
 
 	Input::GetJoypadMovement(y, p, pad);
 
-	yaw += y/2;
-	pitch -= p/2;
+	yaw += y/1000;
+	pitch -= p/1000;
 
 	pitch = min(pitch, 90.0f);
 	pitch = max(pitch, -90.0f);
@@ -85,11 +85,11 @@ void Camera::Update(float msec)
 	//Go up and down using the shoulder buttons!
 	if (Input::ButtonDown(INPUT_L1, pad)) 
 	{
-		position[1] -= msec;
+		position[1] -= msec/10;
 	}
 	if (Input::ButtonDown(INPUT_R1, pad)) 
 	{
-		position[1] += msec;
+		position[1] += msec/10;
 	}
 
 	//std::cout << "Yaw: " << yaw << " Pitch: " << pitch << std::endl;
