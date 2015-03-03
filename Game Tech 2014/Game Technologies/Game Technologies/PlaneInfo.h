@@ -10,6 +10,8 @@
 #define TILE_WIDTH 200
 #define TILE_HALF_WIDTH 100 //needed to save computation
 #define TILE_DEPTH 400
+#define INITIAL_Z_POSITION -7550 // This is the Z value where tiles/planes/blocks/tracks start spawning
+#define END_POSITION 2000 // This is the Z value where tiles/planes/blocks/tracks stop moving and reset
 
 
 //distance from the centre of the game world X/Y axes to the surface of a tile....( TILE_CENTRE_OFFSET - TILE_HEIGHT - 40 for correction )

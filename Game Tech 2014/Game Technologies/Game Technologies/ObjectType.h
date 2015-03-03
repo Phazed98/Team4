@@ -45,5 +45,7 @@ protected:
 
 	bool increaseTimer;
 
+	//float initialPositionZ;
+
 };
 

@@ -67,7 +67,7 @@ void Obstacle::Update(float msec)
 	{
 		if (state == 0)
 		{
-			if (physicsNode->GetPosition().z > (5000))
+			if (physicsNode->GetPosition().z > (END_POSITION))
 			{
 				state = 1;
 			}

@@ -119,7 +119,7 @@ MyGame::MyGame(bool isHost, bool isClient, bool useNetworking, int numClients)
 	cubeEarth = new OBJMesh(MESHDIR"cube.obj");
 	cubeEarth->SetTexture(earthTexture);
 	quad	= Mesh::GenerateQuad();
-	sphere	= new OBJMesh(MESHDIR"bigRock2.obj");
+	sphere	= new OBJMesh(MESHDIR"ico.obj");
 	Renderer::GetRenderer().RenderLoading(95, "Lammas are nice creatures...");
 	Renderer::GetRenderer().RenderLoading(96,"Hold it,  Were not getting into Lammas now...");
 	Renderer::GetRenderer().RenderLoading(97, "The loading system is obviously faulty, we will continue now without any further updates...");
@@ -663,7 +663,7 @@ void MyGame::CreateObstacle(ObjectType* _obj)
 	{
 		if (obstacleReference[_obj->getSubType()] != NULL)
 		{
-			if (obstacleReference[_obj->getSubType()]->GetPhysicsNode().GetPosition().z > -4750.0f)
+			if (obstacleReference[_obj->getSubType()]->GetPhysicsNode().GetPosition().z > INITIAL_Z_POSITION + 800)
 			{
 				temp = BuildObstacleEntity(25, 1, _obj->getSubType(), _obj, obstacleType);
 				if (temp->getObstacleType() == 1)
@@ -684,7 +684,7 @@ void MyGame::CreateObstacle(ObjectType* _obj)
 		//use the old object
 		if (obstacleReference[_obj->getSubType()] != NULL)
 		{
-			if (obstacleReference[_obj->getSubType()]->GetPhysicsNode().GetPosition().z > -4750.0f)
+			if (obstacleReference[_obj->getSubType()]->GetPhysicsNode().GetPosition().z > INITIAL_Z_POSITION + 800)
 			{
 				temp = obstacleElements[_obj->getSubType()][empty];
 				temp->SetTile(_obj);
