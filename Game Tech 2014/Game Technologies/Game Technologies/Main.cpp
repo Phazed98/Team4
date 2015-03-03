@@ -35,7 +35,6 @@ _-_-_-_-_-_-_-""  ""
 
 #pragma comment(lib, "nclgl.lib")
 
-bool loaded = false;
 MyGame* game;
 
 int Quit(bool pause = false, const string &reason = "") 
@@ -63,12 +62,6 @@ void physicsLoop(GameClass* game, bool& running)
 	}
 }
 
-void loadGame()
-{
-	while (!loaded)
-		Renderer::GetRenderer().RenderLoading(0, "Loading...");
-}
-
 int main() 
 {
 	SoundSystem::Initialise(); //Build SoundSystem
@@ -83,16 +76,55 @@ int main()
 		return Quit(true, "Renderer failed to initialise!");
 	}
 
+	Window::GetWindow().LockMouseToWindow(true);
+	Window::GetWindow().ShowOSPointer(false);
+
+	buttonPressed bp;
+	bp = NO_PRESSED;
+
+	while (Window::GetWindow().UpdateWindow() && bp == NO_PRESSED)
+	{
+		bp = Renderer::GetRenderer().RenderMainMenu();
+	}
+
+	if (bp == EXIT)
+		exit(0);
+
+
+	Renderer::GetRenderer().fullyInit();
+	//Start Loading Screen Draw
+	Renderer::GetRenderer().RenderLoading(0, "Hello World");
+
 	PhysicsSystem::Initialise();
 
 
+	MyGame* game;
+	switch (bp)
+	{
+	case SOLO:
+		game = new MyGame(false, false, false, 0);
+		break;
+	case HOST_2:
+		game = new MyGame(true, true, true, 2);
+		break;
+	case HOST_3:
+		game = new MyGame(true, true, true, 3);
+		break;
+	case HOST_4:
+		game = new MyGame(true, true, true, 4);
+		break;
+	case CLIENT:
+		game = new MyGame(false, true, true, 0);
+		break;
+	case EXIT:
+		exit(0);
+	}
+
 	//std::thread Loading(loadGame);
-	MyGame* game = new MyGame();
-	loaded = true;
+//	MyGame* game = new MyGame();
 
 
-	Window::GetWindow().LockMouseToWindow(true);
-	Window::GetWindow().ShowOSPointer(false);
+
 
 	bool running = true;
 	std::thread physics(physicsLoop, game, std::ref(running));

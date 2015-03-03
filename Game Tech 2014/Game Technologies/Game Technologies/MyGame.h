@@ -34,7 +34,8 @@ class Bullets;
 class MyGame : public GameClass	
 {
 public:
-	MyGame();
+//	MyGame();
+	MyGame(bool isHost, bool isClient, bool useNetworking, int numClients);
 	~MyGame(void);
 
 	virtual void UpdateGame(float msec);
@@ -151,12 +152,8 @@ protected:
 	NetworkServer* networkServer;
 	NetworkClient* networkClient;
 
-	int resetNumber;
-	int randomPlane;
-	int createObstacleNumber;
-	int objectRandValue;
-	int objectRandPlane;
-	int obstacleRandNum;
+	bool isHost, isClient, useNetworking;
+	int numClients;
 
 	GLuint earthTexture = SOIL_load_OGL_texture("../../Textures/planet1.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, 0);
 	GLuint waterTexture = SOIL_load_OGL_texture("../../Textures/05_DIFFUSE.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, 0);

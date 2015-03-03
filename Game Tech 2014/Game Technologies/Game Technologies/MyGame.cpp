@@ -19,11 +19,17 @@ You can completely change all of this if you want, it's your game!
 
 unsigned int MyGame::client_id;
 
-MyGame::MyGame()	
+MyGame::MyGame(bool isHost, bool isClient, bool useNetworking, int numClients)
 {
-	if (USE_NETWORKING)
+
+	this->isHost = isHost;
+	this->isClient = isClient;
+	this->useNetworking = useNetworking;
+	this->numClients = numClients;
+
+	if (useNetworking)
 	{
-		if (IS_HOST)
+		if (isHost)
 		{
 			//Init client list to nothing
 			client_id = 0;
@@ -32,7 +38,7 @@ MyGame::MyGame()
 			networkServer = new NetworkServer();
 		}
 
-		if (IS_CLIENT)
+		if (isClient)
 		{
 			//Spawn a New Client which will attempt to connect to a server
 			networkClient = new NetworkClient();
@@ -163,11 +169,12 @@ MyGame::MyGame()
 	Renderer::GetRenderer().RenderLoading(100, "Done...");
 	
 	
-	if (USE_NETWORKING)
+	if (useNetworking)
 	{
-		if (IS_HOST)
+		if (isHost)
 		{
-			while (client_id <= 0)
+			Renderer::GetRenderer().RenderLoading(100, "Waiting on Clients");
+			while (client_id < numClients)
 			{
 				// get new clients
 				if (networkServer->acceptNewClient(client_id))
@@ -179,11 +186,14 @@ MyGame::MyGame()
 			sendServerStartPackets();
 		}
 
-		if (IS_CLIENT)
+		if (isClient)
 		{
 			bool startGame = false;
 			while (!startGame)
 			{
+				if (!isHost)
+					Renderer::GetRenderer().RenderLoading(100, "Waiting on Host");
+
 				Packet packet;
 				int data_length = networkClient->receivePackets(client_network_data);
 

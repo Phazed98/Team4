@@ -39,14 +39,13 @@ void GameClass::setCurrentState(GameState newGameState)
 
 	if (newGameState == GAME_PLAYING)
 	{
-		Window::GetWindow().LockMouseToWindow(true);
-		Window::GetWindow().ShowOSPointer(false);
+		
 	}
 
 	else if (newGameState == GAME_PAUSED)
 	{
-		Window::GetWindow().LockMouseToWindow(false);
-		Window::GetWindow().ShowOSPointer(true);
+		/*Window::GetWindow().LockMouseToWindow(false);
+		Window::GetWindow().ShowOSPointer(true);*/
 	}
 	else if (newGameState == GAME_EXIT)
 	{
@@ -77,7 +76,7 @@ void GameClass::UpdateRendering(float msec)
 
 		else if (currentGameState == GAME_PAUSED)
 		{
-			Renderer::GetRenderer().RenderMenu();
+			Renderer::GetRenderer().RenderPauseMenu();
 
 			if (Window::GetKeyboard()->KeyTriggered(KEYBOARD_P) || Window::GetKeyboard()->KeyTriggered(KEYBOARD_ESCAPE))
 			{

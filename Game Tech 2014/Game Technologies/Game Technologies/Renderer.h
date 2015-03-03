@@ -18,6 +18,19 @@ Implements:OGLRendere
 #include "FireParticleSystem.h"
 #include "EarthParticleSystem.h"
 
+#define PAUSE_BUTTONS_SIZE 2
+#define	MAIN_BUTTONS_SIZE 6
+
+enum buttonPressed
+{
+	SOLO,
+	HOST_2,
+	HOST_3,
+	HOST_4,
+	CLIENT,
+	EXIT,
+	NO_PRESSED,
+};
 
 class ChaseCamera;
 
@@ -26,11 +39,13 @@ class Renderer : public OGLRenderer
 public:
 	virtual void RenderScene();
 	virtual void UpdateScene(float msec);
+	void fullyInit();
 
 	void	SetCamera(ChaseCamera*c);
 	void	AddNode(SceneNode* n);
 	void	RemoveNode(SceneNode* n);
-	void	RenderMenu();
+	void	RenderPauseMenu();
+	buttonPressed	RenderMainMenu();
 	void	RenderLoading(int percent, string Message);
 	ChaseCamera* GetCamera(){ return camera; }
 	Matrix4 GetProjMatrix(){ return projMatrix; }
@@ -132,5 +147,13 @@ protected:
 	Shader*	backgroundShader;
 
 	GLuint background_ColourTex;
+
+
+	//Menu Buttons
+	Mesh*		mainMenuQuad;
+	Button* pauseMenuButtons[PAUSE_BUTTONS_SIZE];
+	Button* mainMenuButtons[MAIN_BUTTONS_SIZE];
+	int mainButtonIndex;
+	int pauseButtonIndex;
 };
 
