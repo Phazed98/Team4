@@ -31,6 +31,14 @@ enum OBJType
 	OBJ_SPHERE,
 };
 
+enum RenderType
+{
+	FIRE_PLANE,
+	AIR_PLANE,
+	WATER_PLANE,
+	EARTH_PLANE,
+	FIRE_SPHERE
+};
 
 class SceneNode	{
 public:
@@ -74,6 +82,9 @@ public:
 
 	OBJType nodeType;
 
+	//steven added for render
+	void SetRenderType(RenderType rt){ render_type = rt; }
+	RenderType GetRenderType(){ return render_type; }
 protected:
 	Matrix4		worldTransform;
 	Matrix4		transform;
@@ -85,5 +96,6 @@ protected:
 	Mesh*		mesh;
 	bool		awake;
 	std::vector<SceneNode*>		children;
+	RenderType render_type;
 };
 

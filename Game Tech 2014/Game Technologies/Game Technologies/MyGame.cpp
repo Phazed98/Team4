@@ -109,11 +109,13 @@ MyGame::MyGame(bool isHost, bool isClient, bool useNetworking, int numClients)
 	//AllCoins = new Coins(10);
 	//AllPowerups = new Powerups();
 
+	water_sphere = new OBJMesh(MESHDIR"sphere.obj");
+	water_sphere->SetTexture(waterTexture);
 	cube	= new OBJMesh(MESHDIR"cube.obj");
 	cubeAir = new OBJMesh(MESHDIR"cube.obj");
 	cubeAir->SetTexture(airTexture);
-	cubeWater = new OBJMesh(MESHDIR"cube.obj");
-	cubeWater->SetTexture(waterTexture);
+	/*cubeWater = new OBJMesh(MESHDIR"cube.obj");
+	cubeWater->SetTexture(waterTexture);*/
 	cubeFire = new OBJMesh(MESHDIR"cube.obj");
 	cubeFire->SetTexture(fireTexture);
 	cubeEarth = new OBJMesh(MESHDIR"cube.obj");
@@ -404,24 +406,24 @@ GameEntity* MyGame::BuildQuadEntity(float size)
 	return g;
 }
 
-ObjectType* MyGame::BuildObjectEntity(int type, int subType) 
-{
-	SceneNode* s = new SceneNode(cube);
+ObjectType* MyGame::BuildObjectEntity(int type, int subType) {
+	//generate different tiles
+	SceneNode* s;
 	if (subType == 0){
 		s = new SceneNode(cubeAir);
+		s->SetRenderType(AIR_PLANE);
 	}
 	else if (subType == 1){
 		s = new SceneNode(cubeFire);
-
+		s->SetRenderType(FIRE_PLANE);
 	}
 	else if (subType == 2){
 		s = new SceneNode(cubeEarth);
-
+		s->SetRenderType(EARTH_PLANE);
 	}
 	else if (subType == 3){
-		
-		s = new SceneNode(cubeWater);
-
+		s = new SceneNode(water_sphere);
+		s->SetRenderType(WATER_PLANE);
 	}
 
 	PhysicsNode* p = new PhysicsNode();
@@ -429,10 +431,10 @@ ObjectType* MyGame::BuildObjectEntity(int type, int subType)
 
 	ObjectType*g = new ObjectType(s, p, type, subType);
 	g->ConnectToSystems();
-	SceneNode &test = g->GetRenderNode();
+	
 
-	test.SetModelScale(Vector3(TILE_WIDTH, TILE_HEIGHT, TILE_DEPTH));
-	test.SetBoundingRadius(TILE_DEPTH);
+	s->SetModelScale(Vector3(TILE_WIDTH, TILE_HEIGHT, TILE_DEPTH));
+	s->SetBoundingRadius(TILE_DEPTH);
 
 	//50% chance that we set the random value of this plane to a random value from 1 - 5
 	if ((rand() % 100 + 1) > 50)
@@ -483,17 +485,16 @@ Obstacle* MyGame::BuildObstacleEntity(float size, int type, int subType, ObjectT
 	g->ConnectToSystems();
 	if (_obstacle_type == 5)
 	{
-		SceneNode &test = g->GetRenderNode();
+		
 
-		test.SetModelScale(Vector3(TILE_WIDTH, TILE_HEIGHT * 2, 20));
-		test.SetBoundingRadius(TILE_DEPTH);
+		s->SetModelScale(Vector3(TILE_WIDTH, TILE_HEIGHT * 2, 20));
+		s->SetBoundingRadius(TILE_DEPTH);
 	}
 	else
 	{
-		SceneNode &test = g->GetRenderNode();
 
-		test.SetModelScale(Vector3(size, size, size));
-		test.SetBoundingRadius(size);
+		s->SetModelScale(Vector3(size, size, size));
+		s->SetBoundingRadius(size);
 	}
 	
 
