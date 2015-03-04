@@ -61,32 +61,52 @@ void GameClass::UpdateRendering(float msec)
 {
 	renderCounter	-= msec;
 
+
 	if (renderCounter <= 0.0f) //Update our rendering logic
 	{
-		if (currentGameState == GAME_PLAYING)
+		//check if controller connected
+		if (Window::GetControllerConnected())
 		{
-			Renderer::GetRenderer().UpdateScene(1000.0f / (float)RENDER_HZ);
-			Renderer::GetRenderer().RenderScene();
+			//set to true
+			controllerConnected = true;
+		}
 
-			if (!(Window::GetinputScrollCDing()) && (Window::GetKeyboard()->KeyDown(KEYBOARD_P) || Window::GetKeyboard()->KeyDown(KEYBOARD_ESCAPE) ||
-				(Window::GetControllerConnected() && Window::GetWindow().GetController()->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_START)))
+		//check if connected controller has been disconnected
+		if (controllerConnected && currentGameState == GAME_PLAYING && !(Window::GetControllerConnected()))
+		{
+			controllerConnected = false;
+			setCurrentState(GAME_PAUSED);
+			Window::enableInputScrollLock();
+		}
+
+		else
+		{
+			if (currentGameState == GAME_PLAYING)
 			{
-				setCurrentState(GAME_PAUSED);
-				Window::enableInputScrollLock();
+				Renderer::GetRenderer().UpdateScene(1000.0f / (float)RENDER_HZ);
+				Renderer::GetRenderer().RenderScene();
+
+				if (!(Window::GetinputScrollCDing()) && (Window::GetKeyboard()->KeyDown(KEYBOARD_P) || Window::GetKeyboard()->KeyDown(KEYBOARD_ESCAPE) ||
+					(Window::GetControllerConnected() && Window::GetWindow().GetController()->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_START)))
+				{
+					setCurrentState(GAME_PAUSED);
+					Window::enableInputScrollLock();
+				}
+			}
+
+			else if (currentGameState == GAME_PAUSED)
+			{
+				Renderer::GetRenderer().RenderPauseMenu();
+
+				if (!(Window::GetinputScrollCDing()) && (Window::GetKeyboard()->KeyDown(KEYBOARD_P) || Window::GetKeyboard()->KeyDown(KEYBOARD_ESCAPE) ||
+					(Window::GetControllerConnected() && Window::GetWindow().GetController()->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_START)))
+				{
+					setCurrentState(GAME_PLAYING);
+					Window::enableInputScrollLock();
+				}
 			}
 		}
 
-		else if (currentGameState == GAME_PAUSED)
-		{
-			Renderer::GetRenderer().RenderPauseMenu();
-
-			if (!(Window::GetinputScrollCDing()) && (Window::GetKeyboard()->KeyDown(KEYBOARD_P) || Window::GetKeyboard()->KeyDown(KEYBOARD_ESCAPE) ||
-				(Window::GetControllerConnected() && Window::GetWindow().GetController()->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_START)))
-			{
-				setCurrentState(GAME_PLAYING);
-				Window::enableInputScrollLock();
-			}
-		}
 		renderCounter += (1000.0f / (float)RENDER_HZ);
 
 		SoundSystem::GetSoundSystem()->Update(msec); //SoundSystem update 25.2.2015

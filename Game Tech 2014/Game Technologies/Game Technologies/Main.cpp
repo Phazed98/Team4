@@ -149,6 +149,10 @@ int main()
 		game->UpdateRendering(msec);	//Update our 'sybsystem' logic (renderer and physics!)
 		game->UpdateGame(msec);	//Update our game logic	
 		Window::GetWindow().updateController(msec);
+		if (Window::GetinputScrollCDing)
+		{
+			Window::updateInputScrollLock(msec);
+		}
 	}
 
 	running = false;

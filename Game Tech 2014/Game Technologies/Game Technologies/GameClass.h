@@ -66,5 +66,8 @@ protected:
 	ChaseCamera* gameCamera;
 	static GameClass* instance;
 	GameState currentGameState;
+
+	//added by Sam to pause game on controller disconnect
+	bool controllerConnected = false;
 };
 

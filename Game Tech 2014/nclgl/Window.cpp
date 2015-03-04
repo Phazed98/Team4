@@ -11,7 +11,7 @@ bool Window::controllerConnected = NULL;
 float Window::controllerConnectTimer = 0;
 bool Window::inputScrollCDing = false;
 float Window::inputScrollCooldown = 0.0f;
-float Window::inputCDTime = 150.0f;
+float Window::inputCDTime = 200.0f;
 
 //GameTimer*Window::timer		= NULL;
 
@@ -358,7 +358,7 @@ void Window::updateController(float msec)
 	controllerConnectTimer += msec;
 	//if 1.5 seconds has passed check for controller connect/disconnect.
 	//This is for the sake of performance - no need to check each frame!
-	if (controllerConnectTimer > 1500)
+	if (controllerConnectTimer > 250)
 	{
 		controllerConnectTimer = 0.0f;
 		//update state with a connection check
