@@ -60,6 +60,12 @@ public:
 	void updateController(float msec);
 	//-----------------------------------------------------
 
+	//---------Added by Sam for controller/keyboard menu scrolling---------
+	static bool	GetinputScrollCDing() { return inputScrollCDing; }
+	static void updateInputScrollLock(float msec);
+	static void enableInputScrollLock();
+	//----------------------------------------------------------------------
+
 protected:
 	void	CheckMessages(MSG &msg);
 	static LRESULT CALLBACK WindowProc(HWND hWnd,UINT message,WPARAM wParam,LPARAM lParam);
@@ -92,6 +98,12 @@ protected:
 	static bool controllerConnected;
 	static float controllerConnectTimer;
 	//-----------------------------------------------------
+
+	//---------Added by Sam for controller/keyboard menu scrolling---------
+	static float inputScrollCooldown;
+	static float inputCDTime;
+	static bool inputScrollCDing;
+	//---------------------------------------------------------------------
 
 private:
 	Window(std::string title = "OpenGL Framework", int sizeX = 800, int sizeY = 600, bool fullScreen = false);

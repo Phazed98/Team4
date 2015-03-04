@@ -82,9 +82,17 @@ int main()
 	buttonPressed bp;
 	bp = NO_PRESSED;
 
+	GameTimer menuTimer;
+
 	while (Window::GetWindow().UpdateWindow() && bp == NO_PRESSED)
 	{
+		float msec = menuTimer.GetTimedMS();
 		bp = Renderer::GetRenderer().RenderMainMenu();
+		Window::GetWindow().updateController(msec);
+		if (Window::GetinputScrollCDing)
+		{
+			Window::updateInputScrollLock(msec);
+		}
 	}
 
 	if (bp == EXIT)

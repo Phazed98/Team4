@@ -464,18 +464,26 @@ void Renderer::RenderPauseMenu()
 		//----------------------------------------------------------------------
 	}
 
-	if ((Window::GetWindow().GetKeyboard()->KeyTriggered(KEYBOARD_UP)) || LY > 0)
+	if (!(Window::GetinputScrollCDing()) && ((Window::GetWindow().GetKeyboard()->KeyDown(KEYBOARD_UP)) || LY > 0))
 	{
-		if (pauseButtonIndex>0)
+		if (pauseButtonIndex > 0)
+		{
 			pauseButtonIndex--;
+			Window::enableInputScrollLock();
+		}
+
 	}
-	else if ((Window::GetWindow().GetKeyboard()->KeyTriggered(KEYBOARD_DOWN)) || LY < 0)
+	else if (!(Window::GetinputScrollCDing()) && ((Window::GetWindow().GetKeyboard()->KeyDown(KEYBOARD_DOWN)) || LY < 0))
 	{
 		if (pauseButtonIndex < PAUSE_BUTTONS_SIZE - 1)
+		{
 			pauseButtonIndex++;
+			Window::enableInputScrollLock();
+		}
+
 	}
 
-	if (Window::GetWindow().GetKeyboard()->KeyTriggered(KEYBOARD_RETURN))
+	if ((Window::GetWindow().GetKeyboard()->KeyTriggered(KEYBOARD_RETURN)) || controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_A)
 	{
 		switch (pauseButtonIndex)
 		{
@@ -548,18 +556,68 @@ buttonPressed Renderer::RenderMainMenu()
 		UpdateShaderMatrices();
 	}
 
-	if (Window::GetWindow().GetKeyboard()->KeyTriggered(KEYBOARD_UP))
+
+
+	//------------Added by Sam for controller input---------------------
+	float LY = 0;
+	XINPUT_STATE controllerState = Window::GetController()->GetState();
+
+	if (Window::GetControllerConnected())
 	{
-		if (mainButtonIndex>0)
-			mainButtonIndex--;
-	}
-	else if (Window::GetWindow().GetKeyboard()->KeyTriggered(KEYBOARD_DOWN))
-	{
-		if (mainButtonIndex < MAIN_BUTTONS_SIZE - 1)
-			mainButtonIndex++;
+		//-------------------get left stick values----------------------
+		LY = controllerState.Gamepad.sThumbLY;
+		//check if the controller is outside dead zone
+		if (abs(LY) > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)
+		{
+			//clip the magnitude at its expected maximum value
+			if (LY > 32767)
+			{
+				LY = 32767;
+			}
+			if (LY < -32767)
+			{
+				LY = -32767;
+			}
+
+			//adjust magnitude relative to the end of the dead zone
+			if (LY > 0)
+			{
+				LY -= XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE;
+			}
+			else //will have to be negative due to previous ifs....so no need for if
+			{
+				LY += XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE;
+			}
+		}
+		else //if the controller is in the deadzone zero out the magnitude
+		{
+			LY = 0.0f;
+		}
+		//------------------------------------------------------------------
+		//----------------------------------------------------------------------
 	}
 
-	if (Window::GetWindow().GetKeyboard()->KeyTriggered(KEYBOARD_RETURN))
+
+	if (!(Window::GetinputScrollCDing()) && ((Window::GetWindow().GetKeyboard()->KeyDown(KEYBOARD_UP)) || LY > 0))
+	{
+		if (mainButtonIndex > 0)
+		{
+			Window::enableInputScrollLock();
+			mainButtonIndex--;
+		}
+
+	}
+	else if (!(Window::GetinputScrollCDing()) && ((Window::GetWindow().GetKeyboard()->KeyDown(KEYBOARD_DOWN)) || LY < 0))
+	{
+		if (mainButtonIndex < MAIN_BUTTONS_SIZE - 1)
+		{
+			Window::enableInputScrollLock();
+			mainButtonIndex++;
+		}
+
+	}
+
+	if ((Window::GetWindow().GetKeyboard()->KeyTriggered(KEYBOARD_RETURN)) || controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_A)
 	{
 		switch (mainButtonIndex)
 		{

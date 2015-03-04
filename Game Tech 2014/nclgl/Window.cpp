@@ -9,6 +9,9 @@ Mouse*Window::mouse = NULL;
 GamePadController* Window::controller = NULL;
 bool Window::controllerConnected = NULL;
 float Window::controllerConnectTimer = 0;
+bool Window::inputScrollCDing = false;
+float Window::inputScrollCooldown = 0.0f;
+float Window::inputCDTime = 150.0f;
 
 //GameTimer*Window::timer		= NULL;
 
@@ -17,6 +20,7 @@ bool Window::Initialise(std::string title, int sizeX, int sizeY, bool fullScreen
 
 	//--------------------added by Sam--------------
 	controller = new GamePadController(1);
+	//----------------------------------------------
 
 	if (!window->HasInitialised()) {
 		return false;
@@ -365,4 +369,22 @@ void Window::updateController(float msec)
 		//simple update of controller state without connection check
 		controller->UpdateState();
 	}
+}
+
+void Window::updateInputScrollLock(float msec)
+{
+	if (inputScrollCDing)
+	{
+		inputScrollCooldown -= msec;
+		if (inputScrollCooldown <= 0.0f)
+		{
+			inputScrollCDing = false;
+		}
+	}
+}
+
+void Window::enableInputScrollLock()
+{
+	inputScrollCooldown = inputCDTime;
+	inputScrollCDing = true;
 }

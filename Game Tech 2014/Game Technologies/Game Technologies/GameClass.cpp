@@ -61,16 +61,18 @@ void GameClass::UpdateRendering(float msec)
 {
 	renderCounter	-= msec;
 
-	if(renderCounter <= 0.0f) //Update our rendering logic
-	{	
+	if (renderCounter <= 0.0f) //Update our rendering logic
+	{
 		if (currentGameState == GAME_PLAYING)
 		{
 			Renderer::GetRenderer().UpdateScene(1000.0f / (float)RENDER_HZ);
 			Renderer::GetRenderer().RenderScene();
 
-			if (Window::GetKeyboard()->KeyTriggered(KEYBOARD_P) || Window::GetKeyboard()->KeyTriggered(KEYBOARD_ESCAPE))
+			if (!(Window::GetinputScrollCDing()) && (Window::GetKeyboard()->KeyDown(KEYBOARD_P) || Window::GetKeyboard()->KeyDown(KEYBOARD_ESCAPE) ||
+				(Window::GetControllerConnected() && Window::GetWindow().GetController()->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_START)))
 			{
 				setCurrentState(GAME_PAUSED);
+				Window::enableInputScrollLock();
 			}
 		}
 
@@ -78,9 +80,11 @@ void GameClass::UpdateRendering(float msec)
 		{
 			Renderer::GetRenderer().RenderPauseMenu();
 
-			if (Window::GetKeyboard()->KeyTriggered(KEYBOARD_P) || Window::GetKeyboard()->KeyTriggered(KEYBOARD_ESCAPE))
+			if (!(Window::GetinputScrollCDing()) && (Window::GetKeyboard()->KeyDown(KEYBOARD_P) || Window::GetKeyboard()->KeyDown(KEYBOARD_ESCAPE) ||
+				(Window::GetControllerConnected() && Window::GetWindow().GetController()->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_START)))
 			{
 				setCurrentState(GAME_PLAYING);
+				Window::enableInputScrollLock();
 			}
 		}
 		renderCounter += (1000.0f / (float)RENDER_HZ);
