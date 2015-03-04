@@ -472,7 +472,7 @@ Obstacle* MyGame::BuildObstacleEntity(float size, int type, int subType, ObjectT
 	}
 	else
 	{
-		s = new SceneNode(missile);
+		s = new SceneNode(sphere);
 	}
 	
 	PhysicsNode* p = new PhysicsNode();
@@ -504,7 +504,7 @@ Obstacle* MyGame::BuildObstacleEntity(float size, int type, int subType, ObjectT
 
 GameEntity* MyGame::BuildBulletEntity(float radius, Vector3 pos)
 {
-	SceneNode* test = new SceneNode(sphere);
+	SceneNode* test = new SceneNode(missile);
 	test->SetModelScale(Vector3(radius, radius, radius));
 	test->SetBoundingRadius(radius);
 	test->SetColour(Vector4(0.2f, 0.2f, 0.5f, 1.0f));
