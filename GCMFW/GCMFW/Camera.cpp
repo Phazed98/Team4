@@ -35,8 +35,8 @@ void Camera::Update(float msec)
 
 	Input::GetJoypadMovement(y, p, pad);
 
-	yaw += y/1000;
-	pitch -= p/1000;
+	yaw += y/600;
+	pitch -= p/600;
 
 	pitch = min(pitch, 90.0f);
 	pitch = max(pitch, -90.0f);

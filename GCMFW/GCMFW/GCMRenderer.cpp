@@ -350,7 +350,7 @@ void	GCMRenderer::DrawNode(SceneNode*n)
 	{
 		//GCC complains about function returns being used as parameters passed
 		//around, or we'd just use GetWorldTransform as the function param
-		Matrix4 transform = n->GetWorldTransform();
+		Matrix4 transform = n->GetWorldTransform() * Matrix4::scale(n->GetModelScale());
 		currentVert->SetParameter("modelMat", transform);
 
 		/*

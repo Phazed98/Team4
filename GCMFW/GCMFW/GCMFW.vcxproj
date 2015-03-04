@@ -85,9 +85,12 @@
     <ClInclude Include="GJKSimplex.h" />
     <ClInclude Include="InertialMatrixHelper.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="MathHelper.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MyGame.h" />
+    <ClInclude Include="ObjectType.h" />
     <ClInclude Include="OBJMesh.h" />
+    <ClInclude Include="Obstacle.h" />
     <ClInclude Include="PhysicsNode.h" />
     <ClInclude Include="PhysicsSystem.h" />
     <ClInclude Include="Plane.h" />
@@ -107,7 +110,9 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MyGame.cpp" />
+    <ClCompile Include="ObjectType.cpp" />
     <ClCompile Include="OBJMesh.cpp" />
+    <ClCompile Include="Obstacle.cpp" />
     <ClCompile Include="PhysicsNode.cpp" />
     <ClCompile Include="PhysicsSystem.cpp" />
     <ClCompile Include="Plane.cpp" />

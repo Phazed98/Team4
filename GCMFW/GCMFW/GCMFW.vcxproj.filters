@@ -55,6 +55,12 @@
     <ClCompile Include="GJK.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="ObjectType.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Obstacle.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -133,6 +139,15 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="GJKSimplex.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MathHelper.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectType.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Obstacle.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>

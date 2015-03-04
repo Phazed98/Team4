@@ -1,12 +1,14 @@
 #include "PhysicsNode.h"
 
-const Vector3 PhysicsNode::gravity = Vector3(0, -0.00001, 0);
+const Vector3 PhysicsNode::gravity = Vector3(0, -0.00000, 0);
 
 PhysicsNode::PhysicsNode(void) : vol(NULL)
 {
 	target = NULL;
 	useGravity = true;
 	m_elasticity = 1.0f;
+	m_linearVelocity = Vector3(0, 0, 0);
+	m_orientation = Quat();
 }
 
 PhysicsNode::PhysicsNode(Quat orientation, Vector3 position) : vol(NULL)
@@ -15,6 +17,7 @@ PhysicsNode::PhysicsNode(Quat orientation, Vector3 position) : vol(NULL)
 	m_position = position;
 	m_elasticity = 1.0f;
 	useGravity = true;
+	m_linearVelocity = Vector3(0, 0, 0);
 }
 
 PhysicsNode::~PhysicsNode(void)
@@ -25,14 +28,15 @@ PhysicsNode::~PhysicsNode(void)
 
 void	PhysicsNode::Update(float msec)
 {
+	//return;
 	//std::cout << "Physics Eh?" << std::endl;
 	//Damping Factor
-	m_linearVelocity = m_linearVelocity * 0.98;
-	m_angularVelocity = m_angularVelocity * 0.98;
+	//m_linearVelocity = m_linearVelocity * 0.98;
+	//m_angularVelocity = m_angularVelocity * 0.98;
 
 	//Linear and Angular Updates
-	updateLinear(msec);
-	updateAngular(msec);
+	//updateLinear(msec);
+	/*updateAngular(msec);*/
 
 	//Removal of Forces
 	m_force = Vector3(0, 0, 0);
@@ -50,52 +54,52 @@ void PhysicsNode::updateLinear(float msec)
 	if (m_moveable)
 	{
 		//Apply Gravitty if it should be applied
-		Vector3 accel = m_force*m_invMass + (useGravity ? gravity : Vector3(0, 0, 0));
-
-		m_linearVelocity = m_linearVelocity + accel * msec;
-		m_position = m_position + m_linearVelocity * msec;
-		m_atRest = false;
+		//Vector3 accel = m_force*m_invMass;// +(useGravity ? gravity : Vector3(0, 0, 0));
+		////Vector3 accel = Vector3(0, 0, 0);
+		//m_linearVelocity = m_linearVelocity + accel * msec;
+		//m_position = m_position + m_linearVelocity * msec;
+		//m_atRest = false;
 
 		//Adds current Velocity to an Array and determines the average velocity over the last few updates
-		CalculateAvgVel();
+		//CalculateAvgVel();
 
 		//If The Object has been close to zero velocity for several frames set it to rest
-		bool stopped = true;
-		for (int x = 0; x < RESTCHECKFRAMES; x++)
-		{
-			//inline const floatInVec lengthSqr(Vector3 vec);
-			//.LengthSqrd()
-			if (lengthSqr(avgVel[x])> 0.00000001)
-			{
-				stopped = false;
-			}
-		}
+		//bool stopped = true;
+		//for (int x = 0; x < RESTCHECKFRAMES; x++)
+		//{
+		//	//inline const floatInVec lengthSqr(Vector3 vec);
+		//	//.LengthSqrd()
+		//	if (lengthSqr(avgVel[x])> 0.00000001)
+		//	{
+		//		stopped = false;
+		//	}
+		//}
 
-		if (stopped)
-		{
-			m_angularVelocity = Vector3(0, 0, 0);
-			m_linearVelocity = Vector3(0, 0, 0);
-			m_atRest = true;
-		}
+		//if (stopped)
+		//{
+		//	m_angularVelocity = Vector3(0, 0, 0);
+		//	m_linearVelocity = Vector3(0, 0, 0);
+		//	m_atRest = true;
+		//}
 	}
 }
 
 void PhysicsNode::updateAngular(float msec)
 {
-	if (m_moveable)
-	{
-		Vector3 angAccel = m_invInertia.getUpper3x3() * m_torque;
-		m_angularVelocity = m_angularVelocity + angAccel * msec;
-		/*
-		This could be horribly wrong, but i have to try it to get things working, 
-		this should be multiplying a quaterion by a vec3 however im useing it as a rotation
-		*/
-		//m_orientation = m_orientation + m_orientation * (m_angularVelocity * msec / 2.0f);
-		rotate(m_orientation, (m_angularVelocity * msec / 2.0f));
-		//m_orientation.Normalise();
-		normalize(m_orientation);
+	//if (m_moveable)
+	//{
+	//	Vector3 angAccel = m_invInertia.getUpper3x3() * m_torque;
+	//	m_angularVelocity = m_angularVelocity + angAccel * msec;
+	//	/*
+	//	This could be horribly wrong, but i have to try it to get things working, 
+	//	this should be multiplying a quaterion by a vec3 however im useing it as a rotation
+	//	*/
+	//	//m_orientation = m_orientation + m_orientation * (m_angularVelocity * msec / 2.0f);
+	//	rotate(m_orientation, (m_angularVelocity * msec / 2.0f));
+	//	//m_orientation.Normalise();
+	//	normalize(m_orientation);
 
-	}
+	//}
 }
 
 
@@ -126,7 +130,9 @@ Matrix4		PhysicsNode::BuildTransform()
 {
 	//Matrix4::rotation(m_orientation);
 	//Matrix4 m = m_orientation.ToMatrix();
+	//normalize(m_orientation);
 	Matrix4 m = Matrix4::rotation(m_orientation);;
+	//Matrix4 m = Matrix4::translation(m_position);
 	m.setTranslation(m_position);
 	//m.SetPositionVector(m_position);
 	return m;

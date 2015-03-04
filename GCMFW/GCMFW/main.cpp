@@ -79,8 +79,7 @@ int main(void)
 	uint64_t priority = 1000;
 	size_t stack_size = 0x1000;
 	char *thread_name = "My Thread";
-	sys_ppu_thread_create(&id, physicsLoop, (uint64_t)game, priority, stack_size,
-		SYS_PPU_THREAD_CREATE_JOINABLE, thread_name);
+	sys_ppu_thread_create(&id, physicsLoop, (uint64_t)game, priority, stack_size,SYS_PPU_THREAD_CREATE_JOINABLE, thread_name);
 
 	while (!done)
 	{
@@ -89,6 +88,7 @@ int main(void)
 		float msec = (float)gameTime.GetTimedMS();	//How many milliseconds since last update?
 		game->UpdateRendering(msec);	//Update our 'sybsystem' logic (renderer and physics!)
 		game->UpdateGame(msec);	//Update our game logic
+		//game->UpdatePhysics(msec);
 	}
 
 
