@@ -102,9 +102,12 @@ void Renderer::fullyInit()
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 
+	water_plane_shader = new Shader(SHADERDIR"plane-shader/displace3DVert.glsl", SHADERDIR"plane-shader/TexturedFragment.glsl");
+
 	//add by steven for motion blur
 	quad_motion_blur = Mesh::GenerateQuad();
 	render_motion_blur = false;
+
 	motion_blur_shader = new Shader(SHADERDIR"MotionBlurVertex.glsl", SHADERDIR"MotionBlurFragment.glsl");
 
 	simpleShader = new Shader(SHADERDIR"TechVertex.glsl", SHADERDIR"TechFragment.glsl");
@@ -123,7 +126,7 @@ void Renderer::fullyInit()
 
 	if (!simpleShader->LinkProgram() || !textShader->LinkProgram() ||
 		!backgroundShader->LinkProgram() || !menuShader->LinkProgram() ||
-		!motion_blur_shader->LinkProgram())
+		!motion_blur_shader->LinkProgram() || !water_plane_shader->LinkProgram())
 	{
 		cout << "error in link shaders" << endl;
 		return;

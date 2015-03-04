@@ -162,5 +162,8 @@ protected:
 	vector<TornadoSceneNode*> tornadoNode;
 	EarthParticleSystem tornado_system;
 	void DrawTornado();
+
+	//steven added for rendering different objects
+	Shader* water_plane_shader;
 };
 
