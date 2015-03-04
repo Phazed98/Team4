@@ -119,12 +119,14 @@ public:
 		return currentShader;
 	}
 
+	void			SetTextureRepeating(GLuint target, bool state);
+
 protected:
 	virtual void	Resize(int x, int y);	
 	void			UpdateShaderMatrices();
 	void			SetCurrentShader(Shader*s);
 
-	void			SetTextureRepeating(GLuint target, bool state);
+	
 
 	//void			SetShaderLight(const Light &l);
 

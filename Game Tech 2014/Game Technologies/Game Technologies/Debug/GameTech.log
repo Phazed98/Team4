@@ -1,9 +1,9 @@
-﻿Build started 04/03/2015 22:42:23.
+﻿Build started 04/03/2015 23:34:07.
      1>Project "C:\Users\siyu\Documents\GitHub\Team4\Game Tech 2014\Game Technologies\Game Technologies\GameTech.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Renderer.cpp
          Renderer.cpp
-     1>c:\users\siyu\documents\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(1008): warning C4305: 'argument' : truncation from 'double' to 'const float'
+     1>c:\users\siyu\documents\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(1040): warning C4305: 'argument' : truncation from 'double' to 'const float'
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\siyu\Documents\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\siyu\Documents\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\siyu\Documents\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.lib" /MACHINE:X86 /FORCE:MULTIPLE Debug\Bullets.obj
          Debug\Button.obj
@@ -90,6 +90,7 @@
      1>Renderer.obj : warning LNK4049: locally defined symbol ___glewGetUniformLocation imported
      1>EarthParticleSystem.obj : warning LNK4049: locally defined symbol ___glewUniform1f imported
      1>FireParticleSystem.obj : warning LNK4049: locally defined symbol ___glewUniform1f imported
+     1>Renderer.obj : warning LNK4049: locally defined symbol ___glewUniform1f imported
      1>EarthParticleSystem.obj : warning LNK4049: locally defined symbol ___glewUniform1i imported
      1>FireParticleSystem.obj : warning LNK4049: locally defined symbol ___glewUniform1i imported
      1>Renderer.obj : warning LNK4049: locally defined symbol ___glewUniform1i imported
@@ -138,4 +139,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.21
+Time Elapsed 00:00:01.26

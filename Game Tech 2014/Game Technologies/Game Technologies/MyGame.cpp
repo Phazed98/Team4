@@ -111,6 +111,7 @@ MyGame::MyGame(bool isHost, bool isClient, bool useNetworking, int numClients)
 
 	water_sphere = new OBJMesh(MESHDIR"sphere.obj");
 	water_sphere->SetTexture(waterTexture);
+	Renderer::GetRenderer().SetTextureRepeating(waterTexture, true);
 	cube	= new OBJMesh(MESHDIR"cube.obj");
 	cubeAir = new OBJMesh(MESHDIR"cube.obj");
 	cubeAir->SetTexture(airTexture);

@@ -90,7 +90,7 @@ Renderer::~Renderer(void)
 void Renderer::fullyInit()
 {
 	camera = NULL;
-
+	total_sec_pass = 0;
 	root = new SceneNode();
 
 	basicFont = new Font(SOIL_load_OGL_texture(TEXTUREDIR"tahoma.tga", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_COMPRESS_TO_DXT), 16, 16);
@@ -153,6 +153,7 @@ void Renderer::fullyInit()
 void Renderer::UpdateScene(float msec)
 {
 	this->msec = msec;
+	total_sec_pass += msec/1000;
 	if (Window::GetKeyboard()->KeyTriggered(KEYBOARD_T)) //Build Cube
 	{
 		toggleWireFrame();
@@ -211,15 +212,14 @@ void Renderer::RenderWithoutPostProcessing(){
 
 	if (camera)
 	{
-		SetCurrentShader(simpleShader);
-		glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), 0);
+		
 
 		textureMatrix.ToIdentity();
 		modelMatrix.ToIdentity();
 		viewMatrix = camera->BuildViewMatrix();
 		projMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float)width / (float)height, 45.0f);
 		frameFrustum.FromMatrix(projMatrix * viewMatrix);
-		UpdateShaderMatrices();
+		
 
 		//Return to default 'usable' state every frame!
 		glEnable(GL_DEPTH_TEST);
@@ -266,15 +266,13 @@ void Renderer::RenderMotionBlur(){
 
 	if (camera)
 	{
-		SetCurrentShader(simpleShader);
-		glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), 0);
-
+		
 		textureMatrix.ToIdentity();
 		modelMatrix.ToIdentity();
 		viewMatrix = camera->BuildViewMatrix();
 		projMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float)width / (float)height, 45.0f);
 		frameFrustum.FromMatrix(projMatrix * viewMatrix);
-		UpdateShaderMatrices();
+		
 
 		//Return to default 'usable' state every frame!
 		glEnable(GL_DEPTH_TEST);
@@ -717,17 +715,51 @@ void Renderer::RenderLoading(int percent, string message)
 
 void	Renderer::DrawNode(SceneNode*n)
 {
-	if (n->GetMesh())
-	{
-		glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(), "modelMatrix"), 1, false, (float*)&(n->GetWorldTransform()*Matrix4::Scale(n->GetModelScale())));
-		glUniform4fv(glGetUniformLocation(currentShader->GetProgram(), "nodeColour"), 1, (float*)&n->GetColour());
-		if (n->GetMesh()->GetTexture() != NULL)
-			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useTexture"), 1);
-		else
-			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useTexture"), 0);
+	RenderType rt = n->GetRenderType();
+	switch (rt){
+	case WATER_PLANE:{
+		if (n->GetMesh())
+		{
+			SetCurrentShader(water_plane_shader);
+			glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "displaceStrength"), 0.3);
+			glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "time"), total_sec_pass);
+			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), 0);
+			UpdateShaderMatrices();
 
-		n->Draw(*this);
+			glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(), "modelMatrix"), 1, false, (float*)&(n->GetWorldTransform()*Matrix4::Scale(n->GetModelScale())));
+			glUniform4fv(glGetUniformLocation(currentShader->GetProgram(), "nodeColour"), 1, (float*)&n->GetColour());
+			if (n->GetMesh()->GetTexture() != NULL)
+				glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useTexture"), 1);
+			else
+				glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useTexture"), 0);
+
+			n->Draw(*this);
+
+			glUseProgram(0);
+
+		}
+		break;
 	}
+	default:{
+		if (n->GetMesh())
+		{
+			SetCurrentShader(simpleShader);
+			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), 0);
+			UpdateShaderMatrices();
+
+			glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(), "modelMatrix"), 1, false, (float*)&(n->GetWorldTransform()*Matrix4::Scale(n->GetModelScale())));
+			glUniform4fv(glGetUniformLocation(currentShader->GetProgram(), "nodeColour"), 1, (float*)&n->GetColour());
+			if (n->GetMesh()->GetTexture() != NULL)
+				glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useTexture"), 1);
+			else
+				glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useTexture"), 0);
+
+			n->Draw(*this);
+			glUseProgram(0);
+		}
+	}
+	}
+	
 }
 
 void	Renderer::BuildNodeLists(SceneNode* from)
