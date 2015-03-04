@@ -58,7 +58,6 @@ dlldata.c
 *_i.h
 *.ilk
 *.meta
-*.obj
 *.pch
 *.pdb
 *.pgc
@@ -210,4 +209,4 @@ FakesAssemblies/
 # Visual Studio 6 workspace options file
 *.opt
 Status API Training Shop Blog About
-© 2015 GitHub, Inc. Terms Privacy Security Contact
+ï¿½ 2015 GitHub, Inc. Terms Privacy Security Contact

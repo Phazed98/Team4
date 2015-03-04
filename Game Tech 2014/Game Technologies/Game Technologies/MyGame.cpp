@@ -120,6 +120,9 @@ MyGame::MyGame(bool isHost, bool isClient, bool useNetworking, int numClients)
 	cubeEarth->SetTexture(earthTexture);
 	quad	= Mesh::GenerateQuad();
 	sphere	= new OBJMesh(MESHDIR"ico.obj");
+	bigRock = new OBJMesh(MESHDIR"bigRock3.obj");
+	missile = new OBJMesh(MESHDIR"missile5.obj");
+	
 	Renderer::GetRenderer().RenderLoading(95, "Lammas are nice creatures...");
 	Renderer::GetRenderer().RenderLoading(96,"Hold it,  Were not getting into Lammas now...");
 	Renderer::GetRenderer().RenderLoading(97, "The loading system is obviously faulty, we will continue now without any further updates...");
@@ -457,19 +460,19 @@ ObjectType* MyGame::BuildObjectEntity(int type, int subType)
 Obstacle* MyGame::BuildObstacleEntity(float size, int type, int subType, ObjectType* _obj, int _obstacle_type) 
 {
 	SceneNode* s;
-	if (_obstacle_type == 5)
-	{
-		s = new SceneNode(cube);
-	}
-	else if (subType == 0 && _obstacle_type == 4)
+	if (subType == 0 && _obstacle_type == 4)
 	{
 		s = new TornadoSceneNode(sphere);
 		Renderer::GetRenderer().SetTornadoSceneNode((TornadoSceneNode*)s);
 		size = size / size;
 	}
+	else if (subType == 2 && _obstacle_type == 0)
+	{
+		s = new SceneNode(bigRock);
+	}
 	else
 	{
-		s = new SceneNode(sphere);
+		s = new SceneNode(missile);
 	}
 	
 	PhysicsNode* p = new PhysicsNode();

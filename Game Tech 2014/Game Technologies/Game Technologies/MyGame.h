@@ -109,6 +109,8 @@ protected:
 
 	Mesh* quad;
 	Mesh* sphere;
+	Mesh* bigRock;
+	Mesh* missile;
 
 	vector<ObjectType*> top;
 	vector<ObjectType*> right;
