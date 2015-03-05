@@ -4,7 +4,7 @@
 //#include <string>
 //#include <iostream>
 
-
+#include "SoundManager.h"
 #include "Input.h"
 #include "Timer.h"
 #include "MyGame.h"
@@ -57,6 +57,9 @@ int main(void)
 {
 	std::cout << "All-New intro to GCM V1.0!\n" << std::endl;
 
+	SoundSystem::SystemAudioUtilitySet6ch();
+	std::cout << "SoundSystem is OK!\n" << std::endl;
+
 	if (!Renderer::Initialise())
 	{
 		return;
@@ -81,9 +84,17 @@ int main(void)
 	char *thread_name = "My Thread";
 	sys_ppu_thread_create(&id, physicsLoop, (uint64_t)game, priority, stack_size,SYS_PPU_THREAD_CREATE_JOINABLE, thread_name);
 
+	Wave::readWavfile();
+	SoundManager::PlaySound(0,1);
+	SoundManager::PlaySound(1,1);
+
 	while (!done)
 	{
 		Input::UpdateJoypad();	//Receive latest joypad input for all joypads
+	
+		SoundManager::PlaySound(0,1);//try to play two sound, the first number means which sound is played,
+		SoundManager::PlaySound(1,1);//second number means the sound is loop or not. 0 ->not loop   1 -> loop
+		SoundManager::UpdateSound();//if the not loop sound is over, this function will delete the sound which is over
 
 		float msec = (float)gameTime.GetTimedMS();	//How many milliseconds since last update?
 		game->UpdateRendering(msec);	//Update our 'sybsystem' logic (renderer and physics!)
