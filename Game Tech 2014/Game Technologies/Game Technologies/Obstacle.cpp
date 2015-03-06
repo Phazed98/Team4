@@ -101,10 +101,10 @@ void Obstacle::SetLane(int _lane)
 			offset.x = (float)random;
 		}
 
-		if (obstacleType == 5)
+		/*if (obstacleType == 5)
 		{
 			offset.x = 0;
-		}
+		}*/
 	}
 	else if (subType == 1) // Right tile
 	{
@@ -118,10 +118,10 @@ void Obstacle::SetLane(int _lane)
 			offset.y = (float)random;
 		}
 		
-		if (obstacleType == 5)
+		/*if (obstacleType == 5)
 		{
 			offset.y = 0;
-		}
+		}*/
 	}
 	else if (subType == 2) // Bottom tile
 	{
@@ -135,10 +135,10 @@ void Obstacle::SetLane(int _lane)
 			offset.x = (float)random;
 		}
 		 
-			if (obstacleType == 5)
+		/*if (obstacleType == 5)
 		{
 			offset.x = 0;
-		}
+		}*/
 	}
 	else if (subType == 3) // Left tile
 	{
@@ -152,10 +152,10 @@ void Obstacle::SetLane(int _lane)
 			offset.y = (float)random;
 		}
 		
-		if (obstacleType == 5)
+		/*if (obstacleType == 5)
 		{
 			offset.y = 0;
-		}
+		}*/
 	}
 }
 

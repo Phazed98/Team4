@@ -169,7 +169,7 @@ MyGame::MyGame(bool isHost, bool isClient, bool useNetworking, int numClients)
 		allEntities.push_back(plane);
 	}
 
-	allEntities.push_back(BuildCheckPointEntity(2, 4, 200));
+	//-------------------------------------------------#####---------------------------------------------------------//
 
 	setCurrentState(GAME_PLAYING);
 	Renderer::GetRenderer().RenderLoading(100, "Done...");
@@ -227,6 +227,9 @@ MyGame::MyGame(bool isHost, bool isClient, bool useNetworking, int numClients)
 	{
 		srand((int)Window::GetWindow().GetTimer()->GetMS());
 	}
+
+	//-------------------------------------------------Checkpoint---------------------------------------------------------//
+	allEntities.push_back(BuildCheckPointEntity(2, 4, 200));
 }
 
 MyGame::~MyGame(void)	
@@ -239,9 +242,9 @@ MyGame::~MyGame(void)
 	delete sphere;
 //	delete Enemy;   //new 5.2.2015 Daixi
 	delete Car;
-	delete bullet;
-	delete AllCoins;
-	delete AllPowerups;
+//	delete bullet;
+//	delete AllCoins;
+//	delete AllPowerups;
 
 	CubeRobot::DeleteCube();
 
@@ -413,18 +416,22 @@ ObjectType* MyGame::BuildObjectEntity(int type, int subType) {
 	if (subType == 0){
 		s = new SceneNode(cubeAir);
 		s->SetRenderType(AIR_PLANE);
+		s->SetTransform(Matrix4::Translation(Vector3(10000, 10000, 10000)));
 	}
 	else if (subType == 1){
 		s = new SceneNode(cubeFire);
 		s->SetRenderType(FIRE_PLANE);
+		s->SetTransform(Matrix4::Translation(Vector3(10000, 10000, 10000)));
 	}
 	else if (subType == 2){
 		s = new SceneNode(cubeEarth);
 		s->SetRenderType(EARTH_PLANE);
+		s->SetTransform(Matrix4::Translation(Vector3(10000, 10000, 10000)));
 	}
 	else if (subType == 3){
 		s = new SceneNode(water_sphere);
 		s->SetRenderType(WATER_PLANE);
+		s->SetTransform(Matrix4::Translation(Vector3(10000, 10000, 10000)));
 	}
 
 	PhysicsNode* p = new PhysicsNode();
@@ -647,7 +654,7 @@ void MyGame::CreateObstacle(ObjectType* _obj)
 	Obstacle* temp = NULL;
 	//select random obstacle 
 
-	int obstacleType = rand() % 6 + 0;
+	int obstacleType = rand() % 5 + 0;
 	int empty = getObstacleEmptyIndex(_obj->getSubType(),obstacleType);
 	// for the first obstacle created
 	if (obstacleReference[_obj->getSubType()] == NULL)
