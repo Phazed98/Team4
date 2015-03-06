@@ -179,7 +179,7 @@ void Obstacle::HandleMovingObstacle()
 				}
 			}
 		}
-		else if (subType == 2)
+		else if (subType == 2) // Obstacles that belong to Earth/Bottom plane 
 		{
 			if (goingLeft)
 			{
@@ -223,7 +223,17 @@ void Obstacle::ControlShootingObstacles()
 
 void Obstacle::Shoot()
 {
+	
 	Vector3 direction = player->GetPosition() - physicsNode->GetPosition();
 	direction.Normalise();
 	bullet->GetPhysicsNode().SetLinearVelocity(direction * 2);
+	bullet->GetPhysicsNode().SetOrientation(Quaternion::LookAt(bullet->GetPhysicsNode().GetPosition(), player->GetPosition()));
+	Vector3 rotation = bullet->GetPhysicsNode().GetOrientation().GetEulerAngles();
+	rotation.y += 90;
+	if (rotation.y > 360)
+	{
+		rotation.y -= 360;
+	}
+	bullet->GetPhysicsNode().SetOrientation(Quaternion::EulerAnglesToQuaternion(rotation.x, rotation.y, rotation.z));
+	
 }

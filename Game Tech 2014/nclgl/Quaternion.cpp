@@ -1,4 +1,5 @@
 #include "Quaternion.h"
+#include <math.h>
 
 Quaternion::Quaternion(void)
 {
@@ -234,3 +235,47 @@ Quaternion Quaternion::FromMatrix(const Matrix4 &m)	{
 
 
 	//-----------------------------------------------------------------------------------------------
+
+	Quaternion Quaternion::LookAt(Vector3 sourcePoint, Vector3 destPoint)
+	{
+		Vector3 forwardVector = destPoint - sourcePoint;
+		forwardVector.Normalise();
+		float dot = Vector3::Dot(Vector3(0, 0, 1), forwardVector);
+		if (fabs(dot - (-1.0f)) < 0.000001f)
+		{
+			return Quaternion(0, 1, 0, PI);
+		}
+		if (fabs(dot - (1.0f)) < 0.000001f)
+		{
+			return Quaternion();
+		}
+		float rotAngle = acos(dot);
+		Vector3 rotAxis = Vector3::Cross(Vector3(0, 0, 1), forwardVector);
+		rotAxis.Normalise();
+		rotAngle = 360 * rotAngle / 2 / PI;
+		return AxisAngleToQuaterion(rotAxis, rotAngle);
+	}
+
+	Vector3 Quaternion::GetEulerAngles() {
+		float roll, pitch, yaw;
+		float test = x * y + z * w;
+		if (test > 0.499) { // singularity at north pole
+			pitch = (float)2 * (float)atan2(x, w);
+			yaw = (float)PI / 2;
+			roll = 0;
+			return Vector3(roll, pitch, yaw);
+		}
+		if (test < -0.499) { // singularity at south pole
+			pitch = -2 * (float)atan2(x, w);
+			yaw = -(float)PI / 2;
+			roll = 0;
+			return Vector3(roll, pitch, yaw);
+		}
+		float sqx = x * x;
+		float sqy = y * y;
+		float sqz = z * z;
+		pitch = (float)atan2(2 * y * w - 2 * x * z, 1 - 2 * sqy - 2 * sqz);
+		yaw = (float)asin(2 * test);
+		roll = (float)atan2(2 * x * w - 2 * y * z, 1 - 2 * sqx - 2 * sqz);
+		return Vector3(roll, pitch, yaw);
+	}

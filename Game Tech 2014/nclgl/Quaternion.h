@@ -52,6 +52,10 @@ public:
 
 	static Quaternion FromMatrix(const Matrix4 &m);
 
+	Vector3 Quaternion::GetEulerAngles();
+
+	static Quaternion LookAt(Vector3 sourcePoint, Vector3 destPoint);
+
 	static float Dot(const Quaternion &a, const Quaternion &b);
 
 	Quaternion operator *(const Quaternion &a) const;
