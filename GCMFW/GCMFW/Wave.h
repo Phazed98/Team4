@@ -23,7 +23,7 @@ public:
 	//static uint32_t waveByteSize;
 	static std::vector<uint32_t> waveByteSize;
 	//Load in a Wave File, saves data in to the statics above.
-	static void readWavfile();
+	static void readWavfile(const char * Soundname);
 	//static void LoadWavfile(const char * Soundname);
 
 	// Swap Endinan−ess of an uint32 t
@@ -41,4 +41,6 @@ public:
 		char *top, //The Wave File
 		unsigned int offset //Index of chunk to get filesize for
 		);
+
+	static int num_sound;
 };

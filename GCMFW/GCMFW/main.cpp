@@ -13,6 +13,9 @@
 
 SYS_PROCESS_PARAM(1001, 0x10000)
 
+#define STEREO_DATA0 "/app_home/36847__ecodtr__laserrocket2.wav"
+#define STEREO_DATA1 "/app_home/14615__man__canon.wav"
+
 bool done = false;
 
 Camera* camera;
@@ -84,7 +87,8 @@ int main(void)
 	char *thread_name = "My Thread";
 	sys_ppu_thread_create(&id, physicsLoop, (uint64_t)game, priority, stack_size,SYS_PPU_THREAD_CREATE_JOINABLE, thread_name);
 
-	Wave::readWavfile();
+	Wave::readWavfile(STEREO_DATA0);
+	Wave::readWavfile(STEREO_DATA1);
 	SoundManager::PlaySound(0,1);
 	SoundManager::PlaySound(1,1);
 

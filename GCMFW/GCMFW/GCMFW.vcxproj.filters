@@ -62,13 +62,13 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Wave.cpp">
-      <Filter>Source</Filter>
+      <Filter>Source\Sound</Filter>
     </ClCompile>
     <ClCompile Include="SoundSystem.cpp">
-      <Filter>Source</Filter>
+      <Filter>Source\Sound</Filter>
     </ClCompile>
     <ClCompile Include="SoundManager.cpp">
-      <Filter>Source</Filter>
+      <Filter>Source\Sound</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -159,14 +159,14 @@
     <ClInclude Include="Obstacle.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="SoundSystem.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="Wave.h">
-      <Filter>Headers</Filter>
+      <Filter>Headers\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundSystem.h">
+      <Filter>Headers\Sound</Filter>
     </ClInclude>
     <ClInclude Include="SoundManager.h">
-      <Filter>Headers</Filter>
+      <Filter>Headers\Sound</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -178,6 +178,12 @@
     </Filter>
     <Filter Include="Shaders">
       <UniqueIdentifier>{8a95770d-2f25-4851-a11b-33599d7b2506}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Sound">
+      <UniqueIdentifier>{e2839b77-44ba-4756-82f7-0ce02e120c77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Sound">
+      <UniqueIdentifier>{57c9703f-c1e9-4bb5-8263-dbf00d3315d3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -14,12 +14,14 @@ std::vector<short*> Wave::wavetop;
 //uint32_t Wave::waveByteSize = 0;
 std::vector<uint32_t> Wave::waveByteSize;
 
+int Wave::num_sound = 0;
+
 //Load in a Wave File, saves data in to the statics above.
-void Wave::readWavfile()
+void Wave::readWavfile(const char * Soundname)
 {
-	printf(" loading %s\n", STEREO_DATA0);
+	printf(" loading %s\n", Soundname);
 
-	file = fopen(STEREO_DATA0, "rb");
+	file = fopen(Soundname, "rb");
 	if (file != NULL)
 	{
 
@@ -38,77 +40,77 @@ void Wave::readWavfile()
 		buffer.push_back((char *)malloc(filebytesize));
 
 
-		if (fread(buffer[0], filebytesize, 1, file) != 1){
+		if (fread(buffer[num_sound], filebytesize, 1, file) != 1){
 			printf(" ## ERR fread fp1 \n");
 			fclose(file);
 			return ;
 		}
-		printf(" %s %ld bytes read \n", STEREO_DATA0, filebytesize);
+		printf(" %s %ld bytes read \n", Soundname, filebytesize);
 
 		fclose(file);
 
 		const char strData[] = {'d', 'a', 't', 'a'};
-		int i = seekWavChunk(buffer[0], filebytesize, (char *)strData);
+		int i = seekWavChunk(buffer[num_sound], filebytesize, (char *)strData);
 		if (i > 0){
-			wavetop.push_back( (short *)(buffer[0]+i+4));
-			waveByteSize.push_back ( getWavChunkSize(buffer[0], (unsigned int)i));
-			printf(" waveByteSize0 = %d\n", waveByteSize[0]);
+			wavetop.push_back( (short *)(buffer[num_sound]+i+4));
+			waveByteSize.push_back ( getWavChunkSize(buffer[num_sound], (unsigned int)i));
+			printf(" waveByteSize0 = %d\n", waveByteSize[num_sound]);
 		} else {
 			return ;
 		}
 	}
 	else{
-		printf(" couldn’t find %s\n", STEREO_DATA1);
+		printf(" couldn’t find %s\n", Soundname);
 	}
 
-
+	num_sound++;
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	printf(" loading %s\n", STEREO_DATA1);
+	//printf(" loading %s\n", STEREO_DATA1);
 
-	file = fopen(STEREO_DATA1, "rb");
-	if (file != NULL)
-	{
+	//file = fopen(STEREO_DATA1, "rb");
+	//if (file != NULL)
+	//{
 
-		fseek(file, 0, SEEK_END);
-		filebytesize = ftell(file);
-		if (filebytesize == 0){
-			printf("seek error.\n");
-			return ;
-		}
-		printf("Filebytesize is %ld\n", filebytesize);
-		fseek(file, 0, SEEK_SET);
+	//	fseek(file, 0, SEEK_END);
+	//	filebytesize = ftell(file);
+	//	if (filebytesize == 0){
+	//		printf("seek error.\n");
+	//		return ;
+	//	}
+	//	printf("Filebytesize is %ld\n", filebytesize);
+	//	fseek(file, 0, SEEK_SET);
 
-		// Reserve memory
-		//buffer = (char *)malloc(filebytesize);
+	//	// Reserve memory
+	//	//buffer = (char *)malloc(filebytesize);
 
-		buffer.push_back((char *)malloc(filebytesize));
-
-
-		if (fread(buffer[1], filebytesize, 1, file) != 1){
-			printf(" ## ERR fread fp1 \n");
-			fclose(file);
-			return ;
-		}
-		printf(" %s %ld bytes read \n", STEREO_DATA1, filebytesize);
-
-		fclose(file);
-
-		const char strData[] = {'d', 'a', 't', 'a'};
-		int i = seekWavChunk(buffer[1], filebytesize, (char *)strData);
-		if (i > 0){
-			wavetop.push_back( (short *)(buffer[1]+i+4));
-			waveByteSize.push_back ( getWavChunkSize(buffer[1], (unsigned int)i));
-			printf(" waveByteSize0 = %d\n", waveByteSize[1]);
-		} else {
-			return ;
-		}
-	}
-	else{
-		printf(" couldn’t find %s\n", STEREO_DATA1);
-	}
+	//	buffer.push_back((char *)malloc(filebytesize));
 
 
-	return;
+	//	if (fread(buffer[1], filebytesize, 1, file) != 1){
+	//		printf(" ## ERR fread fp1 \n");
+	//		fclose(file);
+	//		return ;
+	//	}
+	//	printf(" %s %ld bytes read \n", STEREO_DATA1, filebytesize);
+
+	//	fclose(file);
+
+	//	const char strData[] = {'d', 'a', 't', 'a'};
+	//	int i = seekWavChunk(buffer[1], filebytesize, (char *)strData);
+	//	if (i > 0){
+	//		wavetop.push_back( (short *)(buffer[1]+i+4));
+	//		waveByteSize.push_back ( getWavChunkSize(buffer[1], (unsigned int)i));
+	//		printf(" waveByteSize0 = %d\n", waveByteSize[1]);
+	//	} else {
+	//		return ;
+	//	}
+	//}
+	//else{
+	//	printf(" couldn’t find %s\n", STEREO_DATA1);
+	//}
+
+
+	//return;
 
 
 	
