@@ -26,7 +26,7 @@ Obstacle::Obstacle(ObjectType* _tile, SceneNode* s, PhysicsNode* p, int _type, i
 
 	bullet = NULL;
 
-	movingObsSpeed = 5.0f;
+	movingObsSpeed = 2.5f;
 
 	count_time = 0;
 }
@@ -39,30 +39,7 @@ Obstacle::~Obstacle()
 
 void Obstacle::Update(float msec)
 {
-	//Controls shooting obstacles
-	if (obstacleType == 1)
-	{
-		if (abs(player->GetPosition().y - physicsNode->GetPosition().y) < 400
-			&& abs(player->GetPosition().x - physicsNode->GetPosition().x) < 400
-			&& physicsNode->GetPosition().z < player->GetPosition().z)
-		{
-			//if (count_time == 80)
-			if (count_time == 200)//&& bullet->GetPhysicsNode().GetPosition().z > player->GetPosition().z)
-			{
-				bullet->GetPhysicsNode().SetPosition(physicsNode->GetPosition());
-				count_time = 0;
-				Shoot();
-			}
-
-			count_time++;
-
-		}
-		else
-		{
-			bullet->GetPhysicsNode().SetPosition(physicsNode->GetPosition());
-		}
-	}
-
+	
 	if (type == 1)
 	{
 		if (state == 0)
@@ -81,7 +58,7 @@ void Obstacle::Update(float msec)
 
 	}
 
-
+	ControlShootingObstacles();
 }
 
 void Obstacle::SetLane(int _lane)
@@ -163,7 +140,7 @@ void Obstacle::HandleMovingObstacle()
 {
 	if (obstacleType == 4)
 	{
-		if (subType == 0 || subType == 2) // Top and bottom tile
+		if (subType == 0) // Top
 		{
 			if (goingLeft)
 			{
@@ -183,7 +160,7 @@ void Obstacle::HandleMovingObstacle()
 			}
 
 		}
-		else
+		else if (subType == 1 || subType == 3)
 		{
 			if (goingLeft)
 			{
@@ -201,6 +178,45 @@ void Obstacle::HandleMovingObstacle()
 					goingLeft = true;
 				}
 			}
+		}
+		else if (subType == 2)
+		{
+			if (goingLeft)
+			{
+				offset.x += -movingObsSpeed;
+				physicsNode->SetAngularVelocity(Vector3(0, 0, 0.005f));
+				if (offset.x < -180)
+				{
+					offset.x = 180;
+				}
+			}
+			
+		}
+	}
+}
+
+void Obstacle::ControlShootingObstacles()
+{
+	if (obstacleType == 1)
+	{
+		if (abs(player->GetPosition().y - physicsNode->GetPosition().y) < 400
+			&& abs(player->GetPosition().x - physicsNode->GetPosition().x) < 400
+			&& physicsNode->GetPosition().z < player->GetPosition().z)
+		{
+			//if (count_time == 80)
+			if (count_time == 200)//&& bullet->GetPhysicsNode().GetPosition().z > player->GetPosition().z)
+			{
+				bullet->GetPhysicsNode().SetPosition(physicsNode->GetPosition());
+				count_time = 0;
+				Shoot();
+			}
+
+			count_time++;
+
+		}
+		else
+		{
+			bullet->GetPhysicsNode().SetPosition(physicsNode->GetPosition());
 		}
 	}
 }

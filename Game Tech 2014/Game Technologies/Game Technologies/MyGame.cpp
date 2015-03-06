@@ -122,7 +122,8 @@ MyGame::MyGame(bool isHost, bool isClient, bool useNetworking, int numClients)
 	cubeEarth = new OBJMesh(MESHDIR"cube.obj");
 	cubeEarth->SetTexture(earthTexture);
 	quad	= Mesh::GenerateQuad();
-	sphere	= new OBJMesh(MESHDIR"ico.obj");
+	sphere	= new OBJMesh(MESHDIR"sphere.obj");
+	sphere->SetTexture(fireTexture);
 	bigRock = new OBJMesh(MESHDIR"bigRock3.obj");
 	missile = new OBJMesh(MESHDIR"missile5.obj");
 	

@@ -30,6 +30,8 @@ public:
 
 	void HandleMovingObstacle();
 
+	void ControlShootingObstacles();
+
 	void SetSize(int _size) { size = _size; }
 
 private:
