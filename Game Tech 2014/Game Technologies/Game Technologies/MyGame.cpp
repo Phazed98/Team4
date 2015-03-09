@@ -231,6 +231,19 @@ MyGame::MyGame(bool isHost, bool isClient, bool useNetworking, int numClients)
 
 	//-------------------------------------------------Checkpoint---------------------------------------------------------//
 	allEntities.push_back(BuildCheckPointEntity(2, 4, 200));
+
+	//Sam - moving here for scoping reasons
+	OBJMesh* PlayerMesh = new OBJMesh(MESHDIR"SR-71_Blackbird.obj");
+
+	for (int x = 0; x < 4; x++)
+	{
+		players[x] = BuildCubeEntity(4);
+		players[x]->GetRenderNode().SetMesh(PlayerMesh);
+		players[x]->GetRenderNode().SetColour(Vector4(1, 0, 0, 1));
+		players[x]->GetPhysicsNode().SetPosition(Vector3(10, 10, 10));
+		players[x]->GetPhysicsNode().SetUseGravity(false);
+		players[x]->ConnectToSystems();
+	}
 }
 
 MyGame::~MyGame(void)	
@@ -302,11 +315,6 @@ void MyGame::UpdateGame(float msec)
 	if (useNetworking)
 		handleNetworking();
 
-
-	for (int x = 0; x < 4; x++)
-	{
-		Renderer::GetRenderer().setPlayerSceneNodeTransform(x, playerPositions[x]);
-	}
 }
 
 GameEntity* MyGame::BuildPlayerEntity(float size, Vector3 pos)
@@ -913,8 +921,11 @@ void MyGame::sendClientUpdatePackets()
 	Packet packet;
 	packet.packet_type = CLIENT_POSITION_DATA;
 	packet.packet_integer = 193;
-	Matrix4 clientTransform = PhysicsSystem::GetPhysicsSystem().GetPlayer()->BuildTransform();
-	memcpy(packet.data, &clientTransform, sizeof(Matrix4));
+//	Matrix4 clientTransform = PhysicsSystem::GetPhysicsSystem().GetPlayer()->BuildTransform();
+	messageInfo clientMessage;
+	clientMessage.Position = PhysicsSystem::GetPhysicsSystem().GetPlayer()->GetPosition();
+	clientMessage.Orientation = PhysicsSystem::GetPhysicsSystem().GetPlayer()->GetOrientation();
+	memcpy(packet.data, &clientMessage, sizeof(messageInfo));
 
 	packet.serialize(packet_data);
 
@@ -943,6 +954,7 @@ void MyGame::handleNetworking()
 
 		Packet packet;
 		Matrix4 playerMatrixes[4];
+		messageInfo playerInfo[4];
 
 		int data_length = networkClient->receivePackets(client_network_data);
 
@@ -975,11 +987,15 @@ void MyGame::handleNetworking()
 				break;
 
 			case PLAYERS_DATA:
-				memcpy(&playerMatrixes, packet.data, sizeof(Matrix4)* 4);
+				//memcpy(&playerMatrixes, packet.data, sizeof(Matrix4)* 4);
+
+				memcpy(&playerInfo, packet.data, sizeof(messageInfo)* 4);
+
 				for (int x = 0; x < 4; x++)
 				{
-					cout << "Client " << x << ": " << playerMatrixes[x] << endl;
-					playerPositions[x] = playerMatrixes[x];
+					//cout << "Client " << x << ": " << playerInfo[x].Position << endl;
+					players[x]->GetPhysicsNode().SetPosition(playerInfo[x].Position);
+					players[x]->GetPhysicsNode().SetOrientation(playerInfo[x].Orientation);
 				}
 				break;
 

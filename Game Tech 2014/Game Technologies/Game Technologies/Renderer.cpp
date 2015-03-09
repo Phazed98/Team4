@@ -152,12 +152,6 @@ void Renderer::fullyInit()
 	//Sam - moving here for scoping reasons
 	OBJMesh* PlayerMesh = new OBJMesh(MESHDIR"SR-71_Blackbird.obj");
 
-
-	for (int x = 0; x < 4; x++)
-	{
-		players[x] = new SceneNode(PlayerMesh);
-	}
-
 	glClearColor(0, 0, 0, 1);
 }
 
@@ -244,12 +238,6 @@ void Renderer::RenderWithoutPostProcessing(){
 		SortNodeLists();
 		DrawNodes();
 		ClearNodeLists();
-
-		for (int x = 0; x < 4; x++)
-		{
-			cout << "Player" << x << ": " << players[x]->GetWorldTransform();
-			players[x]->Draw(*this);
-		}
 
 		DrawAfterBurner();
 		galaxy_system.Render(msec, viewMatrix, projMatrix);
@@ -1087,10 +1075,4 @@ void Renderer::MatrixToIdentity(){
 	viewMatrix.ToIdentity();
 	projMatrix.ToIdentity();
 	textureMatrix.ToIdentity();
-}
-
-void Renderer::setPlayerSceneNodeTransform(int player, Matrix4 transform)
-{
-	players[player]->SetTransform(transform);
-	players[player]->Update(16);
 }

@@ -109,6 +109,8 @@ protected:
 	Mesh* bigRock;
 	Mesh* missile;
 
+	GameEntity* players[4];
+
 	vector<ObjectType*> top;
 	vector<ObjectType*> right;
 	vector<ObjectType*> bottom;

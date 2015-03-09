@@ -53,7 +53,6 @@ public:
 	void SetSpaceshipSceneNode(SpaceshipSceneNode* ssn){ spaceship_scene_node = ssn; }
 
 	void SetTornadoSceneNode(TornadoSceneNode* node){ tornadoNode.push_back(node); }
-	void setPlayerSceneNodeTransform(int player, Matrix4 transform);
 
 	//Statics
 	static bool Initialise() 
@@ -170,8 +169,5 @@ protected:
 	float total_sec_pass;
 
 	EarthParticleSystem galaxy_system;
-
-	//Other Players For multiplayer
-	SceneNode* players[4];
 };
 

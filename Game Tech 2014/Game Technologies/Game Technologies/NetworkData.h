@@ -24,7 +24,6 @@ struct messageInfo
 	int objectID;
 	Vector3 Position;
 	Quaternion Orientation;
-	OBJType objectType;
 };
 
 
