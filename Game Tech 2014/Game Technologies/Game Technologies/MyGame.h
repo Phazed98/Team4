@@ -71,10 +71,12 @@ public:
 	void sendToClients();
 	void sendServerActionPackets();
 	void sendServerStartPackets();
+	void sendServerUpdatePackets(int client);
 	char server_network_data[MAX_PACKET_SIZE];
 
 	//Client
 	void sendClientActionPackets();
+	void sendClientUpdatePackets();
 	char client_network_data[MAX_PACKET_SIZE];
 
 
@@ -154,9 +156,11 @@ protected:
 	static unsigned int client_id;
 	NetworkServer* networkServer;
 	NetworkClient* networkClient;
+	Matrix4 playerPositions[4];
 
 	bool isHost, isClient, useNetworking;
 	int numClients;
+
 
 	GLuint earthTexture = SOIL_load_OGL_texture("../../Textures/planet1.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, 0);
 	GLuint waterTexture = SOIL_load_OGL_texture("../../Textures/05_DIFFUSE.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, 0);

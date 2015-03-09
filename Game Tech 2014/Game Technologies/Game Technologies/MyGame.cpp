@@ -181,7 +181,7 @@ MyGame::MyGame(bool isHost, bool isClient, bool useNetworking, int numClients)
 		if (isHost)
 		{
 			Renderer::GetRenderer().RenderLoading(100, "Waiting on Clients");
-			while (client_id < numClients)
+			while (client_id < numClients-1)
 			{
 				// get new clients
 				if (networkServer->acceptNewClient(client_id))
@@ -298,7 +298,9 @@ void MyGame::UpdateGame(float msec)
 	timer += 0.001f;
 
 	handlePlanes(timer);
-	//handleNetworking();
+
+	if (useNetworking)
+		handleNetworking();
 }
 
 GameEntity* MyGame::BuildPlayerEntity(float size, Vector3 pos)
@@ -733,6 +735,7 @@ int MyGame::getObstacleEmptyIndex(int _subType, int _obstacleType)
 void MyGame::receiveFromClients()
 {
 	Packet packet;
+	Matrix4 playerMatrix;
 
 	// go through all clients
 	std::map<unsigned int, SOCKET>::iterator iter;
@@ -747,7 +750,7 @@ void MyGame::receiveFromClients()
 			continue;
 		}
 
-		unsigned int i = 1;
+		unsigned int i = 0;
 		while (i < (unsigned int)data_length)
 		{
 			packet.deserialize(&(server_network_data[i]));
@@ -757,24 +760,26 @@ void MyGame::receiveFromClients()
 			{
 
 			case INIT_CONNECTION:
-
 				cout << "server received init packet from client" << endl;
-				sendServerActionPackets();
+				//sendServerActionPackets();
 
 				break;
 
 			case ACTION_EVENT:
-
 				cout << "server received action event packet from client" << endl;
-				sendServerActionPackets();
+				//sendServerActionPackets();
+				break;
+
+			case CLIENT_POSITION_DATA:
+				memcpy(&playerMatrix, packet.data, sizeof(Matrix4));
+				playerPositions[iter->first] = playerMatrix;
+				sendServerUpdatePackets(0);
 				break;
 
 			default:
 				cout << "error in packet types" << endl;
-
 				break;
 			}
-			++i;
 		}
 	}
 }
@@ -840,7 +845,7 @@ void MyGame::sendServerActionPackets()
 
 	Packet packet;
 	packet.packet_type = ACTION_EVENT;
-	packet.packet_integer = 0;
+	packet.packet_integer = 193;
 	packet.serialize(packet_data);
 
 	networkServer->sendToAll(packet_data, packet_size);
@@ -860,6 +865,24 @@ void MyGame::sendServerStartPackets()
 	networkServer->sendToAll(packet_data, packet_size);
 }
 
+void MyGame::sendServerUpdatePackets(int client)
+{
+	const unsigned int packet_size = sizeof(Packet);
+	char packet_data[packet_size];
+
+	Packet packet;
+	packet.packet_type = PLAYERS_DATA;
+	packet.packet_integer = 193;
+	Matrix4 clientTransform = PhysicsSystem::GetPhysicsSystem().GetPlayer()->BuildTransform();
+
+	memcpy(packet.data, &playerPositions, sizeof(Matrix4)* 4);
+	packet.serialize(packet_data);
+
+	NetworkServices::sendMessage(networkServer->sessions[client], packet_data, packet_size);
+
+	//	networkServer->sendToAll(packet_data, packet_size);
+}
+
 
 void MyGame::sendClientActionPackets()
 {
@@ -869,11 +892,30 @@ void MyGame::sendClientActionPackets()
 
 	Packet packet;
 	packet.packet_type = ACTION_EVENT;
-	packet.packet_integer = 0;
+	packet.packet_integer = 193;
 	packet.serialize(packet_data);
 
 	NetworkServices::sendMessage(networkClient->ConnectSocket, packet_data, packet_size);
 }
+
+void MyGame::sendClientUpdatePackets()
+{
+	// send action packet
+	const unsigned int packet_size = sizeof(Packet);
+	char packet_data[packet_size];
+
+	Packet packet;
+	packet.packet_type = CLIENT_POSITION_DATA;
+	packet.packet_integer = 193;
+	Matrix4 clientTransform = PhysicsSystem::GetPhysicsSystem().GetPlayer()->BuildTransform();
+	memcpy(packet.data, &clientTransform, sizeof(Matrix4));
+
+	packet.serialize(packet_data);
+
+	NetworkServices::sendMessage(networkClient->ConnectSocket, packet_data, packet_size);
+}
+
+
 
 void MyGame::handleNetworking()
 {
@@ -885,13 +927,20 @@ void MyGame::handleNetworking()
 			cout << "Client " << client_id << " has been connected to the server." << endl;
 			client_id++;
 		}
-		sendServerActionPackets();
+		//sendServerStartPackets();
+		//sendServerUpdatePackets(0);
+		receiveFromClients();
 	}
 
 
 	if (IS_CLIENT)
 	{
+		sendClientUpdatePackets();
+		//sendClientActionPackets();
+
 		Packet packet;
+		Matrix4 playerMatrixes[4];
+
 		int data_length = networkClient->receivePackets(client_network_data);
 
 		if (data_length <= 0)
@@ -908,12 +957,26 @@ void MyGame::handleNetworking()
 			switch (packet.packet_type)
 			{
 			case ACTION_EVENT:
+				cout << "Client Recieved Action Event Packet" << endl;
+				//				sendClientActionPackets();
 				break;
 
 			case INIT_CONNECTION:
+				cout << "Client Recieved Init Connection Packet" << endl;
+				//				sendClientActionPackets();
 				break;
 
 			case START_GAME:
+				cout << "Client Recieved Start Game Packet" << endl;
+				//				sendClientActionPackets();
+				break;
+
+			case PLAYERS_DATA:
+				memcpy(&playerMatrixes, packet.data, sizeof(Matrix4)* 4);
+				for (int x = 0; x < 4; x++)
+				{
+					cout << "Client " << x << ": " << playerMatrixes[x] << endl;
+				}
 				break;
 
 			default:

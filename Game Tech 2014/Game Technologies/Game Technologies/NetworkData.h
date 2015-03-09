@@ -6,6 +6,7 @@
 #include "../../nclgl/Vector3.h"
 #include "../../nclgl/Quaternion.h"
 #define MAX_PACKET_SIZE 1000000
+#define DATA_SIZE 2048
 
 
 
@@ -14,6 +15,8 @@ enum PacketTypes
 	INIT_CONNECTION = 0,
 	ACTION_EVENT = 1,
 	START_GAME = 2,
+	CLIENT_POSITION_DATA = 3,
+	PLAYERS_DATA = 4,
 };
 
 struct messageInfo
@@ -29,7 +32,7 @@ struct Packet
 {
 	unsigned int packet_type;
 	int packet_integer;
-	messageInfo data[200];
+	char data[DATA_SIZE];
 
 	void serialize(char* data)
 	{
