@@ -13,10 +13,8 @@ public:
 	void SetLane(int _lane);
 
 	int getObstacleType(){ return obstacleType; }
-	void resetObstacle(){
-		state = 0;
-		physicsNode->SetPosition(Vector3(0, 0, 0));
-	}
+
+	void resetObstacle();
 
 	void SetTile(ObjectType* _tile) { tile = _tile; }
 
@@ -30,7 +28,7 @@ public:
 
 	void HandleMovingObstacle();
 
-	void ControlShootingObstacles();
+	void HandleShootingObstacles();
 
 	void SetSize(int _size) { size = _size; }
 
@@ -55,6 +53,8 @@ private:
 	int count_time;
 
 	int size;
+
+	int directionRand;
 
 };
 

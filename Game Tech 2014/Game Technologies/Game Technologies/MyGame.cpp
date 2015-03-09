@@ -663,7 +663,7 @@ void MyGame::CreateObstacle(ObjectType* _obj)
 		temp = BuildObstacleEntity(25, 1, _obj->getSubType(), _obj, obstacleType);
 		if (temp->getObstacleType() == 1)
 		{
-			GameEntity* bul = BuildBulletEntity(20, temp->GetPhysicsNode().GetPosition());
+			GameEntity* bul = BuildBulletEntity(5, temp->GetPhysicsNode().GetPosition());
 			temp->SetBullet(bul);
 			temp->SetPlayer(PhysicsSystem::GetPhysicsSystem().GetPlayer());
 			allEntities.push_back(bul);
@@ -681,7 +681,7 @@ void MyGame::CreateObstacle(ObjectType* _obj)
 				temp = BuildObstacleEntity(25, 1, _obj->getSubType(), _obj, obstacleType);
 				if (temp->getObstacleType() == 1)
 				{
-					GameEntity* bul = BuildBulletEntity(20, temp->GetPhysicsNode().GetPosition());
+					GameEntity* bul = BuildBulletEntity(5, temp->GetPhysicsNode().GetPosition());
 					temp->SetBullet(bul);
 					temp->SetPlayer(PhysicsSystem::GetPhysicsSystem().GetPlayer());
 					allEntities.push_back(bul);

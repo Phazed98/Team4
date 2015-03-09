@@ -1,5 +1,5 @@
 #include "Obstacle.h"
-
+#include "PhysicsSystem.h"
 
 Obstacle::Obstacle(ObjectType* _tile, SceneNode* s, PhysicsNode* p, int _type, int _subType, int _obstacleType) : ObjectType(s, p, _type, _subType)
 {
@@ -21,8 +21,17 @@ Obstacle::Obstacle(ObjectType* _tile, SceneNode* s, PhysicsNode* p, int _type, i
 	{
 		renderNode->SetColour(Vector4(0.564f, 0.043f, 0.835f, 1.0f));
 	}
-	
-	goingLeft = true;
+
+	directionRand = rand() % 100 + 1;
+	if (directionRand > 50)
+	{
+		goingLeft = true;
+	}
+	else
+	{
+		goingLeft = false;
+	}
+
 
 	bullet = NULL;
 
@@ -39,7 +48,6 @@ Obstacle::~Obstacle()
 
 void Obstacle::Update(float msec)
 {
-	
 	if (type == 1)
 	{
 		if (state == 0)
@@ -58,7 +66,7 @@ void Obstacle::Update(float msec)
 
 	}
 
-	ControlShootingObstacles();
+	HandleShootingObstacles();
 }
 
 void Obstacle::SetLane(int _lane)
@@ -80,7 +88,7 @@ void Obstacle::SetLane(int _lane)
 
 		/*if (obstacleType == 5)
 		{
-			offset.x = 0;
+		offset.x = 0;
 		}*/
 	}
 	else if (subType == 1) // Right tile
@@ -94,10 +102,10 @@ void Obstacle::SetLane(int _lane)
 		{
 			offset.y = (float)random;
 		}
-		
+
 		/*if (obstacleType == 5)
 		{
-			offset.y = 0;
+		offset.y = 0;
 		}*/
 	}
 	else if (subType == 2) // Bottom tile
@@ -111,10 +119,10 @@ void Obstacle::SetLane(int _lane)
 		{
 			offset.x = (float)random;
 		}
-		 
+
 		/*if (obstacleType == 5)
 		{
-			offset.x = 0;
+		offset.x = 0;
 		}*/
 	}
 	else if (subType == 3) // Left tile
@@ -128,10 +136,10 @@ void Obstacle::SetLane(int _lane)
 		{
 			offset.y = (float)random;
 		}
-		
+
 		/*if (obstacleType == 5)
 		{
-			offset.y = 0;
+		offset.y = 0;
 		}*/
 	}
 }
@@ -190,21 +198,27 @@ void Obstacle::HandleMovingObstacle()
 					offset.x = 180;
 				}
 			}
-			
+			else
+			{
+				offset.x += movingObsSpeed;
+				physicsNode->SetAngularVelocity(Vector3(0, 0, -0.005f));
+				if (offset.x > 180)
+				{
+					offset.x = -180;
+				}
+			}
+
 		}
 	}
 }
 
-void Obstacle::ControlShootingObstacles()
+void Obstacle::HandleShootingObstacles()
 {
 	if (obstacleType == 1)
 	{
-		if (abs(player->GetPosition().y - physicsNode->GetPosition().y) < 400
-			&& abs(player->GetPosition().x - physicsNode->GetPosition().x) < 400
-			&& physicsNode->GetPosition().z < player->GetPosition().z)
+		if (PhysicsSystem::GetVehicle()->GetCurrentPlaneID() == subType && physicsNode->GetPosition().z < -length)
 		{
-			//if (count_time == 80)
-			if (count_time == 200)//&& bullet->GetPhysicsNode().GetPosition().z > player->GetPosition().z)
+			if (count_time == 200)
 			{
 				bullet->GetPhysicsNode().SetPosition(physicsNode->GetPosition());
 				count_time = 0;
@@ -212,28 +226,38 @@ void Obstacle::ControlShootingObstacles()
 			}
 
 			count_time++;
+		}
 
-		}
-		else
-		{
-			bullet->GetPhysicsNode().SetPosition(physicsNode->GetPosition());
-		}
 	}
 }
 
 void Obstacle::Shoot()
 {
-	
+
 	Vector3 direction = player->GetPosition() - physicsNode->GetPosition();
 	direction.Normalise();
 	bullet->GetPhysicsNode().SetLinearVelocity(direction * 2);
-	bullet->GetPhysicsNode().SetOrientation(Quaternion::LookAt(bullet->GetPhysicsNode().GetPosition(), player->GetPosition()));
+	//bullet->GetPhysicsNode().SetOrientation(Quaternion::LookAt(bullet->GetPhysicsNode().GetPosition(), player->GetPosition()));
 	Vector3 rotation = bullet->GetPhysicsNode().GetOrientation().GetEulerAngles();
 	rotation.y += 90;
-	if (rotation.y > 360)
+	/*if (rotation.y > 360)
 	{
-		rotation.y -= 360;
-	}
+	rotation.y -= 360;
+	}*/
 	bullet->GetPhysicsNode().SetOrientation(Quaternion::EulerAnglesToQuaternion(rotation.x, rotation.y, rotation.z));
-	
+
+}
+
+void Obstacle::resetObstacle(){
+	state = 0;
+	physicsNode->SetPosition(Vector3(1000, 1000, 1000));
+	directionRand = rand() % 100 + 1;
+	if (directionRand > 30)
+	{
+		goingLeft = true;
+	}
+	else
+	{
+		goingLeft = false;
+	}
 }
