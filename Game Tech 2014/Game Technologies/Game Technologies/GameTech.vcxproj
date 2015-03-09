@@ -78,6 +78,7 @@
     <ClCompile Include="CollisionHelper.cpp" />
     <ClCompile Include="EarthParticleSystem.cpp" />
     <ClCompile Include="FireParticleSystem.cpp" />
+    <ClCompile Include="FireSceneNode.cpp" />
     <ClCompile Include="GameClass.cpp" />
     <ClCompile Include="GameEntity.cpp" />
     <ClCompile Include="GamePadController.cpp" />
@@ -117,6 +118,7 @@
     <ClInclude Include="DebugDrawer.h" />
     <ClInclude Include="EarthParticleSystem.h" />
     <ClInclude Include="FireParticleSystem.h" />
+    <ClInclude Include="FireSceneNode.h" />
     <ClInclude Include="GameClass.h" />
     <ClInclude Include="GameEntity.h" />
     <ClInclude Include="GamePadController.h" />

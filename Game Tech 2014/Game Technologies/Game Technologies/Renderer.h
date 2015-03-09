@@ -18,6 +18,7 @@ Implements:OGLRendere
 #include "FireParticleSystem.h"
 #include "EarthParticleSystem.h"
 #include "TornadoSceneNode.h"
+#include "FireSceneNode.h"
 
 #define PAUSE_BUTTONS_SIZE 2
 #define	MAIN_BUTTONS_SIZE 6
@@ -67,6 +68,8 @@ public:
 	}
 	
 	static Renderer&GetRenderer() { return *instance;}
+
+	void SetFireSceneNode(FireSceneNode* node){ fireNode.push_back(node); }
 
 protected:	
 	Renderer(Window &parent);
@@ -169,5 +172,10 @@ protected:
 	float total_sec_pass;
 
 	EarthParticleSystem galaxy_system;
+
+	void DrawFire();
+
+	vector<FireSceneNode*> fireNode;
+	FireParticleSystem fire_system;
 };
 

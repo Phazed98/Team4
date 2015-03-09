@@ -11,6 +11,7 @@
 #include "NetworkServer.h"
 #include "NetworkData.h"
 #include "TornadoSceneNode.h"
+#include "FireSceneNode.h"
 
 struct sendData
 {

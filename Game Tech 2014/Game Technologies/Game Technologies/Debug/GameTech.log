@@ -1,24 +1,21 @@
-﻿Build started 09/03/2015 18:29:28.
+﻿Build started 09/03/2015 18:49:58.
      1>Project "D:\Group Project\Team4\Team4\Game Tech 2014\Game Technologies\Game Technologies\GameTech.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         D:\Visual Studio 2013\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Bullets.cpp Button.cpp ChaseCamera.cpp Coins.cpp CollisionHelper.cpp EarthParticleSystem.cpp FireParticleSystem.cpp GameClass.cpp GameEntity.cpp GamePadController.cpp GJK.cpp Main.cpp MyGame.cpp NetworkClient.cpp NetworkServer.cpp NetworkServices.cpp ObjectType.cpp Obstacle.cpp PhysicsNode.cpp PhysicsSystem.cpp Powerups.cpp Renderer.cpp Sound.cpp SoundEmitter.cpp SoundManager.cpp SoundSystem.cpp SpaceshipSceneNode.cpp Spring.cpp SpringDemo.cpp TextMesh.cpp TornadoSceneNode.cpp "Vehicle(old).cpp" Vehicle.cpp
-         Vehicle.cpp
-         Vehicle(old).cpp
-         TornadoSceneNode.cpp
-         TextMesh.cpp
+         D:\Visual Studio 2013\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Bullets.cpp Coins.cpp FireSceneNode.cpp GameClass.cpp GameEntity.cpp Main.cpp MyGame.cpp ObjectType.cpp Obstacle.cpp PhysicsSystem.cpp Powerups.cpp Renderer.cpp Spring.cpp SpringDemo.cpp
+         Renderer.cpp
+     1>d:\group project\team4\team4\game tech 2014\game technologies\game technologies\renderer.cpp(731): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
+     1>d:\group project\team4\team4\game tech 2014\game technologies\game technologies\renderer.cpp(1067): warning C4305: 'argument' : truncation from 'double' to 'const float'
+         MyGame.cpp
+     1>d:\group project\team4\team4\game tech 2014\game technologies\game technologies\mygame.cpp(184): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\group project\team4\team4\game tech 2014\game technologies\game technologies\mygame.cpp(1020): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
+     1>d:\group project\team4\team4\game tech 2014\game technologies\game technologies\mygame.cpp(1022): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+         FireSceneNode.cpp
+         Generating Code...
+         Compiling...
          SpringDemo.cpp
          Spring.cpp
-         SpaceshipSceneNode.cpp
-         SoundSystem.cpp
-         SoundManager.cpp
-         SoundEmitter.cpp
-         Sound.cpp
-         Renderer.cpp
-     1>d:\group project\team4\team4\game tech 2014\game technologies\game technologies\renderer.cpp(729): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
-     1>d:\group project\team4\team4\game tech 2014\game technologies\game technologies\renderer.cpp(1047): warning C4305: 'argument' : truncation from 'double' to 'const float'
          Powerups.cpp
          PhysicsSystem.cpp
-         PhysicsNode.cpp
          Obstacle.cpp
      1>d:\group project\team4\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(8): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
      1>d:\group project\team4\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(79): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
@@ -27,37 +24,12 @@
      1>d:\group project\team4\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(130): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
          ObjectType.cpp
      1>d:\group project\team4\team4\game tech 2014\game technologies\game technologies\objecttype.cpp(52): warning C4244: '-=' : conversion from 'float' to 'int', possible loss of data
-         NetworkServices.cpp
-         NetworkServer.cpp
-         NetworkClient.cpp
-         Generating Code...
-         Compiling...
-         MyGame.cpp
-     1>d:\group project\team4\team4\game tech 2014\game technologies\game technologies\mygame.cpp(184): warning C4018: '<' : signed/unsigned mismatch
-     1>d:\group project\team4\team4\game tech 2014\game technologies\game technologies\mygame.cpp(1014): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
-     1>d:\group project\team4\team4\game tech 2014\game technologies\game technologies\mygame.cpp(1016): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
          Main.cpp
      1>d:\group project\team4\team4\game tech 2014\game technologies\game technologies\main.cpp(92): warning C4551: function call missing argument list
      1>d:\group project\team4\team4\game tech 2014\game technologies\game technologies\main.cpp(172): warning C4551: function call missing argument list
-         GJK.cpp
-         GamePadController.cpp
          GameEntity.cpp
          GameClass.cpp
-         FireParticleSystem.cpp
-         EarthParticleSystem.cpp
-     1>d:\group project\team4\team4\game tech 2014\game technologies\game technologies\earthparticlesystem.cpp(22): warning C4552: '+' : operator has no effect; expected operator with side-effect
-     1>d:\group project\team4\team4\game tech 2014\game technologies\game technologies\earthparticlesystem.cpp(63): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
-     1>d:\group project\team4\team4\game tech 2014\game technologies\game technologies\earthparticlesystem.cpp(72): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
-     1>d:\group project\team4\team4\game tech 2014\game technologies\game technologies\earthparticlesystem.cpp(86): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
-     1>d:\group project\team4\team4\game tech 2014\game technologies\game technologies\earthparticlesystem.cpp(162): warning C4244: '+=' : conversion from 'float' to 'int', possible loss of data
-     1>d:\group project\team4\team4\game tech 2014\game technologies\game technologies\earthparticlesystem.cpp(167): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
-     1>d:\group project\team4\team4\game tech 2014\game technologies\game technologies\earthparticlesystem.cpp(191): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
-     1>d:\group project\team4\team4\game tech 2014\game technologies\game technologies\earthparticlesystem.cpp(303): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
-     1>d:\group project\team4\team4\game tech 2014\game technologies\game technologies\earthparticlesystem.cpp(306): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
-         CollisionHelper.cpp
          Coins.cpp
-         ChaseCamera.cpp
-         Button.cpp
          Bullets.cpp
          Generating Code...
        Link:
@@ -68,6 +40,7 @@
          Debug\CollisionHelper.obj
          Debug\EarthParticleSystem.obj
          Debug\FireParticleSystem.obj
+         Debug\FireSceneNode.obj
          Debug\GameClass.obj
          Debug\GameEntity.obj
          Debug\GamePadController.obj
@@ -196,4 +169,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:15.93
+Time Elapsed 00:00:08.10

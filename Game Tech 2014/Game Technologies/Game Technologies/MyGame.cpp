@@ -493,6 +493,12 @@ Obstacle* MyGame::BuildObstacleEntity(float size, int type, int subType, ObjectT
 		Renderer::GetRenderer().SetTornadoSceneNode((TornadoSceneNode*)s);
 		size = size / size;
 	}
+	else if (subType == 1 && _obstacle_type == 4)
+	{
+		s = new FireSceneNode(sphere);
+		Renderer::GetRenderer().SetFireSceneNode((FireSceneNode*)s);
+		size = size / size;
+	}
 	else if (subType == 2 && _obstacle_type == 0)
 	{
 		s = new SceneNode(bigRock);

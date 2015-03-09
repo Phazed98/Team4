@@ -147,6 +147,9 @@
     <ClCompile Include="TornadoSceneNode.cpp">
       <Filter>Source Files\Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="FireSceneNode.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CollisionHelper.h">
@@ -273,6 +276,9 @@
       <Filter>Header Files\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="TornadoSceneNode.h">
+      <Filter>Header Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="FireSceneNode.h">
       <Filter>Header Files\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
