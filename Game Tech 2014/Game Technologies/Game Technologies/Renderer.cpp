@@ -1,6 +1,7 @@
 #include "Renderer.h"
 #include "ChaseCamera.h"
 #include "GamePadController.h"
+#include "../../nclgl/OBJMesh.h"
 
 Renderer* Renderer::instance = NULL;
 
@@ -148,6 +149,15 @@ void Renderer::fullyInit()
 		return;
 	}
 
+	//Sam - moving here for scoping reasons
+	OBJMesh* PlayerMesh = new OBJMesh(MESHDIR"SR-71_Blackbird.obj");
+
+
+	for (int x = 0; x < 4; x++)
+	{
+		players[x] = new SceneNode(PlayerMesh);
+	}
+
 	glClearColor(0, 0, 0, 1);
 }
 
@@ -213,7 +223,7 @@ void Renderer::RenderWithoutPostProcessing(){
 
 	if (camera)
 	{
-		
+
 
 		textureMatrix.ToIdentity();
 		modelMatrix.ToIdentity();
@@ -234,6 +244,12 @@ void Renderer::RenderWithoutPostProcessing(){
 		SortNodeLists();
 		DrawNodes();
 		ClearNodeLists();
+
+		for (int x = 0; x < 4; x++)
+		{
+			cout << "Player" << x << ": " << players[x]->GetWorldTransform();
+			players[x]->Draw(*this);
+		}
 
 		DrawAfterBurner();
 		galaxy_system.Render(msec, viewMatrix, projMatrix);
@@ -287,7 +303,6 @@ void Renderer::RenderMotionBlur(){
 		SortNodeLists();
 		DrawNodes();
 		ClearNodeLists();
-
 
 	}
 
@@ -1072,4 +1087,10 @@ void Renderer::MatrixToIdentity(){
 	viewMatrix.ToIdentity();
 	projMatrix.ToIdentity();
 	textureMatrix.ToIdentity();
+}
+
+void Renderer::setPlayerSceneNodeTransform(int player, Matrix4 transform)
+{
+	players[player]->SetTransform(transform);
+	players[player]->Update(16);
 }

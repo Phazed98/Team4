@@ -301,6 +301,12 @@ void MyGame::UpdateGame(float msec)
 
 	if (useNetworking)
 		handleNetworking();
+
+
+	for (int x = 0; x < 4; x++)
+	{
+		Renderer::GetRenderer().setPlayerSceneNodeTransform(x, playerPositions[x]);
+	}
 }
 
 GameEntity* MyGame::BuildPlayerEntity(float size, Vector3 pos)
@@ -919,7 +925,7 @@ void MyGame::sendClientUpdatePackets()
 
 void MyGame::handleNetworking()
 {
-	if (IS_HOST)
+	if (isHost)
 	{
 		// get new clients
 		if (networkServer->acceptNewClient(client_id))
@@ -927,16 +933,13 @@ void MyGame::handleNetworking()
 			cout << "Client " << client_id << " has been connected to the server." << endl;
 			client_id++;
 		}
-		//sendServerStartPackets();
-		//sendServerUpdatePackets(0);
 		receiveFromClients();
 	}
 
 
-	if (IS_CLIENT)
+	if (isClient)
 	{
 		sendClientUpdatePackets();
-		//sendClientActionPackets();
 
 		Packet packet;
 		Matrix4 playerMatrixes[4];
@@ -976,6 +979,7 @@ void MyGame::handleNetworking()
 				for (int x = 0; x < 4; x++)
 				{
 					cout << "Client " << x << ": " << playerMatrixes[x] << endl;
+					playerPositions[x] = playerMatrixes[x];
 				}
 				break;
 

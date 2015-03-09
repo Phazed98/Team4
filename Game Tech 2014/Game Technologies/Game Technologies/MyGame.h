@@ -12,11 +12,6 @@
 #include "NetworkData.h"
 #include "TornadoSceneNode.h"
 
-
-#define IS_HOST true
-#define IS_CLIENT true
-#define USE_NETWORKING false
-
 struct sendData
 {
 	int resetNumber;
