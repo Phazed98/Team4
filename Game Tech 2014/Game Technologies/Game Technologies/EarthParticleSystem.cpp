@@ -69,9 +69,9 @@ bool EarthParticleSystem::InitParticleSystem(int shape_type, const Vector3& Pos)
 
 	}
 	case 1:{
-		particle_lifetime = 2000.f;
-		particle_size = 25;
-		particleUpdateShader = new Shader(EARTH_SHADER_DIR"vs_update.glsl", EARTH_SHADER_DIR"fs_update.glsl", EARTH_SHADER_DIR"gs_rotator.glsl");
+		particle_lifetime = 10000.f;
+		particle_size = 60;
+		particleUpdateShader = new Shader(EARTH_SHADER_DIR"vs_update.glsl", EARTH_SHADER_DIR"fs_update.glsl", EARTH_SHADER_DIR"gs_update.glsl");
 		flame_texture = SOIL_load_OGL_texture(TEXTUREDIR"dust2.jpg",
 			SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_COMPRESS_TO_DXT);
 		break;
@@ -101,7 +101,7 @@ bool EarthParticleSystem::InitParticleSystem(int shape_type, const Vector3& Pos)
 	}
 
 	InitUpdateSystem();
-	InitRenderSystem();
+	InitRenderSystem(_shape);
 
 	return true;
 }
@@ -133,9 +133,19 @@ bool EarthParticleSystem::InitUpdateSystem(){
 	
 }
 
-bool EarthParticleSystem::InitRenderSystem(){
-	particleRenderShader = new Shader(EARTH_SHADER_DIR"vertex.glsl", EARTH_SHADER_DIR"fragment.glsl", EARTH_SHADER_DIR"geometry.glsl");
+bool EarthParticleSystem::InitRenderSystem(int shape_type){
 
+	switch (_shape){
+	case 0:{
+	
+		particleRenderShader = new Shader(EARTH_SHADER_DIR"vertex.glsl", EARTH_SHADER_DIR"fragment.glsl", EARTH_SHADER_DIR"geometry.glsl");
+		break;
+	}
+	case 1:{
+		particleRenderShader = new Shader(EARTH_SHADER_DIR"vertexStrong.glsl", EARTH_SHADER_DIR"fragmentStrong.glsl", EARTH_SHADER_DIR"geometry.glsl");
+		break;
+	}
+	}
 	if (!particleRenderShader->LinkProgram()){
 		return false;
 	}
@@ -262,7 +272,19 @@ void EarthParticleSystem::UpdateParticles(int DeltaTime){
 
 void EarthParticleSystem::RenderParticles(const Matrix4& modelMatrix)
 {
-	Matrix4 model_matrix = modelMatrix*Matrix4::Scale(Vector3(5, 5, 5));
+	Matrix4 model_matrix ;
+	switch (_shape){
+	case 1:{
+	
+		model_matrix = modelMatrix*Matrix4::Scale(Vector3(60, 60, 40));
+		break;
+	}
+	case 0:{
+		model_matrix = modelMatrix*Matrix4::Scale(Vector3(5, 5, 5));
+		break;
+	}
+	}
+
 	//cout << model_matrix.values[12] << " " << model_matrix.values[13] << " " << model_matrix.values[14] << endl;
 	Matrix4 textureMatrix;
 

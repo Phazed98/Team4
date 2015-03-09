@@ -7,6 +7,7 @@ Renderer* Renderer::instance = NULL;
 Renderer::Renderer(Window &parent) : OGLRenderer(parent)
 {
 	tornado_system.InitParticleSystem(0, Vector3(0, 10, 0));
+	galaxy_system.InitParticleSystem(1, Vector3(0, 0, -200));
 	menuShader = new Shader(SHADERDIR"menuVertex.glsl", SHADERDIR"menuFragment.glsl");
 	if (!menuShader->LinkProgram())
 	{
@@ -235,6 +236,7 @@ void Renderer::RenderWithoutPostProcessing(){
 		ClearNodeLists();
 
 		DrawAfterBurner();
+		galaxy_system.Render(msec, viewMatrix, projMatrix);
 		DrawTornado();
 
 		//Display HUD
@@ -1012,7 +1014,9 @@ void Renderer::RenderParticleToTexture(){
 	RenderBackground();
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
 		GL_TEXTURE_2D, particle_ColourTex, 0);
+	galaxy_system.Render(msec, viewMatrix, projMatrix);
 	DrawAfterBurner();
+	
 	DrawTornado();
 
 	glUseProgram(0);

@@ -28,7 +28,7 @@ private:
 	void UpdateParticles(int DeltaTime);
 	void RenderParticles(const Matrix4& modelMatrix);
 	bool InitUpdateSystem();
-	bool InitRenderSystem();
+	bool InitRenderSystem(int shape_type);
 
 	bool m_isFirst;
 	unsigned int m_currVB;

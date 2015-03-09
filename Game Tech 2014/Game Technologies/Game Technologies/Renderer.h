@@ -166,5 +166,7 @@ protected:
 	//steven added for rendering different objects
 	Shader* water_plane_shader;
 	float total_sec_pass;
+
+	EarthParticleSystem galaxy_system;
 };
 
