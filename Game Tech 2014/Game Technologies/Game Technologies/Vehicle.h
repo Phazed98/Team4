@@ -3,7 +3,7 @@
 #pragma once
 #include"GameEntity.h"
 #include "GamePadController.h"
-
+#include "SoundSystem.h"
 
 //Sam - added a min/max rotation define (negative for min)
 #define MAX_VEHICLE_X_ROTATION 55.0f
@@ -28,6 +28,8 @@ public:
 	PhysicsNode* GetPhysicsNode() { return PhysNode; }
 
 	int GetCurrentPlaneID() { return currentPlaneID; }
+
+	int temp;
 
 protected:
 

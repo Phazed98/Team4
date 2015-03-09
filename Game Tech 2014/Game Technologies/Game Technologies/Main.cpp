@@ -146,6 +146,26 @@ int main()
 				SoundManager::GetSound("../../Sounds/56900__syna-max__war.wav"), Vector3());
 		}
 
+
+		//if (PhysicsSystem::GetPhysicsSystem().GetVehicle()->GetCurrentPlaneID() == 0){
+		//	SoundSystem::GetSoundSystem()->ChangeSceneSound(SoundManager::GetSound("../../Sounds/void.wav"));
+		//}
+		/*if (PhysicsSystem::GetPhysicsSystem().GetVehicle()->GetCurrentPlaneID() == 1){
+			SoundSystem::GetSoundSystem()->ChangeSceneSound(SoundManager::GetSound("../../Sounds/thunder.wav"));
+		}
+		if (PhysicsSystem::GetPhysicsSystem().GetVehicle()->GetCurrentPlaneID() == 2){
+			SoundSystem::GetSoundSystem()->ChangeSceneSound(SoundManager::GetSound("../../Sounds/water.wav"));
+		}
+		if (PhysicsSystem::GetPhysicsSystem().GetVehicle()->GetCurrentPlaneID() == 3){
+			SoundSystem::GetSoundSystem()->ChangeSceneSound(SoundManager::GetSound("../../Sounds/wind.wav"));
+		}*/
+		if (Window::GetKeyboard()->KeyTriggered(KEYBOARD_4)){
+			SoundSystem::GetSoundSystem()->ChangeSceneSound(SoundManager::GetSound("../../Sounds/thunder.wav"));
+		}
+
+
+
+
 		game->UpdateRendering(msec);	//Update our 'sybsystem' logic (renderer and physics!)
 		game->UpdateGame(msec);	//Update our game logic	
 		Window::GetWindow().updateController(msec);

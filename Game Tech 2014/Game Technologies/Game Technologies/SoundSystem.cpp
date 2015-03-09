@@ -48,6 +48,19 @@ SoundSystem::SoundSystem(unsigned int channels) {
 	SoundManager::AddSound("../../Sounds/36847__ecodtr__laserrocket2.wav");
 	SoundManager::AddSound("../../Sounds/41579__erdie__steps-on-stone01.wav");
 	SoundManager::AddSound("../../Sounds/56900__syna-max__war.wav");
+	SoundManager::AddSound("../../Sounds/thunder.wav");
+	SoundManager::AddSound("../../Sounds/water.wav");
+	SoundManager::AddSound("../../Sounds/wind.wav");
+	SoundManager::AddSound("../../Sounds/test.wav");
+	SoundManager::AddSound("../../Sounds/test2.wav");
+	SoundManager::AddSound("../../Sounds/void.wav");
+	GlobleSound01 = new SoundEmitter();
+	GlobleSound01->SetSound(SoundManager::GetSound("../../Sounds/test2.wav"));
+	temporaryEmitters.push_back(GlobleSound01);
+	GlobleSound02 = new SoundEmitter();
+	GlobleSound02->SetSound(SoundManager::GetSound("../../Sounds/test2.wav"));
+	temporaryEmitters.push_back(GlobleSound02);
+
 }
 SoundSystem::~SoundSystem(void) {
 	for (vector<SoundEmitter*>::iterator i = emitters.begin(); i != emitters.end(); ++i) {
@@ -229,3 +242,8 @@ void SoundSystem::PlaySoundA(Sound* s, Vector3 position) {
 //	n -> SetPriority(p);
 //	temporaryEmitters.push_back(n);
 //}
+void SoundSystem::ChangeSceneSound(Sound* s){
+	GlobleSound02->SetSound(s);
+	GlobleSound02->SetLooping(true);
+	GlobleSound02->SetIsGlobal(true);
+}

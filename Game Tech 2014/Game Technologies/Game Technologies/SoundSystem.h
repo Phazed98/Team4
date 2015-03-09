@@ -46,6 +46,7 @@ public:
 	void SetMasterVolume(float value);
 	void PlaySoundA(Sound* s, Vector3 position);
 	//void PlaySound(Sound* s, SoundPriority p = SOUNDPRIORTY_LOW);
+	void ChangeSceneSound(Sound* s);
 
 protected:
 	SoundSystem(unsigned int channels = 32);
@@ -65,6 +66,9 @@ protected:
 	ALCcontext* context;
 	ALCdevice* device;
 	SceneNode* listener;
+
+	SoundEmitter* GlobleSound01;
+	SoundEmitter* GlobleSound02;
 
 	vector<OALSource*> sources;
 	vector<SoundEmitter*> emitters;

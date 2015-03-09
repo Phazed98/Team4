@@ -153,7 +153,7 @@ void SoundEmitter::Update(float msec) {
 		else{
 			alSourcei(currentSource->source, AL_LOOPING, isLooping ? 1 : 0);
 		}
-
+		alSourcef(currentSource->source, AL_GAIN, 1.0f);
 		alSourcef(currentSource->source, AL_MAX_DISTANCE, radius);
 		alSourcef(currentSource->source, AL_REFERENCE_DISTANCE, radius *0.2f);
 	}

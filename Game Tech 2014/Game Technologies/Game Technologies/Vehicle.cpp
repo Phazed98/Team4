@@ -17,6 +17,7 @@ Speed_Turn(speedTurn), currentPlaneID(startingPlaneID), steeringResponsiveness(s
 
 	//set plane switch cooldown period. Add a parameter later if needed
 	PlaneSwitchCDTime = 1500;
+	temp = 4;
 }
 
 Vehicle::~Vehicle(void)
@@ -237,6 +238,23 @@ void Vehicle::UpdatePlayerVelocity()
 		}
 
 		break;
+	}
+	
+	if (temp != currentPlaneID)
+	{
+		if (currentPlaneID == 0){
+			SoundSystem::GetSoundSystem()->ChangeSceneSound(SoundManager::GetSound("../../Sounds/wind.wav"));
+		}
+		if (currentPlaneID == 1){
+			SoundSystem::GetSoundSystem()->ChangeSceneSound(SoundManager::GetSound("../../Sounds/thunder.wav"));
+		}
+		if (currentPlaneID == 2){
+			SoundSystem::GetSoundSystem()->ChangeSceneSound(SoundManager::GetSound("../../Sounds/void.wav"));
+		}
+		if (currentPlaneID == 3){
+			SoundSystem::GetSoundSystem()->ChangeSceneSound(SoundManager::GetSound("../../Sounds/water.wav"));
+		}
+		temp = currentPlaneID;
 	}
 }
 
