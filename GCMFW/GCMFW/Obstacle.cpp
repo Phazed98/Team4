@@ -38,29 +38,29 @@ Obstacle::~Obstacle()
 
 void Obstacle::Update(float msec)
 {
-	//Controls shooting obstacles
-	if (obstacleType == 1)
-	{
-		//if (abs(player->GetPosition().getY() - physicsNode->GetPosition().getY()) < 400
-		//	&& abs(player->GetPosition().getX() - physicsNode->GetPosition().getX()) < 400
-		//	&& physicsNode->GetPosition().getZ() < player->GetPosition().getZ())
-		//{
-		//	//if (count_time == 80)
-		//	if (count_time == 200)//&& bullet->GetPhysicsNode().GetPosition().getZ() > player->GetPosition().getZ())
-		//	{
-		//		bullet->GetPhysicsNode().SetPosition(physicsNode->GetPosition());
-		//		count_time = 0;
-		//		Shoot();
-		//	}
+	////Controls shooting obstacles
+	//if (obstacleType == 1)
+	//{
+	//	if (abs(player->GetPosition().getY() - physicsNode->GetPosition().getY()) < 400
+	//		&& abs(player->GetPosition().getX() - physicsNode->GetPosition().getX()) < 400
+	//		&& physicsNode->GetPosition().getZ() < player->GetPosition().getZ())
+	//	{
+	//		//if (count_time == 80)
+	//		if (count_time == 200)//&& bullet->GetPhysicsNode().GetPosition().getZ() > player->GetPosition().getZ())
+	//		{
+	//			bullet->GetPhysicsNode().SetPosition(physicsNode->GetPosition());
+	//			count_time = 0;
+	//			Shoot();
+	//		}
 
-		//	count_time++;
+	//		count_time++;
 
-		//}
-		//else
-		//{
-		//	bullet->GetPhysicsNode().SetPosition(physicsNode->GetPosition());
-		//}
-	}
+	//	}
+	//	else
+	//	{
+	//		bullet->GetPhysicsNode().SetPosition(physicsNode->GetPosition());
+	//	}
+	//}
 
 	if (type == 1)
 	{

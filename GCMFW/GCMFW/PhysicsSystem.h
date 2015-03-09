@@ -6,6 +6,8 @@
 #include "GameClass.h"
 //#include "GJKSimplex.h"
 #include <vector>
+#include "Vehicle.h"
+#include "SpaceshipSceneNode.h"
 
 //using std::vector;
 
@@ -51,8 +53,14 @@ public:
 
 	void    DrawDebug();
 
+	PhysicsNode* GetPlayer() { return playerPhysNode; }
+
 	float time;//// = 0;
 	int nbFrames;//// = 0;				//Integer for frame count
+
+	static Vehicle* GetVehicle(){ return playerVehicle; }
+	static float GetTrackSpeed(){ return track_speed; }
+	static void  SetTrackSpeed(float s){ track_speed = s; }
 
 protected:
 	PhysicsSystem(void);
@@ -67,10 +75,19 @@ protected:
 	std::vector<DebugDrawer*> allDebug;
 
 
+	//<---------Added by Sam for physics--- DO NOT TRUST IT ---->
+	//player physicspointer for collision checks. A list of additional interactive moving objects can be added later
+	PhysicsNode* playerPhysNode; //shortcut only DO NOT DELETE IN DESTRUCTOR
+	//Player vehicle pointer for updating the player via inputs - this feeds back into the physNode so should be updated first?
+	static Vehicle* playerVehicle;
+
 
 	//<---------Added by Sam for physics--- DO NOT TRUST IT ---->
 	//player pointer for collision checks. A list of additional interactive moving objects can be added later
 	PhysicsNode* player;
+
+	//add by steven to catch it by render
+	SpaceshipSceneNode* spaceship_scene_node;
 
 	//array holds 1 trailing tile, current tile, 8x (adjust later) approaching tile
 	//Each vector will then hold the static obstacles on their respective tile
@@ -92,6 +109,8 @@ protected:
 	bool CheckAABBCollision(PhysicsNode &n0, PhysicsNode &n1);
 
 	//<---------------------------------------------------->
-
+	//steven added for control the track speed everywhere
+	static float track_speed;
+	int checkPointTimer;
 };
 

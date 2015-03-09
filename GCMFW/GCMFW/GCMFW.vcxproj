@@ -70,7 +70,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BezierMath.h" />
+    <ClInclude Include="Button.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="ChaseCamera.h" />
     <ClInclude Include="ChildMeshInterface.h" />
     <ClInclude Include="CollisionHelper.h" />
     <ClInclude Include="CollisionVolume.h" />
@@ -83,6 +86,7 @@
     <ClInclude Include="GCMRenderer.h" />
     <ClInclude Include="GJK.h" />
     <ClInclude Include="GJKSimplex.h" />
+    <ClInclude Include="SpaceshipSceneNode.h" />
     <ClInclude Include="InertialMatrixHelper.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="MathHelper.h" />
@@ -99,9 +103,12 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="SupportPoint.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="Vehicle.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Button.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="ChaseCamera.cpp" />
     <ClCompile Include="GameClass.cpp" />
     <ClCompile Include="GameEntity.cpp" />
     <ClCompile Include="GCMRenderer.cpp" />
@@ -120,7 +127,9 @@
     <ClCompile Include="SceneNode.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Frustum.cpp" />
+    <ClCompile Include="SpaceshipSceneNode.cpp" />
     <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="Vehicle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="fragment.cg">

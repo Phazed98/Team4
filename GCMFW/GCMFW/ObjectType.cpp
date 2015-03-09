@@ -23,13 +23,12 @@ void ObjectType::Update(float msec)
 {
 	if (type == 0)
 	{
-		//float speed = PhysicsSystem::GetTrackSpeed();
-		float speed = 0.1f;
+		float speed = PhysicsSystem::GetTrackSpeed();
+		//float speed = 10.0f;
 		physicsNode->SetPosition(physicsNode->GetPosition() + Vector3(0, 0, speed));
 
 		if (state == 0)
 		{
-
 			if (abs(physicsNode->GetPosition().getZ() - -5550) > length* random)
 			{
 				state = 1;

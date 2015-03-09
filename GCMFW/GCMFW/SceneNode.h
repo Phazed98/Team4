@@ -9,7 +9,8 @@ class Mesh;
 
 using namespace Vectormath::Aos;
 
-class SceneNode	{
+class SceneNode	
+{
 public:
 	SceneNode(Mesh*m = NULL, Vector4 colour = Vector4(1, 1, 1, 1));
 	~SceneNode(void);

@@ -6,6 +6,8 @@
 #include "GameClass.h"
 #include "Camera.h"
 #include "OBJMesh.h"
+
+#include "ChaseCamera.h"
 //#include "PlaneInfo.h"
 #include "MathHelper.h"
 //#include "../nclgl/CubeRobot.h"
@@ -75,6 +77,7 @@ protected:
 	GameEntity* rightObstacle[20];
 	GameEntity* leftObstacle[20];
 
+	Vehicle* Car;
 
 	std::vector<ObjectType*> top;
 	std::vector<ObjectType*> right;

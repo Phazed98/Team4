@@ -46,6 +46,8 @@ public:
 	friend class GameClass;
 
 	GameEntity(void);
+	//Sam - new constructor added for vehicle - not having the physics node connect to systems!
+	GameEntity(SceneNode* s);
 	GameEntity(SceneNode* s, PhysicsNode* p);
 	virtual ~GameEntity(void);
 

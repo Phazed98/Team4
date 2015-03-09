@@ -19,7 +19,7 @@ Camera* camera;
 
 void start_button()		
 {
-	done = true;
+	//done = true;
 	std::cout << "Pressed start button!" << std::endl;
 }
 
@@ -28,7 +28,7 @@ void select_button()
 	camera->SetPosition(Vector3(0, 0, 300));
 	camera->SetPitch(0.0f);
 	camera->SetYaw(0.0f);
-	done = true;
+	//done = true;
 }
 
 
@@ -62,13 +62,28 @@ int main(void)
 		return;
 	}
 
-	PhysicsSystem::Initialise();
-
 	//Start off by initialising the Input system
 	Input::Initialise();
-	Input::SetPadFunction(INPUT_START, start_button);
-	Input::SetPadFunction(INPUT_START, select_button);
 
+	PhysicsSystem::Initialise();
+
+	buttonPressed bp;
+	bp = NO_PRESSED;
+
+
+	Timer menuTimer;
+
+	while (bp == NO_PRESSED)
+	{
+		Input::UpdateJoypad();
+
+		float msec = menuTimer.GetTimedMS();
+		bp = Renderer::GetRenderer().RenderMainMenu();
+	}
+
+
+	if (bp == EXIT)
+		exit(0);
 
 	MyGame* game = new MyGame();
 
@@ -88,7 +103,7 @@ int main(void)
 		float msec = (float)gameTime.GetTimedMS();	//How many milliseconds since last update?
 		game->UpdateRendering(msec);	//Update our 'sybsystem' logic (renderer and physics!)
 		game->UpdateGame(msec);	//Update our game logic
-		//game->UpdatePhysics(msec);
+	//	game->UpdatePhysics(msec);
 	}
 
 

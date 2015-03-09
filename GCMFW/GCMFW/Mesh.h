@@ -89,6 +89,7 @@ public:
 	static Mesh* GenerateQuad();
 	Vertex* getVertexData() { return vertexData; }
 	int getNumVertices() { return numVertices; }
+	Vector3 GetFurthestVert();
 
 	virtual void	Draw(VertexShader &vertex, FragmentShader &fragment);
 

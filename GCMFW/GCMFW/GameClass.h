@@ -23,6 +23,8 @@ _-_-_-_-_-_-_-""  ""
 #include "Renderer.h"
 #include "PhysicsSystem.h"
 #include "GameEntity.h"
+#include "Input.h"
+#include "ChaseCamera.h"
 
 #include <vector>
 
@@ -30,6 +32,13 @@ _-_-_-_-_-_-_-""  ""
 #define PHYSICS_HZ	60
 
 #define PHYSICS_TIMESTEP (1000.0f / (float)PHYSICS_HZ)
+
+enum GameState {
+	GAME_PLAYING,
+	GAME_PAUSED,
+	Game_LOADING,
+	GAME_EXIT
+};
 
 class GameClass	{
 public:
@@ -42,14 +51,21 @@ public:
 	virtual void UpdateGame(float msec) = 0;
 
 	static GameClass& GetGameClass() { return *instance; }
+	void setCurrentState(GameState newGameState);
+	GameState getCurrentState() { return currentGameState; }
+
 
 protected:
 	float renderCounter;
 	float physicsCounter;
 
 	std::vector<GameEntity*> allEntities;
-
-	Camera* gameCamera;
+	ChaseCamera* gameCamera;
+	//Camera* gameCamera;
 	static GameClass* instance;
+	GameState currentGameState;
+	JoyPadNum	pad;
+
+	int delayCounter;
 };
 

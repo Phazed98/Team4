@@ -2,6 +2,8 @@
 #include <vectormath/cpp/vectormath_aos.h>
 #include <vectormath/cpp/quat_aos.h>
 
+
+using namespace Vectormath::Aos;
 /**
 * Author: Callum Rhodes <c.g.rhodes@ncl.ac.uk>
 */

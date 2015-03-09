@@ -1,10 +1,20 @@
 #include "GameEntity.h"
+#include "SceneNode.h"
 #include "Renderer.h"
 #include "PhysicsSystem.h"
+
+
 
 GameEntity::GameEntity(void)
 {
 	renderNode = NULL;
+	physicsNode = NULL;
+}
+
+//Added by Sam for creating vehicles
+GameEntity::GameEntity(SceneNode* s) : renderNode(s)
+{
+//	objectID = globalID++;
 	physicsNode = NULL;
 }
 

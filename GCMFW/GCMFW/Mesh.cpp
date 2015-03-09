@@ -191,3 +191,28 @@ void Mesh::printMesh()
 		
 	}
 }
+
+//Added by Sam for AABB
+Vector3 Mesh::GetFurthestVert()
+{
+	float furthestLengh = 0;
+	int furthestVertIndex = 0;
+	//iterate all vertices
+	for (unsigned int i = 0; i < numVertices; i++)
+	{
+		Vector3 vertexInfo(vertexData[i].x, vertexData[i].y, vertexData[i].z);
+
+		
+		
+		float VectorLength =length(vertexInfo);
+
+		if (VectorLength > furthestLengh)
+		{
+			furthestLengh = VectorLength;
+			furthestVertIndex = i;
+		}
+	}
+
+	Vector3 furthestVert(vertexData[furthestVertIndex].x, vertexData[furthestVertIndex].y, vertexData[furthestVertIndex].z);
+	return furthestVert;
+}

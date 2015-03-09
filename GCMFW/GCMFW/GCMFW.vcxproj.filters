@@ -61,6 +61,18 @@
     <ClCompile Include="Obstacle.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="ChaseCamera.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Vehicle.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="SpaceshipSceneNode.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -148,6 +160,21 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="Obstacle.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Vehicle.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SpaceshipSceneNode.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ChaseCamera.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="BezierMath.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>

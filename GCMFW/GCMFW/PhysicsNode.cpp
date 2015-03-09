@@ -1,4 +1,5 @@
 #include "PhysicsNode.h"
+#include "MathHelper.h"
 
 const Vector3 PhysicsNode::gravity = Vector3(0, -0.00000, 0);
 
@@ -35,8 +36,13 @@ void	PhysicsNode::Update(float msec)
 	//m_angularVelocity = m_angularVelocity * 0.98;
 
 	//Linear and Angular Updates
-	//updateLinear(msec);
-	/*updateAngular(msec);*/
+	
+	if (m_moveable)
+	{
+		updateLinear(msec);
+		updateAngular(msec);
+	}
+		
 
 	//Removal of Forces
 	m_force = Vector3(0, 0, 0);
@@ -51,14 +57,14 @@ void	PhysicsNode::Update(float msec)
 
 void PhysicsNode::updateLinear(float msec)
 {
-	if (m_moveable)
-	{
+//	if (m_moveable)
+//	{
 		//Apply Gravitty if it should be applied
-		//Vector3 accel = m_force*m_invMass;// +(useGravity ? gravity : Vector3(0, 0, 0));
-		////Vector3 accel = Vector3(0, 0, 0);
-		//m_linearVelocity = m_linearVelocity + accel * msec;
-		//m_position = m_position + m_linearVelocity * msec;
-		//m_atRest = false;
+		Vector3 accel = m_force*m_invMass;// +(useGravity ? gravity : Vector3(0, 0, 0));
+		//Vector3 accel = Vector3(0, 0, 0);
+		m_linearVelocity = m_linearVelocity + accel * msec;
+		m_position = m_position + m_linearVelocity * msec;
+		m_atRest = false;
 
 		//Adds current Velocity to an Array and determines the average velocity over the last few updates
 		//CalculateAvgVel();
@@ -81,25 +87,21 @@ void PhysicsNode::updateLinear(float msec)
 		//	m_linearVelocity = Vector3(0, 0, 0);
 		//	m_atRest = true;
 		//}
-	}
+//	}
 }
 
 void PhysicsNode::updateAngular(float msec)
 {
-	//if (m_moveable)
-	//{
-	//	Vector3 angAccel = m_invInertia.getUpper3x3() * m_torque;
-	//	m_angularVelocity = m_angularVelocity + angAccel * msec;
-	//	/*
-	//	This could be horribly wrong, but i have to try it to get things working, 
-	//	this should be multiplying a quaterion by a vec3 however im useing it as a rotation
-	//	*/
-	//	//m_orientation = m_orientation + m_orientation * (m_angularVelocity * msec / 2.0f);
-	//	rotate(m_orientation, (m_angularVelocity * msec / 2.0f));
-	//	//m_orientation.Normalise();
-	//	normalize(m_orientation);
-
-	//}
+	/*Vector3 angAccel = m_invInertia.getUpper3x3() * m_torque;
+	m_angularVelocity = m_angularVelocity + angAccel * msec;*/
+	/*
+	This could be horribly wrong, but i have to try it to get things working, 
+	this should be multiplying a quaterion by a vec3 however im useing it as a rotation
+	*/
+	m_orientation =	MathHelper::addQuats(m_orientation ,MathHelper::multQuatAndVec(m_orientation , (m_angularVelocity * msec)));
+	//rotate(m_orientation, (m_angularVelocity * msec / 2.0f));
+	//m_orientation.Normalise();
+	m_orientation = normalize(m_orientation);
 }
 
 
@@ -128,23 +130,42 @@ void PhysicsNode::CalculateAvgVel()
 
 Matrix4		PhysicsNode::BuildTransform()
 {
-	//Matrix4::rotation(m_orientation);
-	//Matrix4 m = m_orientation.ToMatrix();
-	//normalize(m_orientation);
-	Matrix4 m = Matrix4::rotation(m_orientation);;
-	//Matrix4 m = Matrix4::translation(m_position);
+	Matrix4 m = Matrix4::rotation(m_orientation);
 	m.setTranslation(m_position);
-	//m.SetPositionVector(m_position);
 	return m;
 }
 
+/*
+
+
+
+FFFFFFFFFFFFFFFFFFFFFFIIIIIIIIIIXXXXXXX       XXXXXXX     LLLLLLLLLLL                            AAA         TTTTTTTTTTTTTTTTTTTTTTTEEEEEEEEEEEEEEEEEEEEEERRRRRRRRRRRRRRRRR
+F::::::::::::::::::::FI::::::::IX:::::X       X:::::X     L:::::::::L                           A:::A        T:::::::::::::::::::::TE::::::::::::::::::::ER::::::::::::::::R
+F::::::::::::::::::::FI::::::::IX:::::X       X:::::X     L:::::::::L                          A:::::A       T:::::::::::::::::::::TE::::::::::::::::::::ER::::::RRRRRR:::::R
+FF::::::FFFFFFFFF::::FII::::::IIX::::::X     X::::::X     LL:::::::LL                         A:::::::A      T:::::TT:::::::TT:::::TEE::::::EEEEEEEEE::::ERR:::::R     R:::::R
+F:::::F       FFFFFF  I::::I  XXX:::::X   X:::::XXX       L:::::L                          A:::::::::A     TTTTTT  T:::::T  TTTTTT  E:::::E       EEEEEE  R::::R     R:::::R
+F:::::F               I::::I     X:::::X X:::::X          L:::::L                         A:::::A:::::A            T:::::T          E:::::E               R::::R     R:::::R
+F::::::FFFFFFFFFF     I::::I      X:::::X:::::X           L:::::L                        A:::::A A:::::A           T:::::T          E::::::EEEEEEEEEE     R::::RRRRRR:::::R
+F:::::::::::::::F     I::::I       X:::::::::X            L:::::L                       A:::::A   A:::::A          T:::::T          E:::::::::::::::E     R:::::::::::::RR
+F:::::::::::::::F     I::::I       X:::::::::X            L:::::L                      A:::::A     A:::::A         T:::::T          E:::::::::::::::E     R::::RRRRRR:::::R
+F::::::FFFFFFFFFF     I::::I      X:::::X:::::X           L:::::L                     A:::::AAAAAAAAA:::::A        T:::::T          E::::::EEEEEEEEEE     R::::R     R:::::R
+F:::::F               I::::I     X:::::X X:::::X          L:::::L                    A:::::::::::::::::::::A       T:::::T          E:::::E               R::::R     R:::::R
+F:::::F               I::::I  XXX:::::X   X:::::XXX       L:::::L         LLLLLL    A:::::AAAAAAAAAAAAA:::::A      T:::::T          E:::::E       EEEEEE  R::::R     R:::::R
+FF:::::::FF           II::::::IIX::::::X     X::::::X     LL:::::::LLLLLLLLL:::::L   A:::::A             A:::::A   TT:::::::TT      EE::::::EEEEEEEE:::::ERR:::::R     R:::::R
+F::::::::FF           I::::::::IX:::::X       X:::::X     L::::::::::::::::::::::L  A:::::A               A:::::A  T:::::::::T      E::::::::::::::::::::ER::::::R     R:::::R
+F::::::::FF           I::::::::IX:::::X       X:::::X     L::::::::::::::::::::::L A:::::A                 A:::::A T:::::::::T      E::::::::::::::::::::ER::::::R     R:::::R
+FFFFFFFFFFF           IIIIIIIIIIXXXXXXX       XXXXXXX     LLLLLLLLLLLLLLLLLLLLLLLLAAAAAAA                   AAAAAAATTTTTTTTTTT      EEEEEEEEEEEEEEEEEEEEEERRRRRRRR     RRRRRRR
+
+
+
+*/
 //Added by Sam for physics broadphase
 void PhysicsNode::ConfigureAABBHalfLength()
 {
-	//Vector3 point = target->GetMesh()->GetFurthestVert();
-	////scale the point
-	//point * target->GetModelScale();
+	Vector3 point = target->GetMesh()->GetFurthestVert();
+	//scale the point
+	//point = point * target->GetModelScale();
 
-	////set the AABB half length
-	//AABBHalfLength = length(point);
+	//set the AABB half length
+	AABBHalfLength = length(point);
 }

@@ -1,4 +1,5 @@
 #include "GCMRenderer.h"
+#include "ChaseCamera.h"
 
 //Static member variables need initialising!
 uint32_t		GCMRenderer::localHeapStart = 0;
@@ -316,8 +317,13 @@ void	GCMRenderer::SetCurrentShader(VertexShader & vert, FragmentShader &frag) {
 	cellGcmSetVertexProgram(currentVert->program, currentVert->ucode);
 }
 
+////Sets the camera. Can be NULL
+//void	GCMRenderer::SetCamera(Camera* c) {
+//	camera = c;
+//}
+
 //Sets the camera. Can be NULL
-void	GCMRenderer::SetCamera(Camera* c) {
+void	GCMRenderer::SetCamera(ChaseCamera* c) {
 	camera = c;
 }
 
@@ -366,6 +372,10 @@ void	GCMRenderer::DrawNode(SceneNode*n)
 		The GCM Mesh class needs the current vertex shader, fragment
 		shader is just sent for convenience, in case it's needed in future...
 		*/
+		cellGcmSetCullFaceEnable(CELL_GCM_FRONT);
+		cellGcmSetCullFace(CELL_GCM_FRONT);
+		cellGcmSetCullFace(CELL_GCM_FRONT_AND_BACK);
+
 		n->GetMesh()->Draw(*currentVert, *currentFrag);
 	}
 
@@ -569,6 +579,7 @@ void	GCMRenderer::SetTextureSampler(CGparameter sampler, const CellGcmTexture *t
 	}
 
 	cellGcmSetTextureControl(unitResource, CELL_GCM_TRUE, 0, 0, 0); //Enable sampling on the TU
+
 
 	//Set how the texture is accessed. This is analogous to the 
 	//glTexParameteri function you should be used to, by now.

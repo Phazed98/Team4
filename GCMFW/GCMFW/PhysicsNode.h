@@ -26,7 +26,7 @@ public:
 
 	Matrix4		GetInverseInertiaMatrix() const	{ return m_invInertia; }
 
-	Quat	GetOrientation() const		{ return m_orientation; }
+	Quat		GetOrientation() const		{ return m_orientation; }
 	Vector3		GetAngularVelocity() const	{ return m_angularVelocity; }
 
 	SceneNode*			getTarget()				const	{ return target; }
@@ -56,6 +56,9 @@ public:
 	void	SetCollisionVolume(CollisionVolume* vol) { this->vol = vol; }
 	void	SetElasticity(float value){ m_elasticity = value; }
 
+	//------------------------------------------
+	//Added by Kostas for bullets
+	void SetUseDamping(bool value) { useDamping = value; }
 
 	Vector3	GetForce()	{ return m_force; }
 	Vector3	GetTorque() { return m_torque; }
@@ -72,11 +75,14 @@ public:
 	float GetAABBHalfLength() { return AABBHalfLength; }
 	//-----------------------------------------------
 
+	void SetMovable(bool flag) { m_moveable = flag; }
+
 protected:
 	bool useGravity;
 	bool m_moveable;
 	bool m_atRest;
 	float m_elasticity;
+	bool useDamping; //Added by Kostas and used in bullets.
 
 	//<---------LINEAR-------------->
 	Vector3		m_position;

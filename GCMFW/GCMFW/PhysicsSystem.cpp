@@ -1,14 +1,30 @@
 #include "PhysicsSystem.h"
 #include "CollisionHelper.h"
+#include "OBJMesh.h"
 //#include "GJK.h"
 
 PhysicsSystem* PhysicsSystem::instance = 0;
 int PhysicsSystem::fps = 0;
+Vehicle* PhysicsSystem::playerVehicle = NULL;
+float PhysicsSystem::track_speed = 1.0f;
 
 PhysicsSystem::PhysicsSystem(void)
 {
 	time = 0;
 	nbFrames = 0;
+
+	//Sam - moving here for scoping reasons
+	OBJMesh* PlayerMesh = new OBJMesh(MESHDIR"SR-71_Blackbird.obj");
+	PlayerMesh->SetDefaultTexture(*GCMRenderer::LoadGTF("/Textures/lava_texture.gtf"));
+
+	//add by steven because it should use render instance
+	spaceship_scene_node = new SpaceshipSceneNode(PlayerMesh);
+	//store the ssn in render to render the particle system at the end of everything
+	Renderer::GetRenderer().SetSpaceshipSceneNode(spaceship_scene_node);
+
+	this->playerVehicle = new Vehicle(PlayerMesh, 4.0f, 0.0023f, 2, 0.02f, spaceship_scene_node);
+	this->playerPhysNode = playerVehicle->GetPhysicsNode();
+	playerPhysNode->SetLinearVelocity(Vector3(0, 0, 0));
 }
 
 PhysicsSystem::~PhysicsSystem(void)
@@ -45,6 +61,10 @@ void	PhysicsSystem::Update(float msec)
 	{
 		(*i)->Update(msec);
 	}
+
+
+	playerVehicle->UpdatePlayer(msec);
+	playerPhysNode->Update(msec);
 }
 
 

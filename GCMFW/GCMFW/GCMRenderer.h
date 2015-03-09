@@ -24,6 +24,7 @@ _-_-_-_-_-_-_-""  ""
 #include "Camera.h"
 
 
+
 #include "Shader.h"
 
 
@@ -42,6 +43,7 @@ class VertexShader;
 class FragmentShader;
 class SceneNode;
 class Camera;
+class ChaseCamera;
 
 enum GCMResolution {
 	GCM_RESOLUTION_480 = 4,
@@ -83,7 +85,8 @@ public:
 
 	virtual void RenderScene() = 0;
 
-	void	SetCamera(Camera* n);
+	void	SetCamera(ChaseCamera* n);
+	//void	SetCamera(Camera* n);
 	void	SetRootNode(SceneNode * r);
 
 	void	DrawNode(SceneNode*n);
@@ -131,7 +134,8 @@ protected:
 	FragmentShader*		currentFrag;	//currently assigned fragment shader
 	VertexShader*		currentVert;	//currently assigned vertex shader
 
-	Camera*			camera;			//Current viewpoint origin
+	ChaseCamera*		camera;
+	//Camera*			camera;			//Current viewpoint origin
 	SceneNode*			root;			//The scenegraph the renderer is drawing
 
 	CellGcmSurface surfaces[2];			//Front and back buffers

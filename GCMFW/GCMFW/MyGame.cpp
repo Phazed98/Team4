@@ -55,18 +55,22 @@ MyGame::MyGame()
 
 
 	cube = new OBJMesh(MESHDIR"cube.obj");
-	cube->SetDefaultTexture(*GCMRenderer::LoadGTF("/Textures/borg.gtf"));
+	cube->SetDefaultTexture(*GCMRenderer::LoadGTF("/Textures/red.gtf"));
 	cubeAir = new OBJMesh(MESHDIR"cube.obj");
-	cubeAir->SetDefaultTexture(*GCMRenderer::LoadGTF("/Textures/borg.gtf"));
+	cubeAir->SetDefaultTexture(*GCMRenderer::LoadGTF("/Textures/clouds.gtf"));
 	cubeWater = new OBJMesh(MESHDIR"cube.obj");
-	cubeWater->SetDefaultTexture(*GCMRenderer::LoadGTF("/Textures/borg.gtf"));
+	cubeWater->SetDefaultTexture(*GCMRenderer::LoadGTF("/Textures/Water.gtf"));
 	cubeFire = new OBJMesh(MESHDIR"cube.obj");
-	cubeFire->SetDefaultTexture(*GCMRenderer::LoadGTF("/Textures/borg.gtf"));
+	cubeFire->SetDefaultTexture(*GCMRenderer::LoadGTF("/Textures/lava_texture.gtf"));
 	cubeEarth = new OBJMesh(MESHDIR"cube.obj");
-	cubeEarth->SetDefaultTexture(*GCMRenderer::LoadGTF("/Textures/borg.gtf"));
+	cubeEarth->SetDefaultTexture(*GCMRenderer::LoadGTF("/Textures/dust.gtf"));
 	quad = Mesh::GenerateQuad();
 
-	gameCamera = new Camera(); //changed the location Daixi 3.2.2015
+
+	Vehicle* player = PhysicsSystem::GetVehicle();
+	gameCamera = new ChaseCamera(player, 200, 20, 12);
+
+	//gameCamera = new Camera(); //changed the location Daixi 3.2.2015
 	Renderer::GetRenderer().SetCamera(gameCamera);
 
 
@@ -169,6 +173,9 @@ logic will be added to this function.
 */
 void MyGame::UpdateGame(float msec)
 {
+	if (currentGameState != GAME_PLAYING)
+		return;
+
 	if (gameCamera)
 	{
 		gameCamera->Update(msec);
@@ -178,6 +185,9 @@ void MyGame::UpdateGame(float msec)
 	{
 		(*i)->Update(msec);
 	}
+
+	//Car = PhysicsSystem::GetPhysicsSystem().GetVehicle();
+
 
 	handlePlanes(msec);
 }
@@ -290,12 +300,12 @@ GameEntity* MyGame::BuildPlaneEntity(int position)
 
 GameEntity* MyGame::BuildBulletEntity(float radius, Vector3 pos)
 {
-	SceneNode* test = new SceneNode(sphere);
+	SceneNode* test = new SceneNode(cube);
 	test->SetModelScale(Vector3(radius, radius, radius));
 	test->SetBoundingRadius(radius);
 	test->SetColour(Vector4(0.2f, 0.2f, 0.5f, 1.0f));
 	PhysicsNode*p = new PhysicsNode();
-//	p->SetUseDamping(false);
+	p->SetUseDamping(false);
 	p->SetUseGravity(false);
 	p->SetPosition(pos);
 	p->SetCollisionVolume(new CollisionSphere(radius));    //new 4.2.2015  Daixi
@@ -333,6 +343,7 @@ ObjectType* MyGame::BuildObjectEntity(int type, int subType)
 
 	PhysicsNode* p = new PhysicsNode();
 	p->SetUseGravity(false);
+	p->SetMovable(false);
 
 	ObjectType*g = new ObjectType(s, p, type, subType);
 	g->ConnectToSystems();
@@ -368,6 +379,7 @@ Obstacle* MyGame::BuildObstacleEntity(float size, int type, int subType, ObjectT
 	SceneNode* s = new SceneNode(cube);
 	PhysicsNode* p = new PhysicsNode();
 	p->SetUseGravity(false);
+	p->SetMovable(false);
 
 	Obstacle *g = new Obstacle(_obj, s, p, type, subType, _obstacle_type);
 	g->SetSize((int)size);
@@ -422,6 +434,7 @@ GameEntity* MyGame::BuildBuffEntity(float radius, Vector3 pos)
 
 	p->SetUseGravity(false);
 	p->SetPosition(pos);
+	p->SetMovable(false);
 
 	GameEntity*g = new GameEntity(test, p);
 	g->ConnectToSystems();
@@ -441,14 +454,14 @@ void MyGame::CreateObstacle(ObjectType* _obj)
 	if (obstacleReference[_obj->getSubType()] == NULL)
 	{
 		temp = BuildObstacleEntity(25, 1, _obj->getSubType(), _obj, obstacleType);
-		if (temp->getObstacleType() == 1)
-		{
-			/*GameEntity* bul = BuildBulletEntity(20, temp->GetPhysicsNode().GetPosition());
-			temp->SetBullet(bul);
-			temp->SetPlayer(PhysicsSystem::GetPhysicsSystem().GetPlayer());
-			allEntities.push_back(bul);*/
+		//if (temp->getObstacleType() == 1)
+		//{
+		//	GameEntity* bul = BuildBulletEntity(20, temp->GetPhysicsNode().GetPosition());
+		//	temp->SetBullet(bul);
+		//	temp->SetPlayer(PhysicsSystem::GetPhysicsSystem().GetPlayer());
+		//	allEntities.push_back(bul);
 
-		}
+		//}
 		obstacleElements[_obj->getSubType()].push_back(temp);
 	}
 	//reference exists, but everything is running/working
@@ -459,14 +472,13 @@ void MyGame::CreateObstacle(ObjectType* _obj)
 			if (obstacleReference[_obj->getSubType()]->GetPhysicsNode().GetPosition().getZ() > -4750.0f)
 			{
 				temp = BuildObstacleEntity(25, 1, _obj->getSubType(), _obj, obstacleType);
-				if (temp->getObstacleType() == 1)
+				/*if (temp->getObstacleType() == 1)
 				{
-					/*GameEntity* bul = BuildBulletEntity(20, temp->GetPhysicsNode().GetPosition());
+					GameEntity* bul = BuildBulletEntity(20, temp->GetPhysicsNode().GetPosition());
 					temp->SetBullet(bul);
 					temp->SetPlayer(PhysicsSystem::GetPhysicsSystem().GetPlayer());
-					allEntities.push_back(bul);*/
-
-				}
+					allEntities.push_back(bul);
+				}*/
 				obstacleElements[_obj->getSubType()].push_back(temp);
 			}
 		}
@@ -527,6 +539,7 @@ void MyGame::handlePlanes(float msec)
 				allEntities.erase(allEntities.begin() + getIndexOfAllEtities(obstacleElements[i][j]));
 			}
 		}
+
 		// iterate through all Tiles
 		for (unsigned int j = 0; j < elements[i].size(); j++)
 		{
