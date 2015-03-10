@@ -166,10 +166,11 @@ protected:
 
 	//UI Elements
 	Mesh* uiQuad;
-	Mesh* buttonA;
+	Mesh* cooldownBar;
 	Mesh* buttonB;
 	Mesh* buttonX;
 	Mesh* buttonY;
+	float cd;
 
 	vector<TornadoSceneNode*> tornadoNode;
 	EarthParticleSystem tornado_system;

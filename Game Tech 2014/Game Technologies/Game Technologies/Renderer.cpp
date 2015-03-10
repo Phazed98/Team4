@@ -94,6 +94,7 @@ void Renderer::fullyInit()
 {
 	camera = NULL;
 	total_sec_pass = 0;
+	cd = 10000;
 	root = new SceneNode();
 
 	basicFont = new Font(SOIL_load_OGL_texture(TEXTUREDIR"tahoma.tga", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_COMPRESS_TO_DXT), 16, 16);
@@ -126,8 +127,8 @@ void Renderer::fullyInit()
 	uiQuad = Mesh::GenerateQuad();
 	uiQuad->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"/GUITextures/score.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
 
-	buttonA = Mesh::GenerateQuad();
-	buttonA->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"/GUITextures/bigA.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
+	cooldownBar = Mesh::GenerateQuad();
+	cooldownBar->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"/GUITextures/cd.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
 
 	buttonB = Mesh::GenerateQuad();
 	buttonB->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"/GUITextures/bigB.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
@@ -204,6 +205,13 @@ void Renderer::UpdateScene(float msec)
 		camera->UpdateCamera(msec);
 	}
 	root->Update(msec);
+
+	//Used bor the cooldown bar
+	if (cd > 0)
+	{
+		cd -= msec;
+	}
+	
 }
 
 void Renderer::RenderScene()
@@ -597,24 +605,31 @@ void Renderer::RenderUI()
 	uiQuad->Draw();
 
 	//Button Y
-	modelMatrix = Matrix4::Translation(Vector3(0.72f, -0.85f, 0.0f)) *  Matrix4::Scale(Vector3(0.05f, 0.05f, 0.5f));
+	modelMatrix = Matrix4::Translation(Vector3(0.62f, -0.85f, 0.0f)) *  Matrix4::Scale(Vector3(0.05f, 0.05f, 0.5f));
 	UpdateShaderMatrices();
 	buttonY->Draw();
 
 	//Button X
-	modelMatrix = Matrix4::Translation(Vector3(0.62f, -0.75f, 0.0f)) *  Matrix4::Scale(Vector3(0.05f, 0.05f, 0.5f));
+	modelMatrix = Matrix4::Translation(Vector3(0.52f, -0.75f, 0.0f)) *  Matrix4::Scale(Vector3(0.05f, 0.05f, 0.5f));
 	UpdateShaderMatrices();
 	buttonX->Draw();
 
 	//Button B
-	modelMatrix = Matrix4::Translation(Vector3(0.82f, -0.75f, 0.0f)) *  Matrix4::Scale(Vector3(0.05f, 0.05f, 0.5f));
+	modelMatrix = Matrix4::Translation(Vector3(0.72f, -0.75f, 0.0f)) *  Matrix4::Scale(Vector3(0.05f, 0.05f, 0.5f));
 	UpdateShaderMatrices();
 	buttonB->Draw();
 
-	//Button A
-	modelMatrix = Matrix4::Translation(Vector3(0.72f, -0.65f, 0.0f)) *  Matrix4::Scale(Vector3(0.05f, 0.05f, 0.5f));
+	
+	//Cooldown Bar
+	if (Window::GetWindow().GetKeyboard()->KeyDown(KEYBOARD_Q))
+	{
+		cd = 1000;
+	}
+
+	//cd = cd * 0.9;
+	modelMatrix = Matrix4::Translation(Vector3(0.0f, 0.7f, 0.0f)) *  Matrix4::Scale(Vector3(cd/1000, 0.05f, 0.5f));
 	UpdateShaderMatrices();
-	buttonA->Draw();
+	cooldownBar->Draw();
 
 	
 }
@@ -972,17 +987,17 @@ void Renderer::displayInformation()
 	Matrix4 projMatrixTemp = projMatrix;
 	Matrix4 modelMatrixTemp = modelMatrix;
 	int x = 64;
-	/*DrawText("Physics FPS: " + to_string(PhysicsSystem::getFPS()), Vector3(0, 16 + x, 0), 16, false);
-	DrawText("Renderer FPS: " + to_string(fps), Vector3(0, 32 + x, 0), 16, false);
-	DrawText("Number of Nodes: " + to_string(nodeCount), Vector3(0, 48 + x, 0), 16, false);
+	/*DrawText("Physics FPS: " + to_string(PhysicsSystem::getFPS()), Vector3(0, 16, 0), 16, false);
+	DrawText("Renderer FPS: " + to_string(fps), Vector3(0, 32, 0), 16, false);
+	DrawText("Number of Nodes: " + to_string(nodeCount), Vector3(0, 48, 0), 16, false);
 
-	DrawText("Controls:", Vector3(0, 112 + x, 0), 16, false);
-	DrawText("T = Toggle Wireframe", Vector3(0, 128 + x, 0), 16, false);
-	DrawText("WASD = Move", Vector3(0, 144 + x, 0), 16, false);
-	DrawText("Shift = Down", Vector3(0, 160 + x, 0), 16, false);
-	DrawText("Space = Up", Vector3(0, 176 + x, 0), 16, false);*/
+	DrawText("Controls:", Vector3(0, 112, 0), 16, false);
+	DrawText("T = Toggle Wireframe", Vector3(0, 128, 0), 16, false);
+	DrawText("WASD = Move", Vector3(0, 144, 0), 16, false);
+	DrawText("Shift = Down", Vector3(0, 160, 0), 16, false);
+	DrawText("Space = Up", Vector3(0, 176, 0), 16, false);*/
 	
-	//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	//--------------------------------------------------GUI--------------------------------------------------------------------------------
 	DrawText("SCORE", Vector3(25, 15, 0), 25, false);
 	DrawText("1250", Vector3(32, 50, 0), 25, false);
 
@@ -990,13 +1005,16 @@ void Renderer::displayInformation()
 	DrawText("1250", Vector3(205, 50, 0), 25, false);
 
 	DrawText("SCORE", Vector3(375, 15, 0), 25, false);
-	DrawText("1250", Vector3(395, 50, 0), 25, false);
+	DrawText(to_string(cd), Vector3(395, 50, 0), 25, false);
 
 	DrawText("Timer", Vector3(25, 105, 0), 25, false);
 	DrawText(to_string(PhysicsSystem::GetPhysicsSystem().GetCheckPointTimer()), Vector3(32, 135, 0), 25, false);
 
+	DrawText("Immune", Vector3(740, 15, 0), 20, false);
+	DrawText("Slow", Vector3(640, 85, 0), 20, false);
+	DrawText("No CD", Vector3(880, 85, 0), 20, false);
 
-	//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	//--------------------------------------------------GUI--------------------------------------------------------------------------------
 
 	//DrawText("(R)Reset Boxes", Vector3(0, 192, 0), 16, false);
 
