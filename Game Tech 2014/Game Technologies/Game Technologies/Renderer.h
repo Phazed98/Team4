@@ -47,6 +47,7 @@ public:
 	void	AddNode(SceneNode* n);
 	void	RemoveNode(SceneNode* n);
 	void	RenderPauseMenu();
+	void	RenderUI();
 	buttonPressed	RenderMainMenu();
 	void	RenderLoading(int percent, string Message);
 	ChaseCamera* GetCamera(){ return camera; }
@@ -162,6 +163,13 @@ protected:
 	Button* mainMenuButtons[MAIN_BUTTONS_SIZE];
 	int mainButtonIndex;
 	int pauseButtonIndex;
+
+	//UI Elements
+	Mesh* uiQuad;
+	Mesh* buttonA;
+	Mesh* buttonB;
+	Mesh* buttonX;
+	Mesh* buttonY;
 
 	vector<TornadoSceneNode*> tornadoNode;
 	EarthParticleSystem tornado_system;

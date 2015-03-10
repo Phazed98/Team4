@@ -111,7 +111,7 @@ Mesh* Mesh::GenerateQuad()	{
 	m->textureCoords[3] = Vector2(1.0f,	0.0f);
 
 	for(int i = 0; i < 4; ++i) {
-		m->colours[i] = Vector4(1.0f, 1.0f,1.0f,1.0f);
+		m->colours[i] = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 		m->normals[i] = Vector3(0.0f, 0.0f,-1.0f);
 		m->tangents[i] = Vector3(1.0f, 0.0f,0.0f);
 	}

@@ -122,6 +122,23 @@ void Renderer::fullyInit()
 	quad->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"Loading Screen.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
 	quad->SetColour(new Vector4(1, 0, 0, 1));
 
+	//--------------------------------------------------GUI--------------------------------------------------------------------------------
+	uiQuad = Mesh::GenerateQuad();
+	uiQuad->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"/GUITextures/score.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
+
+	buttonA = Mesh::GenerateQuad();
+	buttonA->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"/GUITextures/bigA.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
+
+	buttonB = Mesh::GenerateQuad();
+	buttonB->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"/GUITextures/bigB.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
+
+	buttonX = Mesh::GenerateQuad();
+	buttonX->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"/GUITextures/bigX.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
+
+	buttonY = Mesh::GenerateQuad();
+	buttonY->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"/GUITextures/bigY.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
+	//--------------------------------------------------GUI--------------------------------------------------------------------------------
+
 	if (!quad->GetTexture()){
 		cout << "error in loading screen texture!!" << endl;
 		return;
@@ -191,7 +208,7 @@ void Renderer::UpdateScene(float msec)
 
 void Renderer::RenderScene()
 {
-
+	
 	if (render_motion_blur){
 
 
@@ -200,6 +217,8 @@ void Renderer::RenderScene()
 
 		//Display HUD
 		displayInformation();
+
+		
 
 		SwapBuffers();
 	}
@@ -240,10 +259,14 @@ void Renderer::RenderWithoutPostProcessing(){
 		DrawNodes();
 		ClearNodeLists();
 
+		RenderUI();
+
 		DrawAfterBurner();
 		galaxy_system.Render(msec, viewMatrix, projMatrix);
 		DrawTornado();
 		DrawFire();
+
+		
 
 		//Display HUD
 		if (wireFrame)
@@ -252,6 +275,7 @@ void Renderer::RenderWithoutPostProcessing(){
 			//Display HUD
 			displayInformation();
 			toggleWireFrame();
+
 		}
 		else
 		{
@@ -512,6 +536,89 @@ void Renderer::RenderPauseMenu()
 	SwapBuffers();
 }
 
+void Renderer::RenderUI()
+{
+	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+	if (camera)
+	{
+		SetCurrentShader(simpleShader);
+		glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), 0);
+
+		textureMatrix.ToIdentity();
+		modelMatrix.ToIdentity();
+		viewMatrix = camera->BuildViewMatrix();
+		projMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float)width / (float)height, 45.0f);
+		frameFrustum.FromMatrix(projMatrix * viewMatrix);
+		UpdateShaderMatrices();
+
+		//Return to default 'usable' state every frame!
+		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_CULL_FACE);
+		glDisable(GL_STENCIL_TEST);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		BuildNodeLists(root);
+		SortNodeLists();
+		DrawNodes();
+		ClearNodeLists();
+	}
+
+
+	//Set Shader to TexturedShader
+	SetCurrentShader(menuShader);
+
+	//Reset Matrixes
+	projMatrix = Matrix4::Orthographic(-1, 1, 1, -1, -1, 1);
+	viewMatrix.ToIdentity();
+	textureMatrix.ToIdentity();
+	modelMatrix.ToIdentity();
+	UpdateShaderMatrices();
+	
+	//Score
+	modelMatrix = Matrix4::Translation(Vector3(-0.82f, -0.88f, 0.0f)) *  Matrix4::Scale(Vector3(0.15f, 0.1f, 0.5f));
+	UpdateShaderMatrices();
+	uiQuad->Draw();
+
+	//Multiplier
+	modelMatrix = Matrix4::Translation(Vector3(-0.48f, -0.88f, 0.0f)) *  Matrix4::Scale(Vector3(0.15f, 0.1f, 0.5f));
+	UpdateShaderMatrices();
+	uiQuad->Draw();
+
+	//Stack Counter
+	modelMatrix = Matrix4::Translation(Vector3(-0.1f, -0.88f, 0.0f)) *  Matrix4::Scale(Vector3(0.15f, 0.1f, 0.5f));
+	UpdateShaderMatrices();
+	uiQuad->Draw();
+
+	//Timer
+	modelMatrix = Matrix4::Translation(Vector3(-0.82f, -0.65f, 0.0f)) *  Matrix4::Scale(Vector3(0.15f, 0.1f, 0.5f));
+	UpdateShaderMatrices();
+	uiQuad->Draw();
+
+	//Button Y
+	modelMatrix = Matrix4::Translation(Vector3(0.72f, -0.85f, 0.0f)) *  Matrix4::Scale(Vector3(0.05f, 0.05f, 0.5f));
+	UpdateShaderMatrices();
+	buttonY->Draw();
+
+	//Button X
+	modelMatrix = Matrix4::Translation(Vector3(0.62f, -0.75f, 0.0f)) *  Matrix4::Scale(Vector3(0.05f, 0.05f, 0.5f));
+	UpdateShaderMatrices();
+	buttonX->Draw();
+
+	//Button B
+	modelMatrix = Matrix4::Translation(Vector3(0.82f, -0.75f, 0.0f)) *  Matrix4::Scale(Vector3(0.05f, 0.05f, 0.5f));
+	UpdateShaderMatrices();
+	buttonB->Draw();
+
+	//Button A
+	modelMatrix = Matrix4::Translation(Vector3(0.72f, -0.65f, 0.0f)) *  Matrix4::Scale(Vector3(0.05f, 0.05f, 0.5f));
+	UpdateShaderMatrices();
+	buttonA->Draw();
+
+	
+}
+
 buttonPressed Renderer::RenderMainMenu()
 {
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -547,6 +654,7 @@ buttonPressed Renderer::RenderMainMenu()
 	{
 		toggleWireFrame();
 	}
+
 
 	glDisable(GL_DEPTH_TEST);
 	mainMenuQuad->Draw();
@@ -832,7 +940,6 @@ void	Renderer::RemoveNode(SceneNode* n)
 	root->RemoveChild(n);
 }
 
-
 void Renderer::DrawText(const std::string &text, const Vector3 &position, const float size, const bool perspective)
 {
 
@@ -864,17 +971,33 @@ void Renderer::displayInformation()
 	Matrix4 viewMatrixTemp = viewMatrix;
 	Matrix4 projMatrixTemp = projMatrix;
 	Matrix4 modelMatrixTemp = modelMatrix;
+	int x = 64;
+	/*DrawText("Physics FPS: " + to_string(PhysicsSystem::getFPS()), Vector3(0, 16 + x, 0), 16, false);
+	DrawText("Renderer FPS: " + to_string(fps), Vector3(0, 32 + x, 0), 16, false);
+	DrawText("Number of Nodes: " + to_string(nodeCount), Vector3(0, 48 + x, 0), 16, false);
 
-	DrawText("Physics FPS: " + to_string(PhysicsSystem::getFPS()), Vector3(0, 16, 0), 16, false);
-	DrawText("Renderer FPS: " + to_string(fps), Vector3(0, 32, 0), 16, false);
-	DrawText("Number of Nodes: " + to_string(nodeCount), Vector3(0, 48, 0), 16, false);
+	DrawText("Controls:", Vector3(0, 112 + x, 0), 16, false);
+	DrawText("T = Toggle Wireframe", Vector3(0, 128 + x, 0), 16, false);
+	DrawText("WASD = Move", Vector3(0, 144 + x, 0), 16, false);
+	DrawText("Shift = Down", Vector3(0, 160 + x, 0), 16, false);
+	DrawText("Space = Up", Vector3(0, 176 + x, 0), 16, false);*/
+	
+	//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	DrawText("SCORE", Vector3(25, 15, 0), 25, false);
+	DrawText("1250", Vector3(32, 50, 0), 25, false);
 
-	DrawText("Controls:", Vector3(0, 112, 0), 16, false);
-	DrawText("T = Toggle Wireframe", Vector3(0, 128, 0), 16, false);
-	DrawText("WASD = Move", Vector3(0, 144, 0), 16, false);
-	DrawText("Shift = Down", Vector3(0, 160, 0), 16, false);
-	DrawText("Space = Up", Vector3(0, 176, 0), 16, false);
-	DrawText("Timer = " + to_string(PhysicsSystem::GetPhysicsSystem().GetCheckPointTimer()), Vector3(0, 192, 0), 16, false);
+	DrawText("SCORE", Vector3(195, 15, 0), 25, false);
+	DrawText("1250", Vector3(205, 50, 0), 25, false);
+
+	DrawText("SCORE", Vector3(375, 15, 0), 25, false);
+	DrawText("1250", Vector3(395, 50, 0), 25, false);
+
+	DrawText("Timer", Vector3(25, 105, 0), 25, false);
+	DrawText(to_string(PhysicsSystem::GetPhysicsSystem().GetCheckPointTimer()), Vector3(32, 135, 0), 25, false);
+
+
+	//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 	//DrawText("(R)Reset Boxes", Vector3(0, 192, 0), 16, false);
 
 	glEnable(GL_DEPTH_TEST);
@@ -938,6 +1061,7 @@ bool Renderer::CreatMotionBlurBuffer(){
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	return true;
 }
+
 void Renderer::DrawAfterBurner(){
 	Matrix4 model_matrix = spaceship_scene_node->GetAfterburnerNode()->GetWorldTransform();
 	if (camera){
@@ -948,6 +1072,7 @@ void Renderer::DrawAfterBurner(){
 	spaceship_scene_node->afterburner_system[0].Render(msec, model_matrix, projMatrix, viewMatrix);
 	spaceship_scene_node->afterburner_system[1].Render(msec, model_matrix, projMatrix, viewMatrix);
 }
+
 void Renderer::DrawTornado(){
 	for (vector<TornadoSceneNode*>::iterator i = tornadoNode.begin(); i != tornadoNode.end(); ++i)
 	{
@@ -969,6 +1094,7 @@ void Renderer::DrawTornado(){
 
 
 }
+
 void Renderer::DrawFire(){
 	for (vector<FireSceneNode*>::iterator i = fireNode.begin(); i != fireNode.end(); ++i)
 	{
@@ -987,7 +1113,6 @@ void Renderer::DrawFire(){
 
 	}
 }
-
 
 bool Renderer::CreatParticleBuffer(){
 
