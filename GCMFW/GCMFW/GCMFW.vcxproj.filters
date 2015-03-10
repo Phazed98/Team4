@@ -73,6 +73,15 @@
     <ClCompile Include="SpaceshipSceneNode.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Wave.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundSystem.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -175,6 +184,15 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="BezierMath.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Wave.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundSystem.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundManager.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>
