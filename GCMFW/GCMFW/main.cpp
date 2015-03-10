@@ -8,6 +8,7 @@
 #include "Input.h"
 #include "Timer.h"
 #include "MyGame.h"
+#include "SoundManager.h"
 #include <sys/ppu_thread.h>
 #include <sys/process.h>
 
@@ -67,6 +68,10 @@ int main(void)
 
 	PhysicsSystem::Initialise();
 
+	SoundSystem::SystemAudioUtilitySet6ch();
+	std::cout << "SoundSystem is OK!\n" << std::endl;
+
+
 	buttonPressed bp;
 	bp = NO_PRESSED;
 
@@ -95,14 +100,35 @@ int main(void)
 	size_t stack_size = 0x1000;
 	char *thread_name = "My Thread";
 	sys_ppu_thread_create(&id, physicsLoop, (uint64_t)game, priority, stack_size,SYS_PPU_THREAD_CREATE_JOINABLE, thread_name);
-
+	Wave::readWavfile();
+    SoundManager::PlaySound(0,1);
+	int temp = 4;
 	while (!done)
 	{
 		Input::UpdateJoypad();	//Receive latest joypad input for all joypads
 
+
+		if (temp != PhysicsSystem::GetVehicle()->GetCurrentPlaneID())
+		{
+			if (PhysicsSystem::GetVehicle()->GetCurrentPlaneID() == 0){
+				SoundManager::ChangSceneSound(2);
+			}
+			if (PhysicsSystem::GetVehicle()->GetCurrentPlaneID() == 1){
+				SoundManager::ChangSceneSound(4);
+			}
+			if (PhysicsSystem::GetVehicle()->GetCurrentPlaneID() == 2){
+				SoundManager::ChangSceneSound(1);
+			}
+			if (PhysicsSystem::GetVehicle()->GetCurrentPlaneID() == 3){
+				SoundManager::ChangSceneSound(3);
+			}
+			temp = PhysicsSystem::GetVehicle()->GetCurrentPlaneID();
+		}
+
 		float msec = (float)gameTime.GetTimedMS();	//How many milliseconds since last update?
 		game->UpdateRendering(msec);	//Update our 'sybsystem' logic (renderer and physics!)
 		game->UpdateGame(msec);	//Update our game logic
+		SoundManager::UpdateSound();
 	//	game->UpdatePhysics(msec);
 	}
 

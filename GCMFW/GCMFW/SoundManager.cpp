@@ -1,7 +1,7 @@
 #include "SoundManager.h"
 
-#define STEREO_DATA0 "/app_home/36847__ecodtr__laserrocket2.wav"
-#define STEREO_DATA1 "/app_home/14615__man__canon.wav"
+//#define STEREO_DATA0 "/app_home/36847__ecodtr__laserrocket2.wav"
+//#define STEREO_DATA1 "/app_home/14615__man__canon.wav"
 
 CellSSPlayerConfig SoundManager::sspConfigStereo = {2, 0};
 int SoundManager::err = NULL;
@@ -55,6 +55,7 @@ void SoundManager::GenerateSoundplayer(){
 }
 
 void SoundManager::PlaySound(int soundname, int loopcontrol){
+	//Wave::readWavfile();
 	switch(ChooseAAN()){
 	case 0: UseAAN(stereo_player0,soundname,loopcontrol);
 		break;
@@ -193,14 +194,30 @@ void SoundManager::UseAAN(CellAANHandle temp,int soundname, int loopcontrol){
 		err = cellAANConnect(
 			SoundSystem::mixerHandle, SoundSystem::strip_0_port_0, temp, 0
 			);
+		//err = Wave::readWavfile();
 		if(soundname == 0){
-			err = Wave::readWavfile(STEREO_DATA0);
+			waveInfo.addr = (void*)Wave::wavetop[0];
+			waveInfo.samples = Wave::waveByteSize[0] / 4;
 		}
 		if(soundname == 1){
-			err = Wave::readWavfile(STEREO_DATA1);
+			waveInfo.addr = (void*)Wave::wavetop[1];
+			waveInfo.samples = Wave::waveByteSize[1] / 4;
 		}
-		waveInfo.addr = (void*)Wave::wavetop;
-		waveInfo.samples = Wave::waveByteSize / 4;
+		if(soundname == 2){
+			waveInfo.addr = (void*)Wave::wavetop[2];
+			waveInfo.samples = Wave::waveByteSize[2] / 4;
+		}
+		if(soundname == 3){
+			waveInfo.addr = (void*)Wave::wavetop[3];
+			waveInfo.samples = Wave::waveByteSize[3] / 4;
+		}
+		if(soundname == 4){
+			waveInfo.addr = (void*)Wave::wavetop[4];
+			waveInfo.samples = Wave::waveByteSize[4] / 4;
+		}
+
+		//waveInfo.addr = (void*)Wave::wavetop;
+		//waveInfo.samples = Wave::waveByteSize / 4;
 		waveInfo.loopStartOffset = 1;
 		waveInfo.startOffset = 1;
 
@@ -223,4 +240,52 @@ void SoundManager::UseAAN(CellAANHandle temp,int soundname, int loopcontrol){
 		err = cellSurMixerStart();
 
 		cellSSPlayerPlay(temp, &playbackInfo);
+}
+
+void SoundManager::ChangSceneSound(int soundname){
+
+	cellAANDisconnect(SoundSystem::mixerHandle, SoundSystem::strip_0_port_0, stereo_player, 0);
+
+	err = cellSSPlayerCreate(&stereo_player, &sspConfigStereo);
+		err = cellAANConnect(
+			SoundSystem::mixerHandle, SoundSystem::strip_0_port_0, stereo_player, 0
+			);
+		//err = Wave::readWavfile();
+		if(soundname == 1){
+			waveInfo.addr = (void*)Wave::wavetop[1];
+			waveInfo.samples = Wave::waveByteSize[1] / 4;
+		}
+		if(soundname == 2){
+			waveInfo.addr = (void*)Wave::wavetop[2];
+			waveInfo.samples = Wave::waveByteSize[2] / 4;
+		}
+		if(soundname == 3){
+			waveInfo.addr = (void*)Wave::wavetop[3];
+			waveInfo.samples = Wave::waveByteSize[3] / 4;
+		}
+		if(soundname == 4){
+			waveInfo.addr = (void*)Wave::wavetop[4];
+			waveInfo.samples = Wave::waveByteSize[4] / 4;
+		}
+
+		//waveInfo.addr = (void*)Wave::wavetop;
+		//waveInfo.samples = Wave::waveByteSize / 4;
+		waveInfo.loopStartOffset = 1;
+		waveInfo.startOffset = 1;
+
+
+
+		loopIno.loopMode = CELL_SSPLAYER_LOOP_ON;
+
+		loopIno.attackMode = 0;
+		playbackInfo.level = 1.0;
+		playbackInfo.speed = 1.0;
+
+
+
+		err = cellSSPlayerSetWave(stereo_player, &waveInfo, &loopIno);
+
+		err = cellSurMixerStart();
+
+		cellSSPlayerPlay(stereo_player, &playbackInfo);
 }

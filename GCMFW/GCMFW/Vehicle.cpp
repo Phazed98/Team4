@@ -26,6 +26,7 @@ Speed_Turn(speedTurn), currentPlaneID(startingPlaneID), steeringResponsiveness(s
 
 	//set plane switch cooldown period. Add a parameter later if needed
 	PlaneSwitchCDTime = 1500;
+	temp = 4;
 }
 
 Vehicle::~Vehicle(void)
@@ -104,6 +105,23 @@ void Vehicle::UpdatePlayer(float msec)
 	{
 		UpdatePlayerVelocity();
 	}
+
+	//if (temp != currentPlaneID)
+	//{
+	//	if (currentPlaneID == 0){
+	//		SoundManager::PlaySound(0,0);
+	//	}
+	//	if (currentPlaneID == 1){
+	//		SoundManager::PlaySound(0,0);
+	//	}
+	//	if (currentPlaneID == 2){
+	//		SoundManager::PlaySound(0,0);
+	//	}
+	//	if (currentPlaneID == 3){
+	//		SoundManager::PlaySound(0,0);
+	//	}
+	//	temp = currentPlaneID;
+	//}
 
 }
 

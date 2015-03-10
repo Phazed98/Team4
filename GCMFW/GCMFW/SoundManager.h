@@ -17,6 +17,7 @@ public:
 	static int ChooseAAN();
 
 	static void UseAAN(CellAANHandle temp,int soundname, int loopcontrol);
+	static void ChangSceneSound(int soundname);
 
 	static int err;
 	static CellAANHandle stereo_player,stereo_player0,stereo_player1,stereo_player2,stereo_player3,stereo_player4,stereo_player5;
