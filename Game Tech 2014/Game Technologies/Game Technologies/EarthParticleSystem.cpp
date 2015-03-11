@@ -76,6 +76,17 @@ bool EarthParticleSystem::InitParticleSystem(int shape_type, const Vector3& Pos)
 			SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_COMPRESS_TO_DXT);
 		break;
 	}
+	case 2:{
+		particle_lifetime = 2000.0f;
+		particle_size = 30;
+		first_particle_launch_time = 10000.f;
+		second_particle_lifetime = 1000.f;
+		render_particle_lifetime = second_particle_lifetime;
+		particleUpdateShader = new Shader(EARTH_SHADER_DIR"vs_update.glsl", EARTH_SHADER_DIR"fs_update.glsl", EARTH_SHADER_DIR"gs_afterburner2.glsl");
+		flame_texture = SOIL_load_OGL_texture(TEXTUREDIR"waterImg2.jpg",
+			SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_COMPRESS_TO_DXT);
+		break;
+	}
 	}
 
 	EarthParticle Particles[MAX_PARTICLES];
@@ -145,6 +156,10 @@ bool EarthParticleSystem::InitRenderSystem(int shape_type){
 		particleRenderShader = new Shader(EARTH_SHADER_DIR"vertexStrong.glsl", EARTH_SHADER_DIR"fragmentStrong.glsl", EARTH_SHADER_DIR"geometry.glsl");
 		break;
 	}
+	case 2:{
+		particleRenderShader = new Shader(EARTH_SHADER_DIR"vertex.glsl", EARTH_SHADER_DIR"fragmentMedium.glsl", EARTH_SHADER_DIR"geometry.glsl");
+		break;
+	}
 	}
 	if (!particleRenderShader->LinkProgram()){
 		return false;
@@ -170,6 +185,8 @@ void EarthParticleSystem::Render(float DeltaTime, const Matrix4& modelMatrix, co
 
 	m_currVB = m_currTFB; //toggle input
 	m_currTFB = (m_currTFB +1) & 0x1 ; //toggle output
+
+	render_particle_lifetime = second_particle_lifetime;
 
 }
 
@@ -280,6 +297,10 @@ void EarthParticleSystem::RenderParticles(const Matrix4& modelMatrix)
 		break;
 	}
 	case 0:{
+		model_matrix = modelMatrix*Matrix4::Scale(Vector3(5, 5, 5));
+		break;
+	}
+	case 2:{
 		model_matrix = modelMatrix*Matrix4::Scale(Vector3(5, 5, 5));
 		break;
 	}

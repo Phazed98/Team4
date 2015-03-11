@@ -94,6 +94,7 @@ MyGame::MyGame(bool isHost, bool isClient, bool useNetworking, int numClients)
 	cubeEarth = new OBJMesh(MESHDIR"cube.obj");
 	cubeEarth->SetTexture(earthTexture);
 	quad	= Mesh::GenerateQuad();
+	quad->SetTexture(checkTexture);
 	sphere	= new OBJMesh(MESHDIR"sphere.obj");
 	sphere->SetTexture(fireTexture);
 	bigRock = new OBJMesh(MESHDIR"bigRock3.obj");
@@ -500,6 +501,12 @@ Obstacle* MyGame::BuildObstacleEntity(float size, int type, int subType, ObjectT
 		s = new FireSceneNode(sphere);
 		Renderer::GetRenderer().SetFireSceneNode((FireSceneNode*)s);
 		size = size / size;
+	}
+	else if (subType == 3 && _obstacle_type ==0)
+	{
+		s = new GeyserSceneNode(sphere);
+		Renderer::GetRenderer().SetGeyserSceneNode((GeyserSceneNode*)s);
+		size= size/size ;
 	}
 	else if (subType == 2 && _obstacle_type == 0)
 	{

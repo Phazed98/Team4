@@ -68,5 +68,7 @@ private:
 	Matrix4 project_matrix;
 	Matrix4 view_matrix;
 
+	float first_particle_launch_time;
+	float second_particle_lifetime;
 	float render_particle_lifetime;
 };

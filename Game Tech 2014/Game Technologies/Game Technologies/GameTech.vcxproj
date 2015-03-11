@@ -82,6 +82,7 @@
     <ClCompile Include="GameClass.cpp" />
     <ClCompile Include="GameEntity.cpp" />
     <ClCompile Include="GamePadController.cpp" />
+    <ClCompile Include="GeyserSceneNode.cpp" />
     <ClCompile Include="GJK.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MyGame.cpp" />
@@ -122,6 +123,7 @@
     <ClInclude Include="GameClass.h" />
     <ClInclude Include="GameEntity.h" />
     <ClInclude Include="GamePadController.h" />
+    <ClInclude Include="GeyserSceneNode.h" />
     <ClInclude Include="GJK.h" />
     <ClInclude Include="GJKSimplex.h" />
     <ClInclude Include="InertialMatrixHelper.h" />

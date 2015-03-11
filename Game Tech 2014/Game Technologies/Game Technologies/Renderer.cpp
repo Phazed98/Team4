@@ -10,6 +10,7 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)
 	fullyInitialised = false;
 
 	tornado_system.InitParticleSystem(0, Vector3(0, 10, 0));
+	geyser_system.InitParticleSystem(2, Vector3(0, 5, 0));
 	galaxy_system.InitParticleSystem(1, Vector3(0, 0, -200));
 	fire_system.InitParticleSystem(0, Vector3(0, 0, 0));
 	
@@ -299,6 +300,7 @@ void Renderer::RenderWithoutPostProcessing(){
 		DrawAfterBurner();
 		galaxy_system.Render(msec, viewMatrix, projMatrix);
 		DrawTornado();
+		DrawGeyser();
 		DrawFire();
 
 		
@@ -1211,6 +1213,19 @@ void Renderer::DrawTornado(){
 
 }
 
+void Renderer::DrawGeyser(){
+	for (vector<GeyserSceneNode*>::iterator i = geyserNode.begin(); i != geyserNode.end(); ++i)
+	{
+		Matrix4 model_matrix = (*i)->GetGeyserNode()->GetWorldTransform();
+
+		if (camera){
+			viewMatrix = camera->BuildViewMatrix();
+		}
+
+		geyser_system.Render(msec, model_matrix, projMatrix, viewMatrix);
+	}
+}
+
 void Renderer::DrawFire(){
 	for (vector<FireSceneNode*>::iterator i = fireNode.begin(); i != fireNode.end(); ++i)
 	{
@@ -1282,6 +1297,7 @@ void Renderer::RenderParticleToTexture(){
 	DrawAfterBurner();
 	
 	DrawTornado();
+	DrawGeyser();
 	DrawFire();
 	glUseProgram(0);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);

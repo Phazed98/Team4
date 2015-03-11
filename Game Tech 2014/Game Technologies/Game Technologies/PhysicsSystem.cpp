@@ -57,7 +57,7 @@ void	PhysicsSystem::Update(float msec)
 		fps = nbFrames;
 		nbFrames = 0;
 		time = 0;
-		canDie = true;
+		//canDie = true;
 	}
 
 	ObstacleCollisions();

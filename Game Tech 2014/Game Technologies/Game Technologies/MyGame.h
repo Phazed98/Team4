@@ -12,6 +12,7 @@
 #include "NetworkData.h"
 #include "TornadoSceneNode.h"
 #include "FireSceneNode.h"
+#include "GeyserSceneNode.h"
 
 struct sendData
 {
@@ -165,6 +166,8 @@ protected:
 	GLuint waterTexture = SOIL_load_OGL_texture("../../Textures/05_DIFFUSE.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, 0);
 	GLuint airTexture = SOIL_load_OGL_texture("../../Textures/sky.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, 0);
 	GLuint fireTexture = SOIL_load_OGL_texture("../../Textures/lava_texture.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, 0);
+
+	GLuint checkTexture = SOIL_load_OGL_texture("../../Textures/Checkpoint.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, 0);
 
 	OBJMesh* water_sphere;
 	

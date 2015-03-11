@@ -19,6 +19,7 @@ Implements:OGLRendere
 #include "EarthParticleSystem.h"
 #include "TornadoSceneNode.h"
 #include "FireSceneNode.h"
+#include "GeyserSceneNode.h"
 
 #define PAUSE_BUTTONS_SIZE 2
 #define	MAIN_BUTTONS_SIZE 6
@@ -55,6 +56,7 @@ public:
 	void SetSpaceshipSceneNode(SpaceshipSceneNode* ssn){ spaceship_scene_node = ssn; }
 
 	void SetTornadoSceneNode(TornadoSceneNode* node){ tornadoNode.push_back(node); }
+	void SetGeyserSceneNode(GeyserSceneNode* node){ geyserNode.push_back(node); }
 
 	//Statics
 	static bool Initialise() 
@@ -178,6 +180,10 @@ protected:
 	vector<TornadoSceneNode*> tornadoNode;
 	EarthParticleSystem tornado_system;
 	void DrawTornado();
+
+	vector<GeyserSceneNode*> geyserNode;
+	EarthParticleSystem geyser_system;
+	void DrawGeyser();
 
 	//steven added for rendering different objects
 	Shader* water_plane_shader;
