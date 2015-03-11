@@ -5,7 +5,7 @@ Obstacle::Obstacle(ObjectType* _tile, SceneNode* s, PhysicsNode* p, int _type, i
 {
 	tile = _tile;
 	obstacleType = _obstacleType;
-	offset.setY(150);
+	offset.setY(TILE_HEIGHT + size);
 	random = rand() % 175 + 1;
 	this->GetRenderNode().SetColour(Vector4(0, 0, 0, 1));
 
@@ -25,7 +25,7 @@ Obstacle::Obstacle(ObjectType* _tile, SceneNode* s, PhysicsNode* p, int _type, i
 
 	bullet = NULL;
 
-	movingObsSpeed = 0.05f;
+	movingObsSpeed = 2.5f;
 
 	count_time = 0;
 }
@@ -130,7 +130,7 @@ void Obstacle::SetLane(int _lane)
 
 	if (subType == 0) // Top tile
 	{
-		offset.setY(-150);
+		offset.setY(-(TILE_HEIGHT + size));
 		if (lane == 0)
 		{
 			offset.setX((float)-random);
@@ -142,7 +142,7 @@ void Obstacle::SetLane(int _lane)
 	}
 	else if (subType == 1) // Right tile
 	{
-		offset.setX(-150);
+		offset.setX(-(TILE_HEIGHT + size));
 		if (lane == 2)
 		{
 			offset.setY((float)-random);
@@ -154,7 +154,7 @@ void Obstacle::SetLane(int _lane)
 	}
 	else if (subType == 2) // Bottom tile
 	{
-		offset.setY(150);
+		offset.setY(TILE_HEIGHT + size);
 		if (lane == 4)
 		{
 			offset.setX((float)-random);
@@ -166,7 +166,7 @@ void Obstacle::SetLane(int _lane)
 	}
 	else if (subType == 3) // Left tile
 	{
-		offset.setX(150);
+		offset.setX(TILE_HEIGHT + size);
 		if (lane == 6)
 		{
 			offset.setY((float)-random);

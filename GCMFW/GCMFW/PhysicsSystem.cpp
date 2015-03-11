@@ -6,7 +6,7 @@
 PhysicsSystem* PhysicsSystem::instance = 0;
 int PhysicsSystem::fps = 0;
 Vehicle* PhysicsSystem::playerVehicle = NULL;
-float PhysicsSystem::track_speed = 1.0f;
+float PhysicsSystem::track_speed = 15.0f;
 
 PhysicsSystem::PhysicsSystem(void)
 {
@@ -22,7 +22,7 @@ PhysicsSystem::PhysicsSystem(void)
 	//store the ssn in render to render the particle system at the end of everything
 	Renderer::GetRenderer().SetSpaceshipSceneNode(spaceship_scene_node);
 
-	this->playerVehicle = new Vehicle(PlayerMesh, 4.0f, 0.0023f, 2, 0.02f, spaceship_scene_node);
+	this->playerVehicle = new Vehicle(PlayerMesh, 3.0f, 0.0023f, 2, 0.02f, spaceship_scene_node);
 	this->playerPhysNode = playerVehicle->GetPhysicsNode();
 	playerPhysNode->SetLinearVelocity(Vector3(0, 0, 0));
 }

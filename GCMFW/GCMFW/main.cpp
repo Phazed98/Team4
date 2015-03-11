@@ -110,16 +110,20 @@ int main(void)
 
 		if (temp != PhysicsSystem::GetVehicle()->GetCurrentPlaneID())
 		{
-			if (PhysicsSystem::GetVehicle()->GetCurrentPlaneID() == 0){
+			if (PhysicsSystem::GetVehicle()->GetCurrentPlaneID() == 0)
+			{
 				SoundManager::ChangSceneSound(2);
 			}
-			if (PhysicsSystem::GetVehicle()->GetCurrentPlaneID() == 1){
+			if (PhysicsSystem::GetVehicle()->GetCurrentPlaneID() == 1)
+			{
 				SoundManager::ChangSceneSound(4);
 			}
-			if (PhysicsSystem::GetVehicle()->GetCurrentPlaneID() == 2){
+			if (PhysicsSystem::GetVehicle()->GetCurrentPlaneID() == 2)
+			{
 				SoundManager::ChangSceneSound(1);
 			}
-			if (PhysicsSystem::GetVehicle()->GetCurrentPlaneID() == 3){
+			if (PhysicsSystem::GetVehicle()->GetCurrentPlaneID() == 3)
+			{
 				SoundManager::ChangSceneSound(3);
 			}
 			temp = PhysicsSystem::GetVehicle()->GetCurrentPlaneID();

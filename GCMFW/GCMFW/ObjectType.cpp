@@ -42,6 +42,29 @@ void ObjectType::Update(float msec)
 			}
 		}
 	}
+	else if (type == 2)
+	{
+		float speed = PhysicsSystem::GetTrackSpeed();
+		physicsNode->SetPosition(physicsNode->GetPosition() + Vector3(0, 0, speed));
+		checkPointTimer -= msec;
+		//PhysicsSystem::GetPhysicsSystem().SetCheckPointTimer(checkPointTimer / 1000);
+
+		if (physicsNode->GetPosition().getZ() > 0 && increaseTimer)
+		{
+			checkPointTimer += 10000 + resetDistance;
+
+			increaseTimer = false;
+		}
+
+		if (physicsNode->GetPosition().getZ() > (resetDistance))
+		{
+			reset();
+			resetDistance += 1000;
+			increaseTimer = true;
+		}
+
+	}
+
 }
 
 

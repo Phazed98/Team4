@@ -14,26 +14,10 @@ You can completely change all of this if you want, it's your game!
 */
 MyGame::MyGame()
 {
-	//std::cout << "Loadede MyGame Constructor and Mesh" << std::endl;
-	//timer = 0;
-	
-
-	//cube = new OBJMesh(MESHDIR"cube.obj");
-	//cube->SetDefaultTexture(*GCMRenderer::LoadGTF("/Textures/borg.gtf"));
-
-	////sphere = new OBJMesh(MESHDIR"SR-71_Blackbird.obj");
-	//sphere = new OBJMesh(MESHDIR"cube.obj");
-	//sphere->SetDefaultTexture(*GCMRenderer::LoadGTF("/Textures/borg.gtf"));
-
-	//quad = Mesh::GenerateQuad();
-
-	std::cout << "Loaded MyGame Constructor and Mesh" << std::endl;
 	//Set Timers and Speed
 	timer = 0;
 	count_time = 0;    //new control shoot the bullets   4.2.2015 Daixi
 	Speed_Player = 1;  //control the player speed
-
-
 
 	elements.push_back(top);
 	elements.push_back(right);
@@ -79,80 +63,41 @@ MyGame::MyGame()
 	for (int i = 0; i < 7; i++)
 	{
 		ObjectType* plane = BuildObjectEntity(0, 2);
-		plane->SetPos(Vector3(0.0f, -500.0f, -i * 800.0f));
-		
+		plane->SetPos(Vector3(0.0f, -TILE_CENTRE_OFFSET, -i * 800.0f));
 		if (i != 6)
 			plane->setState(2);
-		
 		allEntities.push_back(plane);
 	}
 
 	for (int i = 0; i < 7; i++)
 	{
 		ObjectType* plane = BuildObjectEntity(0, 0);
-		plane->SetPos(Vector3(0.0f, 500.0f, -i * 800.0f));
-		
+		plane->SetPos(Vector3(0.0f, TILE_CENTRE_OFFSET, -i * 800.0f));
 		if (i != 6)
 			plane->setState(2);
-		
 		allEntities.push_back(plane);
 	}
 
 	for (int i = 0; i < 7; i++)
 	{
 		ObjectType* plane = BuildObjectEntity(0, 1);
-		plane->SetPos(Vector3(500.0f, 0.0f, -i * 800.0f));
+		plane->SetPos(Vector3(TILE_CENTRE_OFFSET, 0.0f, -i * 800.0f));
 		if (i != 6)
 			plane->setState(2);
-		
 		allEntities.push_back(plane);
 	}
 
 	for (int i = 0; i < 7; i++)
 	{
 		ObjectType* plane = BuildObjectEntity(0, 3);
-		plane->SetPos(Vector3(-500.0f, 0.0f, -i * 800.0f));
-		
+		plane->SetPos(Vector3(-TILE_CENTRE_OFFSET, 0.0f, -i * 800.0f));
 		if (i != 6)
 			plane->setState(2);
-		
 		allEntities.push_back(plane);
 	}
 
+	setCurrentState(GAME_PLAYING);
 
-
-	/*for (int x = 0; x <50; x += 10)
-	{
-		GameEntity* cubeEntity = BuildCubeEntity(5, Vector3(x,x,0));
-		allEntities.push_back(cubeEntity);
-	}*/
-
-
-	//for (int x = 0; x < NUMBEROFPLANES; x++)
-	//{
-	//	//BuildCubeEntity
-	//	//upperPlanes[x] = BuildCubeEntity(10, Vector3(TILE_CENTRE_OFFSET, 0, 0));
-	//	//lowerPlanes[x] = BuildCubeEntity(10, Vector3(0, TILE_CENTRE_OFFSET, 0));
-	//	//rightPlanes[x] = BuildCubeEntity(10, Vector3(-TILE_CENTRE_OFFSET, 0, 0));
-	//	//leftPlanes[x] = BuildCubeEntity(10, Vector3(0, -TILE_CENTRE_OFFSET, 0));
-
-	//	upperPlanes[x] = BuildPlaneEntity(0);
-	//	rightPlanes[x] = BuildPlaneEntity(1);
-	//	lowerPlanes[x] = BuildPlaneEntity(2);
-	//	leftPlanes[x]  = BuildPlaneEntity(3);
-
-	//	allEntities.push_back(upperPlanes[x]);
-	//	allEntities.push_back(lowerPlanes[x]);
-	//	allEntities.push_back(rightPlanes[x]);
-	//	allEntities.push_back(leftPlanes[x]);
-	//}
-	
-
-	/*GameEntity* cubeEntity2 = BuildCubeEntity(5, Vector3(10,10,10));
-	allEntities.push_back(cubeEntity2);*/
-
-	//GameEntity* sphereEntity = BuildCubeEntity(80,Vector3(20,10,30));
-	//allEntities.push_back(sphereEntity);
 }
 
 MyGame::~MyGame(void)
@@ -176,6 +121,16 @@ void MyGame::UpdateGame(float msec)
 	if (currentGameState != GAME_PLAYING)
 		return;
 
+
+	if (Input::ButtonDown(INPUT_L1))
+	{
+		PhysicsSystem::SetTrackSpeed(PhysicsSystem::GetTrackSpeed() - 0.5f);
+	}
+	else if (Input::ButtonDown(INPUT_R1))
+	{
+		PhysicsSystem::SetTrackSpeed(PhysicsSystem::GetTrackSpeed() + 0.5f);
+	}
+
 	if (gameCamera)
 	{
 		gameCamera->Update(msec);
@@ -185,6 +140,8 @@ void MyGame::UpdateGame(float msec)
 	{
 		(*i)->Update(msec);
 	}
+
+	//timer += 0.001f;
 
 	//Car = PhysicsSystem::GetPhysicsSystem().GetVehicle();
 
@@ -251,49 +208,6 @@ GameEntity* MyGame::BuildQuadEntity(float size)
 	p->SetInverseInertia(InertialMatrixHelper::createImmovableInvInertial());
 	p->SetCollisionVolume(new CollisionPlane(Vector3(0, 1, 0), 0));
 	GameEntity*g = new GameEntity(s, p);
-	g->ConnectToSystems();
-	return g;
-}
-
-
-GameEntity* MyGame::BuildPlaneEntity(int position)
-{
-
-	SceneNode* s = new SceneNode(cube);
-	PhysicsNode* p = new PhysicsNode();
-
-	if (position == 0)//Top
-	{
-		std::cout << 0 << std::endl;
-		s->SetModelScale(Vector3(TILE_WIDTH, TILE_HEIGHT, TILE_DEPTH));
-		p->SetPosition(Vector3(0, TILE_CENTRE_OFFSET, 0));
-	}
-
-	if (position == 1)//Bottom
-	{
-		std::cout << 1 << std::endl;
-		s->SetModelScale(Vector3(TILE_WIDTH, TILE_HEIGHT, TILE_DEPTH));
-		p->SetPosition(Vector3(TILE_CENTRE_OFFSET, 0, 0));
-		Vector4 rotVec = MathHelper::vec3ToEuler(0, 0, 90);
-		p->SetOrientation(Quat(rotVec.getX(), rotVec.getY(), rotVec.getZ(), rotVec.getW()));
-	}
-	if (position == 2)//Right
-	{
-		std::cout << 2 << std::endl;
-		s->SetModelScale(Vector3(TILE_WIDTH, TILE_HEIGHT, TILE_DEPTH));
-		p->SetPosition(Vector3(0, -TILE_CENTRE_OFFSET, 0));
-	}
-	if (position == 3)//Left
-	{
-		std::cout << 3 << std::endl;
-		s->SetModelScale(Vector3(TILE_WIDTH, TILE_HEIGHT, TILE_DEPTH));
-		p->SetPosition(Vector3(-TILE_CENTRE_OFFSET, 0, 0));
-		Vector4 rotVec = MathHelper::vec3ToEuler(0, 0, 90);
-		p->SetOrientation(Quat(rotVec.getX(), rotVec.getY(), rotVec.getZ(), rotVec.getW()));
-	}
-
-	//p->SetPosition(Vector3(0, 0, 0));
-	GameEntity* g = new GameEntity(s, p);
 	g->ConnectToSystems();
 	return g;
 }
@@ -374,6 +288,7 @@ ObjectType* MyGame::BuildObjectEntity(int type, int subType)
 	return g;
 }
 
+//creates a new Obstacle
 Obstacle* MyGame::BuildObstacleEntity(float size, int type, int subType, ObjectType* _obj, int _obstacle_type)
 {
 	SceneNode* s = new SceneNode(cube);
@@ -393,6 +308,8 @@ Obstacle* MyGame::BuildObstacleEntity(float size, int type, int subType, ObjectT
 
 	return g;
 }
+
+
 
 //creates a new Obstacle
 //Position defines the plane its on 0-top, 1-bottom, 2-right, 3-left
@@ -561,8 +478,6 @@ void MyGame::handlePlanes(float msec)
 						reference[i].pop_back();
 
 					reference[i].push_back(elements[i][x]); //Add the last tile to be used to the references vector
-					
-					
 					if ((rand() % 100 + 1) > 50)
 					{
 						if (getDrawingPlanes(i) > 0)

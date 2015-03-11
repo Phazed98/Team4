@@ -619,9 +619,12 @@ void Vehicle::GetUserInput()
 	}
 
 
-
+	float x, y;
+	Input::GetJoypadMovement(x, y);
 	//Statement to return the vehicle to flat rotation after A or D are released. 
-	if (!(Input::ButtonDown(INPUT_SQUARE)) && !(Input::ButtonDown(INPUT_CIRCLE)))
+	if (abs(x) < 0.25f)
+//	if (!(Input::ButtonDown(INPUT_SQUARE)) && !(Input::ButtonDown(INPUT_CIRCLE)))
+	//if (!(Input::ButtonDown(INPUT_SQUARE)) && !(Input::ButtonDown(INPUT_CIRCLE)))
 	{
 		if (rotationOnPlane < -0.02)
 		{
@@ -636,8 +639,8 @@ void Vehicle::GetUserInput()
 			PhysNode->SetAngularVelocity(Vector3(0, 0, 0));
 		}
 	}
-
-	if (Input::ButtonDown(INPUT_CIRCLE))
+	if (x>0)
+//	if (Input::ButtonDown(INPUT_CIRCLE))
 	{
 		//rotate vehicle if not at max rotation
 		if (rotationOnPlane > -MAX_VEHICLE_X_ROTATION)
@@ -651,7 +654,8 @@ void Vehicle::GetUserInput()
 		}
 	}
 
-	if (Input::ButtonDown(INPUT_SQUARE))
+	if (x<0)	
+//	if (Input::ButtonDown(INPUT_SQUARE))
 	{
 		//rotate vehicle if not at max rotation
 		if (rotationOnPlane < MAX_VEHICLE_X_ROTATION)
