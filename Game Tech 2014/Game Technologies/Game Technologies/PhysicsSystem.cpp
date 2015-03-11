@@ -13,23 +13,26 @@ PhysicsSystem::PhysicsSystem(void)
 {
 	//Sam - moving here for scoping reasons
 	OBJMesh* PlayerMesh = new OBJMesh(MESHDIR"SR-71_Blackbird.obj");
+
+	//------------------------------------------------------------------------------------
 	//add by steven because it should use render instance
 	spaceship_scene_node = new SpaceshipSceneNode(PlayerMesh);
 	//store the ssn in render to render the particle system at the end of everything
 	Renderer::GetRenderer().SetSpaceshipSceneNode(spaceship_scene_node);
+	//-----------------------------------------------------------------------------------------
 
-	this->playerVehicle = new Vehicle(PlayerMesh, 4.0f, 0.0023f, 2, 0.02f, spaceship_scene_node);
+	this->playerVehicle = new Vehicle(PlayerMesh, 3.0f, 0.0023f, 2, 0.02f, spaceship_scene_node);
 	this->playerPhysNode = playerVehicle->GetPhysicsNode();
 	playerPhysNode->SetLinearVelocity(Vector3(0, 0, 0));
 
+	//Added by Sam
+	maxTrackSpeed = track_speed;
+	canDie = false;
 }
 
 PhysicsSystem::~PhysicsSystem(void)
 {
-	for (unsigned int i = 0; i < allSprings.size(); i++) 
-	{
-		delete allSprings[i];
-	}
+
 }
 
 void	PhysicsSystem::Update(float msec)
@@ -38,6 +41,17 @@ void	PhysicsSystem::Update(float msec)
 	nbFrames++;
 	time += msec;
 
+	//--------added by sam-----------------------
+	//Update max track speed
+	maxTrackSpeed += (msec / DIFFICULTY_SPEED_INCREASE);
+
+	//if not bouncing due to collision, set track speed to max speed
+	if (!playerIsReversing && !playerIsAccelerating)
+	{
+		track_speed = maxTrackSpeed;
+	}
+	//--------------------------------------------
+
 	if (time >= 1000)
 	{
 		fps = nbFrames;
@@ -45,14 +59,6 @@ void	PhysicsSystem::Update(float msec)
 		time = 0;
 	}
 
-
-	//BroadPhaseCollisions();
-	//NarrowPhaseCollisions();
-
-	for (vector<Constraint*>::iterator i = allSprings.begin(); i != allSprings.end(); ++i) 
-	{
-		(*i)->Update(msec);
-	}
 
 	for (vector<PhysicsNode*>::iterator i = allNodes.begin(); i != allNodes.end(); ++i) 
 	{
@@ -66,119 +72,6 @@ void	PhysicsSystem::Update(float msec)
 
 
 
-//Original rubbish. Delete later
-//void	PhysicsSystem::NarrowPhaseCollisions()
-//{
-//	for (int i = 0; i < allNodes.size(); i++)
-//	{
-//		PhysicsNode& first = *allNodes[i];
-//		for (int j = i + 1; j < allNodes.size(); j++)
-//		{
-//			PhysicsNode& second = *allNodes[j];
-//
-//
-//			CollisionData* collisionData = new CollisionData();
-//			GJK* gjkObj = new GJK();
-//
-//
-//			if (gjkObj->CollisionDetection(first, second, collisionData))
-//			{
-//
-//			}
-//
-//			delete gjkObj; 
-//			delete collisionData;
-//		}
-//	}
-//}
-
-
-//Created by Sam 
-void	PhysicsSystem::BroadPhaseCollisions()
-{
-	//get current plane
-	//int currentPlaneIndex = GameClass::GetGameClass().GetCurrentPlaneIndex();
-	int currentPlaneIndex = 0; //TEMP ##################################################################
-
-	//only check collisions on the active player plane
-	//NOTE this will need changing a little if we add other physics objects in. 
-	switch (currentPlaneIndex)
-	{
-	case 0:
-		for (PhysicsNode* &node : *TilePhysicsNodeArray0)
-		{
-			//Check if POTENTIAL collision with player
-			if (CheckAABBCollision(*playerPhysNode, *node))
-			{
-				//Perform collision check between player and object
-				CollisionData* collisionData = new CollisionData();
-				GJK* gjkObj = new GJK();
-				if (gjkObj->CollisionDetection(*playerPhysNode, *node, collisionData))
-				{
-					//resolve collision
-					AddCollisionImpulse(*playerPhysNode, *node, collisionData);
-				}
-				delete gjkObj;
-				delete collisionData;
-			}
-		}
-		break;
-	case 1:
-		for (PhysicsNode* &node : *TilePhysicsNodeArray1)
-		{
-			//Check if POTENTIAL collision with player
-			if (CheckAABBCollision(*playerPhysNode, *node))
-			{
-				//Perform collision check between player and object
-				CollisionData* collisionData = new CollisionData();
-				GJK* gjkObj = new GJK();
-				if (gjkObj->CollisionDetection(*playerPhysNode, *node, collisionData))
-				{
-					//resolve collision
-					AddCollisionImpulse(*playerPhysNode, *node, collisionData);
-				}
-
-			}
-		}
-		break;
-	case 2:
-		for (PhysicsNode* &node : *TilePhysicsNodeArray2)
-		{
-			//Check if POTENTIAL collision with player
-			if (CheckAABBCollision(*playerPhysNode, *node))
-			{
-				//Perform collision check between player and object
-				CollisionData* collisionData = new CollisionData();
-				GJK* gjkObj = new GJK();
-				if (gjkObj->CollisionDetection(*playerPhysNode, *node, collisionData))
-				{
-					//resolve collision
-					AddCollisionImpulse(*playerPhysNode, *node, collisionData);
-				}
-
-			}
-		}
-		break;
-	case 3:
-		for (PhysicsNode* &node : *TilePhysicsNodeArray3)
-		{
-			//Check if POTENTIAL collision with player
-			if (CheckAABBCollision(*playerPhysNode, *node))
-			{
-				//Perform collision check between player and object
-				CollisionData* collisionData = new CollisionData();
-				GJK* gjkObj = new GJK();
-				if (gjkObj->CollisionDetection(*playerPhysNode, *node, collisionData))
-				{
-					//resolve collision
-					AddCollisionImpulse(*playerPhysNode, *node, collisionData);
-				}
-
-			}
-		}
-		break;
-	}
-}
 
 //Added by Sam - basic AABB for broadphase
 bool PhysicsSystem::CheckAABBCollision(PhysicsNode &n0, PhysicsNode &n1)
@@ -221,47 +114,7 @@ void	PhysicsSystem::RemoveNode(PhysicsNode* n)
 	}
 }
 
-void	PhysicsSystem::AddConstraint(Constraint* s) 
-{
-	allSprings.push_back(s);
-}
 
-void	PhysicsSystem::RemoveConstraint(Constraint* c)
-{
-	for (vector<Constraint*>::iterator i = allSprings.begin(); i != allSprings.end(); ++i) 
-	{
-		if ((*i) == c) 
-		{
-			allSprings.erase(i);
-			return;
-		}
-	}
-}
-
-void	PhysicsSystem::AddDebugDraw(DebugDrawer* d) 
-{
-	allDebug.push_back(d);
-}
-
-void	PhysicsSystem::RemoveDebugDraw(DebugDrawer* d)
-{
-	for (vector<DebugDrawer*>::iterator i = allDebug.begin(); i != allDebug.end(); ++i) 
-	{
-		if ((*i) == d) 
-		{
-			allDebug.erase(i);
-			return;
-		}
-	}
-}
-
-void    PhysicsSystem::DrawDebug() 
-{
-	for (vector<DebugDrawer*>::iterator i = allDebug.begin(); i != allDebug.end(); ++i) 
-	{
-		(*i)->DebugDraw();
-	}
-}
 
 void PhysicsSystem::AddCollisionImpulse(PhysicsNode &s0, PhysicsNode &s1, CollisionData* data)
 {
