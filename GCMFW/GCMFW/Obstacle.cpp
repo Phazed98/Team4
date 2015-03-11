@@ -21,6 +21,9 @@ Obstacle::Obstacle(ObjectType* _tile, SceneNode* s, PhysicsNode* p, int _type, i
 	{
 		renderNode->SetColour(Vector4(0.564f, 0.043f, 0.835f, 1.0f));
 	}
+
+	physicsNode->SetPosition(Vector3(1000, 1000, 1000));
+
 	goingLeft = true;
 
 	bullet = NULL;
@@ -176,6 +179,7 @@ void Obstacle::SetLane(int _lane)
 			offset.setY((float)random);
 		}
 	}
+
 }
 
 void Obstacle::Shoot()
@@ -183,4 +187,18 @@ void Obstacle::Shoot()
 	Vector3 direction = player->GetPosition() - physicsNode->GetPosition();
 	normalize(direction);
 	bullet->GetPhysicsNode().SetLinearVelocity(direction * 2);
+}
+
+void Obstacle::resetObstacle(){
+	state = 0;
+	physicsNode->SetPosition(Vector3(1000, 1000, 1000));
+	directionRand = rand() % 100 + 1;
+	if (directionRand > 30)
+	{
+		goingLeft = true;
+	}
+	else
+	{
+		goingLeft = false;
+	}
 }

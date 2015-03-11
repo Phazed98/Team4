@@ -12,6 +12,7 @@ PhysicsSystem::PhysicsSystem(void)
 {
 	time = 0;
 	nbFrames = 0;
+	maxTrackSpeed = 15.0f;
 
 	//Sam - moving here for scoping reasons
 	OBJMesh* PlayerMesh = new OBJMesh(MESHDIR"SR-71_Blackbird.obj");
@@ -25,6 +26,12 @@ PhysicsSystem::PhysicsSystem(void)
 	this->playerVehicle = new Vehicle(PlayerMesh, 3.0f, 0.0023f, 2, 0.02f, spaceship_scene_node);
 	this->playerPhysNode = playerVehicle->GetPhysicsNode();
 	playerPhysNode->SetLinearVelocity(Vector3(0, 0, 0));
+
+
+
+	playerIsReversing = false;
+	playerIsAccelerating = false;
+	gameSpeedFromTime = 0.0f;
 }
 
 PhysicsSystem::~PhysicsSystem(void)
@@ -41,16 +48,37 @@ void	PhysicsSystem::Update(float msec)
 	nbFrames++;
 	time += msec;
 
+	//--------added by sam-----------------------
+	//Update max track speed
+	//maxTrackSpeed += (msec / DIFFICULTY_SPEED_INCREASE);
+
+	//if not bouncing due to collision, set track speed to max speed
+	//if (!playerIsReversing && !playerIsAccelerating)
+	//{
+	//	track_speed = maxTrackSpeed;
+	//}
+	//--------------------------------------------
+
 	if (time >= 1000)
 	{
 		fps = nbFrames;
 		nbFrames = 0;
 		time = 0;
+		canDie = true;
 	}
 
 
-	//BroadPhaseCollisions();
-	//NarrowPhaseCollisions();
+	ObstacleCollisions();
+
+	if (canDie)
+	{
+		if (!CheckOnATile())
+		{
+			std::cout << " For those of you who dont know boobs loook like ( . Y . )" << std::endl;
+//			GameClass::GetGameClass().setCurrentState(GAME_PAUSED);
+		}
+	}
+
 
 	for (std::vector<Constraint*>::iterator i = allSprings.begin(); i != allSprings.end(); ++i)
 	{
@@ -68,33 +96,6 @@ void	PhysicsSystem::Update(float msec)
 }
 
 
-
-
-//Original rubbish. Delete later
-//void	PhysicsSystem::NarrowPhaseCollisions()
-//{
-//	for (int i = 0; i < allNodes.size(); i++)
-//	{
-//		PhysicsNode& first = *allNodes[i];
-//		for (int j = i + 1; j < allNodes.size(); j++)
-//		{
-//			PhysicsNode& second = *allNodes[j];
-//
-//
-//			CollisionData* collisionData = new CollisionData();
-//			GJK* gjkObj = new GJK();
-//
-//
-//			if (gjkObj->CollisionDetection(first, second, collisionData))
-//			{
-//
-//			}
-//
-//			delete gjkObj; 
-//			delete collisionData;
-//		}
-//	}
-//}
 
 
 //Created by Sam 
@@ -188,15 +189,15 @@ void	PhysicsSystem::BroadPhaseCollisions()
 bool PhysicsSystem::CheckAABBCollision(PhysicsNode &n0, PhysicsNode &n1)
 {
 	float AABBSum = n0.GetAABBHalfLength() + n1.GetAABBHalfLength();
-	float distance = n0.GetPosition().getZ() - n1.GetPosition().getZ();
+	float distance = abs(n0.GetPosition().getZ() - n1.GetPosition().getZ());
 	//check Z axis for early out
 	if (distance < AABBSum)
 	{
-		float distance = n0.GetPosition().getX() - n1.GetPosition().getX();
+		float distance = abs(n0.GetPosition().getX() - n1.GetPosition().getX());
 		//next is X axis
 		if (distance < AABBSum)
 		{
-			float distance = n0.GetPosition().getY() - n1.GetPosition().getY();
+			float distance = abs(n0.GetPosition().getY() - n1.GetPosition().getY());
 			//Y axis last
 			if (distance < AABBSum)
 			{
@@ -207,6 +208,29 @@ bool PhysicsSystem::CheckAABBCollision(PhysicsNode &n0, PhysicsNode &n1)
 	return false;
 }
 
+void	PhysicsSystem::reverseTrackDeccel()
+{
+	float normalisedProgress = (zAmountToReverse - distanceReversed) / zAmountToReverse;
+	track_speed = -(normalisedProgress * initialTrackSpeed);
+}
+
+
+void	PhysicsSystem::accelTrackToCurrentSpeed()
+{
+	//zero can be considered the 'initial' speed when we started accelerating. 
+	//LERP function will be sdjusted to give a result that speeds the player up QUICKER as it approaches the final speed (LERP normally slows towards goal)
+
+	//try reciprocal LERP
+	track_speed = track_speed + (1 / ((maxTrackSpeed - track_speed) * COLLISION_RECOVERY_SPEED));
+
+	//clamp (maybe not needed?) and end accel phase
+	if (track_speed > maxTrackSpeed || (maxTrackSpeed - track_speed) < 1.0f)
+	{
+		track_speed = maxTrackSpeed;
+		playerIsAccelerating = false;
+	}
+
+}
 
 void	PhysicsSystem::AddNode(PhysicsNode* n)
 {
@@ -224,6 +248,207 @@ void	PhysicsSystem::RemoveNode(PhysicsNode* n)
 		}
 	}
 }
+
+
+//Created by Sam 
+void	PhysicsSystem::ObstacleCollisions()
+{
+
+	if (!playerIsReversing)
+	{
+		for (int i = 0; i < Obstacles.size(); i++)
+		{
+			if (Obstacles[i]->getState() == 0)
+			{
+				//get other phys node (saves multiple get calls
+				PhysicsNode* otherObj = &(Obstacles.at(i)->GetPhysicsNode());
+				//check objects are close enough to collide
+				if (CheckAABBCollision(*playerPhysNode, *otherObj) == true)
+				{
+					//create the collision objects to test for an actual collision
+					CollisionData* collisionData = new CollisionData();
+					
+					//check for collision
+					
+					//link the amount reversed to both track speed
+					zAmountToReverse = COLLISION_BOUNCE_FACTOR * track_speed;
+					//check reverse amount doesnt go off the back of the current tile (in case no previous tile)
+					if (zAmountToReverse > (TILE_DEPTH - playerPhysNode->GetAABBHalfLength() - 10.0f)) //the 10.0 is just to prevent the player going right to the edge of the tile
+					{
+						zAmountToReverse = TILE_DEPTH - playerPhysNode->GetAABBHalfLength() - 10.0f;
+					}
+					//store forward track speed at moment of impact
+					initialTrackSpeed = track_speed;
+					//set track to be reversing
+					playerIsReversing = true;
+					track_speed = -track_speed;
+					//zero reverse distance so far
+					distanceReversed = 0.0f;
+					//set track accelerating to false (collision still possible if accelerating after collision
+					playerIsAccelerating = false;
+
+				}
+			}
+		}
+
+	}
+
+	else if (playerIsReversing)
+	{
+		//update distance reversed
+		distanceReversed += abs(track_speed);
+		//check if player has reversed (0.5f tolerance in z axis as player will never reach end point with LERP
+		//if (zAmountToReverse - distanceReversed < 0.5f)
+		float value = 0.5 * zAmountToReverse / 100;
+		if (((zAmountToReverse - distanceReversed) < value) || (zAmountToReverse - distanceReversed) < 0.5f || track_speed > -0.05f)
+			//
+		{
+			//stop reverse
+			playerIsReversing = false;
+			//start accelerating back to track speed
+			playerIsAccelerating = true;
+			//zero the track speed
+			track_speed = 0.0f;
+		}
+		else
+		{
+			//reverse track using LERP weighted average
+			reverseTrackDeccel();
+		}
+	}
+	if (playerIsAccelerating)
+	{
+		accelTrackToCurrentSpeed();
+	}
+
+}
+
+void	PhysicsSystem::MissileCollisions()
+{
+	//having to limit the missile collisions to when not reversing
+	//missile collisions will simple stop the player rather than bouncing them back
+	//this is because we cannot garauntee a distance behind the player to the back edge of a tile
+	//therefore a bounce could push the player off the tile. This game is already too bloody hard......
+
+	if (!playerIsReversing)
+	{
+		for (int i = 0; i < Missiles.size(); i++)
+		{
+			//check objects are close enough to collide
+			if (CheckAABBCollision(*playerPhysNode, *Missiles[i]) == true)
+			{
+				//create the collision objects to test for an actual collision
+				
+				track_speed = 0.0f;
+				playerIsAccelerating = true;
+
+				//also 'despawn' missile from track
+				Missiles[i]->SetPosition(Vector3(1000.0f, 1000.0f, 1000.0f));
+
+			}
+
+		}
+
+	}
+}
+
+bool	PhysicsSystem::CheckOnATile()
+{
+	//get current plane
+	int currentPlaneIndex = playerVehicle->GetCurrentPlaneID();
+
+	switch (currentPlaneIndex)
+	{
+	case 0:
+		//for all tiles on that plane
+		for (int i = 0; i < Plane0Tiles.size(); i++)
+		{
+			//check if front of vehicle is on the tile
+			if ((playerPhysNode->GetPosition().getZ() > Plane0Tiles[i]->GetPosition().getZ()) &&
+				(playerPhysNode->GetPosition().getZ() - playerPhysNode->GetAABBHalfLength()) < (Plane0Tiles[i]->GetPosition().getZ() + TILE_DEPTH))
+			{
+				//on a tile so return true as early out
+				return true;
+			}
+			//check if back of vehicle is on the tile
+			if ((playerPhysNode->GetPosition().getZ() < Plane0Tiles[i]->GetPosition().getZ()) &&
+				(playerPhysNode->GetPosition().getZ() + playerPhysNode->GetAABBHalfLength()) >(Plane0Tiles[i]->GetPosition().getZ() - TILE_DEPTH))
+			{
+				//on a tile so return true as early out
+				return true;
+			}
+		}
+		break;
+
+	case 1:
+		//for all tiles on that plane
+		for (int i = 0; i < Plane1Tiles.size(); i++)
+		{
+			//check if front of vehicle is on the tile
+			if ((playerPhysNode->GetPosition().getZ() > Plane1Tiles[i]->GetPosition().getZ()) &&
+				(playerPhysNode->GetPosition().getZ() - playerPhysNode->GetAABBHalfLength()) < (Plane1Tiles[i]->GetPosition().getZ() + TILE_DEPTH))
+			{
+				//on a tile so return true as early out
+				return true;
+			}
+			//check if back of vehicle is on the tile
+			if ((playerPhysNode->GetPosition().getZ() < Plane1Tiles[i]->GetPosition().getZ()) &&
+				(playerPhysNode->GetPosition().getZ() + playerPhysNode->GetAABBHalfLength()) >(Plane1Tiles[i]->GetPosition().getZ() - TILE_DEPTH))
+			{
+				//on a tile so return true as early out
+				return true;
+			}
+		}
+		break;
+
+	case 2:
+		//for all tiles on that plane
+		for (int i = 0; i < Plane2Tiles.size(); i++)
+		{
+			//check if front of vehicle is on the tile
+			if ((playerPhysNode->GetPosition().getZ()> Plane2Tiles[i]->GetPosition().getZ()) &&
+				(playerPhysNode->GetPosition().getZ() - playerPhysNode->GetAABBHalfLength()) < (Plane2Tiles[i]->GetPosition().getZ() + TILE_DEPTH))
+			{
+				//on a tile so return true as early out
+				return true;
+			}
+			//check if back of vehicle is on the tile
+			if ((playerPhysNode->GetPosition().getZ() < Plane2Tiles[i]->GetPosition().getZ()) &&
+				(playerPhysNode->GetPosition().getZ() + playerPhysNode->GetAABBHalfLength()) >(Plane2Tiles[i]->GetPosition().getZ() - TILE_DEPTH))
+			{
+				//on a tile so return true as early out
+				return true;
+			}
+		}
+		break;
+
+	case 3:
+		//for all tiles on that plane
+		for (int i = 0; i < Plane3Tiles.size(); i++)
+		{
+			//check if front of vehicle is on the tile
+			if ((playerPhysNode->GetPosition().getZ() > Plane3Tiles[i]->GetPosition().getZ()) &&
+				(playerPhysNode->GetPosition().getZ() - playerPhysNode->GetAABBHalfLength()) < (Plane3Tiles[i]->GetPosition().getZ() + TILE_DEPTH))
+			{
+				//on a tile so return true as early out
+				return true;
+			}
+			//check if back of vehicle is on the tile
+			if ((playerPhysNode->GetPosition().getZ() < Plane3Tiles[i]->GetPosition().getZ()) &&
+				(playerPhysNode->GetPosition().getZ() + playerPhysNode->GetAABBHalfLength()) >(Plane3Tiles[i]->GetPosition().getZ() - TILE_DEPTH))
+			{
+				//on a tile so return true as early out
+				return true;
+			}
+		}
+		break;
+	}
+
+	//not on any tiles on its plane.....return false.
+	return false;
+}
+
+
 
 void	PhysicsSystem::AddConstraint(Constraint* s)
 {

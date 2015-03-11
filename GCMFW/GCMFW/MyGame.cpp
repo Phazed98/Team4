@@ -67,7 +67,13 @@ MyGame::MyGame()
 		if (i != 6)
 			plane->setState(2);
 		allEntities.push_back(plane);
+
+		//-----------------------------------------------------------------------------
+		PhysicsSystem::GetPhysicsSystem().GetPlane2Tiles()->push_back(&(plane->GetPhysicsNode()));
+		//-----------------------------------------------------------------------------
 	}
+
+
 
 	for (int i = 0; i < 7; i++)
 	{
@@ -76,6 +82,10 @@ MyGame::MyGame()
 		if (i != 6)
 			plane->setState(2);
 		allEntities.push_back(plane);
+
+		//-----------------------------------------------------------------------------
+		PhysicsSystem::GetPhysicsSystem().GetPlane0Tiles()->push_back(&(plane->GetPhysicsNode()));
+		//-----------------------------------------------------------------------------
 	}
 
 	for (int i = 0; i < 7; i++)
@@ -85,6 +95,10 @@ MyGame::MyGame()
 		if (i != 6)
 			plane->setState(2);
 		allEntities.push_back(plane);
+
+		//-----------------------------------------------------------------------------
+		PhysicsSystem::GetPhysicsSystem().GetPlane1Tiles()->push_back(&(plane->GetPhysicsNode()));
+		//-----------------------------------------------------------------------------
 	}
 
 	for (int i = 0; i < 7; i++)
@@ -94,6 +108,9 @@ MyGame::MyGame()
 		if (i != 6)
 			plane->setState(2);
 		allEntities.push_back(plane);
+		//-----------------------------------------------------------------------------
+		PhysicsSystem::GetPhysicsSystem().GetPlane3Tiles()->push_back(&(plane->GetPhysicsNode()));
+		//-----------------------------------------------------------------------------
 	}
 
 	setCurrentState(GAME_PLAYING);
@@ -130,6 +147,8 @@ void MyGame::UpdateGame(float msec)
 	{
 		PhysicsSystem::SetTrackSpeed(PhysicsSystem::GetTrackSpeed() + 0.5f);
 	}
+
+	PhysicsSystem::SetTrackSpeed(max(PhysicsSystem::GetTrackSpeed(),30.0f));
 
 	if (gameCamera)
 	{
@@ -380,6 +399,9 @@ void MyGame::CreateObstacle(ObjectType* _obj)
 
 		//}
 		obstacleElements[_obj->getSubType()].push_back(temp);
+		//--------------------
+		PhysicsSystem::GetPhysicsSystem().GetObstacles()->push_back(temp);
+		//---------------------------
 	}
 	//reference exists, but everything is running/working
 	else if (empty == -1)
@@ -397,6 +419,9 @@ void MyGame::CreateObstacle(ObjectType* _obj)
 					allEntities.push_back(bul);
 				}*/
 				obstacleElements[_obj->getSubType()].push_back(temp);
+				//---------------------------
+				PhysicsSystem::GetPhysicsSystem().GetObstacles()->push_back(temp);
+				//---------------------------
 			}
 		}
 	}
@@ -465,7 +490,27 @@ void MyGame::handlePlanes(float msec)
 				//create new
 				if (getEmptyIndex(i) == -1)
 				{
-					allEntities.push_back(BuildObjectEntity(0, i));
+					ObjectType* obj = BuildObjectEntity(0, i);
+					allEntities.push_back(obj);
+					//-----------------------------
+					switch (i)
+					{
+					case (0) :
+						PhysicsSystem::GetPhysicsSystem().GetPlane0Tiles()->push_back(&(obj->GetPhysicsNode()));
+						break;
+					case (1) :
+						PhysicsSystem::GetPhysicsSystem().GetPlane1Tiles()->push_back(&(obj->GetPhysicsNode()));
+						break;
+					case (2) :
+						PhysicsSystem::GetPhysicsSystem().GetPlane2Tiles()->push_back(&(obj->GetPhysicsNode()));
+						break;
+					case (3) :
+						PhysicsSystem::GetPhysicsSystem().GetPlane3Tiles()->push_back(&(obj->GetPhysicsNode()));
+						break;
+					}
+					//-----------------------------
+
+
 				}
 				else
 				{

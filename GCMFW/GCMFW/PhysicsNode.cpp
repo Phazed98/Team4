@@ -135,36 +135,15 @@ Matrix4		PhysicsNode::BuildTransform()
 	return m;
 }
 
-/*
-
-
-
-FFFFFFFFFFFFFFFFFFFFFFIIIIIIIIIIXXXXXXX       XXXXXXX     LLLLLLLLLLL                            AAA         TTTTTTTTTTTTTTTTTTTTTTTEEEEEEEEEEEEEEEEEEEEEERRRRRRRRRRRRRRRRR
-F::::::::::::::::::::FI::::::::IX:::::X       X:::::X     L:::::::::L                           A:::A        T:::::::::::::::::::::TE::::::::::::::::::::ER::::::::::::::::R
-F::::::::::::::::::::FI::::::::IX:::::X       X:::::X     L:::::::::L                          A:::::A       T:::::::::::::::::::::TE::::::::::::::::::::ER::::::RRRRRR:::::R
-FF::::::FFFFFFFFF::::FII::::::IIX::::::X     X::::::X     LL:::::::LL                         A:::::::A      T:::::TT:::::::TT:::::TEE::::::EEEEEEEEE::::ERR:::::R     R:::::R
-F:::::F       FFFFFF  I::::I  XXX:::::X   X:::::XXX       L:::::L                          A:::::::::A     TTTTTT  T:::::T  TTTTTT  E:::::E       EEEEEE  R::::R     R:::::R
-F:::::F               I::::I     X:::::X X:::::X          L:::::L                         A:::::A:::::A            T:::::T          E:::::E               R::::R     R:::::R
-F::::::FFFFFFFFFF     I::::I      X:::::X:::::X           L:::::L                        A:::::A A:::::A           T:::::T          E::::::EEEEEEEEEE     R::::RRRRRR:::::R
-F:::::::::::::::F     I::::I       X:::::::::X            L:::::L                       A:::::A   A:::::A          T:::::T          E:::::::::::::::E     R:::::::::::::RR
-F:::::::::::::::F     I::::I       X:::::::::X            L:::::L                      A:::::A     A:::::A         T:::::T          E:::::::::::::::E     R::::RRRRRR:::::R
-F::::::FFFFFFFFFF     I::::I      X:::::X:::::X           L:::::L                     A:::::AAAAAAAAA:::::A        T:::::T          E::::::EEEEEEEEEE     R::::R     R:::::R
-F:::::F               I::::I     X:::::X X:::::X          L:::::L                    A:::::::::::::::::::::A       T:::::T          E:::::E               R::::R     R:::::R
-F:::::F               I::::I  XXX:::::X   X:::::XXX       L:::::L         LLLLLL    A:::::AAAAAAAAAAAAA:::::A      T:::::T          E:::::E       EEEEEE  R::::R     R:::::R
-FF:::::::FF           II::::::IIX::::::X     X::::::X     LL:::::::LLLLLLLLL:::::L   A:::::A             A:::::A   TT:::::::TT      EE::::::EEEEEEEE:::::ERR:::::R     R:::::R
-F::::::::FF           I::::::::IX:::::X       X:::::X     L::::::::::::::::::::::L  A:::::A               A:::::A  T:::::::::T      E::::::::::::::::::::ER::::::R     R:::::R
-F::::::::FF           I::::::::IX:::::X       X:::::X     L::::::::::::::::::::::L A:::::A                 A:::::A T:::::::::T      E::::::::::::::::::::ER::::::R     R:::::R
-FFFFFFFFFFF           IIIIIIIIIIXXXXXXX       XXXXXXX     LLLLLLLLLLLLLLLLLLLLLLLLAAAAAAA                   AAAAAAATTTTTTTTTTT      EEEEEEEEEEEEEEEEEEEEEERRRRRRRR     RRRRRRR
-
-
-
-*/
 //Added by Sam for physics broadphase
 void PhysicsNode::ConfigureAABBHalfLength()
 {
 	Vector3 point = target->GetMesh()->GetFurthestVert();
 	//scale the point
-	//point = point * target->GetModelScale();
+
+	point.setX(point.getX() * target->GetModelScale().getX());
+	point.setY(point.getY() * target->GetModelScale().getY());
+	point.setY(point.getZ() * target->GetModelScale().getZ());;
 
 	//set the AABB half length
 	AABBHalfLength = length(point);

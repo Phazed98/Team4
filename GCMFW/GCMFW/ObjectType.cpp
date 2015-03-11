@@ -41,6 +41,7 @@ void ObjectType::Update(float msec)
 				state = 3;
 			}
 		}
+
 	}
 	else if (type == 2)
 	{
@@ -64,6 +65,7 @@ void ObjectType::Update(float msec)
 		}
 
 	}
+
 
 }
 
@@ -110,4 +112,5 @@ void ObjectType::reset()
 void ObjectType::SetPos(Vector3 pos)
 {
 	physicsNode->SetPosition(pos);
+
 }
