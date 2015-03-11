@@ -119,6 +119,13 @@ Renderer::~Renderer(void)
 
 void Renderer::fullyInit()
 {
+	point_light_sphere = new OBJMesh("../../Meshes/ico.obj");
+	screen_quad = Mesh::GenerateQuad();
+	defer_shader = new Shader(SHADERDIR"DeferGeometryVertex.glsl", SHADERDIR"DeferGeometryFragment.glsl");
+	point_light_shader = new Shader(SHADERDIR"TechVertex.glsl", SHADERDIR"PointLightFragment.glsl");
+	dir_light_shader = new Shader(SHADERDIR"TechVertex.glsl", SHADERDIR"DirectionLightFragment.glsl");
+
+
 	camera = NULL;
 	total_sec_pass = 0;
 	cd = 10000;
@@ -175,7 +182,9 @@ void Renderer::fullyInit()
 
 	if (!simpleShader->LinkProgram() || !textShader->LinkProgram() ||
 		!backgroundShader->LinkProgram() || !menuShader->LinkProgram() ||
-		!motion_blur_shader->LinkProgram() || !water_plane_shader->LinkProgram())
+		!motion_blur_shader->LinkProgram() || !water_plane_shader->LinkProgram()||
+		!defer_shader->LinkProgram() || !point_light_shader->LinkProgram() ||
+		!dir_light_shader->LinkProgram())
 	{
 		cout << "error in link shaders" << endl;
 		return;
@@ -196,6 +205,14 @@ void Renderer::fullyInit()
 		return;
 	}
 
+	if (!InitDSBuffer()){
+		//initilize the motion blur buffer
+		//one depth buffer and one color buffer
+		//one frame buffer 
+		cout << "error in init defer buffer!!" << endl;
+		return;
+	}
+
 	//Sam - moving here for scoping reasons
 	OBJMesh* PlayerMesh = new OBJMesh(MESHDIR"SR-71_Blackbird.obj");
 
@@ -213,10 +230,7 @@ void Renderer::UpdateScene(float msec)
 		toggleWireFrame();
 	}
 
-	if (Window::GetKeyboard()->KeyTriggered(KEYBOARD_M)) //Build Cube
-	{
-		render_motion_blur = !render_motion_blur;
-	}
+	
 
 
 	time += msec;
@@ -247,16 +261,36 @@ void Renderer::UpdateScene(float msec)
 void Renderer::RenderScene()
 {
 	
-	if (render_motion_blur){
+	if (!render_motion_blur){
 
 
 
-		RenderMotionBlur();
+	//	RenderMotionBlur();
+		//render the particle to a texture firstly
+		//this scene store in particle_ColourTex
+		RenderParticleToTexture();
+		
+		BuildNodeLists(root);
+		SortNodeLists();
+
+		deferRenderPass();
+		ClearNodeLists();
+
+	//	CombinePass();
+
+		/*glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+		glBindFramebuffer(GL_READ_FRAMEBUFFER, defer_FBO);
+		glReadBuffer(GL_COLOR_ATTACHMENT4);
+		glBlitFramebuffer(0, 0, width, height,
+			0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_LINEAR);*/
+
+
+		PresentMotionBlur();
 
 		//Display HUD
-		displayInformation();
-
+//		displayInformation();
 		
+	//	DSFinalPass();
 
 		SwapBuffers();
 	}
@@ -264,6 +298,35 @@ void Renderer::RenderScene()
 		RenderWithoutPostProcessing();
 	}
 
+}
+
+void Renderer::CombinePass(){
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, particle_FBO);
+	glDrawBuffer(GL_COLOR_ATTACHMENT1);
+
+	glDisable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+	
+	glBlendFunc(GL_ONE, GL_ONE);
+
+	glEnable(GL_CULL_FACE);
+	
+	glCullFace(GL_FRONT);
+	PushMatrix();
+	MatrixToIdentity();
+	projMatrix = Matrix4::Orthographic(-1, 1, 1, -1, -1, 1);
+	SetCurrentShader(simpleShader);
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), 0);
+
+	UpdateShaderMatrices();
+	quad->SetTexture(background_ColourTex);
+	quad->Draw();
+//	quad->SetTexture(defer_final_texture);
+//	quad->Draw();
+
+	glUseProgram(0);
+
+	PopMatrix();
 }
 
 void Renderer::RenderWithoutPostProcessing(){
@@ -275,55 +338,39 @@ void Renderer::RenderWithoutPostProcessing(){
 
 	if (camera)
 	{
-		textureMatrix.ToIdentity();
-		modelMatrix.ToIdentity();
-		viewMatrix = camera->BuildViewMatrix();
-		projMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float)width / (float)height, 60.0f);
-		frameFrustum.FromMatrix(projMatrix * viewMatrix);
-		
-
-		//Return to default 'usable' state every frame!
-		glEnable(GL_DEPTH_TEST);
-		glEnable(GL_CULL_FACE);
-		glDisable(GL_STENCIL_TEST);
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 
 		BuildNodeLists(root);
 		SortNodeLists();
-		DrawNodes();
+
+		deferRenderPass();
 		ClearNodeLists();
-
-		RenderUI();
-
-		DrawAfterBurner();
+		
+		//	RenderUI();
 		galaxy_system.Render(msec, viewMatrix, projMatrix);
+		DrawAfterBurner();
 		DrawTornado();
 		DrawGeyser();
 		DrawFire();
 
-		
-
 		//Display HUD
-		if (wireFrame)
-		{
-			toggleWireFrame();
-			//Display HUD
-			displayInformation();
-			toggleWireFrame();
-
-		}
-		else
-		{
-			displayInformation();
-		}
+		//if (wireFrame)
+		//{
+		//	toggleWireFrame();
+		//	//Display HUD
+		//	displayInformation();
+		//	toggleWireFrame();
+		//}
+		//else
+		//{
+		//	displayInformation();
+		//}
 	}
 
 	glUseProgram(0);
 
 
 	SwapBuffers();
+
 }
 
 void Renderer::RenderMotionBlur(){
@@ -372,26 +419,22 @@ void Renderer::PresentMotionBlur(){
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+	
+	PushMatrix();
+	MatrixToIdentity();
 	SetCurrentShader(motion_blur_shader);
 
-	
-
+	projMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float)width / (float)height, 60.0f);
+	viewMatrix = camera->BuildViewMatrix();
 	//update current viewMatrix
 	current_viewMatrix = viewMatrix;//get current camera view matrix
 	float track_speed = PhysicsSystem::GetTrackSpeed();
 //	previous_viewMatrix = current_viewMatrix;
-	previous_viewMatrix.values[14] = previous_viewMatrix.values[14] - track_speed;
-	/*
-	current_viewMatrix.values[12] = current_viewMatrix.values[12] / 1000;
-	current_viewMatrix.values[13] = current_viewMatrix.values[13] / 1000;
-	current_viewMatrix.values[14] = current_viewMatrix.values[14] / 1000;
-
-	previous_viewMatrix = viewMatrix;
-	previous_viewMatrix.values[14] = previous_viewMatrix.values[14] - 200;
-	*/
+	previous_viewMatrix.values[14] = current_viewMatrix.values[14] + track_speed/2;
+	
 	Matrix4 inverse_pv_matrix = Matrix4::InvertMatrix(projMatrix*current_viewMatrix);
 
-	//	previous_viewMatrix.values[14] = previous_viewMatrix.values[14] - 100;
+//		previous_viewMatrix.values[14] = previous_viewMatrix.values[14] - 1000;
 
 	Matrix4 previous_pv_matrix = projMatrix * previous_viewMatrix;
 
@@ -412,7 +455,7 @@ void Renderer::PresentMotionBlur(){
 		"backgroundTex"), 6);
 
 	glActiveTexture(GL_TEXTURE4);
-	glBindTexture(GL_TEXTURE_2D, motion_blur_DepthTex);
+	glBindTexture(GL_TEXTURE_2D, defer_depth_texture);
 
 	glActiveTexture(GL_TEXTURE5);
 	glBindTexture(GL_TEXTURE_2D, particle_ColourTex);
@@ -427,7 +470,7 @@ void Renderer::PresentMotionBlur(){
 	UpdateShaderMatrices();
 
 
-	quad_motion_blur->SetTexture(motion_blur_ColourTex);
+	quad_motion_blur->SetTexture(defer_final_texture);
 	quad_motion_blur->Draw();
 
 	previous_viewMatrix = current_viewMatrix;
@@ -946,49 +989,21 @@ void Renderer::RenderLoading(int percent, string message)
 void	Renderer::DrawNode(SceneNode*n)
 {
 	RenderType rt = n->GetRenderType();
-	switch (rt){
-	case WATER_PLANE:{
-		if (n->GetMesh())
-		{
-			SetCurrentShader(water_plane_shader);
-			glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "displaceStrength"), 0.3);
-			glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "time"), total_sec_pass);
-			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), 0);
-			UpdateShaderMatrices();
-
-			glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(), "modelMatrix"), 1, false, (float*)&(n->GetWorldTransform()*Matrix4::Scale(n->GetModelScale())));
-			glUniform4fv(glGetUniformLocation(currentShader->GetProgram(), "nodeColour"), 1, (float*)&n->GetColour());
-			if (n->GetMesh()->GetTexture() != NULL)
-				glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useTexture"), 1);
-			else
-				glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useTexture"), 0);
-
-			n->Draw(*this);
-
-			glUseProgram(0);
-
+	
+	glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(), "modelMatrix"),
+		1, false, (float*)&(n->GetWorldTransform()*Matrix4::Scale(n->GetModelScale())));
+	if (n->GetMesh()){
+		switch (rt){
+		case WATER_PLANE:{
+			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useDisplace"), 1);
+			break;
 		}
-		break;
-	}
-	default:{
-		if (n->GetMesh())
-		{
-			SetCurrentShader(simpleShader);
-			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), 0);
-			UpdateShaderMatrices();
-
-			glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(), "modelMatrix"), 1, false, (float*)&(n->GetWorldTransform()*Matrix4::Scale(n->GetModelScale())));
-			glUniform4fv(glGetUniformLocation(currentShader->GetProgram(), "nodeColour"), 1, (float*)&n->GetColour());
-			if (n->GetMesh()->GetTexture() != NULL)
-				glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useTexture"), 1);
-			else
-				glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useTexture"), 0);
-
-			n->Draw(*this);
-			glUseProgram(0);
+		default:{
+			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useDisplace"), 0);
+		}
 		}
 	}
-	}
+	n->Draw(*this);
 	
 }
 
@@ -1181,6 +1196,9 @@ bool Renderer::CreatMotionBlurBuffer(){
 }
 
 void Renderer::DrawAfterBurner(){
+	PushMatrix();
+	viewMatrix = camera->BuildViewMatrix();
+	projMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float)width / (float)height, 60.0f);
 	Matrix4 model_matrix = spaceship_scene_node->GetAfterburnerNode()->GetWorldTransform();
 	if (camera){
 
@@ -1189,31 +1207,53 @@ void Renderer::DrawAfterBurner(){
 
 	spaceship_scene_node->afterburner_system[0].Render(msec, model_matrix, projMatrix, viewMatrix);
 	spaceship_scene_node->afterburner_system[1].Render(msec, model_matrix, projMatrix, viewMatrix);
+	
+	galaxy_system.Render(msec, viewMatrix, projMatrix);
+	PopMatrix();
 }
 
 void Renderer::DrawTornado(){
+	PushMatrix();
+	viewMatrix = camera->BuildViewMatrix();
+	projMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float)width / (float)height, 60.0f);
+	Vector4 light_colour = Vector4(0, 0, 1, 1);
+
+	PointLight* pt = new PointLight(spaceship_scene_node->GetWorldTransform().GetPositionVector(), light_colour, 300);
+	point_lights.push_back(pt);
+
 	for (vector<TornadoSceneNode*>::iterator i = tornadoNode.begin(); i != tornadoNode.end(); ++i)
 	{
 		Matrix4 model_matrix2 = (*i)->GetTornadoNode()->GetWorldTransform();
 
-		//Matrix4 model_matrix = spaceship_scene_node->GetAfterburnerNode()->GetWorldTransform();
-		//viewMatrix.ToIdentity();
-		if (camera){
+		//steven added to update defer lighting info
+		Vector3 world_position = model_matrix2.GetPositionVector();
+		//	cout << world_position.z << endl;
+		if (world_position.z < 10){
+			//this is in the viewport render it
+			Vector4 light_colour = Vector4(1, 1, 0, 1);
+			PointLight* pt = new PointLight(world_position, light_colour, 500);
+			point_lights.push_back(pt);
 
-			viewMatrix = camera->BuildViewMatrix();
+			if (camera){
+				viewMatrix = camera->BuildViewMatrix();
+			}
+
+			tornado_system.Render(msec, model_matrix2, projMatrix, viewMatrix);
 		}
 
 
 
-		tornado_system.Render(msec, model_matrix2, projMatrix, viewMatrix);
+
 
 	}
-
-
+	PopMatrix();
 
 }
 
 void Renderer::DrawGeyser(){
+	PushMatrix();
+	viewMatrix = camera->BuildViewMatrix();
+	projMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float)width / (float)height, 60.0f);
 	for (vector<GeyserSceneNode*>::iterator i = geyserNode.begin(); i != geyserNode.end(); ++i)
 	{
 		Matrix4 model_matrix = (*i)->GetGeyserNode()->GetWorldTransform();
@@ -1224,9 +1264,14 @@ void Renderer::DrawGeyser(){
 
 		geyser_system.Render(msec, model_matrix, projMatrix, viewMatrix);
 	}
+	PopMatrix();
 }
 
 void Renderer::DrawFire(){
+	PushMatrix();
+	viewMatrix = camera->BuildViewMatrix();
+	projMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float)width / (float)height, 60.0f);
+
 	for (vector<FireSceneNode*>::iterator i = fireNode.begin(); i != fireNode.end(); ++i)
 	{
 		Matrix4 model_matrix = (*i)->GetFireNode()->GetWorldTransform();
@@ -1243,6 +1288,7 @@ void Renderer::DrawFire(){
 		fire_system.Render(msec, model_matrix, projMatrix, viewMatrix);
 
 	}
+	PopMatrix();
 }
 
 bool Renderer::CreatParticleBuffer(){
@@ -1274,9 +1320,12 @@ bool Renderer::CreatParticleBuffer(){
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
 		GL_TEXTURE_2D, particle_ColourTex, 0);
 
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1,
+		GL_TEXTURE_2D, background_ColourTex, 0);
+
 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE ||
-		!particle_ColourTex) {
+		!particle_ColourTex || !background_ColourTex) {
 		//check FBO attachment success using this command
 		return false;
 	}
@@ -1288,12 +1337,17 @@ void Renderer::RenderParticleToTexture(){
 	glBindFramebuffer(GL_FRAMEBUFFER, particle_FBO);
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-		GL_TEXTURE_2D, background_ColourTex, 0);
+	
+	glEnable(GL_BLEND);
+//	glBlendEquation(GL_FUNC_ADD);
+	glBlendFunc(GL_ONE, GL_ZERO);
+	
+	glDrawBuffer(GL_COLOR_ATTACHMENT1);
 	RenderBackground();
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-		GL_TEXTURE_2D, particle_ColourTex, 0);
-	galaxy_system.Render(msec, viewMatrix, projMatrix);
+	
+	/*glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1,
+		GL_TEXTURE_2D, particle_ColourTex, 0);*/
+	glDrawBuffer(GL_COLOR_ATTACHMENT0);
 	DrawAfterBurner();
 	
 	DrawTornado();
@@ -1352,4 +1406,263 @@ void Renderer::MatrixToIdentity(){
 	viewMatrix.ToIdentity();
 	projMatrix.ToIdentity();
 	textureMatrix.ToIdentity();
+}
+
+bool Renderer::InitDSBuffer(){
+	// Create the FBO
+	glGenFramebuffers(1, &defer_FBO);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, defer_FBO);
+
+	// Create the gbuffer textures
+	glGenTextures(4, defer_textures);
+
+
+	
+	
+
+	for (unsigned int i = 0; i < 4; i++) {
+		glBindTexture(GL_TEXTURE_2D, defer_textures[i]);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F, width, height, 0, GL_RGB, GL_FLOAT, NULL);
+		glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, defer_textures[i], 0);
+	}
+
+	
+
+	glGenTextures(1, &defer_depth_texture);
+	// depth
+	glBindTexture(GL_TEXTURE_2D, defer_depth_texture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, width, height, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, defer_depth_texture, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_TEXTURE_2D, defer_depth_texture, 0);
+	
+	glGenTextures(1, &defer_final_texture);
+	// final
+	glBindTexture(GL_TEXTURE_2D, defer_final_texture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT4, GL_TEXTURE_2D, defer_final_texture, 0);
+
+
+
+	GLenum Status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+
+	if (Status != GL_FRAMEBUFFER_COMPLETE) {
+		printf("FB error, status: 0x%x\n", Status);
+		return false;
+	}
+
+	// restore default FBO
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+
+	return true;
+}
+
+void Renderer::DSGeometryPass(){
+	glBindFramebuffer(GL_FRAMEBUFFER, defer_FBO);
+	GLenum DrawBuffers[] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2 };
+	glDrawBuffers(3, DrawBuffers);
+	glEnable(GL_DEPTH_TEST);
+	//open depth mask
+	glDepthMask(GL_TRUE);
+	//clean it
+	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+	
+
+	textureMatrix.ToIdentity();
+	modelMatrix.ToIdentity();
+	viewMatrix = camera->BuildViewMatrix();
+	projMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float)width / (float)height, 45.0f);
+	frameFrustum.FromMatrix(projMatrix * viewMatrix);
+
+	//	SetCurrentShader(water_plane_shader);
+	SetCurrentShader(defer_shader);
+
+	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "displaceStrength"), 0.3);
+	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "time"), total_sec_pass);
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), 0);
+	UpdateShaderMatrices();
+
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+
+
+	glEnable(GL_CULL_FACE);
+	glDisable(GL_STENCIL_TEST);
+	glDisable(GL_BLEND);
+
+	DrawNodes();
+
+
+	glUseProgram(0);
+
+	//we do not need to render depth buffer any more
+	glDepthMask(GL_FALSE);
+	glDisable(GL_DEPTH_TEST);
+}
+
+void Renderer::DSFinalPass(){
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, defer_FBO);
+
+
+	glReadBuffer(GL_COLOR_ATTACHMENT4);
+
+
+	glBlitFramebuffer(0, 0, width, height,
+		0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+}
+
+void Renderer::deferRenderPass(){
+	//just for clear the final texture
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, defer_FBO);
+	glDrawBuffer(GL_COLOR_ATTACHMENT4);
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	DSGeometryPass();//first pass draw everything to 3 color attachments(G-buffer)
+
+	glEnable(GL_STENCIL_TEST);
+	glEnable(GL_BLEND);
+	glBlendEquation(GL_FUNC_ADD);
+	glBlendFunc(GL_ONE, GL_ONE);
+
+	for (vector<PointLight*>::const_iterator i = point_lights.begin(); i != point_lights.end(); ++i){
+		DSStencilPass(*i);
+		DSPointLightsPass(*i);
+	}
+	glDisable(GL_STENCIL_TEST);
+
+	DSDirectionalLightPass();
+
+	//draw final texture
+//	DSFinalPass();
+
+
+
+
+	point_lights.clear();
+}
+void Renderer::DSDirectionalLightPass(){
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, defer_FBO);
+	glDrawBuffer(GL_COLOR_ATTACHMENT4);
+	PushMatrix();
+	SetCurrentShader(dir_light_shader);
+
+	MatrixToIdentity();
+	projMatrix = Matrix4::Orthographic(-1, 1, 1, -1, -1, 1);
+
+
+	UpdateShaderMatrices();
+
+	for (unsigned int i = 0; i < 3; i++) {
+		glActiveTexture(GL_TEXTURE2 + i);
+		glBindTexture(GL_TEXTURE_2D, defer_textures[i]);
+
+	}
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "gPositionMap"), 2);
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "gColorMap"), 3);
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "gNormalMap"), 4);
+
+	glUniform2f(glGetUniformLocation(currentShader->GetProgram(), "gScreenSize"), width, height);
+	glUniform3fv(glGetUniformLocation(currentShader->GetProgram(), "gEyeWorldPos"), 1, (float*)&camera->GetPosition());
+
+	screen_quad->Draw();
+
+	PopMatrix();
+}
+
+
+void Renderer::DSPointLightsPass(PointLight* pt){
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, defer_FBO);
+	glDrawBuffer(GL_COLOR_ATTACHMENT4);
+
+	glStencilFunc(GL_NOTEQUAL, 0, 0xFF);
+	glDisable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+	glBlendEquation(GL_FUNC_ADD);
+	glBlendFunc(GL_ONE, GL_ONE);
+
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_FRONT);
+	PushMatrix();
+	textureMatrix.ToIdentity();
+	modelMatrix.ToIdentity();
+	viewMatrix = camera->BuildViewMatrix();
+	projMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float)width / (float)height, 45.0f);
+	SetCurrentShader(point_light_shader);
+
+	for (unsigned int i = 0; i < 3; i++) {
+		glActiveTexture(GL_TEXTURE2 + i);
+		glBindTexture(GL_TEXTURE_2D, defer_textures[i]);
+
+	}
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "gPositionMap"), 2);
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "gColorMap"), 3);
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "gNormalMap"), 4);
+
+	glUniform2f(glGetUniformLocation(currentShader->GetProgram(), "gScreenSize"), width, height);
+	glUniform3fv(glGetUniformLocation(currentShader->GetProgram(), "gEyeWorldPos"), 1, (float*)&camera->GetPosition());
+
+
+	Vector3 pos = pt->GetPosition();
+	float   radius = pt->GetRadius();
+	Vector4 color = pt->GetColour();
+	modelMatrix = Matrix4::Translation(pos)*Matrix4::Scale(Vector3(radius, radius, radius));
+	UpdateShaderMatrices();
+	glUniform3fv(glGetUniformLocation(currentShader->GetProgram(), "lightPos"), 1, (float*)&pos);
+	glUniform4fv(glGetUniformLocation(currentShader->GetProgram(), "lightColour"), 1, (float*)&color);
+	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "lightRadius"), radius);
+
+	point_light_sphere->Draw();
+
+
+
+	PopMatrix();
+
+	glCullFace(GL_BACK);
+
+	//	glDisable(GL_BLEND);
+}
+
+void Renderer::DSStencilPass(PointLight* pt){
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, defer_FBO);
+	glDrawBuffer(GL_NONE);
+	glEnable(GL_DEPTH_TEST);
+
+	glDisable(GL_CULL_FACE);
+
+	glClear(GL_STENCIL_BUFFER_BIT);
+	glStencilFunc(GL_ALWAYS, 0, 0);
+
+	glStencilOpSeparate(GL_BACK, GL_KEEP, GL_INCR_WRAP, GL_KEEP);
+	glStencilOpSeparate(GL_FRONT, GL_KEEP, GL_DECR_WRAP, GL_KEEP);
+	PushMatrix();
+	textureMatrix.ToIdentity();
+	modelMatrix.ToIdentity();
+	viewMatrix = camera->BuildViewMatrix();
+	projMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float)width / (float)height, 45.0f);
+
+	SetCurrentShader(simpleShader);
+
+	Vector3 pos = pt->GetPosition();
+	float   radius = pt->GetRadius();
+
+	modelMatrix = Matrix4::Translation(pos)*Matrix4::Scale(Vector3(radius, radius, radius));
+	UpdateShaderMatrices();
+
+
+	point_light_sphere->Draw();
+	PopMatrix();
+	glEnable(GL_CULL_FACE);
 }

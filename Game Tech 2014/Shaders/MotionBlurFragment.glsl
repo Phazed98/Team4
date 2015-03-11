@@ -28,6 +28,7 @@ void main ( void ) {
 
 	//Get the depth buffer value at this pixel.
 	vec2 texCoord = IN.texCoord;
+
 	//Get the current particle texture
 	vec4 particle_color = texture(particleTex, texCoord);
 	//Get the current background texture
@@ -48,15 +49,17 @@ void main ( void ) {
 	vec4 currentPos = H;  
 
 	// Use the world position, and transform by the previous view-  
-	// projection matrix.    
+	// projection matrix. 
+//	vec4 previousWorldPos = worldPos;
+//	previousWorldPos.z = previousWorldPos.z-10000;
 	vec4 previousPos = previousPVMatrix * worldPos ;  
 
 	// Convert to nonhomogeneous points [-1,1] by dividing by w.  
 	previousPos /= previousPos.w;  
-
+//	previousPos.z = currentPos.z-0.1;
 	// Use this frame's position and last frame's to compute the pixel velocity.  
-//	vec2 velocity = ((previousPos-currentPos)/2.f).xy; 
-	vec2 velocity = ((currentPos-previousPos)).xy; 
+	vec2 velocity = ((previousPos-currentPos)/2.f).xy; 
+//	vec2 velocity = ((currentPos-previousPos)).xy; 
 	// Get the initial color at this pixel.  
 	vec4 motion_color = texture(diffuseTex, texCoord);
 	  
@@ -90,9 +93,12 @@ void main ( void ) {
 	FragColor = motion_color;
 	
 	if(LinearizeDepth(zOverW)>0.9)
+		
 		FragColor = background_colour;
 	
 	FragColor += particle_color;
-	
+//	FragColor = motion_color;
+//	FragColor = texture(diffuseTex, IN.texCoord);
+		
 //	FragColor = vec4(velocity,0,1);
 }

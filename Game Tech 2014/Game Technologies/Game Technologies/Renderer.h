@@ -10,6 +10,7 @@ Implements:OGLRendere
 #include "../../nclgl/SceneNode.h"
 #include "../../nclgl/Camera.h"
 #include "../../nclgl/Frustum.h"
+#include "../../nclgl/OBJMesh.h"
 #include <algorithm>
 #include "textmesh.h"
 #include "PhysicsSystem.h"
@@ -20,6 +21,7 @@ Implements:OGLRendere
 #include "TornadoSceneNode.h"
 #include "FireSceneNode.h"
 #include "GeyserSceneNode.h"
+#include "PointLight.h"
 
 #define PAUSE_BUTTONS_SIZE 2
 #define	MAIN_BUTTONS_SIZE 6
@@ -197,5 +199,25 @@ protected:
 	FireParticleSystem fire_system;
 
 	bool fullyInitialised;
+
+	//steven added for defer rendering
+	bool InitDSBuffer();
+	GLuint defer_FBO;
+	GLuint defer_textures[4];
+	GLuint defer_depth_texture;
+	Shader* defer_shader;
+	void DSFinalPass();
+	void DSGeometryPass();
+	void deferRenderPass();
+	vector<PointLight *> point_lights;
+	OBJMesh* point_light_sphere;
+	Shader* point_light_shader;
+	void DSPointLightsPass(PointLight* pt);
+	void DSStencilPass(PointLight* pt);
+	GLuint defer_final_texture;
+	void DSDirectionalLightPass();
+	Mesh* screen_quad;
+	Shader* dir_light_shader;
+	void CombinePass();
 };
 

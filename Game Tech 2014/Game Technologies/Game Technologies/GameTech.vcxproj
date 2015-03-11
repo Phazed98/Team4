@@ -138,6 +138,7 @@
     <ClInclude Include="PhysicsNode.h" />
     <ClInclude Include="PhysicsSystem.h" />
     <ClInclude Include="PlaneInfo.h" />
+    <ClInclude Include="PointLight.h" />
     <ClInclude Include="Powerups.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Sound.h" />
