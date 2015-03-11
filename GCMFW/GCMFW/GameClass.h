@@ -37,6 +37,7 @@ enum GameState {
 	GAME_PLAYING,
 	GAME_PAUSED,
 	Game_LOADING,
+	GAME_OVER,
 	GAME_EXIT
 };
 

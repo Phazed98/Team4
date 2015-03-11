@@ -76,6 +76,25 @@ void GameClass::UpdateRendering(float msec)
 			}
 
 		}
+
+		else if (currentGameState == GAME_OVER)
+		{
+		//	Renderer::GetRenderer().RenderGameOver();
+
+			if (Input::ButtonDown(INPUT_CROSS, pad))
+			{
+				PhysicsSystem::GetPhysicsSystem().setImmunity();
+				setCurrentState(GAME_PLAYING);
+				
+			}
+
+			if (Input::ButtonDown(INPUT_TRIANGLE, pad))
+			{
+				setCurrentState(GAME_EXIT);
+			}
+
+
+		}
 		renderCounter += (1000.0f / (float)RENDER_HZ);
 	}
 }
@@ -93,6 +112,10 @@ void GameClass::setCurrentState(GameState newGameState)
 		
 	}
 	else if (newGameState == GAME_EXIT)
+	{
+
+	}
+	else if (newGameState == GAME_OVER)
 	{
 
 	}

@@ -60,6 +60,12 @@ public:
 
 	void    DrawDebug();
 
+	void setImmunity()
+	{
+		immunityTime = 5000;
+		canDie = false;
+	}
+
 	PhysicsNode* GetPlayer() { return playerPhysNode; }
 
 	float time;//// = 0;
@@ -86,6 +92,8 @@ public:
 	std::vector<Obstacle*>*	GetObstacles() { return &Obstacles; }
 	std::vector<PhysicsNode*>* GetMissiles() { return &Missiles; }
 	//---------------------------------------------------------------------------------
+
+
 
 protected:
 	PhysicsSystem(void);
@@ -165,6 +173,7 @@ protected:
 	void		ObstacleCollisions();
 	void		MissileCollisions();
 	bool		CheckOnATile();
+	int		immunityTime;
 
 	bool canDie;
 };
