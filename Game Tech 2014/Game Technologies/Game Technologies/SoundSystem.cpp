@@ -54,12 +54,21 @@ SoundSystem::SoundSystem(unsigned int channels) {
 	SoundManager::AddSound("../../Sounds/test.wav");
 	SoundManager::AddSound("../../Sounds/test2.wav");
 	SoundManager::AddSound("../../Sounds/void.wav");
+	SoundManager::AddSound("../../Sounds/engine01.wav");
+	SoundManager::AddSound("../../Sounds/engine05.wav");
+	SoundManager::AddSound("../../Sounds/switchsound03.wav");
+	SoundManager::AddSound("../../Sounds/switchsound01.wav");
 	GlobleSound01 = new SoundEmitter();
+	GlobleSound01->SetVolume(0.5);
 	GlobleSound01->SetSound(SoundManager::GetSound("../../Sounds/test2.wav"));
 	temporaryEmitters.push_back(GlobleSound01);
 	GlobleSound02 = new SoundEmitter();
 	GlobleSound02->SetSound(SoundManager::GetSound("../../Sounds/test2.wav"));
 	temporaryEmitters.push_back(GlobleSound02);
+	GlobleSound03 = new SoundEmitter();
+	GlobleSound03->SetSound(SoundManager::GetSound("../../Sounds/engine05.wav"));
+	GlobleSound03->SetVolume(0.5);
+	temporaryEmitters.push_back(GlobleSound03);
 
 }
 SoundSystem::~SoundSystem(void) {
@@ -246,4 +255,14 @@ void SoundSystem::ChangeSceneSound(Sound* s){
 	GlobleSound02->SetSound(s);
 	GlobleSound02->SetLooping(true);
 	GlobleSound02->SetIsGlobal(true);
+}
+
+void SoundSystem::SwitchBoard(Sound* s) {
+	SoundEmitter* n = new SoundEmitter();
+	n->SetLooping(false);
+	//n -> SetTransform (Matrix4::Translation(position));
+	n->SetSound(s);
+	n->SetVolume(0.5);
+	//n->SetIsGlobal(true);
+	temporaryEmitters.push_back(n);
 }

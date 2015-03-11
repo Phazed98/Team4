@@ -246,10 +246,10 @@ void Vehicle::UpdatePlayerVelocity()
 			SoundSystem::GetSoundSystem()->ChangeSceneSound(SoundManager::GetSound("../../Sounds/wind.wav"));
 		}
 		if (currentPlaneID == 1){
-			SoundSystem::GetSoundSystem()->ChangeSceneSound(SoundManager::GetSound("../../Sounds/thunder.wav"));
+			SoundSystem::GetSoundSystem()->ChangeSceneSound(SoundManager::GetSound("../../Sounds/void.wav"));
 		}
 		if (currentPlaneID == 2){
-			SoundSystem::GetSoundSystem()->ChangeSceneSound(SoundManager::GetSound("../../Sounds/void.wav"));
+			SoundSystem::GetSoundSystem()->ChangeSceneSound(SoundManager::GetSound("../../Sounds/thunder.wav"));
 		}
 		if (currentPlaneID == 3){
 			SoundSystem::GetSoundSystem()->ChangeSceneSound(SoundManager::GetSound("../../Sounds/water.wav"));
@@ -440,6 +440,7 @@ void Vehicle::GetSwitchPlaneInputs(float normalisedRX, float normalisedRY)
 		//set cooldown
 		coolingDownPlaneSwitch = true;
 		PlaneSwitchCDRemaining = PlaneSwitchCDTime;
+		SoundSystem::GetSoundSystem()->SwitchBoard(SoundManager::GetSound("../../Sounds/switchsound01.wav"));
 	}
 
 	if ((Window::GetKeyboard()->KeyDown(KEYBOARD_RIGHT) || normalisedRX > 0.5) && !coolingDownPlaneSwitch)
@@ -509,6 +510,7 @@ void Vehicle::GetSwitchPlaneInputs(float normalisedRX, float normalisedRY)
 		//set cooldown
 		coolingDownPlaneSwitch = true;
 		PlaneSwitchCDRemaining = PlaneSwitchCDTime;
+		SoundSystem::GetSoundSystem()->SwitchBoard(SoundManager::GetSound("../../Sounds/switchsound01.wav"));
 	}
 
 	if ((Window::GetKeyboard()->KeyDown(KEYBOARD_LEFT) || normalisedRX < -0.5) && !coolingDownPlaneSwitch)
@@ -578,6 +580,7 @@ void Vehicle::GetSwitchPlaneInputs(float normalisedRX, float normalisedRY)
 		//set cooldown
 		coolingDownPlaneSwitch = true;
 		PlaneSwitchCDRemaining = PlaneSwitchCDTime;
+		SoundSystem::GetSoundSystem()->SwitchBoard(SoundManager::GetSound("../../Sounds/switchsound01.wav"));
 	}
 
 }

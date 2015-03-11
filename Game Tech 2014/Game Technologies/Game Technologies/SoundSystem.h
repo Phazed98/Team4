@@ -47,6 +47,7 @@ public:
 	void PlaySoundA(Sound* s, Vector3 position);
 	//void PlaySound(Sound* s, SoundPriority p = SOUNDPRIORTY_LOW);
 	void ChangeSceneSound(Sound* s);
+	void SwitchBoard(Sound* s);
 
 protected:
 	SoundSystem(unsigned int channels = 32);
@@ -69,6 +70,7 @@ protected:
 
 	SoundEmitter* GlobleSound01;
 	SoundEmitter* GlobleSound02;
+	SoundEmitter* GlobleSound03;
 
 	vector<OALSource*> sources;
 	vector<SoundEmitter*> emitters;

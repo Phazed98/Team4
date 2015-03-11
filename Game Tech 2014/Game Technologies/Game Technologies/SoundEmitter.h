@@ -26,8 +26,8 @@ public:
 	inline void SetPriority(SoundPriority p){ priority = p; }
 	inline SoundPriority GetPriority() { return priority; }
 
-	inline void SetVolume(float volume) {
-		volume = min(1.0f, max(0.0f, volume));
+	inline void SetVolume(float vol) {
+		volume = min(1.0f, max(0.0f, vol));
 	}
 	inline float GetVolume() { return volume; }
 
