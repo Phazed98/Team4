@@ -1,6 +1,6 @@
 #include "NetworkClient.h"
 
-NetworkClient::NetworkClient(void)
+NetworkClient::NetworkClient(string ipAddress)
 {
 	WSADATA wsaData;
 	ConnectSocket = INVALID_SOCKET;
@@ -21,7 +21,7 @@ NetworkClient::NetworkClient(void)
 	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_protocol = IPPROTO_TCP;
 
-	iResult = getaddrinfo("10.66.67.183", DEFAULT_PORT, &hints, &result);
+	iResult = getaddrinfo(ipAddress.c_str(), DEFAULT_PORT, &hints, &result);
 
 	if (iResult != 0)
 	{

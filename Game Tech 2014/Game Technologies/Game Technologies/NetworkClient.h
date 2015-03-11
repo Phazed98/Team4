@@ -36,6 +36,6 @@ public:
 
 
 	// ctor/dtor
-	NetworkClient(void);
+	NetworkClient(string ipAddress);
 	~NetworkClient(void);
 };

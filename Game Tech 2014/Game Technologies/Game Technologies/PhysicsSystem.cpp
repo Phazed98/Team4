@@ -13,7 +13,6 @@ PhysicsSystem::PhysicsSystem(void)
 {
 	//Sam - moving here for scoping reasons
 	OBJMesh* PlayerMesh = new OBJMesh(MESHDIR"SR-71_Blackbird.obj");
-
 	//add by steven because it should use render instance
 	spaceship_scene_node = new SpaceshipSceneNode(PlayerMesh);
 	//store the ssn in render to render the particle system at the end of everything

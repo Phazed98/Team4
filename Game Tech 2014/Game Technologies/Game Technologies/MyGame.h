@@ -73,6 +73,7 @@ public:
 	//Client
 	void sendClientActionPackets();
 	void sendClientUpdatePackets();
+	void recieveFromServer();
 	char client_network_data[MAX_PACKET_SIZE];
 
 

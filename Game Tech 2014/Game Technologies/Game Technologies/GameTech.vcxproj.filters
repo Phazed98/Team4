@@ -16,9 +16,6 @@
     <Filter Include="Header Files\Physics">
       <UniqueIdentifier>{cbdec657-7229-4f54-8e05-6e506e78e711}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Physics">
-      <UniqueIdentifier>{d1fbe2ac-dad6-42ad-bf12-397ef355ddf8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Rendering">
       <UniqueIdentifier>{82f937df-fe36-4083-b7d7-e4f6798232ba}</UniqueIdentifier>
     </Filter>
@@ -46,25 +43,28 @@
     <Filter Include="Networking">
       <UniqueIdentifier>{e7bf2bab-e26e-4351-8f9b-8b1716dedca6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\General\Physics">
+      <UniqueIdentifier>{d1fbe2ac-dad6-42ad-bf12-397ef355ddf8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CollisionHelper.cpp">
-      <Filter>Source Files\Physics</Filter>
+      <Filter>Source Files\General\Physics</Filter>
     </ClCompile>
     <ClCompile Include="GJK.cpp">
-      <Filter>Source Files\Physics</Filter>
+      <Filter>Source Files\General\Physics</Filter>
     </ClCompile>
     <ClCompile Include="PhysicsNode.cpp">
-      <Filter>Source Files\Physics</Filter>
+      <Filter>Source Files\General\Physics</Filter>
     </ClCompile>
     <ClCompile Include="PhysicsSystem.cpp">
-      <Filter>Source Files\Physics</Filter>
+      <Filter>Source Files\General\Physics</Filter>
     </ClCompile>
     <ClCompile Include="Spring.cpp">
-      <Filter>Source Files\Physics</Filter>
+      <Filter>Source Files\General\Physics</Filter>
     </ClCompile>
     <ClCompile Include="SpringDemo.cpp">
-      <Filter>Source Files\Physics</Filter>
+      <Filter>Source Files\General\Physics</Filter>
     </ClCompile>
     <ClCompile Include="Renderer.cpp">
       <Filter>Source Files\Rendering</Filter>

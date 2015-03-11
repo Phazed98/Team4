@@ -251,7 +251,7 @@ you've been building up in the Mesh class as the tutorials go on, will
 automatically be used by this overloaded function. Once 'this' has been drawn,
 all of the children of 'this' will be drawn
 */
-void OBJMesh::Draw() {
+void OBJMesh::Draw(bool update) {
 	Mesh::Draw();
 	for(unsigned int i = 0; i < children.size(); ++i) {
 		children.at(i)->Draw();

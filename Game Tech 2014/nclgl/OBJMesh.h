@@ -145,7 +145,7 @@ public:
 	~OBJMesh(void){};
 	bool	LoadOBJMesh(std::string filename);
 
-	virtual void Draw();
+	virtual void Draw(bool update = true);
 
 protected:
 	void	SetTexturesFromMTL(string &mtlFile, string &mtlType);

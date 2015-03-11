@@ -10,8 +10,13 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)
 	tornado_system.InitParticleSystem(0, Vector3(0, 10, 0));
 	galaxy_system.InitParticleSystem(1, Vector3(0, 0, -200));
 	fire_system.InitParticleSystem(0, Vector3(0, 0, 0));
+	
 	menuShader = new Shader(SHADERDIR"menuVertex.glsl", SHADERDIR"menuFragment.glsl");
-	if (!menuShader->LinkProgram())
+	basicFont = new Font(SOIL_load_OGL_texture(TEXTUREDIR"tahoma.tga", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_COMPRESS_TO_DXT), 16, 16);
+	textShader = new Shader(SHADERDIR"TexVertex.glsl", SHADERDIR"TexFragment.glsl");
+	ipAddress = "127.0.0.1";
+
+	if (!menuShader->LinkProgram() || !textShader->LinkProgram())
 	{
 		cout << "error in link shaders" << endl;
 		return;
@@ -22,6 +27,10 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)
 
 	mainMenuQuad = Mesh::GenerateQuad();
 	mainMenuQuad->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"Loading Screen.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
+
+	ipQuad = Mesh::GenerateQuad();
+	ipQuad->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"IPBox.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
+
 
 	//Main Menu Buttons
 
@@ -96,7 +105,7 @@ void Renderer::fullyInit()
 	total_sec_pass = 0;
 	cd = 10000;
 	root = new SceneNode();
-
+	
 	basicFont = new Font(SOIL_load_OGL_texture(TEXTUREDIR"tahoma.tga", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_COMPRESS_TO_DXT), 16, 16);
 
 	background[0] = SOIL_load_OGL_texture(TEXTUREDIR"background2.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS);
@@ -123,6 +132,7 @@ void Renderer::fullyInit()
 	quad->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"Loading Screen.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
 	quad->SetColour(new Vector4(1, 0, 0, 1));
 
+	
 	//--------------------------------------------------GUI--------------------------------------------------------------------------------
 	uiQuad = Mesh::GenerateQuad();
 	uiQuad->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"/GUITextures/score.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
@@ -674,6 +684,14 @@ buttonPressed Renderer::RenderMainMenu()
 	glDisable(GL_DEPTH_TEST);
 	mainMenuQuad->Draw();
 
+	Vector3 translation2 = Vector3(-0.6f, 0.47f, 0.0f);
+	Vector3 scale2 = Vector3(0.35f, 0.15f, 0.35f);
+	modelMatrix = Matrix4::Translation(translation2) *  Matrix4::Scale(scale2);
+	UpdateShaderMatrices();
+
+	ipQuad->Draw();
+
+
 	Vector3 translation(0.0f, -0.6f, 0.0f);
 	Vector3 scale(0.35f, 0.35f, 0.35f);
 	modelMatrix = Matrix4::Translation(translation) *  Matrix4::Scale(scale);
@@ -686,6 +704,69 @@ buttonPressed Renderer::RenderMainMenu()
 		modelMatrix = Matrix4::Translation(translation) *  Matrix4::Scale(scale);
 		UpdateShaderMatrices();
 	}
+
+	if (Window::GetWindow().GetKeyboard()->KeyTriggered(KEYBOARD_0))
+	{
+		ipAddress += "0";
+	}
+	if (Window::GetWindow().GetKeyboard()->KeyTriggered(KEYBOARD_1))
+	{
+		ipAddress += "1";
+	}
+	if (Window::GetWindow().GetKeyboard()->KeyTriggered(KEYBOARD_2))
+	{
+		ipAddress += "2";
+	}
+	if (Window::GetWindow().GetKeyboard()->KeyTriggered(KEYBOARD_3))
+	{
+		ipAddress += "3";
+	}
+	if (Window::GetWindow().GetKeyboard()->KeyTriggered(KEYBOARD_4))
+	{
+		ipAddress += "4";
+	}
+	if (Window::GetWindow().GetKeyboard()->KeyTriggered(KEYBOARD_5))
+	{
+		ipAddress += "5";
+	}
+	if (Window::GetWindow().GetKeyboard()->KeyTriggered(KEYBOARD_6))
+	{
+		ipAddress += "6";
+	}
+	if (Window::GetWindow().GetKeyboard()->KeyTriggered(KEYBOARD_7))
+	{
+		ipAddress += "7";
+	}
+	if (Window::GetWindow().GetKeyboard()->KeyTriggered(KEYBOARD_8))
+	{
+		ipAddress += "8";
+	}
+	if (Window::GetWindow().GetKeyboard()->KeyTriggered(KEYBOARD_9))
+	{
+		ipAddress += "9";
+	}
+	if (Window::GetWindow().GetKeyboard()->KeyTriggered(KEYBOARD_PERIOD))
+	{
+		ipAddress += ".";
+	}
+	if (Window::GetWindow().GetKeyboard()->KeyTriggered(KEYBOARD_BACK))
+	{
+		ipAddress = ipAddress.substr(0, ipAddress.size() - 1);
+	}
+
+	if (ipAddress.length() > 15)
+	{
+		ipAddress = ipAddress.substr(0, 15);
+	}
+
+	glDepthMask(false);
+	glBlendFunc(GL_SRC_ALPHA, GL_SRC_ALPHA);
+
+	DrawText(ipAddress, Vector3(width / 4.0f - ipAddress.length() * 12.0f - 20, height / 2 + 175.0f, 0.0f), 20.0f, false);
+
+
+	glDepthMask(true);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 
 

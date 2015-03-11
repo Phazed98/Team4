@@ -128,12 +128,6 @@ int main()
 		exit(0);
 	}
 
-	//std::thread Loading(loadGame);
-//	MyGame* game = new MyGame();
-
-
-
-
 	bool running = true;
 	std::thread physics(physicsLoop, game, std::ref(running));
 
@@ -159,7 +153,8 @@ int main()
 		if (PhysicsSystem::GetPhysicsSystem().GetVehicle()->GetCurrentPlaneID() == 3){
 			SoundSystem::GetSoundSystem()->ChangeSceneSound(SoundManager::GetSound("../../Sounds/wind.wav"));
 		}*/
-		if (Window::GetKeyboard()->KeyTriggered(KEYBOARD_4)){
+		if (Window::GetKeyboard()->KeyTriggered(KEYBOARD_4))
+		{
 			SoundSystem::GetSoundSystem()->ChangeSceneSound(SoundManager::GetSound("../../Sounds/thunder.wav"));
 		}
 

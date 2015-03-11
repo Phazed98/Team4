@@ -27,34 +27,6 @@ MyGame::MyGame(bool isHost, bool isClient, bool useNetworking, int numClients)
 	this->useNetworking = useNetworking;
 	this->numClients = numClients;
 
-	if (useNetworking)
-	{
-		if (isHost)
-		{
-			//Init client list to nothing
-			client_id = 0;
-
-			//Spawn Server Which listens for clients
-			networkServer = new NetworkServer();
-		}
-
-		if (isClient)
-		{
-			//Spawn a New Client which will attempt to connect to a server
-			networkClient = new NetworkClient();
-
-			// send init packet
-			const unsigned int packet_size = sizeof(Packet);
-			char packet_data[packet_size];
-
-			Packet packet;
-			packet.packet_type = INIT_CONNECTION;
-			packet.serialize(packet_data);
-			NetworkServices::sendMessage(networkClient->ConnectSocket, packet_data, packet_size);
-		}
-	}
-
-
 	Renderer::GetRenderer().RenderLoading(0, "Initializing...");
 	setCurrentState(Game_LOADING);
 	timer = 0;
@@ -170,14 +142,50 @@ MyGame::MyGame(bool isHost, bool isClient, bool useNetworking, int numClients)
 		allEntities.push_back(plane);
 	}
 
+	OBJMesh* PlayerMesh = new OBJMesh(MESHDIR"SR-71_Blackbird.obj");
+
+	for (int x = 0; x < 4; x++)
+	{
+		players[x] = BuildCubeEntity(4);
+		players[x]->GetRenderNode().SetMesh(PlayerMesh);
+		players[x]->GetRenderNode().SetColour(Vector4(1, 0, 0, 1));
+		players[x]->GetPhysicsNode().SetPosition(Vector3(10, 10, 10));
+		players[x]->GetPhysicsNode().SetUseGravity(false);
+		players[x]->ConnectToSystems();
+	}
+
 	//-------------------------------------------------#####---------------------------------------------------------//
 
 	setCurrentState(GAME_PLAYING);
 	Renderer::GetRenderer().RenderLoading(100, "Done...");
-	
-	
+
+
 	if (useNetworking)
 	{
+		if (isHost)
+		{
+			//Init client list to nothing
+			client_id = 0;
+
+			//Spawn Server Which listens for clients
+			networkServer = new NetworkServer();
+		}
+
+		if (isClient)
+		{
+			//Spawn a New Client which will attempt to connect to a server
+			networkClient = new NetworkClient(Renderer::GetRenderer().getIPAddress());
+
+			// send init packet
+			const unsigned int packet_size = sizeof(Packet);
+			char packet_data[packet_size];
+
+			Packet packet;
+			packet.packet_type = INIT_CONNECTION;
+			packet.serialize(packet_data);
+			NetworkServices::sendMessage(networkClient->ConnectSocket, packet_data, packet_size);
+		}
+
 		if (isHost)
 		{
 			Renderer::GetRenderer().RenderLoading(100, "Waiting on Clients");
@@ -231,19 +239,6 @@ MyGame::MyGame(bool isHost, bool isClient, bool useNetworking, int numClients)
 
 	//-------------------------------------------------Checkpoint---------------------------------------------------------//
 	allEntities.push_back(BuildCheckPointEntity(2, 4, 200));
-
-	//Sam - moving here for scoping reasons
-	OBJMesh* PlayerMesh = new OBJMesh(MESHDIR"SR-71_Blackbird.obj");
-
-	for (int x = 0; x < 4; x++)
-	{
-		players[x] = BuildCubeEntity(4);
-		players[x]->GetRenderNode().SetMesh(PlayerMesh);
-		players[x]->GetRenderNode().SetColour(Vector4(1, 0, 0, 1));
-		players[x]->GetPhysicsNode().SetPosition(Vector3(10, 10, 10));
-		players[x]->GetPhysicsNode().SetUseGravity(false);
-		players[x]->ConnectToSystems();
-	}
 }
 
 MyGame::~MyGame(void)	
@@ -756,10 +751,11 @@ void MyGame::receiveFromClients()
 {
 	Packet packet;
 	Matrix4 playerMatrix;
+	messageInfo playerMessage;
 
 	// go through all clients
+	int x = 0;
 	std::map<unsigned int, SOCKET>::iterator iter;
-	int i = 0;
 	for (iter = networkServer->sessions.begin(); iter != networkServer->sessions.end(); iter++)
 	{
 		int data_length = networkServer->receiveData(iter->first, server_network_data);
@@ -771,6 +767,7 @@ void MyGame::receiveFromClients()
 		}
 
 		unsigned int i = 0;
+
 		while (i < (unsigned int)data_length)
 		{
 			packet.deserialize(&(server_network_data[i]));
@@ -781,75 +778,25 @@ void MyGame::receiveFromClients()
 
 			case INIT_CONNECTION:
 				cout << "server received init packet from client" << endl;
-				//sendServerActionPackets();
-
 				break;
 
 			case ACTION_EVENT:
 				cout << "server received action event packet from client" << endl;
-				//sendServerActionPackets();
 				break;
 
 			case CLIENT_POSITION_DATA:
-				memcpy(&playerMatrix, packet.data, sizeof(Matrix4));
-				playerPositions[iter->first] = playerMatrix;
-				sendServerUpdatePackets(0);
+				//Set Corrisponding Player Orientation and Position
+				memcpy(&playerMessage, packet.data, sizeof(messageInfo));
+				players[iter->first]->GetPhysicsNode().SetPosition(playerMessage.Position);
+				players[iter->first]->GetPhysicsNode().SetOrientation(playerMessage.Orientation);
+				players[iter->first]->GetRenderNode().SetTransform(players[iter->first]->GetPhysicsNode().BuildTransform());
+				players[iter->first]->GetRenderNode().Update(0);
+				//Send Updated GameState Back to client
+				sendServerUpdatePackets(iter->first);
 				break;
 
 			default:
 				cout << "error in packet types" << endl;
-				break;
-			}
-		}
-	}
-}
-
-
-void MyGame::sendToClients()
-{
-	Packet packet;
-	// go through all clients
-	std::map<unsigned int, SOCKET>::iterator iter;
-
-	for (iter = networkServer->sessions.begin(); iter != networkServer->sessions.end(); iter++)
-	{
-		int data_length = networkServer->receiveData(iter->first, server_network_data);
-
-		if (data_length <= 0)
-		{
-			//no data recieved
-			continue;
-		}
-
-		unsigned int i = 0;
-		while (i < (unsigned int)data_length)
-		{
-			packet.deserialize(&(server_network_data[i]));
-			i += sizeof(Packet);
-
-			switch (packet.packet_type)
-			{
-
-			case INIT_CONNECTION:
-
-				cout << "Server received init packet from client." << endl;
-
-				//sendServerActionPackets();
-
-				break;
-
-			case ACTION_EVENT:
-
-				cout << "Server received action event packet from client." << endl;
-
-				//sendServerActionPackets();
-
-				break;
-
-			default:
-
-				cout << "Error in packet types." << endl;
-
 				break;
 			}
 		}
@@ -865,7 +812,7 @@ void MyGame::sendServerActionPackets()
 
 	Packet packet;
 	packet.packet_type = ACTION_EVENT;
-	packet.packet_integer = 193;
+	packet.packet_integer = 201;
 	packet.serialize(packet_data);
 
 	networkServer->sendToAll(packet_data, packet_size);
@@ -879,6 +826,7 @@ void MyGame::sendServerStartPackets()
 
 	Packet packet;
 	packet.packet_type = START_GAME;
+	packet.packet_integer = 201;
 	packet.packet_integer = (int)Window::GetWindow().GetTimer()->GetMS();
 	packet.serialize(packet_data);
 
@@ -889,18 +837,22 @@ void MyGame::sendServerUpdatePackets(int client)
 {
 	const unsigned int packet_size = sizeof(Packet);
 	char packet_data[packet_size];
+	messageInfo mi[4];
+
+	for (int x = 0; x < 4; x++)
+	{
+		mi[x].objectID = x;
+		mi[x].Orientation = players[x]->GetPhysicsNode().GetOrientation();
+		mi[x].Position = players[x]->GetPhysicsNode().GetPosition();
+	}
 
 	Packet packet;
 	packet.packet_type = PLAYERS_DATA;
-	packet.packet_integer = 193;
-	Matrix4 clientTransform = PhysicsSystem::GetPhysicsSystem().GetPlayer()->BuildTransform();
-
-	memcpy(packet.data, &playerPositions, sizeof(Matrix4)* 4);
+	packet.packet_integer = 203;
+	memcpy(packet.data, &mi, sizeof(messageInfo)* 4);
 	packet.serialize(packet_data);
 
 	NetworkServices::sendMessage(networkServer->sessions[client], packet_data, packet_size);
-
-	//	networkServer->sendToAll(packet_data, packet_size);
 }
 
 
@@ -927,15 +879,66 @@ void MyGame::sendClientUpdatePackets()
 	Packet packet;
 	packet.packet_type = CLIENT_POSITION_DATA;
 	packet.packet_integer = 193;
-//	Matrix4 clientTransform = PhysicsSystem::GetPhysicsSystem().GetPlayer()->BuildTransform();
 	messageInfo clientMessage;
 	clientMessage.Position = PhysicsSystem::GetPhysicsSystem().GetPlayer()->GetPosition();
 	clientMessage.Orientation = PhysicsSystem::GetPhysicsSystem().GetPlayer()->GetOrientation();
 	memcpy(packet.data, &clientMessage, sizeof(messageInfo));
-
 	packet.serialize(packet_data);
 
 	NetworkServices::sendMessage(networkClient->ConnectSocket, packet_data, packet_size);
+}
+
+void MyGame::recieveFromServer()
+{
+	Packet packet;
+	Matrix4 playerMatrixes[4];
+	messageInfo playerInfo[4];
+
+	int data_length = networkClient->receivePackets(client_network_data);
+
+	if (data_length <= 0)
+	{
+		return;
+	}
+
+	unsigned int i = 0;
+	while (i < (unsigned int)data_length)
+	{
+		packet.deserialize(&(client_network_data[i]));
+		i += sizeof(Packet);
+
+		switch (packet.packet_type)
+		{
+		case ACTION_EVENT:
+			cout << "Client Recieved Action Event Packet" << endl;
+			//				sendClientActionPackets();
+			break;
+
+		case INIT_CONNECTION:
+			cout << "Client Recieved Init Connection Packet" << endl;
+			//				sendClientActionPackets();
+			break;
+
+		case START_GAME:
+			cout << "Client Recieved Start Game Packet" << endl;
+			//				sendClientActionPackets();
+			break;
+
+		case PLAYERS_DATA:
+			memcpy(&playerInfo, packet.data, sizeof(messageInfo)* 4);
+
+			for (int x = 0; x < 4; x++)
+			{
+				players[x]->GetPhysicsNode().SetPosition(playerInfo[x].Position);
+				players[x]->GetPhysicsNode().SetOrientation(playerInfo[x].Orientation);
+			}
+			break;
+
+		default:
+			cout << "error in packet types" << endl;
+			break;
+		}
+	}
 }
 
 
@@ -957,59 +960,7 @@ void MyGame::handleNetworking()
 	if (isClient)
 	{
 		sendClientUpdatePackets();
-
-		Packet packet;
-		Matrix4 playerMatrixes[4];
-		messageInfo playerInfo[4];
-
-		int data_length = networkClient->receivePackets(client_network_data);
-
-		if (data_length <= 0)
-		{
-			return;
-		}
-
-		unsigned int i = 0;
-		while (i < (unsigned int)data_length)
-		{
-			packet.deserialize(&(client_network_data[i]));
-			i += sizeof(Packet);
-
-			switch (packet.packet_type)
-			{
-			case ACTION_EVENT:
-				cout << "Client Recieved Action Event Packet" << endl;
-				//				sendClientActionPackets();
-				break;
-
-			case INIT_CONNECTION:
-				cout << "Client Recieved Init Connection Packet" << endl;
-				//				sendClientActionPackets();
-				break;
-
-			case START_GAME:
-				cout << "Client Recieved Start Game Packet" << endl;
-				//				sendClientActionPackets();
-				break;
-
-			case PLAYERS_DATA:
-				//memcpy(&playerMatrixes, packet.data, sizeof(Matrix4)* 4);
-
-				memcpy(&playerInfo, packet.data, sizeof(messageInfo)* 4);
-
-				for (int x = 0; x < 4; x++)
-				{
-					//cout << "Client " << x << ": " << playerInfo[x].Position << endl;
-					players[x]->GetPhysicsNode().SetPosition(playerInfo[x].Position);
-					players[x]->GetPhysicsNode().SetOrientation(playerInfo[x].Orientation);
-				}
-				break;
-
-			default:
-				cout << "error in packet types" << endl;
-				break;
-			}
-		}
+		recieveFromServer();
 	}
 }
 

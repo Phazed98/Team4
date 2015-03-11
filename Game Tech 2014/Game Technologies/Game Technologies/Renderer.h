@@ -71,6 +71,7 @@ public:
 	static Renderer&GetRenderer() { return *instance;}
 
 	void SetFireSceneNode(FireSceneNode* node){ fireNode.push_back(node); }
+	string getIPAddress() { return ipAddress; }
 
 protected:	
 	Renderer(Window &parent);
@@ -159,10 +160,12 @@ protected:
 
 	//Menu Buttons
 	Mesh*		mainMenuQuad;
-	Button* pauseMenuButtons[PAUSE_BUTTONS_SIZE];
-	Button* mainMenuButtons[MAIN_BUTTONS_SIZE];
-	int mainButtonIndex;
-	int pauseButtonIndex;
+	Mesh*		ipQuad;
+	Button*		pauseMenuButtons[PAUSE_BUTTONS_SIZE];
+	Button*		mainMenuButtons[MAIN_BUTTONS_SIZE];
+	int			mainButtonIndex;
+	int			pauseButtonIndex;
+	string		ipAddress;
 
 	//UI Elements
 	Mesh* uiQuad;
