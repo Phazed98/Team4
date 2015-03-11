@@ -270,7 +270,7 @@ MyGame::~MyGame(void)
 	obstacleReference.clear();
 
 	//GameClass destructor will destroy your entities for you...
-	setCurrentState(GAME_EXIT);
+	//setCurrentState(GAME_EXIT);-+
 }
 
 /*

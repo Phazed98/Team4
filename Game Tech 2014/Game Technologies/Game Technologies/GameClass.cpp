@@ -85,8 +85,8 @@ void GameClass::UpdateRendering(float msec)
 				Renderer::GetRenderer().RenderScene();
 				
 
-				if (!(Window::GetinputScrollCDing()) && (Window::GetKeyboard()->KeyDown(KEYBOARD_P) || Window::GetKeyboard()->KeyDown(KEYBOARD_ESCAPE) ||
-					(Window::GetControllerConnected() && Window::GetWindow().GetController()->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_START)))
+				if (!(Window::GetinputScrollCDing()) && Window::GetKeyboard()->KeyDown(KEYBOARD_ESCAPE) ||
+					(Window::GetControllerConnected() && Window::GetWindow().GetController()->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_START))
 				{
 					setCurrentState(GAME_PAUSED);
 					Window::enableInputScrollLock();
@@ -97,8 +97,8 @@ void GameClass::UpdateRendering(float msec)
 			{
 				Renderer::GetRenderer().RenderPauseMenu();
 
-				if (!(Window::GetinputScrollCDing()) && (Window::GetKeyboard()->KeyDown(KEYBOARD_P) || Window::GetKeyboard()->KeyDown(KEYBOARD_ESCAPE) ||
-					(Window::GetControllerConnected() && Window::GetWindow().GetController()->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_START)))
+				if (!(Window::GetinputScrollCDing()) && Window::GetKeyboard()->KeyDown(KEYBOARD_ESCAPE) ||
+					(Window::GetControllerConnected() && Window::GetWindow().GetController()->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_START))
 				{
 					setCurrentState(GAME_PLAYING);
 					Window::enableInputScrollLock();

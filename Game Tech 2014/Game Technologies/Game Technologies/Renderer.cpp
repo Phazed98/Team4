@@ -83,11 +83,9 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)
 
 Renderer::~Renderer(void)
 {
-	delete root;
 	delete simpleShader;
 	delete textShader;
 	delete motion_blur_shader;
-	delete quad;
 	delete quad_motion_blur;
 
 	delete camera;
