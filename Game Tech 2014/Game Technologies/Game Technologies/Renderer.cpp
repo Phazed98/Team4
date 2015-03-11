@@ -260,7 +260,7 @@ void Renderer::RenderWithoutPostProcessing(){
 		textureMatrix.ToIdentity();
 		modelMatrix.ToIdentity();
 		viewMatrix = camera->BuildViewMatrix();
-		projMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float)width / (float)height, 45.0f);
+		projMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float)width / (float)height, 60.0f);
 		frameFrustum.FromMatrix(projMatrix * viewMatrix);
 		
 
@@ -320,7 +320,7 @@ void Renderer::RenderMotionBlur(){
 		textureMatrix.ToIdentity();
 		modelMatrix.ToIdentity();
 		viewMatrix = camera->BuildViewMatrix();
-		projMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float)width / (float)height, 45.0f);
+		projMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float)width / (float)height, 60.0f);
 		frameFrustum.FromMatrix(projMatrix * viewMatrix);
 		
 
@@ -428,7 +428,7 @@ void Renderer::RenderPauseMenu()
 		textureMatrix.ToIdentity();
 		modelMatrix.ToIdentity();
 		viewMatrix = camera->BuildViewMatrix();
-		projMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float)width / (float)height, 45.0f);
+		projMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float)width / (float)height, 60.0f);
 		frameFrustum.FromMatrix(projMatrix * viewMatrix);
 		UpdateShaderMatrices();
 
@@ -566,7 +566,7 @@ void Renderer::RenderUI()
 		textureMatrix.ToIdentity();
 		modelMatrix.ToIdentity();
 		viewMatrix = camera->BuildViewMatrix();
-		projMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float)width / (float)height, 45.0f);
+		projMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float)width / (float)height, 60.0f);
 		frameFrustum.FromMatrix(projMatrix * viewMatrix);
 		UpdateShaderMatrices();
 
@@ -653,7 +653,7 @@ buttonPressed Renderer::RenderMainMenu()
 
 	textureMatrix.ToIdentity();
 	modelMatrix.ToIdentity();
-	projMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float)width / (float)height, 45.0f);
+	projMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float)width / (float)height, 60.0f);
 	frameFrustum.FromMatrix(projMatrix * viewMatrix);
 	UpdateShaderMatrices();
 
