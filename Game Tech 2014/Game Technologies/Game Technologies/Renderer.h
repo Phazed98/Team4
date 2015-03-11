@@ -189,5 +189,7 @@ protected:
 
 	vector<FireSceneNode*> fireNode;
 	FireParticleSystem fire_system;
+
+	bool fullyInitialised;
 };
 

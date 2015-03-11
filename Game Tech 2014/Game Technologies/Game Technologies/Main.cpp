@@ -69,7 +69,12 @@ int main()
 	}
 
 	if (bp == EXIT)
-		exit(0);
+	{
+		//Window::Destroy();
+		Renderer::Destroy();
+		return 0;
+	}
+
 
 
 	Renderer::GetRenderer().fullyInit();

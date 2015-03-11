@@ -7,6 +7,8 @@ Renderer* Renderer::instance = NULL;
 
 Renderer::Renderer(Window &parent) : OGLRenderer(parent)
 {
+	fullyInitialised = false;
+
 	tornado_system.InitParticleSystem(0, Vector3(0, 10, 0));
 	galaxy_system.InitParticleSystem(1, Vector3(0, 0, -200));
 	fire_system.InitParticleSystem(0, Vector3(0, 0, 0));
@@ -83,17 +85,34 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)
 
 Renderer::~Renderer(void)
 {
-	delete simpleShader;
+	if (fullyInitialised)
+	{
+		delete simpleShader;
+		delete motion_blur_shader;
+		delete quad_motion_blur;
+
+		delete camera;
+
+		glDeleteFramebuffers(1, &motion_blur_FBO);
+		glDeleteTextures(1, &motion_blur_ColourTex);
+		glDeleteTextures(1, &motion_blur_DepthTex);
+
+		currentShader = NULL;
+	}
+
+	delete menuShader;
 	delete textShader;
-	delete motion_blur_shader;
-	delete quad_motion_blur;
-
-	delete camera;
-
-	glDeleteFramebuffers(1, &motion_blur_FBO);
-	glDeleteTextures(1, &motion_blur_ColourTex);
-	glDeleteTextures(1, &motion_blur_DepthTex);
-
+	delete basicFont;
+	delete mainMenuQuad;
+	delete ipQuad;
+	for (int i = 0; i < MAIN_BUTTONS_SIZE; i++)
+	{
+		delete mainMenuButtons[i];
+	}
+	for (int i = 0; i < PAUSE_BUTTONS_SIZE; i++)
+	{
+		delete pauseMenuButtons[i];
+	}
 	currentShader = NULL;
 }
 
@@ -180,6 +199,8 @@ void Renderer::fullyInit()
 	OBJMesh* PlayerMesh = new OBJMesh(MESHDIR"SR-71_Blackbird.obj");
 
 	glClearColor(0, 0, 0, 1);
+
+	fullyInitialised = true;
 }
 
 void Renderer::UpdateScene(float msec)

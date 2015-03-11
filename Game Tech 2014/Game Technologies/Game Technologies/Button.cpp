@@ -4,6 +4,11 @@ Button::Button(Mesh* m)
 	mesh = m;
 }
 
+Button::~Button()
+{
+	delete mesh;
+}
+
 bool Button::checkAndDraw(bool highlighted)
 {
 	if (highlighted)
