@@ -27,11 +27,10 @@ PhysicsSystem::PhysicsSystem(void)
 	this->playerPhysNode = playerVehicle->GetPhysicsNode();
 	playerPhysNode->SetLinearVelocity(Vector3(0, 0, 0));
 
-
-
 	playerIsReversing = false;
 	playerIsAccelerating = false;
 	gameSpeedFromTime = 0.0f;
+	immunityTime = 5000;
 }
 
 PhysicsSystem::~PhysicsSystem(void)
@@ -67,6 +66,16 @@ void	PhysicsSystem::Update(float msec)
 		canDie = true;
 	}
 
+	if (immunityTime > 0)
+	{
+		immunityTime--;
+	}
+
+	if (immunityTime < 1)
+	{
+		canDie = true;
+	}
+
 
 	ObstacleCollisions();
 
@@ -75,7 +84,7 @@ void	PhysicsSystem::Update(float msec)
 		if (!CheckOnATile())
 		{
 			std::cout << " For those of you who dont know boobs loook like ( . Y . )" << std::endl;
-//			GameClass::GetGameClass().setCurrentState(GAME_PAUSED);
+			GameClass::GetGameClass().setCurrentState(GAME_OVER);
 		}
 	}
 

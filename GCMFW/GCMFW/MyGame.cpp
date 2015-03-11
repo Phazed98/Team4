@@ -148,8 +148,6 @@ void MyGame::UpdateGame(float msec)
 		PhysicsSystem::SetTrackSpeed(PhysicsSystem::GetTrackSpeed() + 0.5f);
 	}
 
-	PhysicsSystem::SetTrackSpeed(max(PhysicsSystem::GetTrackSpeed(),30.0f));
-
 	if (gameCamera)
 	{
 		gameCamera->Update(msec);
