@@ -255,8 +255,6 @@ void Renderer::RenderWithoutPostProcessing(){
 
 	if (camera)
 	{
-
-
 		textureMatrix.ToIdentity();
 		modelMatrix.ToIdentity();
 		viewMatrix = camera->BuildViewMatrix();
