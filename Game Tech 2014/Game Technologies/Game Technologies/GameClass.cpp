@@ -16,7 +16,6 @@ GameClass::~GameClass(void)
 	{
 		delete (*i);
 	}
-//	delete gameCamera;
 }
 
 void GameClass::UpdatePhysics(float msec) 
@@ -44,8 +43,7 @@ void GameClass::setCurrentState(GameState newGameState)
 
 	else if (newGameState == GAME_PAUSED)
 	{
-		/*Window::GetWindow().LockMouseToWindow(false);
-		Window::GetWindow().ShowOSPointer(true);*/
+
 	}
 	else if (newGameState == GAME_EXIT)
 	{
@@ -105,6 +103,10 @@ void GameClass::UpdateRendering(float msec)
 					setCurrentState(GAME_PLAYING);
 					Window::enableInputScrollLock();
 				}
+			}
+			else if (currentGameState == GAME_OVER)
+			{
+				Renderer::GetRenderer().RenderPauseMenu();
 			}
 		}
 

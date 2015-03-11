@@ -177,8 +177,6 @@ protected:
 
 	//----------------------------------------------------------------------------------------------------------------------------------------------
 
-	//Added by Sam for obstacle removal when they go inactive
-	void removePastObstactles();
 
 	//Basic AABB for broadphase
 	bool CheckAABBCollision(PhysicsNode &n0, PhysicsNode &n1);

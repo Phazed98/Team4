@@ -132,8 +132,9 @@ Matrix4		PhysicsNode::BuildTransform()
 void PhysicsNode::ConfigureAABBHalfLength()
 {
 	Vector3 point = target->GetMesh()->GetFurthestVert();
+
 	//scale the point
-	point * target->GetModelScale();
+	point = point * target->GetModelScale();
 
 	//set the AABB half length
 	AABBHalfLength = point.Length();
