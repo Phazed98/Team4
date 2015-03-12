@@ -127,4 +127,7 @@ protected:
 	float slowDurationRemaining = 500;
 	float immunityDurationRemaining = 500;
 	float cdRedDurationRemaining = 500;
+
+	//added by Daixi
+	int soundTemp;
 };
