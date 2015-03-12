@@ -1,13 +1,17 @@
-﻿Build started 12/03/2015 16:07:47.
+﻿Build started 12/03/2015 17:03:47.
      1>Project "D:\GitHub\Team4\Game Tech 2014\Game Technologies\Game Technologies\GameTech.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Renderer.cpp
-         Renderer.cpp
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(355): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(1343): warning C4305: 'argument' : truncation from 'double' to 'const float'
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(1458): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(1545): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(1582): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt PhysicsSystem.cpp
+         PhysicsSystem.cpp
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(234): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(338): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(372): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(416): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(437): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(458): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(479): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(505): warning C4244: '+=' : conversion from 'float' to 'int', possible loss of data
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(521): warning C4244: '+=' : conversion from 'float' to 'int', possible loss of data
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.lib" /MACHINE:X86 /FORCE:MULTIPLE Debug\Bullets.obj
          Debug\Button.obj
@@ -63,7 +67,6 @@
      1>PhysicsSystem.obj : warning LNK4006: "public: __thiscall SupportPoint::SupportPoint(class Vector3 &,class Vector3 &,class Vector3 &,int,int)" (??0SupportPoint@@QAE@AAVVector3@@00HH@Z) already defined in GJK.obj; second definition ignored
      1>PhysicsSystem.obj : warning LNK4006: "public: __thiscall SupportPoint::SupportPoint(class Vector3 &)" (??0SupportPoint@@QAE@AAVVector3@@@Z) already defined in GJK.obj; second definition ignored
      1>PhysicsSystem.obj : warning LNK4006: "public: __thiscall SupportPoint::SupportPoint(void)" (??0SupportPoint@@QAE@XZ) already defined in GJK.obj; second definition ignored
-     1>Powerups.obj : warning LNK4006: "public: __thiscall GJKSimplex::GJKSimplex(void)" (??0GJKSimplex@@QAE@XZ) already defined in Bullets.obj; second definition ignored
      1>Renderer.obj : warning LNK4006: "public: __thiscall GJKSimplex::GJKSimplex(void)" (??0GJKSimplex@@QAE@XZ) already defined in Bullets.obj; second definition ignored
      1>Spring.obj : warning LNK4006: "public: __thiscall GJKSimplex::GJKSimplex(void)" (??0GJKSimplex@@QAE@XZ) already defined in Bullets.obj; second definition ignored
      1>SpringDemo.obj : warning LNK4006: "public: __thiscall GJKSimplex::GJKSimplex(void)" (??0GJKSimplex@@QAE@XZ) already defined in Bullets.obj; second definition ignored
@@ -154,4 +157,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.21
+Time Elapsed 00:00:01.14

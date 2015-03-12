@@ -41,6 +41,9 @@ void	PhysicsSystem::Update(float msec)
 	nbFrames++;
 	time += msec;
 
+	//Calculate Score
+	CalculateScore(msec);
+
 	//--------added by sam-----------------------
 	//Update max track speed
 	maxTrackSpeed += (msec / DIFFICULTY_SPEED_INCREASE);
@@ -84,10 +87,6 @@ void	PhysicsSystem::Update(float msec)
 	playerVehicle->UpdatePlayer(msec);
 	playerPhysNode->Update(msec);
 }
-
-
-
-
 
 
 void	PhysicsSystem::AddNode(PhysicsNode* n) 
@@ -499,4 +498,31 @@ bool	PhysicsSystem::CheckOnATile()
 
 	//not on any tiles on its plane.....return false.
 	return false;
+}
+
+void PhysicsSystem::CalculateScore(float msec)
+{
+	scoreTimer += msec;
+
+	if (Window::GetKeyboard()->KeyTriggered(KEYBOARD_7))
+	{
+		numberOfCoins++;
+	}
+
+	if (numberOfCoins > scoreMultiplier)
+	{
+		scoreMultiplier++;
+		numberOfCoins = 0;
+	}
+
+	//Increase score every second
+	if (scoreTimer > 1000 && track_speed > 0)
+	{
+		score += track_speed;
+		scoreTimer = 0;
+	}
+
+	//score += track_speed * msec / 1000;
+
+	int actualScore = score;
 }
