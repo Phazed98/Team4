@@ -77,6 +77,7 @@ void	PhysicsSystem::Update(float msec)
 	{
 		if (!CheckOnATile())
 		{
+			SoundSystem::GetSoundSystem()->PlaySoundA(SoundManager::GetSound("../../Sounds/bomb.wav"),Vector3());
 			GameClass::GetGameClass().setCurrentState(GAME_OVER);
 		}
 	}
