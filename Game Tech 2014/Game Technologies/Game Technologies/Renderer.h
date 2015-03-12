@@ -136,6 +136,7 @@ protected:
 
 	SpaceshipSceneNode* spaceship_scene_node;
 	void DrawAfterBurner();
+	void DrawShield();
 	float msec;
 
 	//steven added for render particles
@@ -196,6 +197,7 @@ protected:
 	float total_sec_pass;
 
 	EarthParticleSystem galaxy_system;
+	EarthParticleSystem galaxyShield;
 
 	void DrawFire();
 

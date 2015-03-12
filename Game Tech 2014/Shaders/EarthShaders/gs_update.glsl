@@ -1,5 +1,5 @@
 #version 330 core
-
+//gs_update
 layout(points) in;
 layout(points, max_vertices = 101) out;
 
@@ -64,7 +64,7 @@ void main()
 	float Age = IN[0].Age0 + gDeltaTimeMillis;
 	
 	if (IN[0].Type0 == PARTICLE_TYPE_LAUNCHER) {
-		if (Age >= gLauncherLifetime) {
+		if (Age >= gLauncherLifetime ) {
 			for (int i = 0; i < PARTICLE_AMOUNT; i++){
 				float random_index = gTime / 200.0 + i / 20.0;
 

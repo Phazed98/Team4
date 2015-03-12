@@ -3,6 +3,7 @@
 #include "../../nclgl/SceneNode.h"
 #include "FireParticleSystem.h"
 #include "../../nclgl/Matrix4.h"
+#include "EarthParticleSystem.h"
 
 class ChaseCamera;
 
@@ -17,10 +18,14 @@ public:
 
 	FireParticleSystem afterburner_system[2];
 	FireParticleSystem explosion;
+	EarthParticleSystem shieldSystem;
+
 	SceneNode* GetAfterburnerNode(){ return afterburnerNode; }
+	SceneNode* GetShieldNode(){ return shieldNode; }
 private:
 	SceneNode * root;
 	SceneNode * afterburnerNode;
+	SceneNode * shieldNode;
 	
 	Matrix4 view_matrix;
 	Matrix4 project_matrix;

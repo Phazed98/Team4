@@ -87,6 +87,14 @@ bool EarthParticleSystem::InitParticleSystem(int shape_type, const Vector3& Pos)
 			SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_COMPRESS_TO_DXT);
 		break;
 	}
+	case 3:{
+		particle_lifetime = 10000.f;
+		particle_size = 35;
+		particleUpdateShader = new Shader(EARTH_SHADER_DIR"vs_update.glsl", EARTH_SHADER_DIR"fs_update.glsl", EARTH_SHADER_DIR"gs_updateShield.glsl");
+		flame_texture = SOIL_load_OGL_texture(TEXTUREDIR"blueShield.jpg",
+			SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_COMPRESS_TO_DXT);
+		break;
+	}
 	}
 
 	EarthParticle Particles[MAX_PARTICLES];
@@ -158,6 +166,10 @@ bool EarthParticleSystem::InitRenderSystem(int shape_type){
 	}
 	case 2:{
 		particleRenderShader = new Shader(EARTH_SHADER_DIR"vertex.glsl", EARTH_SHADER_DIR"fragmentMedium.glsl", EARTH_SHADER_DIR"geometry.glsl");
+		break;
+	}
+	case 3:{
+		particleRenderShader = new Shader(EARTH_SHADER_DIR"vertexShield.glsl", EARTH_SHADER_DIR"fragmentShield.glsl", EARTH_SHADER_DIR"geometry.glsl");
 		break;
 	}
 	}
@@ -304,6 +316,10 @@ void EarthParticleSystem::RenderParticles(const Matrix4& modelMatrix)
 		model_matrix = modelMatrix*Matrix4::Scale(Vector3(5, 5, 5));
 		break;
 	}
+	case 3:{
+		model_matrix = modelMatrix*Matrix4::Scale(Vector3(10, 10, 10));
+		break;
+	}
 	}
 
 	//cout << model_matrix.values[12] << " " << model_matrix.values[13] << " " << model_matrix.values[14] << endl;
@@ -326,6 +342,8 @@ void EarthParticleSystem::RenderParticles(const Matrix4& modelMatrix)
 		glUniform1f(glGetUniformLocation(particleRenderShader->GetProgram(), "MaxLifeTime"), SECOND_PARTICLE_LIFETIME);
 	if (_shape == 2)
 		glUniform1f(glGetUniformLocation(particleRenderShader->GetProgram(), "MaxLifeTime"), particle_lifetime);
+	if (_shape == 3)
+		glUniform1f(glGetUniformLocation(particleRenderShader->GetProgram(), "MaxLifeTime"), SECOND_PARTICLE_LIFETIME);
 	glUniform1f(glGetUniformLocation(particleRenderShader->GetProgram(), "particleSize"), particle_size);
 	glUniform1i(glGetUniformLocation(particleRenderShader->GetProgram(), "diffuseTex"), 0);
 	glUniform1i(glGetUniformLocation(particleRenderShader->GetProgram(), "flameTex"), 1);

@@ -12,6 +12,7 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)
 	tornado_system.InitParticleSystem(0, Vector3(0, 10, 0));
 	geyser_system.InitParticleSystem(2, Vector3(0, 5, 0));
 	galaxy_system.InitParticleSystem(1, Vector3(0, 0, -200));
+	galaxyShield.InitParticleSystem(3, Vector3(0, 0, 0));
 	fire_system.InitParticleSystem(0, Vector3(0, 0, 0));
 
 	deferTimer = new float(0);
@@ -1209,6 +1210,9 @@ void Renderer::DrawAfterBurner(){
 	else{
 		spaceship_scene_node->afterburner_system[0].Render(msec, model_matrix, projMatrix, viewMatrix);
 		spaceship_scene_node->afterburner_system[1].Render(msec, model_matrix, projMatrix, viewMatrix);
+	}
+	if (PhysicsSystem::GetVehicle()->getImmunityPowerUpActive()){
+		spaceship_scene_node->shieldSystem.Render(msec, model_matrix, projMatrix, viewMatrix);
 	}
 	galaxy_system.Render(msec, viewMatrix, projMatrix);
 	PopMatrix();

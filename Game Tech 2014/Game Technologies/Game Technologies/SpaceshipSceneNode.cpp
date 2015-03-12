@@ -13,6 +13,7 @@ SpaceshipSceneNode::SpaceshipSceneNode(Mesh* shipMesh){
 
 	afterburner_system[1].InitParticleSystem(2, Vector3(3.2f, -2.0f, 8.5f));
 	explosion.InitParticleSystem(1, Vector3(0.0f, -3.0f, 0.0f));
+	shieldSystem.InitParticleSystem(3, Vector3(0.0f, -2.0f, 0.0f));
 }
 
 
