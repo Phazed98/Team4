@@ -523,6 +523,23 @@ Obstacle* MyGame::BuildObstacleEntity(float size, int type, int subType, ObjectT
 	Obstacle *g = new Obstacle(_obj, s, p, type, subType, _obstacle_type);
 	g->SetSize((int)size);
 	g->ConnectToSystems();
+
+	//-------------------------------------------------------------
+	if (subType == 0 && _obstacle_type == 4)
+	{
+		p->SetAABBHalfLength(25.f);
+	}
+	else if (subType == 1 && _obstacle_type == 4)
+	{	
+		p->SetAABBHalfLength(25.f);
+
+	}
+	else if (subType == 3 && _obstacle_type == 0)
+	{
+		p->SetAABBHalfLength(25.f);
+	}
+	//---------------------------------------------------------
+
 	if (_obstacle_type == 5)
 	{
 		

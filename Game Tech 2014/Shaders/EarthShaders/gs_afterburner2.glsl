@@ -118,7 +118,7 @@ void main()
 				OUT.pos = IN[0].Position0;
 
 
-				OUT.vel = vec3(0, 0.8, 0);
+				OUT.vel = vec3(0, 0.2, 0);
 
 				OUT.age = 1.0f;
 				EmitVertex();

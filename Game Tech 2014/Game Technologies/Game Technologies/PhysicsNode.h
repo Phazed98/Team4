@@ -78,8 +78,10 @@ public:
 	float GetAABBHalfLength() { return AABBHalfLength; }
 
 	void SetMovable(bool flag) { m_moveable = flag; }
-	//-----------------------------------------------
 
+	void SetAABBHalfLength(float length){AABBHalfLength = length ;}//added for particle systems
+	//-----------------------------------------------
+	
 protected:
 	bool useGravity;
 	bool m_moveable;

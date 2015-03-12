@@ -324,6 +324,8 @@ void EarthParticleSystem::RenderParticles(const Matrix4& modelMatrix)
 		glUniform1f(glGetUniformLocation(particleRenderShader->GetProgram(), "MaxLifeTime"), particle_lifetime);
 	if (_shape == 1)
 		glUniform1f(glGetUniformLocation(particleRenderShader->GetProgram(), "MaxLifeTime"), SECOND_PARTICLE_LIFETIME);
+	if (_shape == 2)
+		glUniform1f(glGetUniformLocation(particleRenderShader->GetProgram(), "MaxLifeTime"), particle_lifetime);
 	glUniform1f(glGetUniformLocation(particleRenderShader->GetProgram(), "particleSize"), particle_size);
 	glUniform1i(glGetUniformLocation(particleRenderShader->GetProgram(), "diffuseTex"), 0);
 	glUniform1i(glGetUniformLocation(particleRenderShader->GetProgram(), "flameTex"), 1);
