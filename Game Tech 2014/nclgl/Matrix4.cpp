@@ -298,3 +298,21 @@ Matrix4 Matrix4::InvertMatrix(Matrix4 m)
 
 	return invOut;
 }
+
+Matrix4 Matrix4::TransposeMatrix(Matrix4 m){
+	float temp;
+
+	temp = m.values[4];
+	m.values[4] = m.values[1];
+	m.values[1] = temp;
+
+	temp = m.values[8];
+	m.values[8] = m.values[2];
+	m.values[2] = temp;
+
+	temp = m.values[9];
+	m.values[9] = m.values[6];
+	m.values[6] = temp;
+
+	return m;
+}

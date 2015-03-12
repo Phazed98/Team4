@@ -119,6 +119,9 @@ Renderer::~Renderer(void)
 
 void Renderer::fullyInit()
 {
+
+
+
 	point_light_sphere = new OBJMesh("../../Meshes/ico.obj");
 	screen_quad = Mesh::GenerateQuad();
 	defer_shader = new Shader(SHADERDIR"DeferGeometryVertex.glsl", SHADERDIR"DeferGeometryFragment.glsl");
@@ -133,7 +136,13 @@ void Renderer::fullyInit()
 	
 	basicFont = new Font(SOIL_load_OGL_texture(TEXTUREDIR"tahoma.tga", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_COMPRESS_TO_DXT), 16, 16);
 
-	background[0] = SOIL_load_OGL_texture(TEXTUREDIR"background2.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS);
+	background[0] = SOIL_load_OGL_texture(TEXTUREDIR"air_background.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS);
+	background[1] = SOIL_load_OGL_texture(TEXTUREDIR"fire_background.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS);
+	background[2] = SOIL_load_OGL_texture(TEXTUREDIR"earth_background.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS);
+	background[3] = SOIL_load_OGL_texture(TEXTUREDIR"water_background.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS);
+
+	cur_back = pre_back = background[2];
+
 	glBindTexture(GL_TEXTURE_2D, background[0]);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -150,7 +159,7 @@ void Renderer::fullyInit()
 
 	simpleShader = new Shader(SHADERDIR"TechVertex.glsl", SHADERDIR"TechFragment.glsl");
 	textShader = new Shader(SHADERDIR"TexVertex.glsl", SHADERDIR"TexFragment.glsl");
-	backgroundShader = new Shader(SHADERDIR"BackgroundVertex.glsl", SHADERDIR"TexturedFragment.glsl");
+	backgroundShader = new Shader(SHADERDIR"BackgroundVertex.glsl", SHADERDIR"BackgroundFragment.glsl");
 
 
 	quad = Mesh::GenerateQuad();
@@ -1375,7 +1384,9 @@ void Renderer::RenderBackground(){
 	glDisable(GL_DEPTH_TEST);
 	glDepthMask(GL_FALSE);
 	SetCurrentShader(backgroundShader);
-	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), 0);
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex1"), 0);
+
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex2"), 2);
 	PushMatrix();
 	MatrixToIdentity();
 	//	projMatrix = Matrix4::Perspective(0.5f, 10000.0f, (float)width / (float)height, 45.0f);
@@ -1388,13 +1399,23 @@ void Renderer::RenderBackground(){
 	rotation.values[13] = 0;
 	rotation.values[14] = 0;
 
-	//PhysicsSystem::GetVehicle()->get
+	float temp = PhysicsSystem::GetVehicle()->getNormalisedPlaneSwitchProgress();
+	if (PhysicsSystem::GetVehicle()->getIsPlaneSwitching()){
+		//change plane, now change background
+		pre_back = background[PhysicsSystem::GetVehicle()->getPreviousPlaneID()]; //old plane
+		cur_back = background[PhysicsSystem::GetVehicle()->GetCurrentPlaneID()]; //new plane
+	}
 
-	rotation=Matrix4::InvertMatrix(rotation);
+	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "temp"), temp);
+	
+	rotation = Matrix4::TransposeMatrix(rotation);
 	textureMatrix = pushPos * rotation *Matrix4::Scale(Vector3(0.7, 0.7, 0.7))* popPos;
 
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, pre_back);
+
 	UpdateShaderMatrices();
-	quad->SetTexture(background[0]);
+	quad->SetTexture(cur_back);
 	quad->Draw();
 
 	PopMatrix();

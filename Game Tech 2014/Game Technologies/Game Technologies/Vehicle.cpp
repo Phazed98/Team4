@@ -6,7 +6,7 @@
 //in case we want to have a selection of vehicles or something, and for multiplayer
 //Also going to pass the obj as a parameter to speed it up. 
 Vehicle::Vehicle(Mesh* mesh, float playerScale, float speedTurn, int startingPlaneID, float steeringResponsiveness, SpaceshipSceneNode* ssn) :
-Speed_Turn(speedTurn), currentPlaneID(startingPlaneID), steeringResponsiveness(steeringResponsiveness), spaceship_scene_node(ssn)
+Speed_Turn(speedTurn), currentPlaneID(startingPlaneID), steeringResponsiveness(steeringResponsiveness), spaceship_scene_node(ssn), previousPlaneID(startingPlaneID)
 {
 	//initialise variables;
 	rotationOnPlane = 0;

@@ -219,5 +219,10 @@ protected:
 	Mesh* screen_quad;
 	Shader* dir_light_shader;
 	void CombinePass();
+
+//for the background changes
+	GLuint pre_back;
+	GLuint cur_back;
+
 };
 
