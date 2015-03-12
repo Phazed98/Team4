@@ -63,6 +63,9 @@ SoundSystem::SoundSystem(unsigned int channels) {
 	SoundManager::AddSound("../../Sounds/bullets.wav");
 	SoundManager::AddSound("../../Sounds/move.wav");
 	SoundManager::AddSound("../../Sounds/move02.wav");
+	SoundManager::AddSound("../../Sounds/firecross.wav");
+	SoundManager::AddSound("../../Sounds/thundercross.wav");
+	SoundManager::AddSound("../../Sounds/watercross.wav");
 	/*GlobleSound01 = new SoundEmitter();
 	GlobleSound01->SetVolume(0.5);
 	GlobleSound01->SetSound(SoundManager::GetSound("../../Sounds/test2.wav"));

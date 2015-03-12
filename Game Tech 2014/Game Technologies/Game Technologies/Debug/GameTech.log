@@ -1,9 +1,16 @@
-﻿Build started 12/03/2015 15:32:48.
+﻿Build started 12/03/2015 15:52:18.
      1>Project "D:\Team 4\Team4\Game Tech 2014\Game Technologies\Game Technologies\GameTech.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         D:\visual studio 2013\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt SoundSystem.cpp
-         SoundSystem.cpp
+         D:\visual studio 2013\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt PhysicsSystem.cpp
+         PhysicsSystem.cpp
      1>d:\team 4\team4\game tech 2014\nclgl\keyboard.h : warning C4819: The file contains a character that cannot be represented in the current code page (936). Save the file in Unicode format to prevent data loss
+     1>d:\team 4\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(235): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\team 4\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(339): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>d:\team 4\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(373): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\team 4\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(417): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\team 4\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(438): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\team 4\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(459): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\team 4\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(480): warning C4018: '<' : signed/unsigned mismatch
        Link:
          D:\visual studio 2013\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\Team 4\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\Team 4\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\Team 4\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.lib" /MACHINE:X86 /FORCE:MULTIPLE Debug\Bullets.obj
          Debug\Button.obj
@@ -150,4 +157,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.60
+Time Elapsed 00:00:01.50

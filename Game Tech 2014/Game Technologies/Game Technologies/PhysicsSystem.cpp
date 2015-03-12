@@ -287,10 +287,13 @@ void	PhysicsSystem::ObstacleCollisions()
 								switch (Obstacles[i]->getSubType())
 								{
 									//tornado
+									SoundSystem::GetSoundSystem()->PlaySoundA(SoundManager::GetSound("../../Sounds/thundercross.wav"), Vector3());
 								case 0:
 									//flames
+									SoundSystem::GetSoundSystem()->PlaySoundA(SoundManager::GetSound("../../Sounds/firecross.wav"), Vector3());
 								case 1:
 									//water spout 
+									SoundSystem::GetSoundSystem()->PlaySoundA(SoundManager::GetSound("../../Sounds/watercross.wav"), Vector3());
 								case 3:
 
 									break;
