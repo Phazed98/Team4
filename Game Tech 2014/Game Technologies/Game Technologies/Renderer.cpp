@@ -288,8 +288,8 @@ void Renderer::RenderScene()
 		PresentMotionBlur();
 
 		//Display HUD
-//		displayInformation();
-		
+		RenderUI();
+		displayInformation();
 	//	DSFinalPass();
 
 		SwapBuffers();
@@ -424,13 +424,13 @@ void Renderer::PresentMotionBlur(){
 	MatrixToIdentity();
 	SetCurrentShader(motion_blur_shader);
 
-	projMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float)width / (float)height, 60.0f);
+//	projMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float)width / (float)height, 60.0f);
 	viewMatrix = camera->BuildViewMatrix();
 	//update current viewMatrix
 	current_viewMatrix = viewMatrix;//get current camera view matrix
-	float track_speed = PhysicsSystem::GetTrackSpeed();
+//	float track_speed = PhysicsSystem::GetTrackSpeed();
 //	previous_viewMatrix = current_viewMatrix;
-	previous_viewMatrix.values[14] = current_viewMatrix.values[14] + track_speed/2;
+//	previous_viewMatrix.values[14] = current_viewMatrix.values[14] + track_speed/2;
 	
 	Matrix4 inverse_pv_matrix = Matrix4::InvertMatrix(projMatrix*current_viewMatrix);
 
@@ -473,6 +473,7 @@ void Renderer::PresentMotionBlur(){
 	quad_motion_blur->SetTexture(defer_final_texture);
 	quad_motion_blur->Draw();
 
+	//store the previous viewmatrix
 	previous_viewMatrix = current_viewMatrix;
 
 	glUseProgram(0);
@@ -618,33 +619,11 @@ void Renderer::RenderPauseMenu()
 
 void Renderer::RenderUI()
 {
-	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-
-	if (camera)
-	{
-		SetCurrentShader(simpleShader);
-		glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), 0);
-
-		textureMatrix.ToIdentity();
-		modelMatrix.ToIdentity();
-		viewMatrix = camera->BuildViewMatrix();
-		projMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float)width / (float)height, 60.0f);
-		frameFrustum.FromMatrix(projMatrix * viewMatrix);
-		UpdateShaderMatrices();
-
-		//Return to default 'usable' state every frame!
-		glEnable(GL_DEPTH_TEST);
-		glEnable(GL_CULL_FACE);
-		glDisable(GL_STENCIL_TEST);
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-		BuildNodeLists(root);
-		SortNodeLists();
-		DrawNodes();
-		ClearNodeLists();
-	}
-
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	glDisable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+	glBlendEquation(GL_FUNC_ADD);
+	glBlendFunc(GL_ONE, GL_ZERO);
 
 	//Set Shader to TexturedShader
 	SetCurrentShader(menuShader);
@@ -703,7 +682,7 @@ void Renderer::RenderUI()
 	UpdateShaderMatrices();
 	cooldownBar->Draw();
 
-	
+	glUseProgram(0);
 }
 
 buttonPressed Renderer::RenderMainMenu()
@@ -1378,6 +1357,9 @@ void Renderer::RenderBackground(){
 	rotation.values[13] = 0;
 	rotation.values[14] = 0;
 
+	//PhysicsSystem::GetVehicle()->get
+
+	rotation=Matrix4::InvertMatrix(rotation);
 	textureMatrix = pushPos * rotation *Matrix4::Scale(Vector3(0.7, 0.7, 0.7))* popPos;
 
 	UpdateShaderMatrices();
