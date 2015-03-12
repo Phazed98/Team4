@@ -55,17 +55,18 @@ protected:
 	Obstacle*	BuildObstacleEntity(float size, int type, int subType, ObjectType*, int);
 	GameEntity*	BuildNewObstacleEntity(int plane);
 	GameEntity* BuildBuffEntity(float radius, Vector3 pos); //new 6.2.2015 Daixi
+	ObjectType* BuildCheckPointEntity(int type, int subType, int size);
 
 
 
 	Mesh* cube;
 	Mesh* quad;
 	Mesh* sphere;
-
 	Mesh* cubeWater;
 	Mesh* cubeAir;
 	Mesh* cubeFire;
 	Mesh* cubeEarth;
+	Mesh* checkCube;
 
 	GameEntity* upperPlanes[NUMBEROFPLANES];
 	GameEntity* lowerPlanes[NUMBEROFPLANES];

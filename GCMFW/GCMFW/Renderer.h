@@ -43,7 +43,6 @@ public:
 	~Renderer(void);
 	
 	void	SetCamera(ChaseCamera *c); 
-	//void	SetCamera(Camera*c);
 	void	AddNode(SceneNode* n);
 	void	RemoveNode(SceneNode* n);
 	void	RenderPauseMenu();
@@ -79,7 +78,7 @@ protected:
 	void	SortNodeLists();
 	void	ClearNodeLists();
 	void	DrawNodes();
-//	void	DrawNode(SceneNode*n);
+	//void	DrawNode(SceneNode*n);
 
 	Frustum		frameFrustum;
 	std::vector<SceneNode*> transparentNodeList;

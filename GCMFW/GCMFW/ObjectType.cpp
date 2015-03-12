@@ -11,6 +11,8 @@ ObjectType::ObjectType(SceneNode* s, PhysicsNode* p, int _type, int _subType) : 
 	SetInitialAttributes();
 	length = 800.0f;
 	random = 1;
+	checkPointTimer = 10000;
+	AddToPhysics = true;
 }
 
 
@@ -47,14 +49,23 @@ void ObjectType::Update(float msec)
 	{
 		float speed = PhysicsSystem::GetTrackSpeed();
 		physicsNode->SetPosition(physicsNode->GetPosition() + Vector3(0, 0, speed));
-		checkPointTimer -= msec;
-		//PhysicsSystem::GetPhysicsSystem().SetCheckPointTimer(checkPointTimer / 1000);
 
 		if (physicsNode->GetPosition().getZ() > 0 && increaseTimer)
 		{
-			checkPointTimer += 10000 + resetDistance;
+			checkPointTimer += 10000000 + resetDistance;
 
 			increaseTimer = false;
+		}
+
+		if (physicsNode->GetPosition().getZ() < 0 && AddToPhysics)
+		{
+			PhysicsSystem::GetPhysicsSystem().SetCheckPointTimer(PhysicsSystem::GetPhysicsSystem().GetCheckPointTimer() + (resetDistance/150));
+			AddToPhysics = false;
+		}
+
+		if (physicsNode->GetPosition().getZ() < -5 && !AddToPhysics)
+		{
+			AddToPhysics = true;
 		}
 
 		if (physicsNode->GetPosition().getZ() > (resetDistance))
@@ -96,6 +107,10 @@ void ObjectType::SetInitialAttributes()
 		Vector4 rotVec = MathHelper::vec3ToEuler(0, 0, 90);
 		physicsNode->SetOrientation(Quat(rotVec.getX(), rotVec.getY(), rotVec.getZ(), rotVec.getW()));
 		renderNode->SetColour(Vector4(0, 1, 0, 1));
+	}
+	else if (subType == 4) // Middle
+	{
+		physicsNode->SetPosition(Vector3(0, 0, INITIAL_Z_POSITION));
 	}
 }
 

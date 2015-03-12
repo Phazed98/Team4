@@ -31,6 +31,8 @@ PhysicsSystem::PhysicsSystem(void)
 	playerIsAccelerating = false;
 	gameSpeedFromTime = 0.0f;
 	immunityTime = 5000;
+	checkPointTimer = 50000;
+	canDie = false;
 }
 
 PhysicsSystem::~PhysicsSystem(void)
@@ -46,6 +48,7 @@ void	PhysicsSystem::Update(float msec)
 	//Update FPS
 	nbFrames++;
 	time += msec;
+	checkPointTimer -= msec;
 
 	//--------added by sam-----------------------
 	//Update max track speed
@@ -57,6 +60,8 @@ void	PhysicsSystem::Update(float msec)
 	//	track_speed = maxTrackSpeed;
 	//}
 	//--------------------------------------------
+
+	
 
 	if (time >= 1000)
 	{
@@ -81,10 +86,15 @@ void	PhysicsSystem::Update(float msec)
 
 	if (canDie)
 	{
+		if (checkPointTimer < 1)
+		{
+			GameClass::GetGameClass().setCurrentState(GAME_OVER);
+		}
+
 		if (!CheckOnATile())
 		{
 			std::cout << " For those of you who dont know boobs loook like ( . Y . )" << std::endl;
-			GameClass::GetGameClass().setCurrentState(GAME_OVER);
+		//	GameClass::GetGameClass().setCurrentState(GAME_OVER);
 		}
 	}
 

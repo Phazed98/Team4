@@ -40,15 +40,24 @@ MyGame::MyGame()
 
 	cube = new OBJMesh(MESHDIR"cube.obj");
 	cube->SetDefaultTexture(*GCMRenderer::LoadGTF("/Textures/red.gtf"));
+
+	checkCube = new OBJMesh(MESHDIR"cube.obj");
+	checkCube->SetDefaultTexture(*GCMRenderer::LoadGTF("/Textures/Checkpoint.gtf"));
+
 	cubeAir = new OBJMesh(MESHDIR"cube.obj");
 	cubeAir->SetDefaultTexture(*GCMRenderer::LoadGTF("/Textures/clouds.gtf"));
+
 	cubeWater = new OBJMesh(MESHDIR"cube.obj");
 	cubeWater->SetDefaultTexture(*GCMRenderer::LoadGTF("/Textures/Water.gtf"));
+
 	cubeFire = new OBJMesh(MESHDIR"cube.obj");
 	cubeFire->SetDefaultTexture(*GCMRenderer::LoadGTF("/Textures/lava_texture.gtf"));
+
 	cubeEarth = new OBJMesh(MESHDIR"cube.obj");
 	cubeEarth->SetDefaultTexture(*GCMRenderer::LoadGTF("/Textures/dust.gtf"));
+
 	quad = Mesh::GenerateQuad();
+//	quad->SetDefaultTexture(*GCMRenderer::LoadGTF("/Textures/lava_texture.gtf"));
 
 
 	Vehicle* player = PhysicsSystem::GetVehicle();
@@ -112,6 +121,9 @@ MyGame::MyGame()
 		PhysicsSystem::GetPhysicsSystem().GetPlane3Tiles()->push_back(&(plane->GetPhysicsNode()));
 		//-----------------------------------------------------------------------------
 	}
+
+	//-------------------------------------------------Checkpoint---------------------------------------------------------//
+	allEntities.push_back(BuildCheckPointEntity(2, 4, 200));
 
 	setCurrentState(GAME_PLAYING);
 
@@ -607,4 +619,28 @@ int MyGame::getEmptyIndex(int _subType)
 		}
 	}
 	return -1;
+}
+
+
+ObjectType* MyGame::BuildCheckPointEntity(int type, int subType, int size)
+{
+	SceneNode* s = new SceneNode(checkCube);
+
+	s->SetModelScale(Vector3(size,size,size));
+	//Oh if only we had a set texture function...we could make our brick floor again WINK WINK
+	s->SetBoundingRadius(size);
+
+	Vector4 helperVec = MathHelper::vec3ToEuler(180, 0, 0);
+	PhysicsNode*p = new PhysicsNode(Quat(helperVec.getX(), helperVec.getY(), helperVec.getZ(),helperVec.getZ()), Vector3());
+
+	p->SetUseGravity(false);
+	p->SetInverseMass(0.0f);
+	p->SetMovable(false);
+	p->SetInverseInertia(InertialMatrixHelper::createImmovableInvInertial());
+	p->SetCollisionVolume(new CollisionPlane(Vector3(0, 1, 0), 0));
+
+	ObjectType*g = new ObjectType(s, p, type, subType);
+	g->ConnectToSystems();
+
+	return g;
 }

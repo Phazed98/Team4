@@ -75,6 +75,10 @@ public:
 	static float GetTrackSpeed(){ return track_speed; }
 	static void  SetTrackSpeed(float s){ track_speed = s; }
 
+
+	int GetCheckPointTimer(){ return checkPointTimer; }
+	void  SetCheckPointTimer(int s){ checkPointTimer = s; }
+
 	//---------------------------------------------------------------------------------
 	//getters for storage vectors - to be filled at tile/obstacle creation
 	std::vector<PhysicsNode*>* GetPlane0Tiles() { return &Plane0Tiles; }
@@ -92,6 +96,7 @@ public:
 	std::vector<Obstacle*>*	GetObstacles() { return &Obstacles; }
 	std::vector<PhysicsNode*>* GetMissiles() { return &Missiles; }
 	//---------------------------------------------------------------------------------
+
 
 
 

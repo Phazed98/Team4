@@ -42,5 +42,6 @@ protected:
 
 	int resetDistance; // Reset distance used for check point
 	bool increaseTimer;
+	bool AddToPhysics;
 };
 
