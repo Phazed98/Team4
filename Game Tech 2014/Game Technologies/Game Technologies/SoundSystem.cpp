@@ -66,6 +66,7 @@ SoundSystem::SoundSystem(unsigned int channels) {
 	SoundManager::AddSound("../../Sounds/firecross.wav");
 	SoundManager::AddSound("../../Sounds/thundercross.wav");
 	SoundManager::AddSound("../../Sounds/watercross.wav");
+	SoundManager::AddSound("../../Sounds/jet.wav");
 	/*GlobleSound01 = new SoundEmitter();
 	GlobleSound01->SetVolume(0.5);
 	GlobleSound01->SetSound(SoundManager::GetSound("../../Sounds/test2.wav"));
@@ -95,7 +96,7 @@ void SoundSystem::GameStart(){
 	temporaryEmitters.push_back(GlobleSound03);
 	VehicleMove = new SoundEmitter();
 	VehicleMove->SetVolume(0);
-	VehicleMove->SetSound(SoundManager::GetSound("../../Sounds/move02.wav"));
+	VehicleMove->SetSound(SoundManager::GetSound("../../Sounds/jet.wav"));
 	temporaryEmitters.push_back(VehicleMove);
 }
 
@@ -215,9 +216,11 @@ void SoundSystem::CullNodes() {
 			length = (listenerTransform.GetPositionVector() -
 				(*i)->GetWorldTransform().GetPositionVector()).Length();
 
-			//length = (listener->GetWorldTransform().GetPositionVector() -
-			//	(*i)->GetWorldTransform().GetPositionVector()).Length();
 		}
+		/*if (length < (*i)->GetRadius())
+		{
+			(*i)->SetVolume(1 - (length / (*i)->GetRadius()));
+		}*/
 
 		if (length > (*i)->GetRadius() || !(*i)->GetSound() || (*i)->GetTimeLeft() < 0) {
 			(*i)->DetachSource();	//Important!
