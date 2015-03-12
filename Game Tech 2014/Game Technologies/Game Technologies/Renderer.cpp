@@ -170,8 +170,17 @@ void Renderer::fullyInit()
 	uiQuad = Mesh::GenerateQuad();
 	uiQuad->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"/GUITextures/score.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
 
-	cooldownBar = Mesh::GenerateQuad();
-	cooldownBar->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"/GUITextures/cd.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
+	blueBar = Mesh::GenerateQuad();
+	blueBar->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"/GUITextures/blue.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
+
+	greenBar = Mesh::GenerateQuad();
+	greenBar->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"/GUITextures/green.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
+
+	redBar = Mesh::GenerateQuad();
+	redBar->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"/GUITextures/red.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
+
+	yellowBar = Mesh::GenerateQuad();
+	yellowBar->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"/GUITextures/yellow.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
 
 	buttonB = Mesh::GenerateQuad();
 	buttonB->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"/GUITextures/bigB.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
@@ -259,21 +268,15 @@ void Renderer::UpdateScene(float msec)
 	root->Update(msec);
 
 	//Used bor the cooldown bar
-	if (cd > 0)
+	if ( planeSwitchCD > 0)
 	{
-		cd -= msec;
+		planeSwitchCD -= msec;
 	}
 	
 }
 
 void Renderer::RenderScene()
 {
-	
-
-
-
-
-	
 	//render the particle to a texture firstly
 	//this scene store in particle_ColourTex
 	RenderParticleToTexture();
@@ -633,23 +636,49 @@ void Renderer::RenderUI()
 	}
 
 
-	//Cooldown Bar
+	//Plane switch cooldown Bar
 	if (PhysicsSystem::GetVehicle()->getCoolingDownPlaneSwitch())
 	{
-		cd = PhysicsSystem::GetVehicle()->getPlaneSwitchCDRemaining();
+		planeSwitchCD = PhysicsSystem::GetVehicle()->getPlaneSwitchCDRemaining() / 1000;
 	}
 
-	
-	//Cooldown Bar
-	if (Window::GetWindow().GetKeyboard()->KeyDown(KEYBOARD_Q))
+	//Immunity PowerUp Duration
+	if (PhysicsSystem::GetVehicle()->getCoolingDownPlaneSwitch())
 	{
-		cd = 1000;
+		immunePowerUpDuration = 5000;
 	}
 
-	//cd = cd * 0.9;
-	modelMatrix = Matrix4::Translation(Vector3(0.0f, 0.7f, 0.0f)) *  Matrix4::Scale(Vector3(cd / 1000 * 0.5f, 0.05f, 0.5f));
+	//Slow PowerUp Duration
+	if (PhysicsSystem::GetVehicle()->getCoolingDownPlaneSwitch())
+	{
+		slowPowerUpDuration = 5000;
+	}
+
+	//CD PowerUp Duration
+	if (PhysicsSystem::GetVehicle()->getCoolingDownPlaneSwitch())
+	{
+		cdPowerUpDuration = 5000;
+	}
+
+	//Plane switch cooldown
+	modelMatrix = Matrix4::Translation(Vector3(0.0f, 0.9f, 0.0f)) *  Matrix4::Scale(Vector3(planeSwitchCD * 0.5f, 0.05f, 0.5f));
 	UpdateShaderMatrices();
-	cooldownBar->Draw();
+	greenBar->Draw();
+
+	//Slow PowerUp duration
+	modelMatrix = Matrix4::Translation(Vector3(0.0f, 0.8f, 0.0f)) *  Matrix4::Scale(Vector3(slowPowerUpDuration / 5000 * 0.75f, 0.05f, 0.5f));
+	UpdateShaderMatrices();
+	redBar->Draw();
+
+	//No Cooldown PowerUp duration
+	modelMatrix = Matrix4::Translation(Vector3(0.0f, 0.7f, 0.0f)) *  Matrix4::Scale(Vector3(cdPowerUpDuration / 5000 * 0.75f, 0.05f, 0.5f));
+	UpdateShaderMatrices();
+	blueBar->Draw();
+
+	//Immune PowerUp duration
+	modelMatrix = Matrix4::Translation(Vector3(0.0f, 0.6f, 0.0f)) *  Matrix4::Scale(Vector3(immunePowerUpDuration / 5000 * 0.75f, 0.05f, 0.5f));
+	UpdateShaderMatrices();
+	yellowBar->Draw();
 
 	glUseProgram(0);
 }
@@ -1065,13 +1094,13 @@ void Renderer::displayInformation()
 	
 	//--------------------------------------------------GUI--------------------------------------------------------------------------------
 	DrawText("SCORE", Vector3(25, 15, 0), 25, false);
-	DrawText("1250", Vector3(32, 50, 0), 25, false);
+	DrawText(to_string(PhysicsSystem::GetPhysicsSystem().GetScore()), Vector3(32, 50, 0), 25, false);
 
-	DrawText("SCORE", Vector3(195, 15, 0), 25, false);
-	DrawText("1250", Vector3(205, 50, 0), 25, false);
+	DrawText("STACK", Vector3(195, 15, 0), 25, false);
+	DrawText("X  " + to_string(PhysicsSystem::GetPhysicsSystem().GetScoreMultiplier()), Vector3(205, 50, 0), 25, false);
 
-	DrawText("SCORE", Vector3(375, 15, 0), 25, false);
-	DrawText(to_string(cd), Vector3(395, 50, 0), 25, false);
+	DrawText("COINS", Vector3(375, 15, 0), 25, false);
+	DrawText("X  " + to_string(PhysicsSystem::GetPhysicsSystem().GetNumberOfCoins()), Vector3(395, 50, 0), 25, false);
 
 	DrawText("Timer", Vector3(25, 105, 0), 25, false);
 	DrawText(to_string(PhysicsSystem::GetPhysicsSystem().GetCheckPointTimer()), Vector3(32, 135, 0), 25, false);
@@ -1094,8 +1123,8 @@ void Renderer::displayInformation()
 		DrawText("No CD", Vector3(880, 85, 0), 20, false);
 	}
 
-
 	//--------------------------------------------------GUI--------------------------------------------------------------------------------
+
 
 	//DrawText("(R)Reset Boxes", Vector3(0, 192, 0), 16, false);
 

@@ -1,6 +1,6 @@
 #include "ObjectType.h"
 #include "PhysicsSystem.h"
-
+#include "GameClass.h"
 
 ObjectType::ObjectType(SceneNode* s, PhysicsNode* p, int _type, int _subType) : GameEntity(s, p)
 {
@@ -45,11 +45,20 @@ void ObjectType::Update(float msec)
 		}
 	}
 
+
+
+
+
 	if (type == 2)
 	{
+		if (GameClass::GetGameClass().getCurrentState() == GAME_PLAYING)
+		{
+			if (!(msec> 10000))
+				checkPointTimer -= msec;
+		}
+
 		float speed = PhysicsSystem::GetTrackSpeed();
 		physicsNode->SetPosition(physicsNode->GetPosition() + Vector3(0, 0, speed));
-		checkPointTimer -= msec;
 		PhysicsSystem::GetPhysicsSystem().SetCheckPointTimer(checkPointTimer / 1000);
 
 		if (physicsNode->GetPosition().z > 0 && increaseTimer)
@@ -69,7 +78,6 @@ void ObjectType::Update(float msec)
 	}
 
 }
-
 
 void ObjectType::SetInitialAttributes()
 {

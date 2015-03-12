@@ -72,8 +72,17 @@ public:
 	static float GetTrackSpeed(){ return track_speed; }
 	static void  SetTrackSpeed(float s){ track_speed = s; }
 
+	//---------------------CheckPoint Timer--------------------------------------------
 	int GetCheckPointTimer(){ return checkPointTimer; }
 	void  SetCheckPointTimer(int s){ checkPointTimer = s; }
+
+	//---------------------Score--------------------------------------------
+	void CalculateScore(float);
+	int GetScoreMultiplier() { return scoreMultiplier; }
+	int GetNumberOfCoins() { return numberOfCoins; }
+	int GetScore() { return score; }
+
+	//---------------------------------------------------------------------------------
 
 
 	//---------------------------------------------------------------------------------
@@ -224,5 +233,11 @@ protected:
 	bool		CheckOnATile();
 
 	bool canDie;
+
+	//---------------------Score--------------------------------------------
+	int			score = 0;
+	int			scoreMultiplier = 1;
+	int			numberOfCoins = 0;
+	int			scoreTimer = 0;
 };
 

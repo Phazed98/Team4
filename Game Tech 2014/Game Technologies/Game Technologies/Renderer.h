@@ -169,11 +169,17 @@ protected:
 
 	//UI Elements
 	Mesh* uiQuad;
-	Mesh* cooldownBar;
+	Mesh* blueBar;
+	Mesh* yellowBar;
+	Mesh* redBar;
+	Mesh* greenBar;
 	Mesh* buttonB;
 	Mesh* buttonX;
 	Mesh* buttonY;
-	float cd;
+	float planeSwitchCD;
+	float slowPowerUpDuration;
+	float immunePowerUpDuration;
+	float cdPowerUpDuration;
 
 	vector<TornadoSceneNode*> tornadoNode;
 	EarthParticleSystem tornado_system;
