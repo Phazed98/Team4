@@ -490,6 +490,7 @@ ObjectType* MyGame::BuildObjectEntity(int type, int subType) {
 Obstacle* MyGame::BuildObstacleEntity(float size, int type, int subType, ObjectType* _obj, int _obstacle_type) 
 {
 	SceneNode* s;
+	
 	if (subType == 0 && _obstacle_type == 4)
 	{
 		s = new TornadoSceneNode(sphere);
@@ -508,11 +509,21 @@ Obstacle* MyGame::BuildObstacleEntity(float size, int type, int subType, ObjectT
 		Renderer::GetRenderer().SetGeyserSceneNode((GeyserSceneNode*)s);
 		size= size/size ;
 	}
+	
 	else if (subType == 2 && _obstacle_type == 0)
 	{
 		s = new SceneNode(bigRock);
 	}
-	else
+	
+	else if (subType == 0 && _obstacle_type == 0){
+		s = new SceneNode(sphere);
+		s->SetRenderType(STABLE_OBSTACLE);
+	}
+	else if (subType == 1 && _obstacle_type == 0){
+		s = new SceneNode(sphere);
+		s->SetRenderType(STABLE_OBSTACLE);
+	}
+	else 
 	{
 		s = new SceneNode(sphere);
 	}

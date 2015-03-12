@@ -17,6 +17,7 @@ PhysicsSystem::PhysicsSystem(void)
 	//------------------------------------------------------------------------------------
 	//add by steven because it should use render instance
 	spaceship_scene_node = new SpaceshipSceneNode(PlayerMesh);
+	spaceship_scene_node->SetRenderType(PLAYER_RENDER);
 	//store the ssn in render to render the particle system at the end of everything
 	Renderer::GetRenderer().SetSpaceshipSceneNode(spaceship_scene_node);
 	//-----------------------------------------------------------------------------------------

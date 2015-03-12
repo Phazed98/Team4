@@ -233,5 +233,7 @@ protected:
 	float* deferTimer;
 	float* postprocessTimer;
 
+	bool explosion;
+
 };
 

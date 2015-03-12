@@ -16,6 +16,7 @@ public:
 	virtual void	Update(float msec);
 
 	FireParticleSystem afterburner_system[2];
+	FireParticleSystem explosion;
 	SceneNode* GetAfterburnerNode(){ return afterburnerNode; }
 private:
 	SceneNode * root;

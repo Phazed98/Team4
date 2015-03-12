@@ -123,6 +123,7 @@ Renderer::~Renderer(void)
 
 void Renderer::fullyInit()
 {
+	explosion = false;
 
 	post_processing_shader = new Shader(SHADERDIR"TechVertex.glsl", SHADERDIR"PostProcessingFragment.glsl");
 
@@ -993,6 +994,17 @@ void	Renderer::DrawNode(SceneNode*n)
 		switch (rt){
 		case WATER_PLANE:{
 			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useDisplace"), 1);
+			glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "displaceStrength"), 0.3);
+			break;
+		}
+		/*case PLAYER_RENDER:{
+			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useDisplace"), 1);
+			glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "displaceStrength"), 5);
+			break;
+		}*/
+		case STABLE_OBSTACLE:{
+			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useDisplace"), 1);
+			glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "displaceStrength"), 0.3);
 			break;
 		}
 		default:{
@@ -1184,6 +1196,12 @@ void Renderer::DrawAfterBurner(){
 	spaceship_scene_node->afterburner_system[0].Render(msec, model_matrix, projMatrix, viewMatrix);
 	spaceship_scene_node->afterburner_system[1].Render(msec, model_matrix, projMatrix, viewMatrix);
 	
+	if (Window::GetKeyboard()->KeyTriggered(KEYBOARD_M) || explosion) //Build Cube
+	{
+		explosion = true;
+		spaceship_scene_node->explosion.Render(msec, model_matrix, projMatrix, viewMatrix);
+	}
+
 	galaxy_system.Render(msec, viewMatrix, projMatrix);
 	PopMatrix();
 }
@@ -1478,7 +1496,7 @@ void Renderer::DSGeometryPass(){
 	//	SetCurrentShader(water_plane_shader);
 	SetCurrentShader(defer_shader);
 
-	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "displaceStrength"), 0.3);
+	
 	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "time"), total_sec_pass);
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), 0);
 	UpdateShaderMatrices();
