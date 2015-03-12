@@ -79,6 +79,7 @@ SoundSystem::SoundSystem(unsigned int channels) {
 	GlobleSound03->SetVolume(0.2);
 	temporaryEmitters.push_back(GlobleSound03);*/
 	VehicleMove = NULL;
+	GlobleSound03 = NULL;
 }
 
 void SoundSystem::GameStart(){
@@ -217,10 +218,10 @@ void SoundSystem::CullNodes() {
 				(*i)->GetWorldTransform().GetPositionVector()).Length();
 
 		}
-		/*if (length < (*i)->GetRadius())
+		if (length < (*i)->GetRadius())
 		{
 			(*i)->SetVolume(1 - (length / (*i)->GetRadius()));
-		}*/
+		}
 
 		if (length > (*i)->GetRadius() || !(*i)->GetSound() || (*i)->GetTimeLeft() < 0) {
 			(*i)->DetachSource();	//Important!
@@ -229,6 +230,9 @@ void SoundSystem::CullNodes() {
 		else{
 			++i;
 		}
+	}
+	if (GlobleSound03 != NULL){
+		GlobleSound03->SetVolume(0.2);
 	}
 
 }
