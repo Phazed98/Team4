@@ -59,6 +59,7 @@ public:
 	void SetIsGlobal(bool value) { isGlobal = value; }
 
 	Matrix4	GetWorldTransform() const { return worldTransform; }
+	void SetWorldTransform(Matrix4 temp){ worldTransform = temp; }
 protected:
 	Matrix4 worldTransform;
 	Sound* sound;

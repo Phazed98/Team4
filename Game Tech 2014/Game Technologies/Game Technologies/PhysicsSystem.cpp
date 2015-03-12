@@ -318,6 +318,7 @@ void	PhysicsSystem::ObstacleCollisions()
 								distanceReversed = 0.0f;
 								//set track accelerating to false (collision still possible if accelerating after collision
 								playerIsAccelerating = false;
+								SoundSystem::GetSoundSystem()->PlaySoundA(SoundManager::GetSound("../../Sounds/collision01.wav"), Vector3());
 							}
 						}
 					}

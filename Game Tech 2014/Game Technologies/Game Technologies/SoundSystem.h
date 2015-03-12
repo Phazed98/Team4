@@ -49,7 +49,8 @@ public:
 	void ChangeSceneSound(Sound* s);
 	void SwitchBoard(Sound* s);
 	void GameStart();
-
+	void PlayMove();
+	void PlaySoundB(Sound* s, Vector3 position);
 protected:
 	SoundSystem(unsigned int channels = 32);
 	~SoundSystem(void);
@@ -72,6 +73,7 @@ protected:
 	SoundEmitter* GlobleSound01;
 	SoundEmitter* GlobleSound02;
 	SoundEmitter* GlobleSound03;
+	SoundEmitter* VehicleMove;
 
 	vector<OALSource*> sources;
 	vector<SoundEmitter*> emitters;

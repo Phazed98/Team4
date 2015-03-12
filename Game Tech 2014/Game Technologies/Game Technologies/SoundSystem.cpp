@@ -61,6 +61,8 @@ SoundSystem::SoundSystem(unsigned int channels) {
 	SoundManager::AddSound("../../Sounds/button.wav");
 	SoundManager::AddSound("../../Sounds/collision01.wav");
 	SoundManager::AddSound("../../Sounds/bullets.wav");
+	SoundManager::AddSound("../../Sounds/move.wav");
+	SoundManager::AddSound("../../Sounds/move02.wav");
 	/*GlobleSound01 = new SoundEmitter();
 	GlobleSound01->SetVolume(0.5);
 	GlobleSound01->SetSound(SoundManager::GetSound("../../Sounds/test2.wav"));
@@ -72,7 +74,7 @@ SoundSystem::SoundSystem(unsigned int channels) {
 	GlobleSound03->SetSound(SoundManager::GetSound("../../Sounds/engine05.wav"));
 	GlobleSound03->SetVolume(0.2);
 	temporaryEmitters.push_back(GlobleSound03);*/
-
+	VehicleMove = NULL;
 }
 
 void SoundSystem::GameStart(){
@@ -88,6 +90,10 @@ void SoundSystem::GameStart(){
 	GlobleSound03->SetVolume(0.2);
 	GlobleSound03->SetSound(SoundManager::GetSound("../../Sounds/engine05.wav"));
 	temporaryEmitters.push_back(GlobleSound03);
+	VehicleMove = new SoundEmitter();
+	VehicleMove->SetVolume(0);
+	VehicleMove->SetSound(SoundManager::GetSound("../../Sounds/move02.wav"));
+	temporaryEmitters.push_back(VehicleMove);
 }
 
 SoundSystem::~SoundSystem(void) {
@@ -160,6 +166,9 @@ void SoundSystem::Update(float msec) {
 	}
 
 	frameEmitters.clear();
+	if (VehicleMove != NULL){
+		VehicleMove->SetVolume(0);
+	}
 	//vector<SoundEmitter*>().swap(frameEmitters);
 }
 
@@ -190,7 +199,7 @@ void SoundSystem::CullNodes() {
 	}
 	}*/
 
-	for (vector<SoundEmitter*>::iterator i = emitters.begin(); i != emitters.end();) {
+	for (vector<SoundEmitter*>::iterator i = frameEmitters.begin(); i != frameEmitters.end();) {
 
 		float length;
 
@@ -199,13 +208,17 @@ void SoundSystem::CullNodes() {
 		}
 
 		else{
-			length = (listener->GetWorldTransform().GetPositionVector() -
+
+			length = (listenerTransform.GetPositionVector() -
 				(*i)->GetWorldTransform().GetPositionVector()).Length();
+
+			//length = (listener->GetWorldTransform().GetPositionVector() -
+			//	(*i)->GetWorldTransform().GetPositionVector()).Length();
 		}
 
 		if (length > (*i)->GetRadius() || !(*i)->GetSound() || (*i)->GetTimeLeft() < 0) {
 			(*i)->DetachSource();	//Important!
-			i = emitters.erase(i);
+			i = frameEmitters.erase(i);
 		}
 		else{
 			++i;
@@ -284,4 +297,21 @@ void SoundSystem::SwitchBoard(Sound* s) {
 	n->SetVolume(0.5);
 	//n->SetIsGlobal(true);
 	temporaryEmitters.push_back(n);
+}
+
+void SoundSystem::PlaySoundB(Sound* s, Vector3 position) {
+	SoundEmitter* n = new SoundEmitter();
+	n->SetLooping(false);
+	//SceneNode* p = new SceneNode();
+
+
+	n->SetWorldTransform(Matrix4::Translation(position));
+	//n -> SetWorldTransform(Matrix4::Translation(position));
+	n->SetSound(s);
+	//n->SetIsGlobal(true);
+	temporaryEmitters.push_back(n);
+}
+
+void SoundSystem::PlayMove() {
+	VehicleMove->SetVolume(0.5);
 }

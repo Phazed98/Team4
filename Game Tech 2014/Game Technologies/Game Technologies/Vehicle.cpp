@@ -781,6 +781,7 @@ void Vehicle::GetUserInput()
 		{
 			PhysNode->SetAngularVelocity(Vector3(0, 0, 0));
 		}
+		SoundSystem::GetSoundSystem()->PlayMove();
 	}
 
 	//different method as allowing the controller to do fine adjustments to turn
@@ -806,6 +807,7 @@ void Vehicle::GetUserInput()
 		{
 			PhysNode->SetAngularVelocity(Vector3(0, 0, 0));
 		}
+		SoundSystem::GetSoundSystem()->PlayMove();
 	}
 
 	if (controllerIsConnected && normalisedLX < 0)
