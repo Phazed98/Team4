@@ -66,6 +66,7 @@ int main()
 		{
 			Window::updateInputScrollLock(msec);
 		}
+		SoundSystem::GetSoundSystem()->Update(msec);
 	}
 
 	if (bp == EXIT)
@@ -82,7 +83,7 @@ int main()
 	Renderer::GetRenderer().RenderLoading(0, "Hello World");
 
 	PhysicsSystem::Initialise();
-
+	SoundSystem::GetSoundSystem()->GameStart();
 
 	MyGame* game;
 	switch (bp)

@@ -879,6 +879,7 @@ buttonPressed Renderer::RenderMainMenu()
 			Window::enableInputScrollLock();
 			mainButtonIndex--;
 		}
+		SoundSystem::GetSoundSystem()->SwitchBoard(SoundManager::GetSound("../../Sounds/button.wav"));
 
 	}
 	else if (!(Window::GetinputScrollCDing()) && ((Window::GetWindow().GetKeyboard()->KeyDown(KEYBOARD_DOWN)) || LY < 0))
@@ -888,11 +889,13 @@ buttonPressed Renderer::RenderMainMenu()
 			Window::enableInputScrollLock();
 			mainButtonIndex++;
 		}
+		SoundSystem::GetSoundSystem()->SwitchBoard(SoundManager::GetSound("../../Sounds/button.wav"));
 
 	}
 
 	if ((Window::GetWindow().GetKeyboard()->KeyTriggered(KEYBOARD_RETURN)) || controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_A)
 	{
+		SoundSystem::GetSoundSystem()->SwitchBoard(SoundManager::GetSound("../../Sounds/button.wav"));
 		switch (mainButtonIndex)
 		{
 		case 0:

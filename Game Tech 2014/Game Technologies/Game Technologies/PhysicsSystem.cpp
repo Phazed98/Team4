@@ -244,6 +244,7 @@ void	PhysicsSystem::ObstacleCollisions()
 						//bounce object if collision normal is positive in z axis
 						if (collisionData->m_normal.z > 0.0f)
 						{
+							SoundSystem::GetSoundSystem()->PlaySoundA(SoundManager::GetSound("../../Sounds/collision01.wav"), Vector3());
 							//link the amount reversed to both track speed
 							zAmountToReverse = COLLISION_BOUNCE_FACTOR * track_speed;
 							//check reverse amount doesnt go off the back of the current tile (in case no previous tile)
@@ -318,6 +319,7 @@ void	PhysicsSystem::MissileCollisions()
 				//check for collision
 				if (gjkObj->CollisionDetection(*playerPhysNode, *Missiles[i], collisionData))
 				{
+					SoundSystem::GetSoundSystem()->PlaySoundA(SoundManager::GetSound("../../Sounds/bullets.wav"), Vector3());
 					//stop player if collision normal is positive in z axis
 					if (collisionData->m_normal.z > 0.0f)
 					{

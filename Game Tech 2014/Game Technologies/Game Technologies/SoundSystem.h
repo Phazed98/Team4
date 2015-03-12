@@ -48,6 +48,7 @@ public:
 	//void PlaySound(Sound* s, SoundPriority p = SOUNDPRIORTY_LOW);
 	void ChangeSceneSound(Sound* s);
 	void SwitchBoard(Sound* s);
+	void GameStart();
 
 protected:
 	SoundSystem(unsigned int channels = 32);

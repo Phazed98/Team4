@@ -58,7 +58,10 @@ SoundSystem::SoundSystem(unsigned int channels) {
 	SoundManager::AddSound("../../Sounds/engine05.wav");
 	SoundManager::AddSound("../../Sounds/switchsound03.wav");
 	SoundManager::AddSound("../../Sounds/switchsound01.wav");
-	GlobleSound01 = new SoundEmitter();
+	SoundManager::AddSound("../../Sounds/button.wav");
+	SoundManager::AddSound("../../Sounds/collision01.wav");
+	SoundManager::AddSound("../../Sounds/bullets.wav");
+	/*GlobleSound01 = new SoundEmitter();
 	GlobleSound01->SetVolume(0.5);
 	GlobleSound01->SetSound(SoundManager::GetSound("../../Sounds/test2.wav"));
 	temporaryEmitters.push_back(GlobleSound01);
@@ -67,10 +70,26 @@ SoundSystem::SoundSystem(unsigned int channels) {
 	temporaryEmitters.push_back(GlobleSound02);
 	GlobleSound03 = new SoundEmitter();
 	GlobleSound03->SetSound(SoundManager::GetSound("../../Sounds/engine05.wav"));
-	GlobleSound03->SetVolume(0.5);
-	temporaryEmitters.push_back(GlobleSound03);
+	GlobleSound03->SetVolume(0.2);
+	temporaryEmitters.push_back(GlobleSound03);*/
 
 }
+
+void SoundSystem::GameStart(){
+	GlobleSound01 = new SoundEmitter();
+	GlobleSound01->SetVolume(0.5);
+	GlobleSound01->SetSound(SoundManager::GetSound("../../Sounds/test2.wav"));
+	temporaryEmitters.push_back(GlobleSound01);
+	GlobleSound02 = new SoundEmitter();
+	GlobleSound02->SetVolume(1);
+	GlobleSound02->SetSound(SoundManager::GetSound("../../Sounds/test2.wav"));
+	temporaryEmitters.push_back(GlobleSound02);
+	GlobleSound03 = new SoundEmitter();
+	GlobleSound03->SetVolume(0.2);
+	GlobleSound03->SetSound(SoundManager::GetSound("../../Sounds/engine05.wav"));
+	temporaryEmitters.push_back(GlobleSound03);
+}
+
 SoundSystem::~SoundSystem(void) {
 	for (vector<SoundEmitter*>::iterator i = emitters.begin(); i != emitters.end(); ++i) {
 		(*i)->DetachSource();
