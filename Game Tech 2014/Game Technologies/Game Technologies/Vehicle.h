@@ -119,14 +119,17 @@ protected:
 	bool cdRedPowerUpActive = false;
 
 	//powerup total duration values
-	float slowPUDuration = 5000;
-	float immunityPUDuration = 5000;
-	float cdRedPUDurtation = 5000;
+	const float slowPUDuration = 5000;
+	const float immunityPUDuration = 5000;
+	const float cdRedPUDurtation = 5000;
 
 	//powerup remaining duration values
-	float slowDurationRemaining = 500;
-	float immunityDurationRemaining = 500;
-	float cdRedDurationRemaining = 500;
+	float slowDurationRemaining = 0;
+	float immunityDurationRemaining = 0;
+	float cdRedDurationRemaining = 0;
+
+	//Sam - moving to its own method as we have lots of cooldowns now. I dont like big update methods....
+	void updateCooldowns(float msec);
 
 	//added by Daixi
 	int soundTemp;

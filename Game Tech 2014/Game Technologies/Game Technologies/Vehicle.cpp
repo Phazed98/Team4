@@ -55,22 +55,7 @@ void Vehicle::BuildPlayerEntity(Mesh* mesh, float size, Vector3 pos, Vector3 ori
 void Vehicle::UpdatePlayer(float msec)
 {
 	//update cooldowns
-	if (coolingDownPlaneSwitch)
-	{
-		//if cooldown powerup active, stop cooldown
-		if (cdRedPowerUpActive)
-		{
-			coolingDownPlaneSwitch = false;
-		}
-		else
-		{
-			PlaneSwitchCDRemaining -= msec;
-			if (PlaneSwitchCDRemaining <= 0)
-			{
-				coolingDownPlaneSwitch = false;
-			}
-		}
-	}
+	updateCooldowns(msec);
 
 	UpdatePlayerRotationOnPlane();
 
@@ -817,6 +802,88 @@ void Vehicle::GetUserInput()
 		if ((rotationOnPlane < MAX_VEHICLE_X_ROTATION) && (normRotOnPlane < -LXLow))
 		{
 			PhysNode->SetAngularVelocity(Vector3(0, 0, Speed_Turn));
+		}
+	}
+
+
+
+	//---------------------------------------------------------------------------------------------------
+	//Check for cooldown trigger input
+
+	//slow PowerUp
+	if (hasSlowPowerUp == true && slowPowerUpActive == false &&
+		(Window::GetKeyboard()->KeyDown(KEYBOARD_Q) || controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_X))
+	{
+		hasSlowPowerUp = false;
+		slowPowerUpActive = true;
+		slowDurationRemaining = slowPUDuration;
+	}
+
+	//immunity
+	if (hasImmunityPowerUp == true && immunityPowerUpActive == false &&
+		(Window::GetKeyboard()->KeyDown(KEYBOARD_W) || controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_Y))
+	{
+		hasImmunityPowerUp = false;
+		immunityPowerUpActive = true;
+		immunityDurationRemaining = immunityPUDuration;
+	}
+
+	//cd reduction
+	if (hasCDRedPowerUp == true && cdRedPowerUpActive == false &&
+		(Window::GetKeyboard()->KeyDown(KEYBOARD_W) || controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_Y))
+	{
+		hasCDRedPowerUp = false;
+		cdRedPowerUpActive = true;
+		cdRedDurationRemaining = cdRedPUDurtation;
+	}
+}
+
+void Vehicle::updateCooldowns(float msec)
+{
+	//update cooldowns
+	if (coolingDownPlaneSwitch)
+	{
+		//if cooldown powerup active, stop cooldown
+		if (cdRedPowerUpActive)
+		{
+			coolingDownPlaneSwitch = false;
+		}
+		else
+		{
+			PlaneSwitchCDRemaining -= msec;
+			if (PlaneSwitchCDRemaining <= 0)
+			{
+				coolingDownPlaneSwitch = false;
+				PlaneSwitchCDRemaining = 0.0f;
+			}
+		}
+	}
+
+
+	if (slowPowerUpActive == true)
+	{
+		slowDurationRemaining -= msec;
+		if (slowDurationRemaining < 0.0)
+		{
+			slowDurationRemaining = 0.0f;
+		}
+	}
+
+	if (slowPowerUpActive == true)
+	{
+		immunityDurationRemaining -= msec;
+		if (immunityDurationRemaining < 0.0)
+		{
+			immunityDurationRemaining = 0.0f;
+		}
+	}
+
+	if (cdRedPowerUpActive == true)
+	{
+		cdRedDurationRemaining -= msec;
+		if (cdRedDurationRemaining < 0.0)
+		{
+			cdRedDurationRemaining = 0.0f;
 		}
 	}
 }
