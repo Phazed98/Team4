@@ -124,6 +124,7 @@ Renderer::~Renderer(void)
 void Renderer::fullyInit()
 {
 	explosion = false;
+	explosion_time = 0;
 
 	post_processing_shader = new Shader(SHADERDIR"TechVertex.glsl", SHADERDIR"PostProcessingFragment.glsl");
 
@@ -970,7 +971,7 @@ void Renderer::RenderLoading(int percent, string message)
 void	Renderer::DrawNode(SceneNode*n)
 {
 	RenderType rt = n->GetRenderType();
-	
+
 	glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(), "modelMatrix"),
 		1, false, (float*)&(n->GetWorldTransform()*Matrix4::Scale(n->GetModelScale())));
 	if (n->GetMesh()){
@@ -978,25 +979,31 @@ void	Renderer::DrawNode(SceneNode*n)
 		case WATER_PLANE:{
 			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useDisplace"), 1);
 			glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "displaceStrength"), 0.3);
+			n->Draw(*this);
 			break;
 		}
-		/*case PLAYER_RENDER:{
-			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useDisplace"), 1);
-			glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "displaceStrength"), 5);
+		case PLAYER_RENDER:{
+			if (explosion && explosion_time>1200)
+				glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useDisplace"), 1);
+			else
+				glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useDisplace"), 0);
+			glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "displaceStrength"), explosion_time / 100 - 15);
+			if (explosion_time<2100)
+				n->Draw(*this);
 			break;
-		}*/
+		}
 		case STABLE_OBSTACLE:{
 			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useDisplace"), 1);
 			glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "displaceStrength"), 0.3);
+			n->Draw(*this);
 			break;
 		}
 		default:{
 			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useDisplace"), 0);
+			n->Draw(*this);
 		}
 		}
 	}
-	n->Draw(*this);
-	
 }
 
 void	Renderer::BuildNodeLists(SceneNode* from)
@@ -1176,15 +1183,18 @@ void Renderer::DrawAfterBurner(){
 		viewMatrix = camera->BuildViewMatrix();
 	}
 
-	spaceship_scene_node->afterburner_system[0].Render(msec, model_matrix, projMatrix, viewMatrix);
-	spaceship_scene_node->afterburner_system[1].Render(msec, model_matrix, projMatrix, viewMatrix);
-	
+
+
 	if (Window::GetKeyboard()->KeyTriggered(KEYBOARD_M) || explosion) //Build Cube
 	{
 		explosion = true;
+		explosion_time += msec;
 		spaceship_scene_node->explosion.Render(msec, model_matrix, projMatrix, viewMatrix);
 	}
-
+	else{
+		spaceship_scene_node->afterburner_system[0].Render(msec, model_matrix, projMatrix, viewMatrix);
+		spaceship_scene_node->afterburner_system[1].Render(msec, model_matrix, projMatrix, viewMatrix);
+	}
 	galaxy_system.Render(msec, viewMatrix, projMatrix);
 	PopMatrix();
 }

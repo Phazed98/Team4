@@ -16,8 +16,8 @@ out vec4 FragColor;
 
 void main(void)	{
 	if(current_plane == 1){
-		float TimeInRadians_x = times;
-		float TimeInRadians_y = times;
+		float TimeInRadians_x = times*2;
+		float TimeInRadians_y = times*2;
 		float offset_x = sin(TimeInRadians_x+IN.texCoord.x*4*3.14)*DistortionAmount;
 		float offset_y = cos(TimeInRadians_y+IN.texCoord.y*5*3.14)*DistortionAmount;
 

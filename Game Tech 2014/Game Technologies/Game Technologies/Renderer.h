@@ -234,6 +234,6 @@ protected:
 	float* postprocessTimer;
 
 	bool explosion;
-
+	float explosion_time;
 };
 
