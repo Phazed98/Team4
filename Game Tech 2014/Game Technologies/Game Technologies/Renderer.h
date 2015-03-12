@@ -125,16 +125,12 @@ protected:
 	//steven added for motion blur
 	GLuint motion_blur_FBO;
 	GLuint motion_blur_ColourTex;
-	GLuint motion_blur_DepthTex;
 	bool CreatMotionBlurBuffer();
 	void PresentMotionBlur();
 	Mesh* quad_motion_blur;
 	Shader* motion_blur_shader;
 	Matrix4 previous_viewMatrix;
 	Matrix4 current_viewMatrix;
-	void RenderMotionBlur();
-	void RenderWithoutPostProcessing();
-	bool render_motion_blur;
 
 	SpaceshipSceneNode* spaceship_scene_node;
 	void DrawAfterBurner();
@@ -218,11 +214,12 @@ protected:
 	void DSDirectionalLightPass();
 	Mesh* screen_quad;
 	Shader* dir_light_shader;
-	void CombinePass();
 
 //for the background changes
 	GLuint pre_back;
 	GLuint cur_back;
 
+	void FinalPostProcessing();
+	Shader* post_processing_shader;
 };
 

@@ -16,6 +16,9 @@ layout (location = 3) out vec4 TexCoordOut;
 uniform sampler2D diffuseTex;
 
 void main(void)	{
+	if(texture(diffuseTex, IN.texCoord).a==0){
+		discard;
+	}
 	WorldPosOut = vec4(IN.worldPos,1);	
     DiffuseOut = texture(diffuseTex, IN.texCoord);	
     NormalOut = vec4(normalize(IN.normal),1);	

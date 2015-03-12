@@ -96,7 +96,7 @@ Renderer::~Renderer(void)
 
 		glDeleteFramebuffers(1, &motion_blur_FBO);
 		glDeleteTextures(1, &motion_blur_ColourTex);
-		glDeleteTextures(1, &motion_blur_DepthTex);
+		
 
 		currentShader = NULL;
 	}
@@ -120,7 +120,7 @@ Renderer::~Renderer(void)
 void Renderer::fullyInit()
 {
 
-
+	post_processing_shader = new Shader(SHADERDIR"TechVertex.glsl", SHADERDIR"PostProcessingFragment.glsl");
 
 	point_light_sphere = new OBJMesh("../../Meshes/ico.obj");
 	screen_quad = Mesh::GenerateQuad();
@@ -153,7 +153,6 @@ void Renderer::fullyInit()
 
 	//add by steven for motion blur
 	quad_motion_blur = Mesh::GenerateQuad();
-	render_motion_blur = false;
 
 	motion_blur_shader = new Shader(SHADERDIR"MotionBlurVertex.glsl", SHADERDIR"MotionBlurFragment.glsl");
 
@@ -193,7 +192,7 @@ void Renderer::fullyInit()
 		!backgroundShader->LinkProgram() || !menuShader->LinkProgram() ||
 		!motion_blur_shader->LinkProgram() || !water_plane_shader->LinkProgram()||
 		!defer_shader->LinkProgram() || !point_light_shader->LinkProgram() ||
-		!dir_light_shader->LinkProgram())
+		!dir_light_shader->LinkProgram() || !post_processing_shader->LinkProgram())
 	{
 		cout << "error in link shaders" << endl;
 		return;
@@ -270,162 +269,107 @@ void Renderer::UpdateScene(float msec)
 void Renderer::RenderScene()
 {
 	
-	if (!render_motion_blur){
 
 
 
-	//	RenderMotionBlur();
-		//render the particle to a texture firstly
-		//this scene store in particle_ColourTex
-		RenderParticleToTexture();
-		
-		BuildNodeLists(root);
-		SortNodeLists();
 
-		deferRenderPass();
-		ClearNodeLists();
-
-	//	CombinePass();
-
-		/*glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-		glBindFramebuffer(GL_READ_FRAMEBUFFER, defer_FBO);
-		glReadBuffer(GL_COLOR_ATTACHMENT4);
-		glBlitFramebuffer(0, 0, width, height,
-			0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_LINEAR);*/
-
-
-		PresentMotionBlur();
-
-		//Display HUD
-		RenderUI();
-		displayInformation();
-	//	DSFinalPass();
-
-		SwapBuffers();
-	}
-	else{
-		RenderWithoutPostProcessing();
-	}
-
-}
-
-void Renderer::CombinePass(){
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, particle_FBO);
-	glDrawBuffer(GL_COLOR_ATTACHMENT1);
-
-	glDisable(GL_DEPTH_TEST);
-	glEnable(GL_BLEND);
 	
-	glBlendFunc(GL_ONE, GL_ONE);
-
-	glEnable(GL_CULL_FACE);
-	
-	glCullFace(GL_FRONT);
-	PushMatrix();
-	MatrixToIdentity();
-	projMatrix = Matrix4::Orthographic(-1, 1, 1, -1, -1, 1);
-	SetCurrentShader(simpleShader);
-	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), 0);
-
-	UpdateShaderMatrices();
-	quad->SetTexture(background_ColourTex);
-	quad->Draw();
-//	quad->SetTexture(defer_final_texture);
-//	quad->Draw();
-
-	glUseProgram(0);
-
-	PopMatrix();
-}
-
-void Renderer::RenderWithoutPostProcessing(){
-
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-
-	RenderBackground();
-
-	if (camera)
-	{
-
-		BuildNodeLists(root);
-		SortNodeLists();
-
-		deferRenderPass();
-		ClearNodeLists();
-		
-		//	RenderUI();
-		galaxy_system.Render(msec, viewMatrix, projMatrix);
-		DrawAfterBurner();
-		DrawTornado();
-		DrawGeyser();
-		DrawFire();
-
-		//Display HUD
-		//if (wireFrame)
-		//{
-		//	toggleWireFrame();
-		//	//Display HUD
-		//	displayInformation();
-		//	toggleWireFrame();
-		//}
-		//else
-		//{
-		//	displayInformation();
-		//}
-	}
-
-	glUseProgram(0);
-
-
-	SwapBuffers();
-
-}
-
-void Renderer::RenderMotionBlur(){
-
-
-	//render scene need motion blur and fog
-	glBindFramebuffer(GL_FRAMEBUFFER, motion_blur_FBO);
-	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-
-	if (camera)
-	{
-		
-		textureMatrix.ToIdentity();
-		modelMatrix.ToIdentity();
-		viewMatrix = camera->BuildViewMatrix();
-		projMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float)width / (float)height, 60.0f);
-		frameFrustum.FromMatrix(projMatrix * viewMatrix);
-		
-
-		//Return to default 'usable' state every frame!
-		glEnable(GL_DEPTH_TEST);
-		glEnable(GL_CULL_FACE);
-		glDisable(GL_STENCIL_TEST);
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-		BuildNodeLists(root);
-		SortNodeLists();
-		DrawNodes();
-		ClearNodeLists();
-
-	}
-
-	glUseProgram(0);
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
 	//render the particle to a texture firstly
 	//this scene store in particle_ColourTex
 	RenderParticleToTexture();
+		
+	BuildNodeLists(root);
+	SortNodeLists();
+
+	deferRenderPass();
+	ClearNodeLists();
 
 	PresentMotionBlur();
+	FinalPostProcessing();
+	
+	//Display HUD
+	RenderUI();
+	displayInformation();
+//	DSFinalPass();
+
+	SwapBuffers();
+	
+	
+
+}
+
+
+bool Renderer::CreatMotionBlurBuffer(){
+	
+	// And our colour texture ...
+	glGenTextures(1, &motion_blur_ColourTex);
+	glBindTexture(GL_TEXTURE_2D, motion_blur_ColourTex);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0,
+		GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+
+
+	glGenFramebuffers(1, &motion_blur_FBO);
+
+
+	glBindFramebuffer(GL_FRAMEBUFFER, motion_blur_FBO);
+
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+		GL_TEXTURE_2D, motion_blur_ColourTex, 0);
+
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE || !motion_blur_ColourTex) {
+		//check FBO attachment success using this command
+		return false;
+	}
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	return true;
+}
+
+
+void Renderer::FinalPostProcessing(){
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+//	glBindFramebuffer(GL_READ_FRAMEBUFFER, motion_blur_FBO);
+	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+
+	PushMatrix();
+	MatrixToIdentity();
+	SetCurrentShader(post_processing_shader);
+
+	//	projMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float)width / (float)height, 60.0f);
+//	viewMatrix = camera->BuildViewMatrix();
+	//update current viewMatrix
+	
+	int current_plane = PhysicsSystem::GetVehicle()->GetCurrentPlaneID();
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(),
+		"diffuseTex"), 0);
+	glUniform1f(glGetUniformLocation(currentShader->GetProgram(),
+		"times"), total_sec_pass);
+	glUniform1f(glGetUniformLocation(currentShader->GetProgram(),
+		"DistortionAmount"), 0.008);
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(),
+		"current_plane"), current_plane);
+
+
+	projMatrix = Matrix4::Orthographic(-1, 1, 1, -1, -1, 1);
+
+	
+	UpdateShaderMatrices();
+
+
+	quad_motion_blur->SetTexture(motion_blur_ColourTex);
+	quad_motion_blur->Draw();
+
+
+	glUseProgram(0);
 
 }
 
 void Renderer::PresentMotionBlur(){
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glBindFramebuffer(GL_FRAMEBUFFER, motion_blur_FBO);
 
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 	
@@ -1174,48 +1118,6 @@ void Renderer::toggleWireFrame()
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
-bool Renderer::CreatMotionBlurBuffer(){
-	// Generate our scene depth texture ...
-	glGenTextures(1, &motion_blur_DepthTex);
-	glBindTexture(GL_TEXTURE_2D, motion_blur_DepthTex);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, width, height,
-		0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL);
-
-	// And our colour texture ...
-	glGenTextures(1, &motion_blur_ColourTex);
-	glBindTexture(GL_TEXTURE_2D, motion_blur_ColourTex);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0,
-		GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-
-
-	glGenFramebuffers(1, &motion_blur_FBO);
-
-
-	glBindFramebuffer(GL_FRAMEBUFFER, motion_blur_FBO);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
-		GL_TEXTURE_2D, motion_blur_DepthTex, 0);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT,
-		GL_TEXTURE_2D, motion_blur_DepthTex, 0);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-		GL_TEXTURE_2D, motion_blur_ColourTex, 0);
-
-
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE ||
-		!motion_blur_DepthTex || !motion_blur_ColourTex) {
-		//check FBO attachment success using this command
-		return false;
-	}
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	return true;
-}
 
 void Renderer::DrawAfterBurner(){
 	PushMatrix();
