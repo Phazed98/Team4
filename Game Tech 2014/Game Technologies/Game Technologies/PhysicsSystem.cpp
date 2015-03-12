@@ -52,6 +52,12 @@ void	PhysicsSystem::Update(float msec)
 	}
 	//--------------------------------------------
 
+	//if slow powerup active, half track speed
+	if (playerVehicle->getSlowPowerUpActive())
+	{
+		track_speed *= 0.5;
+	}
+
 	if (time >= 1000)
 	{
 		fps = nbFrames;
@@ -224,7 +230,7 @@ void	PhysicsSystem::accelTrackToCurrentSpeed()
 void	PhysicsSystem::ObstacleCollisions()
 {
 
-	if (!playerIsReversing)
+	if (!playerIsReversing && !(playerVehicle->getImmunityPowerUpActive()))
 	{
 		for (int i = 0; i < Obstacles.size(); i++)
 		{
@@ -244,23 +250,75 @@ void	PhysicsSystem::ObstacleCollisions()
 						//bounce object if collision normal is positive in z axis
 						if (collisionData->m_normal.z > 0.0f)
 						{
-							SoundSystem::GetSoundSystem()->PlaySoundA(SoundManager::GetSound("../../Sounds/collision01.wav"), Vector3());
-							//link the amount reversed to both track speed
-							zAmountToReverse = COLLISION_BOUNCE_FACTOR * track_speed;
-							//check reverse amount doesnt go off the back of the current tile (in case no previous tile)
-							if (zAmountToReverse > (TILE_DEPTH - playerPhysNode->GetAABBHalfLength() - 10.0f)) //the 10.0 is just to prevent the player going right to the edge of the tile
+
+							//check if object is a powerup
+							if (Obstacles[i]->getObstacleType() == 3)
 							{
-								zAmountToReverse = TILE_DEPTH - playerPhysNode->GetAABBHalfLength() - 10.0f;
+								switch (Obstacles[i]->GetPowerupType())
+								{
+								case 1:
+									if (playerVehicle->getHasSlowPowerUp() == false)
+									{
+										playerVehicle->setHasSlowPowerUp(true);
+										otherObj->SetPosition(Vector3(1000, 1000, 1000));
+									}
+									break;
+
+								case 2:
+									if (playerVehicle->getHasCDRedPowerUp() == false)
+									{
+										playerVehicle->setHasCDRedPowerUp(true);
+										otherObj->SetPosition(Vector3(1000, 1000, 1000));
+									}
+									break;
+
+								case 3:
+									if (playerVehicle->getHasImmunityPowerUp() == false)
+									{
+										playerVehicle->setHasImmunityPowerUp(true);
+										otherObj->SetPosition(Vector3(1000, 1000, 1000));
+									}
+									break;
+								}
 							}
-							//store forward track speed at moment of impact
-							initialTrackSpeed = track_speed;
-							//set track to be reversing
-							playerIsReversing = true;
-							track_speed = -track_speed;
-							//zero reverse distance so far
-							distanceReversed = 0.0f;
-							//set track accelerating to false (collision still possible if accelerating after collision
-							playerIsAccelerating = false;
+							//check if a special obstacle; tornado, flamethrower, water spout
+							else if (Obstacles[i]->getObstacleType() == 4)
+							{
+								switch (Obstacles[i]->getSubType())
+								{
+									//tornado
+								case 0:
+									//flames
+								case 1:
+									//water spout 
+								case 3:
+
+									break;
+
+								case 2:
+									//do nothing
+									break;
+								}
+							}
+							else
+							{
+								//link the amount reversed to both track speed
+								zAmountToReverse = COLLISION_BOUNCE_FACTOR * track_speed;
+								//check reverse amount doesnt go off the back of the current tile (in case no previous tile)
+								if (zAmountToReverse > (TILE_DEPTH - playerPhysNode->GetAABBHalfLength() - 10.0f)) //the 10.0 is just to prevent the player going right to the edge of the tile
+								{
+									zAmountToReverse = TILE_DEPTH - playerPhysNode->GetAABBHalfLength() - 10.0f;
+								}
+								//store forward track speed at moment of impact
+								initialTrackSpeed = track_speed;
+								//set track to be reversing
+								playerIsReversing = true;
+								track_speed = -track_speed;
+								//zero reverse distance so far
+								distanceReversed = 0.0f;
+								//set track accelerating to false (collision still possible if accelerating after collision
+								playerIsAccelerating = false;
+							}
 						}
 					}
 				}
@@ -306,7 +364,7 @@ void	PhysicsSystem::MissileCollisions()
 	//this is because we cannot garauntee a distance behind the player to the back edge of a tile
 	//therefore a bounce could push the player off the tile. This game is already too bloody hard......
 
-	if (!playerIsReversing)
+	if (!playerIsReversing  && !(playerVehicle->getImmunityPowerUpActive()))
 	{
 		for (int i = 0; i < Missiles.size(); i++)
 		{
@@ -339,6 +397,12 @@ void	PhysicsSystem::MissileCollisions()
 
 bool	PhysicsSystem::CheckOnATile()
 {
+	//if immune, return true
+	if (playerVehicle->getImmunityPowerUpActive())
+	{
+		return true;
+	}
+
 	//get current plane
 	int currentPlaneIndex = playerVehicle->GetCurrentPlaneID();
 

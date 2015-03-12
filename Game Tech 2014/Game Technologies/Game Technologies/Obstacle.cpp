@@ -7,6 +7,7 @@ Obstacle::Obstacle(ObjectType* _tile, SceneNode* s, PhysicsNode* p, int _type, i
 	obstacleType = _obstacleType;
 	offset.y = (TILE_HEIGHT + size);
 	random = rand() % 175 + 1;
+	powerupType = rand() % 3 + 1;
 	this->GetRenderNode().SetColour(Vector4(0, 0, 0, 1));
 
 	if (obstacleType == 1)
@@ -17,10 +18,22 @@ Obstacle::Obstacle(ObjectType* _tile, SceneNode* s, PhysicsNode* p, int _type, i
 	{
 		renderNode->SetColour(Vector4(0.827f, 0.835f, 0.043f, 1.0f));
 	}
-	else if (obstacleType == 3)
+	else if (obstacleType == 3) // PowerUp
 	{
-		renderNode->SetColour(Vector4(0.564f, 0.043f, 0.835f, 1.0f));
+		if (powerupType == 1) // Slow
+		{
+			renderNode->SetColour(Vector4(1, 0, 0, 1.0f));
+		}
+		else if (powerupType == 2) // Cooldown
+		{
+			renderNode->SetColour(Vector4(0, 1, 0, 1.0f));
+		}
+		else if (powerupType == 3) // Immunity
+		{
+			renderNode->SetColour(Vector4(0, 0, 1, 1.0f));
+		}
 	}
+
 
 	directionRand = rand() % 100 + 1;
 	if (directionRand > 50)
@@ -214,7 +227,7 @@ void Obstacle::HandleMovingObstacle()
 
 void Obstacle::HandleShootingObstacles()
 {
-	if (obstacleType == 1)
+	if (obstacleType == 1 && PhysicsSystem::GetVehicle()->getIsPlaneSwitching() == false)
 	{
 		if (PhysicsSystem::GetVehicle()->GetCurrentPlaneID() == subType && physicsNode->GetPosition().z < -length)
 		{
@@ -252,6 +265,7 @@ void Obstacle::resetObstacle(){
 	state = 0;
 	physicsNode->SetPosition(Vector3(1000, 1000, 1000));
 	directionRand = rand() % 100 + 1;
+	powerupType = rand() % 3 + 1;
 	if (directionRand > 30)
 	{
 		goingLeft = true;

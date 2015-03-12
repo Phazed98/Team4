@@ -17,7 +17,6 @@ Speed_Turn(speedTurn), currentPlaneID(startingPlaneID), steeringResponsiveness(s
 
 	//set plane switch cooldown period. Add a parameter later if needed
 	PlaneSwitchCDTime = 1500;
-	temp = 4;
 }
 
 Vehicle::~Vehicle(void)
@@ -56,10 +55,18 @@ void Vehicle::UpdatePlayer(float msec)
 	//update cooldowns
 	if (coolingDownPlaneSwitch)
 	{
-		PlaneSwitchCDRemaining -= msec;
-		if (PlaneSwitchCDRemaining <= 0)
+		//if cooldown powerup active, stop cooldown
+		if (cdRedPowerUpActive)
 		{
 			coolingDownPlaneSwitch = false;
+		}
+		else
+		{
+			PlaneSwitchCDRemaining -= msec;
+			if (PlaneSwitchCDRemaining <= 0)
+			{
+				coolingDownPlaneSwitch = false;
+			}
 		}
 	}
 
@@ -72,10 +79,11 @@ void Vehicle::UpdatePlayer(float msec)
 		//update spline progress
 		planeSwitchProgress += msec;
 		//calculate normalised progress between 0.0 - 1.0
-		float normProgress = planeSwitchProgress / planeSwitchTime;
+		normalisedPlaneSwitchProgress = planeSwitchProgress / planeSwitchTime;
 		//check if transition complete
-		if (normProgress >= 1.0f)
+		if (normalisedPlaneSwitchProgress >= 1.0f)
 		{
+			normalisedPlaneSwitchProgress = 1.0f;
 			PhysNode->SetPosition(Vector3(endPoint.x, endPoint.y, 0));
 			UpdatePlayerVelocity();
 			isSwitchingPlane = false;
@@ -86,7 +94,7 @@ void Vehicle::UpdatePlayer(float msec)
 			PhysNode->SetAngularVelocity((PhysNode->GetAngularVelocity()) * 2);
 
 			//calculate position on spline
-			Vector2 xyPos = BezierMath::calculate2DQuadBezierPoint(normProgress, startPoint, Vector2(0, 0), endPoint);
+			Vector2 xyPos = BezierMath::calculate2DQuadBezierPoint(normalisedPlaneSwitchProgress, startPoint, Vector2(0, 0), endPoint);
 			//set position on spline
 			PhysNode->SetPosition(Vector3(xyPos.x, xyPos.y, 0));
 		}
@@ -240,22 +248,24 @@ void Vehicle::UpdatePlayerVelocity()
 		break;
 	}
 	
-	if (temp != currentPlaneID)
+
+	if (currentPlaneID == 0)
 	{
-		if (currentPlaneID == 0){
-			SoundSystem::GetSoundSystem()->ChangeSceneSound(SoundManager::GetSound("../../Sounds/wind.wav"));
-		}
-		if (currentPlaneID == 1){
-			SoundSystem::GetSoundSystem()->ChangeSceneSound(SoundManager::GetSound("../../Sounds/void.wav"));
-		}
-		if (currentPlaneID == 2){
-			SoundSystem::GetSoundSystem()->ChangeSceneSound(SoundManager::GetSound("../../Sounds/thunder.wav"));
-		}
-		if (currentPlaneID == 3){
-			SoundSystem::GetSoundSystem()->ChangeSceneSound(SoundManager::GetSound("../../Sounds/water.wav"));
-		}
-		temp = currentPlaneID;
+		SoundSystem::GetSoundSystem()->ChangeSceneSound(SoundManager::GetSound("../../Sounds/wind.wav"));
 	}
+	else if (currentPlaneID == 1)
+	{
+		SoundSystem::GetSoundSystem()->ChangeSceneSound(SoundManager::GetSound("../../Sounds/void.wav"));
+	}
+	else if (currentPlaneID == 2)
+	{
+		SoundSystem::GetSoundSystem()->ChangeSceneSound(SoundManager::GetSound("../../Sounds/thunder.wav"));
+	}
+	else if (currentPlaneID == 3)
+	{
+		SoundSystem::GetSoundSystem()->ChangeSceneSound(SoundManager::GetSound("../../Sounds/water.wav"));
+	}
+
 }
 
 Vector3 Vehicle::CalculateStartingOrientation()
@@ -375,6 +385,9 @@ void Vehicle::GetSwitchPlaneInputs(float normalisedRX, float normalisedRY)
 	//go to plane 180 degrees from the current
 	if ((Window::GetKeyboard()->KeyDown(KEYBOARD_UP) || normalisedRY > 0.5) && !coolingDownPlaneSwitch)
 	{
+		//set previous plane ID to current ID before change
+		previousPlaneID = currentPlaneID;
+
 		Vector3 EulerOrientation;
 		//set new position then change the plane of current velocity (maintain in a new direction relative to new plane
 		Vector3 currentVelocity = PhysNode->GetLinearVelocity();
@@ -445,6 +458,9 @@ void Vehicle::GetSwitchPlaneInputs(float normalisedRX, float normalisedRY)
 
 	if ((Window::GetKeyboard()->KeyDown(KEYBOARD_RIGHT) || normalisedRX > 0.5) && !coolingDownPlaneSwitch)
 	{
+		//set previous plane ID to current ID before change
+		previousPlaneID = currentPlaneID;
+
 		Vector3 EulerOrientation;
 		//set new position then change the plane of current velocity (maintain in a new direction relative to new plane
 		Vector3 currentVelocity = PhysNode->GetLinearVelocity();
@@ -515,6 +531,9 @@ void Vehicle::GetSwitchPlaneInputs(float normalisedRX, float normalisedRY)
 
 	if ((Window::GetKeyboard()->KeyDown(KEYBOARD_LEFT) || normalisedRX < -0.5) && !coolingDownPlaneSwitch)
 	{
+		//set previous plane ID to current ID before change
+		previousPlaneID = currentPlaneID;
+
 		Vector3 EulerOrientation;
 		//change the plane of current velocity (maintain in a new direction relative to new plane
 		Vector3 currentVelocity = PhysNode->GetLinearVelocity();

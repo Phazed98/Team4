@@ -29,7 +29,31 @@ public:
 
 	int GetCurrentPlaneID() { return currentPlaneID; }
 
-	int temp;
+
+	bool getIsPlaneSwitching() { return isSwitchingPlane; }
+	bool getCoolingDownPlaneSwitch() { return coolingDownPlaneSwitch; }
+	float getPlaneSwitchCDRemaining() { return PlaneSwitchCDRemaining; }
+
+
+	bool getHasSlowPowerUp() { return hasSlowPowerUp; }
+	bool getHasImmunityPowerUp() { return hasImmunityPowerUp; }
+	bool getHasCDRedPowerUp() { return hasCDRedPowerUp; }
+
+	void setHasSlowPowerUp(bool b) { hasSlowPowerUp = b; }
+	void setHasImmunityPowerUp(bool b) { hasImmunityPowerUp = b; }
+	void setHasCDRedPowerUp(bool b) { hasCDRedPowerUp = b; }
+
+	bool getSlowPowerUpActive() { return slowPowerUpActive; }
+	bool getImmunityPowerUpActive() { return immunityPowerUpActive; }
+	bool getCDRedPowerUpActive() { return cdRedPowerUpActive; }
+
+	float getSlowDurationRemaining() { return slowDurationRemaining; }
+	float getImmunityDurationRemaining() { return immunityDurationRemaining; }
+	float getCDRedDurationRemaining() { return cdRedDurationRemaining; }
+
+
+	float getNormalisedPlaneSwitchProgress() { return normalisedPlaneSwitchProgress; }
+	int getPreviousPlaneID() { return previousPlaneID; }
 
 protected:
 
@@ -76,6 +100,8 @@ protected:
 	float planeSwitchProgress = 0;
 	Vector2 startPoint;
 	Vector2 endPoint;
+	float normalisedPlaneSwitchProgress = 1.0f;
+	int previousPlaneID;
 	//---------------------------------------------------------------
 
 	//Added by Siyu
@@ -83,4 +109,22 @@ protected:
 
 	//Debug method, doesnt do anything, only for triggering breaks when needed.
 	void debug();
+
+	bool hasSlowPowerUp = false;
+	bool hasImmunityPowerUp = false;
+	bool hasCDRedPowerUp = false;
+
+	bool slowPowerUpActive = false;
+	bool immunityPowerUpActive = false;
+	bool cdRedPowerUpActive = false;
+
+	//powerup total duration values
+	float slowPUDuration = 5000;
+	float immunityPUDuration = 5000;
+	float cdRedPUDurtation = 5000;
+
+	//powerup remaining duration values
+	float slowDurationRemaining = 500;
+	float immunityDurationRemaining = 500;
+	float cdRedDurationRemaining = 500;
 };

@@ -32,6 +32,8 @@ public:
 
 	void SetSize(int _size) { size = _size; }
 
+	int GetPowerupType() { return powerupType; }
+
 private:
 
 	int lane; // Lanes are from 0 t 7 starting from top, two lanes per tile
@@ -55,6 +57,8 @@ private:
 	int size;
 
 	int directionRand;
+
+	int powerupType;
 
 };
 

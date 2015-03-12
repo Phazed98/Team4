@@ -128,7 +128,7 @@ void Renderer::fullyInit()
 
 	camera = NULL;
 	total_sec_pass = 0;
-	cd = 10000;
+	//cd = 10000;
 	root = new SceneNode();
 	
 	basicFont = new Font(SOIL_load_OGL_texture(TEXTUREDIR"tahoma.tga", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_COMPRESS_TO_DXT), 16, 16);
@@ -655,20 +655,36 @@ void Renderer::RenderUI()
 	UpdateShaderMatrices();
 	uiQuad->Draw();
 
-	//Button Y
-	modelMatrix = Matrix4::Translation(Vector3(0.62f, -0.85f, 0.0f)) *  Matrix4::Scale(Vector3(0.05f, 0.05f, 0.5f));
-	UpdateShaderMatrices();
-	buttonY->Draw();
+	//Button Y for Immunity
+	if (PhysicsSystem::GetVehicle()->getHasImmunityPowerUp())
+	{
+		modelMatrix = Matrix4::Translation(Vector3(0.62f, -0.85f, 0.0f)) *  Matrix4::Scale(Vector3(0.05f, 0.05f, 0.5f));
+		UpdateShaderMatrices();
+		buttonY->Draw();
+	}
 
-	//Button X
-	modelMatrix = Matrix4::Translation(Vector3(0.52f, -0.75f, 0.0f)) *  Matrix4::Scale(Vector3(0.05f, 0.05f, 0.5f));
-	UpdateShaderMatrices();
-	buttonX->Draw();
+	//Button X for Slow
+	if (PhysicsSystem::GetVehicle()->getHasSlowPowerUp())
+	{
+		modelMatrix = Matrix4::Translation(Vector3(0.52f, -0.75f, 0.0f)) *  Matrix4::Scale(Vector3(0.05f, 0.05f, 0.5f));
+		UpdateShaderMatrices();
+		buttonX->Draw();
+	}
 
-	//Button B
-	modelMatrix = Matrix4::Translation(Vector3(0.72f, -0.75f, 0.0f)) *  Matrix4::Scale(Vector3(0.05f, 0.05f, 0.5f));
-	UpdateShaderMatrices();
-	buttonB->Draw();
+	//Button B for Cooldown
+	if (PhysicsSystem::GetVehicle()->getHasCDRedPowerUp())
+	{
+		modelMatrix = Matrix4::Translation(Vector3(0.72f, -0.75f, 0.0f)) *  Matrix4::Scale(Vector3(0.05f, 0.05f, 0.5f));
+		UpdateShaderMatrices();
+		buttonB->Draw();
+	}
+
+
+	//Cooldown Bar
+	if (PhysicsSystem::GetVehicle()->getCoolingDownPlaneSwitch())
+	{
+		cd = PhysicsSystem::GetVehicle()->getPlaneSwitchCDRemaining();
+	}
 
 	
 	//Cooldown Bar
@@ -678,7 +694,7 @@ void Renderer::RenderUI()
 	}
 
 	//cd = cd * 0.9;
-	modelMatrix = Matrix4::Translation(Vector3(0.0f, 0.7f, 0.0f)) *  Matrix4::Scale(Vector3(cd/1000, 0.05f, 0.5f));
+	modelMatrix = Matrix4::Translation(Vector3(0.0f, 0.7f, 0.0f)) *  Matrix4::Scale(Vector3(cd / 1000 * 0.5f, 0.05f, 0.5f));
 	UpdateShaderMatrices();
 	cooldownBar->Draw();
 
@@ -1107,9 +1123,24 @@ void Renderer::displayInformation()
 	DrawText("Timer", Vector3(25, 105, 0), 25, false);
 	DrawText(to_string(PhysicsSystem::GetPhysicsSystem().GetCheckPointTimer()), Vector3(32, 135, 0), 25, false);
 
-	DrawText("Immune", Vector3(740, 15, 0), 20, false);
-	DrawText("Slow", Vector3(640, 85, 0), 20, false);
-	DrawText("No CD", Vector3(880, 85, 0), 20, false);
+	//Button Y for Immunity
+	if (PhysicsSystem::GetVehicle()->getHasImmunityPowerUp())
+	{
+		DrawText("Immune", Vector3(740, 15, 0), 20, false);
+	}
+
+	//Button X for Slow
+	if (PhysicsSystem::GetVehicle()->getHasSlowPowerUp())
+	{
+		DrawText("Slow", Vector3(640, 85, 0), 20, false);
+	}
+
+	//Button B for Cooldown
+	if (PhysicsSystem::GetVehicle()->getHasCDRedPowerUp())
+	{
+		DrawText("No CD", Vector3(880, 85, 0), 20, false);
+	}
+
 
 	//--------------------------------------------------GUI--------------------------------------------------------------------------------
 
