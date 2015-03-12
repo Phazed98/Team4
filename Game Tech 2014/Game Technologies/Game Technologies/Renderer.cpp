@@ -660,41 +660,24 @@ void Renderer::RenderUI()
 		planeSwitchCD = PhysicsSystem::GetVehicle()->getPlaneSwitchCDRemaining() / 1000;
 	}
 
-	//Immunity PowerUp Duration
-	if (PhysicsSystem::GetVehicle()->getCoolingDownPlaneSwitch())
-	{
-		immunePowerUpDuration = 5000;
-	}
-
-	//Slow PowerUp Duration
-	if (PhysicsSystem::GetVehicle()->getCoolingDownPlaneSwitch())
-	{
-		slowPowerUpDuration = 5000;
-	}
-
-	//CD PowerUp Duration
-	if (PhysicsSystem::GetVehicle()->getCoolingDownPlaneSwitch())
-	{
-		cdPowerUpDuration = 5000;
-	}
-
+	
 	//Plane switch cooldown
 	modelMatrix = Matrix4::Translation(Vector3(0.0f, 0.9f, 0.0f)) *  Matrix4::Scale(Vector3(planeSwitchCD * 0.5f, 0.05f, 0.5f));
 	UpdateShaderMatrices();
 	greenBar->Draw();
 
 	//Slow PowerUp duration
-	modelMatrix = Matrix4::Translation(Vector3(0.0f, 0.8f, 0.0f)) *  Matrix4::Scale(Vector3(slowPowerUpDuration / 5000 * 0.75f, 0.05f, 0.5f));
-	UpdateShaderMatrices();
-	redBar->Draw();
-
-	//No Cooldown PowerUp duration
-	modelMatrix = Matrix4::Translation(Vector3(0.0f, 0.7f, 0.0f)) *  Matrix4::Scale(Vector3(cdPowerUpDuration / 5000 * 0.75f, 0.05f, 0.5f));
+	modelMatrix = Matrix4::Translation(Vector3(0.0f, 0.8f, 0.0f)) *  Matrix4::Scale(Vector3(PhysicsSystem::GetVehicle()->getSlowDurationRemaining() / 5000 * 0.75f, 0.05f, 0.5f));
 	UpdateShaderMatrices();
 	blueBar->Draw();
 
+	//No Cooldown PowerUp duration
+	modelMatrix = Matrix4::Translation(Vector3(0.0f, 0.7f, 0.0f)) *  Matrix4::Scale(Vector3(PhysicsSystem::GetVehicle()->getCDRedDurationRemaining() / 5000 * 0.75f, 0.05f, 0.5f));
+	UpdateShaderMatrices();
+	redBar->Draw();
+
 	//Immune PowerUp duration
-	modelMatrix = Matrix4::Translation(Vector3(0.0f, 0.6f, 0.0f)) *  Matrix4::Scale(Vector3(immunePowerUpDuration / 5000 * 0.75f, 0.05f, 0.5f));
+	modelMatrix = Matrix4::Translation(Vector3(0.0f, 0.6f, 0.0f)) *  Matrix4::Scale(Vector3(PhysicsSystem::GetVehicle()->getImmunityDurationRemaining() / 5000 * 0.75f, 0.05f, 0.5f));
 	UpdateShaderMatrices();
 	yellowBar->Draw();
 

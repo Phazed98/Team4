@@ -830,7 +830,7 @@ void Vehicle::GetUserInput()
 
 	//cd reduction
 	if (hasCDRedPowerUp == true && cdRedPowerUpActive == false &&
-		(Window::GetKeyboard()->KeyDown(KEYBOARD_W) || controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_Y))
+		(Window::GetKeyboard()->KeyDown(KEYBOARD_E) || controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_B))
 	{
 		hasCDRedPowerUp = false;
 		cdRedPowerUpActive = true;
@@ -863,27 +863,30 @@ void Vehicle::updateCooldowns(float msec)
 	if (slowPowerUpActive == true)
 	{
 		slowDurationRemaining -= msec;
-		if (slowDurationRemaining < 0.0)
+		if (slowDurationRemaining < 0.0f)
 		{
 			slowDurationRemaining = 0.0f;
+			slowPowerUpActive = false;
 		}
 	}
 
-	if (slowPowerUpActive == true)
+	if (immunityPowerUpActive == true)
 	{
 		immunityDurationRemaining -= msec;
-		if (immunityDurationRemaining < 0.0)
+		if (immunityDurationRemaining < 0.0f)
 		{
 			immunityDurationRemaining = 0.0f;
+			immunityPowerUpActive = false;
 		}
 	}
 
 	if (cdRedPowerUpActive == true)
 	{
 		cdRedDurationRemaining -= msec;
-		if (cdRedDurationRemaining < 0.0)
+		if (cdRedDurationRemaining < 0.0f)
 		{
 			cdRedDurationRemaining = 0.0f;
+			cdRedPowerUpActive = false;
 		}
 	}
 }
