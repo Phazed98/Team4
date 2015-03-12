@@ -13,6 +13,10 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)
 	geyser_system.InitParticleSystem(2, Vector3(0, 5, 0));
 	galaxy_system.InitParticleSystem(1, Vector3(0, 0, -200));
 	fire_system.InitParticleSystem(0, Vector3(0, 0, 0));
+
+	deferTimer = new float(0);
+	postprocessTimer = new float(0);
+	motionblurTimer = new float(0);
 	
 	menuShader = new Shader(SHADERDIR"menuVertex.glsl", SHADERDIR"menuFragment.glsl");
 	basicFont = new Font(SOIL_load_OGL_texture(TEXTUREDIR"tahoma.tga", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_COMPRESS_TO_DXT), 16, 16);
@@ -284,11 +288,24 @@ void Renderer::RenderScene()
 	BuildNodeLists(root);
 	SortNodeLists();
 
+	
+	*deferTimer = 0;				//Added by Loizos to get the timers 
+	postPtimer.GetTimedMS();		//Added by Loizos to get the timers 
 	deferRenderPass();
+	*deferTimer = postPtimer.GetTimedMS();		//Added by Loizos to get the timers 
+
+
 	ClearNodeLists();
 
+	*motionblurTimer = 0;			//Added by Loizos to get the timers 
+	postPtimer.GetTimedMS();
 	PresentMotionBlur();
+	*motionblurTimer = postPtimer.GetTimedMS();
+
+	*postprocessTimer = 0;
+	postPtimer.GetTimedMS();
 	FinalPostProcessing();
+	*postprocessTimer = postPtimer.GetTimedMS();
 	
 	//Display HUD
 	RenderUI();
@@ -1092,6 +1109,12 @@ void Renderer::displayInformation()
 	DrawText("Shift = Down", Vector3(0, 160, 0), 16, false);
 	DrawText("Space = Up", Vector3(0, 176, 0), 16, false);*/
 	
+	//Added for the timer debugger
+
+	DrawText("Motion blur timer : " + to_string(*motionblurTimer), Vector3(0, 224, 0), 16, false);
+	DrawText("PostProcess Render timer : " + to_string(*postprocessTimer), Vector3(0, 240, 0), 16, false);
+	DrawText("Defer Rendering timer : " + to_string(*deferTimer), Vector3(0, 256, 0), 16, false);
+
 	//--------------------------------------------------GUI--------------------------------------------------------------------------------
 	DrawText("SCORE", Vector3(25, 15, 0), 25, false);
 	DrawText(to_string(PhysicsSystem::GetPhysicsSystem().GetScore()), Vector3(32, 50, 0), 25, false);

@@ -227,5 +227,11 @@ protected:
 
 	void FinalPostProcessing();
 	Shader* post_processing_shader;
+
+	GameTimer postPtimer;
+	float* motionblurTimer;
+	float* deferTimer;
+	float* postprocessTimer;
+
 };
 
