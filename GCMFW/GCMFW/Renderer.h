@@ -24,6 +24,7 @@ _-_-_-_-_-_-_-""  ""
 //#include "textmesh.h"
 #include "PhysicsSystem.h"
 #include "Button.h"
+#include "textmesh.h"
 
 #define PAUSE_BUTTONS_SIZE 2
 #define	MAIN_BUTTONS_SIZE 3
@@ -49,6 +50,7 @@ public:
 	buttonPressed	RenderMainMenu();
 	void	RenderLoading(int percent);
 	void SetSpaceshipSceneNode(SpaceshipSceneNode* ssn){ spaceship_scene_node = ssn; }
+	void DrawText(const std::string &text, const Vector3 &position, const float size, const bool perspective);
 
 
 	virtual void RenderScene();
@@ -85,6 +87,8 @@ protected:
 	std::vector<SceneNode*> nodeList;
 
 	static Renderer*	instance;
+	Font*		basicFont;
+	SceneNode* textNode;
 
 	int nodeCount;
 	int nbFrames;
@@ -106,5 +110,21 @@ protected:
 	int coolDown;
 
 	SpaceshipSceneNode* spaceship_scene_node;
+
+	//UI Elements
+	Mesh* scoreQuad;
+	Mesh* timerQuad;
+	Mesh* cooldownBar;
+	Mesh* buttonB;
+	Mesh* buttonX;
+	Mesh* buttonY;
+	float cd;
+
+	SceneNode* scoreSN;
+	SceneNode* timerSN;
+	SceneNode* cooldownBarSN;
+	SceneNode* buttonBSN;
+	SceneNode* buttonXSN;
+	SceneNode* buttonYSN;
 
 };

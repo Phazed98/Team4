@@ -104,6 +104,7 @@
     <ClInclude Include="SceneNode.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="SupportPoint.h" />
+    <ClInclude Include="TextMesh.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Vehicle.h" />
     <ClInclude Include="Wave.h" />
@@ -133,6 +134,7 @@
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="SoundSystem.cpp" />
     <ClCompile Include="SpaceshipSceneNode.cpp" />
+    <ClCompile Include="TextMesh.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Vehicle.cpp" />
     <ClCompile Include="Wave.cpp" />

@@ -344,30 +344,29 @@ Obstacle* MyGame::BuildObstacleEntity(float size, int type, int subType, ObjectT
 //Position defines the plane its on 0-top, 1-bottom, 2-right, 3-left
 GameEntity* MyGame::BuildNewObstacleEntity(int position)
 {
-	SceneNode* s = new SceneNode(sphere);
-	PhysicsNode* p = new PhysicsNode();
-	s->SetModelScale(Vector3(5, 5, 5));
+	//SceneNode* s = new SceneNode(sphere);
+	//PhysicsNode* p = new PhysicsNode();
+	//s->SetModelScale(Vector3(5, 5, 5));
 
-	if (position == 0)//Top
-	{
-		p->SetPosition(Vector3(0, TILE_CENTRE_OFFSET, 0));
-	}
-	else if (position == 1)//Bottom
-	{
-		p->SetPosition(Vector3(0, -TILE_CENTRE_OFFSET, 0));
-	}
-	else if (position == 2)//Right
-	{
-		p->SetPosition(Vector3(TILE_CENTRE_OFFSET, 0, 0));
-	}
-	else if (position == 3)//Left
-	{
-		p->SetPosition(Vector3(-TILE_CENTRE_OFFSET, 0, 0));
-	}
+	//if (position == 0)//Top
+	//{
+	//	p->SetPosition(Vector3(0, TILE_CENTRE_OFFSET, 0));
+	//}
+	//else if (position == 1)//Bottom
+	//{
+	//	p->SetPosition(Vector3(0, -TILE_CENTRE_OFFSET, 0));
+	//}
+	//else if (position == 2)//Right
+	//{
+	//	p->SetPosition(Vector3(TILE_CENTRE_OFFSET, 0, 0));
+	//}
+	//else if (position == 3)//Left
+	//{
+	//	p->SetPosition(Vector3(-TILE_CENTRE_OFFSET, 0, 0));
+	//}
 
-	GameEntity* g = new GameEntity(s, p);
-	return g;
-
+	//GameEntity* g = new GameEntity(s, p);
+	//return g;
 }
 
 GameEntity* MyGame::BuildBuffEntity(float radius, Vector3 pos)
@@ -400,14 +399,6 @@ void MyGame::CreateObstacle(ObjectType* _obj)
 	if (obstacleReference[_obj->getSubType()] == NULL)
 	{
 		temp = BuildObstacleEntity(25, 1, _obj->getSubType(), _obj, obstacleType);
-		//if (temp->getObstacleType() == 1)
-		//{
-		//	GameEntity* bul = BuildBulletEntity(20, temp->GetPhysicsNode().GetPosition());
-		//	temp->SetBullet(bul);
-		//	temp->SetPlayer(PhysicsSystem::GetPhysicsSystem().GetPlayer());
-		//	allEntities.push_back(bul);
-
-		//}
 		obstacleElements[_obj->getSubType()].push_back(temp);
 		//--------------------
 		PhysicsSystem::GetPhysicsSystem().GetObstacles()->push_back(temp);
@@ -421,13 +412,6 @@ void MyGame::CreateObstacle(ObjectType* _obj)
 			if (obstacleReference[_obj->getSubType()]->GetPhysicsNode().GetPosition().getZ() > -4750.0f)
 			{
 				temp = BuildObstacleEntity(25, 1, _obj->getSubType(), _obj, obstacleType);
-				/*if (temp->getObstacleType() == 1)
-				{
-					GameEntity* bul = BuildBulletEntity(20, temp->GetPhysicsNode().GetPosition());
-					temp->SetBullet(bul);
-					temp->SetPlayer(PhysicsSystem::GetPhysicsSystem().GetPlayer());
-					allEntities.push_back(bul);
-				}*/
 				obstacleElements[_obj->getSubType()].push_back(temp);
 				//---------------------------
 				PhysicsSystem::GetPhysicsSystem().GetObstacles()->push_back(temp);

@@ -25,7 +25,7 @@ void ChaseCamera::Update(float msec)
 	chasePos.setZ(chasePos.getZ() + chaseDistance);
 	
 	//LERP position
-	cameraPosition = MathHelper::getWeightedAverage(cameraPosition,chasePos, chaseLagFactorLinear);
+	cameraPosition = MathHelper::getWeightedAverage(chasePos, cameraPosition, chaseLagFactorLinear);
 
 	//get orientation
 	Quat playerQuat = playerPhysNode->GetOrientation();

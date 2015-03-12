@@ -30,6 +30,7 @@ Renderer::Renderer(void)
 	std::cout << "New Root Has Been Made!!!!!" << std::endl;
 	root = new SceneNode();
 
+	basicFont = new Font(*GCMRenderer::LoadGTF("/Textures/Tahoma.gtf"), 16, 16);
 
 	pauseButtonIndex = 0;
 	mainButtonIndex = 0;
@@ -87,6 +88,60 @@ Renderer::Renderer(void)
 	pauseMenuButtons[1] = new SceneNode(pauseButtonMesh2);
 	pauseMenuButtons[1]->SetTransform(Matrix4::translation(Vector3(-0.6f, -0.4f, 0)) * Matrix4::scale(Vector3(0.2f, 0.1f, 0.1f)));
 	pauseMenuButtons[1]->Update(0);
+
+
+	//--------------------------------------------------GUI--------------------------------------------------------------------------------
+	scoreQuad = Mesh::GenerateQuad();
+	scoreQuad->SetDefaultTexture(*GCMRenderer::LoadGTF("/Textures/GUITextures/score.gtf"));
+
+	timerQuad = Mesh::GenerateQuad();
+	timerQuad->SetDefaultTexture(*GCMRenderer::LoadGTF("/Textures/GUITextures/score.gtf"));
+
+	cooldownBar = Mesh::GenerateQuad();
+	cooldownBar->SetDefaultTexture(*GCMRenderer::LoadGTF("/Textures/GUITextures/cd.gtf"));
+
+	buttonB = Mesh::GenerateQuad();
+	buttonB->SetDefaultTexture(*GCMRenderer::LoadGTF("/Textures/GUITextures/bigB.gtf"));
+
+	buttonX = Mesh::GenerateQuad();
+	buttonX->SetDefaultTexture(*GCMRenderer::LoadGTF("/Textures/GUITextures/bigX.gtf"));
+
+	buttonY = Mesh::GenerateQuad();
+	buttonY->SetDefaultTexture(*GCMRenderer::LoadGTF("/Textures/GUITextures/bigY.gtf"));
+
+	scoreSN = new SceneNode(scoreQuad);
+	modelMatrix = Matrix4::translation(Vector3(-0.82f, -0.88f, 0.0f));
+	scoreSN->SetTransform(modelMatrix);
+	scoreSN->SetModelScale(Vector3(0.15f, 0.1f, 0.5f));
+
+	timerSN = new SceneNode(timerQuad);
+	modelMatrix = Matrix4::translation(Vector3(-0.48f, -0.88f, 0.0f));
+	timerSN->SetTransform(modelMatrix);
+	timerSN->SetModelScale(Vector3(0.15f, 0.1f, 0.5f));
+
+	cooldownBarSN = new SceneNode(cooldownBar);
+	modelMatrix = Matrix4::translation(Vector3(-0.1f, -0.88f, 0.0f));
+	cooldownBarSN->SetTransform(modelMatrix);
+	cooldownBarSN->SetModelScale(Vector3(0.15f, 0.1f, 0.5f));
+
+	buttonBSN = new SceneNode(buttonB);
+	modelMatrix = Matrix4::translation(Vector3(0.72f, -0.75f, 0.0f));
+	buttonBSN->SetTransform(modelMatrix);
+	buttonBSN->SetModelScale(Vector3(0.15f, 0.1f, 0.5f));
+
+
+	buttonXSN = new SceneNode(buttonX);
+	modelMatrix = Matrix4::translation(Vector3(0.52f, -0.75f, 0.0f));
+	buttonXSN->SetTransform(modelMatrix);
+	buttonXSN->SetModelScale(Vector3(0.15f, 0.1f, 0.5f));
+
+	buttonYSN = new SceneNode(buttonY);
+	modelMatrix = Matrix4::translation(Vector3(0.62f,-0.85f, 0.0f));
+	buttonYSN->SetTransform(modelMatrix);
+	buttonYSN->SetModelScale(Vector3(0.15f, 0.1f, 0.5f));
+	//--------------------------------------------------GUI--------------------------------------------------------------------------------
+
+
 
 	instance = this;
 	init = true;
@@ -163,9 +218,6 @@ void Renderer::RenderScene()
 
 	currentVert->UpdateShaderMatrices(modelMatrix, viewMatrix, projMatrix);
 
-	
-
-
 	cellGcmSetDepthTestEnable(CELL_GCM_TRUE);
 	cellGcmSetDepthFunc(CELL_GCM_LESS);
 
@@ -173,6 +225,34 @@ void Renderer::RenderScene()
 	SortNodeLists();
 	DrawNodes();
 	ClearNodeLists();
+
+	cellGcmSetDepthTestEnable(CELL_GCM_FALSE);
+	cellGcmSetDepthFunc(CELL_GCM_NEVER);
+
+	viewMatrix = Matrix4::identity();
+	projMatrix = Matrix4::orthographic(-1, 1, 1, -1, -1, 1);
+	//projMatrix = Matrix4::orthographic(0.0f, (float)screenWidth, 0.0f, (float)screenHeight, -1.0f, 1.0f);
+	textureMatrix = Matrix4::identity();
+	currentVert->UpdateShaderMatrices(modelMatrix, viewMatrix, projMatrix);
+
+	scoreSN->Update(0);
+	DrawNode(scoreSN);
+	timerSN->Update(0);
+	DrawNode(timerSN);
+	cooldownBarSN->Update(0);
+	DrawNode(cooldownBarSN);
+	buttonBSN->Update(0);
+	DrawNode(buttonBSN);
+	buttonXSN->Update(0);
+	DrawNode(buttonXSN);
+	buttonYSN->Update(0);
+	DrawNode(buttonYSN);
+
+	//cellGcmSetDepthTestEnable(CELL_GCM_TRUE);
+	//cellGcmSetDepthFunc(CELL_GCM_LESS);
+
+	//projMatrix = Matrix4::perspective(0.7853982, screenRatio, 1.0f, 20000.0f);	//CHANGED TO THIS!!
+
 
 	SwapBuffers();
 }
@@ -220,6 +300,8 @@ void	Renderer::RenderPauseMenu()
 	
 	
 	projMatrix = Matrix4::orthographic(-1, 1, 1, -1, -1, 1);
+
+	
 	textureMatrix = Matrix4::identity();
 	viewMatrix = Matrix4::identity();
 
@@ -336,6 +418,8 @@ buttonPressed	Renderer::RenderMainMenu()
 
 	}
 
+	DrawText("Hello World", Vector3(0, 0, 0), 16, false);
+
 	if (Input::ButtonDown(INPUT_CROSS))
 	{
 		switch (mainButtonIndex)
@@ -377,8 +461,8 @@ void	Renderer::BuildNodeLists(SceneNode* from)
 	Vector3 direction = from->GetWorldTransform().getTranslation() - camera->GetPosition();
 	from->SetCameraDistance(dot(direction, direction));
 
-	if (frameFrustum.InsideFrustum(*from))
-	{
+//	if (frameFrustum.InsideFrustum(*from))
+//	{
 		if (from->GetColour().getW()< 1.0f)
 		{
 			transparentNodeList.push_back(from);
@@ -387,7 +471,7 @@ void	Renderer::BuildNodeLists(SceneNode* from)
 		{
 			nodeList.push_back(from);
 		}
-	}
+//	}
 
 	for (std::vector<SceneNode*>::const_iterator i = from->GetChildIteratorStart(); i != from->GetChildIteratorEnd(); ++i)
 	{
@@ -455,6 +539,30 @@ void	Renderer::RemoveNode(SceneNode* n)
 {
 	//nodeCount--;
 	root->RemoveChild(n);
+}
+
+void Renderer::DrawText(const std::string &text, const Vector3 &position, const float size, const bool perspective)
+{
+	//Create a new temporary TextMesh, using our line of text andour font
+	TextMesh* mesh = new TextMesh(text, *basicFont);
+	textNode = new SceneNode(mesh);
+
+
+	//In ortho mode, we subtract the y from the height, so that a height of 0 is at the top left of the screen, which is more intuitive
+	//modelMatrix = Matrix4::translation(Vector3(position.getX(), screenHeight - position.getY(), position.getZ())) * Matrix4::scale(Vector3(size, size, 1));
+	//modelMatrix = Matrix4::identity() * Matrix4::scale(Vector3(16,16,1));
+
+	modelMatrix = Matrix4::translation(Vector3(200, 200, 0)) * Matrix4::scale(Vector3(32, 32, 1));
+	textNode->SetTransform(modelMatrix);
+	textNode->Update(0);
+	viewMatrix = Matrix4::identity();
+	projMatrix = Matrix4::orthographic(0.0f, (float)screenWidth, 0.0f, (float)screenHeight, -1.0f, 1.0f);
+	textureMatrix = Matrix4::identity();
+	currentVert->UpdateShaderMatrices(modelMatrix, viewMatrix, projMatrix);
+
+	DrawNode(textNode);
+
+	delete mesh; //Once it's drawn, we don't need it anymore!
 }
 
 

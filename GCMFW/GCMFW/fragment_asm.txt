@@ -1,6 +1,6 @@
 # profile sce_fp_rsx
-# parameterCount 4
-# instructionCount 1
+# parameterCount 5
+# instructionCount 4
 # attributeInputMask Tex0
 # registerCount 2
 
@@ -9,6 +9,9 @@ index: type: name: semantic: res: # of const, const offset
 #1: float2: texcoord: in.TEXCOORD0: TEXCOORD0
 #2: samplerRECT: texture: : TEXUNIT0
 #3: float4: color_out: out.COLOR: COLOR0
+#4: float4: $kill_0000: out.UNDEFINED: UNDEFINED
 
-TEXR R0, f[TEX0], TEX0; # last instruction
+TEXR R0, f[TEX0], TEX0;
+SLTXC RC.x, R0_n.w, {0x3dcccccd(0.1), 0x00000000(0), 0x00000000(0), 0x00000000(0)}_n.x;
+KILR (NE.x); # last instruction
 END

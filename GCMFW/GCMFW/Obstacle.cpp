@@ -9,7 +9,7 @@ Obstacle::Obstacle(ObjectType* _tile, SceneNode* s, PhysicsNode* p, int _type, i
 	random = rand() % 175 + 1;
 	this->GetRenderNode().SetColour(Vector4(0, 0, 0, 1));
 
-	if (obstacleType == 1)
+	/*if (obstacleType == 1)
 	{
 		renderNode->SetColour(Vector4(0.835f, 0.262f, 0.043f, 1.0f));
 	}
@@ -20,7 +20,7 @@ Obstacle::Obstacle(ObjectType* _tile, SceneNode* s, PhysicsNode* p, int _type, i
 	else if (obstacleType == 3)
 	{
 		renderNode->SetColour(Vector4(0.564f, 0.043f, 0.835f, 1.0f));
-	}
+	}*/
 
 	physicsNode->SetPosition(Vector3(1000, 1000, 1000));
 

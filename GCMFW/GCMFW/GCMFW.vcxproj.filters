@@ -82,6 +82,9 @@
     <ClCompile Include="SoundManager.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="TextMesh.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -193,6 +196,9 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="SoundManager.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TextMesh.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>

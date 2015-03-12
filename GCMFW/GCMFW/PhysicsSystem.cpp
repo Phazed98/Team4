@@ -52,13 +52,13 @@ void	PhysicsSystem::Update(float msec)
 
 	//--------added by sam-----------------------
 	//Update max track speed
-	//maxTrackSpeed += (msec / DIFFICULTY_SPEED_INCREASE);
+	maxTrackSpeed += (msec / DIFFICULTY_SPEED_INCREASE);
 
 	//if not bouncing due to collision, set track speed to max speed
-	//if (!playerIsReversing && !playerIsAccelerating)
-	//{
-	//	track_speed = maxTrackSpeed;
-	//}
+	if (!playerIsReversing && !playerIsAccelerating)
+	{
+		track_speed = maxTrackSpeed;
+	}
 	//--------------------------------------------
 
 	
@@ -282,7 +282,12 @@ void	PhysicsSystem::ObstacleCollisions()
 				//get other phys node (saves multiple get calls
 				PhysicsNode* otherObj = &(Obstacles.at(i)->GetPhysicsNode());
 				//check objects are close enough to collide
-				if (CheckAABBCollision(*playerPhysNode, *otherObj) == true)
+
+				if (otherObj->GetPosition().getZ() > 0)
+				{
+
+				}
+				else if (CheckAABBCollision(*playerPhysNode, *otherObj) == true)
 				{
 					//create the collision objects to test for an actual collision
 					CollisionData* collisionData = new CollisionData();

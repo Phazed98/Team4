@@ -13,6 +13,12 @@ void main
 	out float4 color_out : COLOR
 )
 {
+
 	color_out =  texRECT(texture, texcoord);// * texRECT(textureTwo, texcoord); //color_in *
+
+	if(color_out.a <0.1)
+	{
+		discard;
+	}
 	//color_out = float4(1.0,1.0,0.0,1.0);
 }
