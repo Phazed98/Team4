@@ -27,6 +27,8 @@ MyGame::MyGame(bool isHost, bool isClient, bool useNetworking, int numClients)
 	this->useNetworking = useNetworking;
 	this->numClients = numClients;
 
+	wasPaused = false;
+
 	Renderer::GetRenderer().RenderLoading(0, "Initializing...");
 	setCurrentState(Game_LOADING);
 	timer = 0;
@@ -282,7 +284,14 @@ logic will be added to this function.
 void MyGame::UpdateGame(float msec) 
 {
 	if (currentGameState != GAME_PLAYING)
+	{
+		if (currentGameState == GAME_PAUSE && useNetworking)
+		{
+			handleNetworking();
+			wasPaused = true;
+		}
 		return;
+	}
 
 	if (Window::GetKeyboard()->KeyDown(KEYBOARD_L)) //Build Cube
 	{
@@ -868,6 +877,12 @@ void MyGame::receiveFromClients()
 				sendServerUpdatePackets(iter->first);
 				break;
 
+			case GAME_PAUSE:
+				sendServerPausePackets();
+				break;
+			case GAME_UNPAUSE:
+				sendServerUnPausePackets();
+
 			default:
 				cout << "error in packet types" << endl;
 				break;
@@ -875,6 +890,69 @@ void MyGame::receiveFromClients()
 		}
 	}
 }
+
+void MyGame::recieveFromServer()
+{
+	Packet packet;
+	Matrix4 playerMatrixes[4];
+	messageInfo playerInfo[4];
+
+	int data_length = networkClient->receivePackets(client_network_data);
+
+	if (data_length <= 0)
+	{
+		return;
+	}
+
+	unsigned int i = 0;
+	while (i < (unsigned int)data_length)
+	{
+		packet.deserialize(&(client_network_data[i]));
+		i += sizeof(Packet);
+
+		switch (packet.packet_type)
+		{
+		case ACTION_EVENT:
+			cout << "Client Recieved Action Event Packet" << endl;
+			//sendClientActionPackets();
+			break;
+
+		case INIT_CONNECTION:
+			cout << "Client Recieved Init Connection Packet" << endl;
+			//sendClientActionPackets();
+			break;
+
+		case START_GAME:
+			cout << "Client Recieved Start Game Packet" << endl;
+			//sendClientActionPackets();
+			break;
+
+		case PLAYERS_DATA:
+			memcpy(&playerInfo, packet.data, sizeof(messageInfo)* 4);
+
+			for (int x = 0; x < 4; x++)
+			{
+				players[x]->GetPhysicsNode().SetPosition(playerInfo[x].Position);
+				players[x]->GetPhysicsNode().SetOrientation(playerInfo[x].Orientation);
+			}
+			break;
+
+		case GAME_PAUSE:
+			setCurrentState(GAME_PAUSED);
+			break;
+
+		case GAME_UNPAUSE:
+			setCurrentState(GAME_PLAYING);
+			break;
+
+		default:
+			cout << "error in packet types" << endl;
+			break;
+		}
+	}
+}
+
+
 
 
 void MyGame::sendServerActionPackets()
@@ -905,6 +983,39 @@ void MyGame::sendServerStartPackets()
 
 	networkServer->sendToAll(packet_data, packet_size);
 }
+
+
+void MyGame::sendServerPausePackets()
+{
+	// send action packet
+	const unsigned int packet_size = sizeof(Packet);
+	char packet_data[packet_size];
+
+	Packet packet;
+	packet.packet_type = GAME_PAUSE;
+	packet.packet_integer = 205;
+	packet.packet_integer = (int)Window::GetWindow().GetTimer()->GetMS();
+	packet.serialize(packet_data);
+
+	networkServer->sendToAll(packet_data, packet_size);
+}
+
+void MyGame::sendServerUnPausePackets()
+{
+	// send action packet
+	const unsigned int packet_size = sizeof(Packet);
+	char packet_data[packet_size];
+
+	Packet packet;
+	packet.packet_type = GAME_UNPAUSE;
+	packet.packet_integer = 207;
+	packet.packet_integer = (int)Window::GetWindow().GetTimer()->GetMS();
+	packet.serialize(packet_data);
+
+	networkServer->sendToAll(packet_data, packet_size);
+}
+
+
 
 void MyGame::sendServerUpdatePackets(int client)
 {
@@ -961,59 +1072,33 @@ void MyGame::sendClientUpdatePackets()
 	NetworkServices::sendMessage(networkClient->ConnectSocket, packet_data, packet_size);
 }
 
-void MyGame::recieveFromServer()
+
+void MyGame::sendClientPausePackets()
 {
+	// send action packet
+	const unsigned int packet_size = sizeof(Packet);
+	char packet_data[packet_size];
 	Packet packet;
-	Matrix4 playerMatrixes[4];
-	messageInfo playerInfo[4];
+	packet.packet_type = GAME_PAUSE;
+	packet.packet_integer = 197;
+	packet.serialize(packet_data);
 
-	int data_length = networkClient->receivePackets(client_network_data);
-
-	if (data_length <= 0)
-	{
-		return;
-	}
-
-	unsigned int i = 0;
-	while (i < (unsigned int)data_length)
-	{
-		packet.deserialize(&(client_network_data[i]));
-		i += sizeof(Packet);
-
-		switch (packet.packet_type)
-		{
-		case ACTION_EVENT:
-			cout << "Client Recieved Action Event Packet" << endl;
-			//				sendClientActionPackets();
-			break;
-
-		case INIT_CONNECTION:
-			cout << "Client Recieved Init Connection Packet" << endl;
-			//				sendClientActionPackets();
-			break;
-
-		case START_GAME:
-			cout << "Client Recieved Start Game Packet" << endl;
-			//				sendClientActionPackets();
-			break;
-
-		case PLAYERS_DATA:
-			memcpy(&playerInfo, packet.data, sizeof(messageInfo)* 4);
-
-			for (int x = 0; x < 4; x++)
-			{
-				players[x]->GetPhysicsNode().SetPosition(playerInfo[x].Position);
-				players[x]->GetPhysicsNode().SetOrientation(playerInfo[x].Orientation);
-			}
-			break;
-
-		default:
-			cout << "error in packet types" << endl;
-			break;
-		}
-	}
+	NetworkServices::sendMessage(networkClient->ConnectSocket, packet_data, packet_size);
 }
 
+
+void MyGame::sendClientUnPausePackets()
+{
+	// send action packet
+	const unsigned int packet_size = sizeof(Packet);
+	char packet_data[packet_size];
+	Packet packet;
+	packet.packet_type = GAME_UNPAUSE;
+	packet.packet_integer = 198;
+	packet.serialize(packet_data);
+
+	NetworkServices::sendMessage(networkClient->ConnectSocket, packet_data, packet_size);
+}
 
 
 void MyGame::handleNetworking()
@@ -1032,6 +1117,11 @@ void MyGame::handleNetworking()
 
 	if (isClient)
 	{
+		if (wasPaused)
+		{
+			sendClientUnPausePackets();
+			wasPaused = false;
+		}
 		sendClientUpdatePackets();
 		recieveFromServer();
 	}

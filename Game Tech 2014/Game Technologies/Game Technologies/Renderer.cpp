@@ -33,7 +33,7 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)
 	mainButtonIndex = 0;
 
 	mainMenuQuad = Mesh::GenerateQuad();
-	mainMenuQuad->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"Loading Screen.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
+	mainMenuQuad->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"Background.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
 
 	ipQuad = Mesh::GenerateQuad();
 	ipQuad->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"IPBox.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
@@ -167,7 +167,7 @@ void Renderer::fullyInit()
 
 
 	quad = Mesh::GenerateQuad();
-	quad->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"Loading Screen.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
+	quad->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"Background.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
 	quad->SetColour(new Vector4(1, 0, 0, 1));
 
 	

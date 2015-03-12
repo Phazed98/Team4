@@ -68,12 +68,16 @@ public:
 	void sendToClients();
 	void sendServerActionPackets();
 	void sendServerStartPackets();
+	void sendServerPausePackets();
+	void sendServerUnPausePackets();
 	void sendServerUpdatePackets(int client);
 	char server_network_data[MAX_PACKET_SIZE];
 
 	//Client
 	void sendClientActionPackets();
 	void sendClientUpdatePackets();
+	void sendClientPausePackets();
+	void sendClientUnPausePackets();
 	void recieveFromServer();
 	char client_network_data[MAX_PACKET_SIZE];
 
@@ -170,6 +174,6 @@ protected:
 	GLuint checkTexture = SOIL_load_OGL_texture("../../Textures/Checkpoint.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, 0);
 
 	OBJMesh* water_sphere;
-	
+	bool wasPaused;
 };
 
