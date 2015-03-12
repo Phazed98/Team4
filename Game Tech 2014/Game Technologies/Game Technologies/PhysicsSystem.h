@@ -80,7 +80,7 @@ public:
 	void CalculateScore(float);
 	int GetScoreMultiplier() { return scoreMultiplier; }
 	int GetNumberOfCoins() { return numberOfCoins; }
-	int GetScore() { return score; }
+	int GetScore() { return actualScore; }
 
 	//---------------------------------------------------------------------------------
 
@@ -235,9 +235,11 @@ protected:
 	bool canDie;
 
 	//---------------------Score--------------------------------------------
-	int			score = 0;
+	float		score = 0;
 	int			scoreMultiplier = 1;
 	int			numberOfCoins = 0;
-	int			scoreTimer = 0;
+	int			actualScore = 0;
+	bool		increaseScore = true;
+	//----------------------------------------------------------------------
 };
 

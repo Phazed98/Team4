@@ -260,7 +260,7 @@ void	PhysicsSystem::ObstacleCollisions()
 									if (playerVehicle->getHasSlowPowerUp() == false)
 									{
 										playerVehicle->setHasSlowPowerUp(true);
-										otherObj->SetPosition(Vector3(1000, 1000, 1000));
+										Obstacles[i]->GetRidOfObstacle();
 									}
 									break;
 
@@ -268,7 +268,7 @@ void	PhysicsSystem::ObstacleCollisions()
 									if (playerVehicle->getHasCDRedPowerUp() == false)
 									{
 										playerVehicle->setHasCDRedPowerUp(true);
-										otherObj->SetPosition(Vector3(1000, 1000, 1000));
+										Obstacles[i]->GetRidOfObstacle();
 									}
 									break;
 
@@ -276,7 +276,7 @@ void	PhysicsSystem::ObstacleCollisions()
 									if (playerVehicle->getHasImmunityPowerUp() == false)
 									{
 										playerVehicle->setHasImmunityPowerUp(true);
-										otherObj->SetPosition(Vector3(1000, 1000, 1000));
+										Obstacles[i]->GetRidOfObstacle();
 									}
 									break;
 								}
@@ -505,27 +505,36 @@ bool	PhysicsSystem::CheckOnATile()
 
 void PhysicsSystem::CalculateScore(float msec)
 {
-	scoreTimer += msec;
 
-	if (Window::GetKeyboard()->KeyTriggered(KEYBOARD_7))
+	if (!increaseScore && track_speed > 0)
 	{
-		numberOfCoins++;
+		distanceReversed -= track_speed;
+		if (distanceReversed < 0)
+		{
+			score += (abs(distanceReversed) * msec) / 10000;
+
+			increaseScore = true;
+			actualScore = score * scoreMultiplier;
+		}
+	}
+	else
+	{
+		if (Window::GetKeyboard()->KeyTriggered(KEYBOARD_7))
+		{
+			numberOfCoins++;
+		}
+
+		if (numberOfCoins > scoreMultiplier)
+		{
+			scoreMultiplier++;
+			numberOfCoins = 0;
+		}
+
+
+		score += (track_speed * msec) / 10000;
+
+		actualScore = score * scoreMultiplier;
 	}
 
-	if (numberOfCoins > scoreMultiplier)
-	{
-		scoreMultiplier++;
-		numberOfCoins = 0;
-	}
 
-	//Increase score every second
-	if (scoreTimer > 1000 && track_speed > 0)
-	{
-		score += track_speed;
-		scoreTimer = 0;
-	}
-
-	//score += track_speed * msec / 1000;
-
-	int actualScore = score;
 }

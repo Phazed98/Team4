@@ -34,6 +34,8 @@ public:
 
 	int GetPowerupType() { return powerupType; }
 
+	void GetRidOfObstacle() { offset.y = 10000; }
+
 private:
 
 	int lane; // Lanes are from 0 t 7 starting from top, two lanes per tile

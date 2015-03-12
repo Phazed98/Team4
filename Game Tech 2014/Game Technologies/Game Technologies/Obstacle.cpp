@@ -266,6 +266,7 @@ void Obstacle::resetObstacle(){
 	physicsNode->SetPosition(Vector3(1000, 1000, 1000));
 	directionRand = rand() % 100 + 1;
 	powerupType = rand() % 3 + 1;
+	offset.y = (TILE_HEIGHT + size);
 	if (directionRand > 30)
 	{
 		goingLeft = true;

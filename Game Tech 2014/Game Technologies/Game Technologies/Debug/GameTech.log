@@ -1,115 +1,55 @@
-﻿Build started 12/03/2015 19:43:27.
-     1>Project "D:\Team 4\Team4\Game Tech 2014\Game Technologies\Game Technologies\GameTech.vcxproj" on node 2 (Build target(s)).
+﻿Build started 12/03/2015 20:11:46.
+     1>Project "D:\GitHub\Team4\Game Tech 2014\Game Technologies\Game Technologies\GameTech.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         D:\visual studio 2013\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Bullets.cpp Button.cpp ChaseCamera.cpp Coins.cpp CollisionHelper.cpp EarthParticleSystem.cpp FireParticleSystem.cpp FireSceneNode.cpp GameClass.cpp GameEntity.cpp GamePadController.cpp GeyserSceneNode.cpp GJK.cpp Main.cpp MyGame.cpp NetworkClient.cpp NetworkServer.cpp NetworkServices.cpp ObjectType.cpp Obstacle.cpp PhysicsNode.cpp PhysicsSystem.cpp Powerups.cpp Renderer.cpp Sound.cpp SoundEmitter.cpp SoundManager.cpp SoundSystem.cpp SpaceshipSceneNode.cpp Spring.cpp SpringDemo.cpp TextMesh.cpp TornadoSceneNode.cpp "Vehicle(old).cpp" Vehicle.cpp
-         Vehicle.cpp
-     1>d:\team 4\team4\game tech 2014\nclgl\keyboard.h : warning C4819: The file contains a character that cannot be represented in the current code page (936). Save the file in Unicode format to prevent data loss
-         Vehicle(old).cpp
-         TornadoSceneNode.cpp
-     1>d:\team 4\team4\game tech 2014\nclgl\keyboard.h : warning C4819: The file contains a character that cannot be represented in the current code page (936). Save the file in Unicode format to prevent data loss
-         TextMesh.cpp
-     1>d:\team 4\team4\game tech 2014\nclgl\keyboard.h : warning C4819: The file contains a character that cannot be represented in the current code page (936). Save the file in Unicode format to prevent data loss
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Bullets.cpp Coins.cpp GameClass.cpp GameEntity.cpp Main.cpp MyGame.cpp NetworkClient.cpp NetworkServer.cpp ObjectType.cpp Obstacle.cpp PhysicsSystem.cpp Powerups.cpp Renderer.cpp SoundSystem.cpp Spring.cpp SpringDemo.cpp
          SpringDemo.cpp
-     1>d:\team 4\team4\game tech 2014\nclgl\keyboard.h : warning C4819: The file contains a character that cannot be represented in the current code page (936). Save the file in Unicode format to prevent data loss
          Spring.cpp
-     1>d:\team 4\team4\game tech 2014\nclgl\keyboard.h : warning C4819: The file contains a character that cannot be represented in the current code page (936). Save the file in Unicode format to prevent data loss
-         SpaceshipSceneNode.cpp
-     1>d:\team 4\team4\game tech 2014\nclgl\keyboard.h : warning C4819: The file contains a character that cannot be represented in the current code page (936). Save the file in Unicode format to prevent data loss
          SoundSystem.cpp
-     1>d:\team 4\team4\game tech 2014\nclgl\keyboard.h : warning C4819: The file contains a character that cannot be represented in the current code page (936). Save the file in Unicode format to prevent data loss
-     1>d:\team 4\team4\game tech 2014\game technologies\game technologies\soundsystem.cpp(94): warning C4305: 'argument' : truncation from 'double' to 'float'
-         SoundManager.cpp
-         SoundEmitter.cpp
-     1>d:\team 4\team4\game tech 2014\nclgl\keyboard.h : warning C4819: The file contains a character that cannot be represented in the current code page (936). Save the file in Unicode format to prevent data loss
-         Sound.cpp
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\soundsystem.cpp(95): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\soundsystem.cpp(235): warning C4305: 'argument' : truncation from 'double' to 'float'
          Renderer.cpp
-     1>d:\team 4\team4\game tech 2014\nclgl\keyboard.h : warning C4819: The file contains a character that cannot be represented in the current code page (936). Save the file in Unicode format to prevent data loss
-     1>d:\team 4\team4\game tech 2014\game technologies\game technologies\renderer.cpp(373): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
-     1>d:\team 4\team4\game tech 2014\game technologies\game technologies\renderer.cpp(980): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
-     1>d:\team 4\team4\game tech 2014\game technologies\game technologies\renderer.cpp(990): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
-     1>d:\team 4\team4\game tech 2014\game technologies\game technologies\renderer.cpp(1367): warning C4305: 'argument' : truncation from 'double' to 'const float'
-     1>d:\team 4\team4\game tech 2014\game technologies\game technologies\renderer.cpp(1569): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
-     1>d:\team 4\team4\game tech 2014\game technologies\game technologies\renderer.cpp(1606): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
-         Powerups.cpp
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(373): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(980): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(990): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(1367): warning C4305: 'argument' : truncation from 'double' to 'const float'
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(1569): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(1606): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
          PhysicsSystem.cpp
-     1>d:\team 4\team4\game tech 2014\nclgl\keyboard.h : warning C4819: The file contains a character that cannot be represented in the current code page (936). Save the file in Unicode format to prevent data loss
-     1>d:\team 4\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(235): warning C4018: '<' : signed/unsigned mismatch
-     1>d:\team 4\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(341): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>d:\team 4\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(375): warning C4018: '<' : signed/unsigned mismatch
-     1>d:\team 4\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(419): warning C4018: '<' : signed/unsigned mismatch
-     1>d:\team 4\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(440): warning C4018: '<' : signed/unsigned mismatch
-     1>d:\team 4\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(461): warning C4018: '<' : signed/unsigned mismatch
-     1>d:\team 4\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(482): warning C4018: '<' : signed/unsigned mismatch
-     1>d:\team 4\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(508): warning C4244: '+=' : conversion from 'float' to 'int', possible loss of data
-     1>d:\team 4\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(524): warning C4244: '+=' : conversion from 'float' to 'int', possible loss of data
-         PhysicsNode.cpp
-     1>d:\team 4\team4\game tech 2014\nclgl\keyboard.h : warning C4819: The file contains a character that cannot be represented in the current code page (936). Save the file in Unicode format to prevent data loss
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(235): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(341): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(375): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(419): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(440): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(461): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(482): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(517): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(536): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
          Obstacle.cpp
-     1>d:\team 4\team4\game tech 2014\nclgl\keyboard.h : warning C4819: The file contains a character that cannot be represented in the current code page (936). Save the file in Unicode format to prevent data loss
-     1>d:\team 4\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(8): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
-     1>d:\team 4\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(92): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
-     1>d:\team 4\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(109): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
-     1>d:\team 4\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(126): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
-     1>d:\team 4\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(143): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
-         ObjectType.cpp
-     1>d:\team 4\team4\game tech 2014\nclgl\keyboard.h : warning C4819: The file contains a character that cannot be represented in the current code page (936). Save the file in Unicode format to prevent data loss
-     1>d:\team 4\team4\game tech 2014\game technologies\game technologies\objecttype.cpp(57): warning C4244: '-=' : conversion from 'float' to 'int', possible loss of data
-         NetworkServices.cpp
-         NetworkServer.cpp
-     1>d:\team 4\team4\game tech 2014\nclgl\keyboard.h : warning C4819: The file contains a character that cannot be represented in the current code page (936). Save the file in Unicode format to prevent data loss
-         NetworkClient.cpp
-     1>d:\team 4\team4\game tech 2014\nclgl\keyboard.h : warning C4819: The file contains a character that cannot be represented in the current code page (936). Save the file in Unicode format to prevent data loss
-         Generating Code...
-         Compiling...
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(8): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(92): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(109): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(126): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(143): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(269): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
          MyGame.cpp
-     1>d:\team 4\team4\game tech 2014\nclgl\keyboard.h : warning C4819: The file contains a character that cannot be represented in the current code page (936). Save the file in Unicode format to prevent data loss
-     1>d:\team 4\team4\game tech 2014\game technologies\game technologies\mygame.cpp(206): warning C4018: '<' : signed/unsigned mismatch
-     1>d:\team 4\team4\game tech 2014\game technologies\game technologies\mygame.cpp(1044): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
-     1>d:\team 4\team4\game tech 2014\game technologies\game technologies\mygame.cpp(1046): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(206): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(1044): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\mygame.cpp(1046): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
          Main.cpp
-     1>d:\team 4\team4\game tech 2014\nclgl\keyboard.h : warning C4819: The file contains a character that cannot be represented in the current code page (936). Save the file in Unicode format to prevent data loss
-     1>d:\team 4\team4\game tech 2014\game technologies\game technologies\main.cpp(65): warning C4551: function call missing argument list
-     1>d:\team 4\team4\game tech 2014\game technologies\game technologies\main.cpp(127): warning C4551: function call missing argument list
-         GJK.cpp
-     1>d:\team 4\team4\game tech 2014\game technologies\game technologies\gjk.cpp : warning C4819: The file contains a character that cannot be represented in the current code page (936). Save the file in Unicode format to prevent data loss
-     1>d:\team 4\team4\game tech 2014\nclgl\keyboard.h : warning C4819: The file contains a character that cannot be represented in the current code page (936). Save the file in Unicode format to prevent data loss
-         GeyserSceneNode.cpp
-     1>d:\team 4\team4\game tech 2014\nclgl\keyboard.h : warning C4819: The file contains a character that cannot be represented in the current code page (936). Save the file in Unicode format to prevent data loss
-         GamePadController.cpp
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\main.cpp(65): warning C4551: function call missing argument list
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\main.cpp(127): warning C4551: function call missing argument list
          GameEntity.cpp
-     1>d:\team 4\team4\game tech 2014\nclgl\keyboard.h : warning C4819: The file contains a character that cannot be represented in the current code page (936). Save the file in Unicode format to prevent data loss
          GameClass.cpp
-     1>d:\team 4\team4\game tech 2014\nclgl\keyboard.h : warning C4819: The file contains a character that cannot be represented in the current code page (936). Save the file in Unicode format to prevent data loss
-         FireSceneNode.cpp
-     1>d:\team 4\team4\game tech 2014\nclgl\keyboard.h : warning C4819: The file contains a character that cannot be represented in the current code page (936). Save the file in Unicode format to prevent data loss
-         FireParticleSystem.cpp
-     1>d:\team 4\team4\game tech 2014\nclgl\keyboard.h : warning C4819: The file contains a character that cannot be represented in the current code page (936). Save the file in Unicode format to prevent data loss
-         EarthParticleSystem.cpp
-     1>d:\team 4\team4\game tech 2014\nclgl\keyboard.h : warning C4819: The file contains a character that cannot be represented in the current code page (936). Save the file in Unicode format to prevent data loss
-     1>d:\team 4\team4\game tech 2014\game technologies\game technologies\earthparticlesystem.cpp(22): warning C4552: '+' : operator has no effect; expected operator with side-effect
-     1>d:\team 4\team4\game tech 2014\game technologies\game technologies\earthparticlesystem.cpp(63): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
-     1>d:\team 4\team4\game tech 2014\game technologies\game technologies\earthparticlesystem.cpp(72): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
-     1>d:\team 4\team4\game tech 2014\game technologies\game technologies\earthparticlesystem.cpp(80): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
-     1>d:\team 4\team4\game tech 2014\game technologies\game technologies\earthparticlesystem.cpp(97): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
-     1>d:\team 4\team4\game tech 2014\game technologies\game technologies\earthparticlesystem.cpp(177): warning C4244: '+=' : conversion from 'float' to 'int', possible loss of data
-     1>d:\team 4\team4\game tech 2014\game technologies\game technologies\earthparticlesystem.cpp(182): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
-     1>d:\team 4\team4\game tech 2014\game technologies\game technologies\earthparticlesystem.cpp(208): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
-     1>d:\team 4\team4\game tech 2014\game technologies\game technologies\earthparticlesystem.cpp(324): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
-     1>d:\team 4\team4\game tech 2014\game technologies\game technologies\earthparticlesystem.cpp(328): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
-     1>d:\team 4\team4\game tech 2014\game technologies\game technologies\earthparticlesystem.cpp(329): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
-         CollisionHelper.cpp
-     1>d:\team 4\team4\game tech 2014\nclgl\keyboard.h : warning C4819: The file contains a character that cannot be represented in the current code page (936). Save the file in Unicode format to prevent data loss
-         Coins.cpp
-     1>d:\team 4\team4\game tech 2014\nclgl\keyboard.h : warning C4819: The file contains a character that cannot be represented in the current code page (936). Save the file in Unicode format to prevent data loss
-         ChaseCamera.cpp
-     1>d:\team 4\team4\game tech 2014\nclgl\keyboard.h : warning C4819: The file contains a character that cannot be represented in the current code page (936). Save the file in Unicode format to prevent data loss
-         Button.cpp
-     1>d:\team 4\team4\game tech 2014\nclgl\keyboard.h : warning C4819: The file contains a character that cannot be represented in the current code page (936). Save the file in Unicode format to prevent data loss
-         Bullets.cpp
-     1>d:\team 4\team4\game tech 2014\nclgl\keyboard.h : warning C4819: The file contains a character that cannot be represented in the current code page (936). Save the file in Unicode format to prevent data loss
          Generating Code...
+         Skipping... (no relevant changes detected)
+         Powerups.cpp
+         NetworkServer.cpp
+         NetworkClient.cpp
+         ObjectType.cpp
+         Coins.cpp
+         Bullets.cpp
        Link:
-         D:\visual studio 2013\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\Team 4\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\Team 4\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\Team 4\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.lib" /MACHINE:X86 /FORCE:MULTIPLE Debug\Bullets.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.lib" /MACHINE:X86 /FORCE:MULTIPLE Debug\Bullets.obj
          Debug\Button.obj
          Debug\ChaseCamera.obj
          Debug\Coins.obj
@@ -147,7 +87,7 @@
          "..\..\OpenAL 1.1 SDK\libs\Win32\EFX-Util_MTDLL\EFX-Util.lib"
          "..\..\OpenAL 1.1 SDK\libs\Win32\EFX-Util_MT\EFX-Util.lib"
          "..\..\OpenAL 1.1 SDK\libs\Win32\OpenAL32.lib"
-         "D:\Team 4\Team4\Game Tech 2014\Game Technologies\Debug\nclgl.lib"
+         "D:\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\nclgl.lib"
      1>LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/FORCE' specification
      1>Bullets.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/OPT:LBR' specification
      1>Coins.obj : warning LNK4006: "public: __thiscall GJKSimplex::GJKSimplex(void)" (??0GJKSimplex@@QAE@XZ) already defined in Bullets.obj; second definition ignored
@@ -240,15 +180,17 @@
      1>Renderer.obj : warning LNK4049: locally defined symbol ___glewDeleteFramebuffers imported
      1>Renderer.obj : warning LNK4049: locally defined symbol ___glewFramebufferTexture2D imported
      1>Renderer.obj : warning LNK4049: locally defined symbol ___glewGenFramebuffers imported
-     1>D:\Team 4\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.exe : warning LNK4088: image being generated due to /FORCE option; image may not run
-     1>glew32.lib(glew.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'glew32.lib(glew.obj)' or at 'D:\Team 4\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
-     1>SOIL.lib(image_DXT.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'SOIL.lib(image_DXT.obj)' or at 'D:\Team 4\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
-     1>SOIL.lib(image_helper.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'SOIL.lib(image_helper.obj)' or at 'D:\Team 4\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
-     1>SOIL.lib(SOIL.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'SOIL.lib(SOIL.obj)' or at 'D:\Team 4\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
-     1>SOIL.lib(stb_image_aug.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'SOIL.lib(stb_image_aug.obj)' or at 'D:\Team 4\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
-         GameTech.vcxproj -> D:\Team 4\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.exe
-     1>Done Building Project "D:\Team 4\Team4\Game Tech 2014\Game Technologies\Game Technologies\GameTech.vcxproj" (Build target(s)).
+     1>D:\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.exe : warning LNK4088: image being generated due to /FORCE option; image may not run
+     1>PhysicsNode.obj : warning LNK4099: PDB 'vc120.pdb' was not found with 'PhysicsNode.obj' or at 'D:\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
+     1>CollisionHelper.obj : warning LNK4099: PDB 'vc120.pdb' was not found with 'CollisionHelper.obj' or at 'D:\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
+     1>glew32.lib(glew.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'glew32.lib(glew.obj)' or at 'D:\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
+     1>SOIL.lib(image_DXT.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'SOIL.lib(image_DXT.obj)' or at 'D:\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
+     1>SOIL.lib(image_helper.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'SOIL.lib(image_helper.obj)' or at 'D:\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
+     1>SOIL.lib(SOIL.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'SOIL.lib(SOIL.obj)' or at 'D:\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
+     1>SOIL.lib(stb_image_aug.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'SOIL.lib(stb_image_aug.obj)' or at 'D:\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\vc120.pdb'; linking object as if no debug info
+         GameTech.vcxproj -> D:\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.exe
+     1>Done Building Project "D:\GitHub\Team4\Game Tech 2014\Game Technologies\Game Technologies\GameTech.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:17.89
+Time Elapsed 00:00:06.47

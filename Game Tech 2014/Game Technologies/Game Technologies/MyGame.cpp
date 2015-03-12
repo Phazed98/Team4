@@ -798,8 +798,8 @@ void MyGame::CreateObstacle(ObjectType* _obj)
 	if (temp != NULL)
 	{
 		int temp_lane = (_obj->getSubType() + 1) * 2 - random_number;
-		temp->SetLane(temp_lane);
 		temp->resetObstacle();
+		temp->SetLane(temp_lane);
 		obstacleReference[_obj->getSubType()] = temp;
 		allEntities.push_back(temp);
 	}
