@@ -64,6 +64,8 @@ bool SceneNode::RemoveChild(SceneNode* s,bool recursive) {
 
 void SceneNode::Draw(const OGLRenderer & r) {
 	if (mesh) { 
+		if (render_type != PLAYER_RENDER)
+			mesh->SetTexture(texture);
 		mesh->Draw();
 	};
 }

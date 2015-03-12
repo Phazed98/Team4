@@ -77,6 +77,8 @@ public:
 	void SetFireSceneNode(FireSceneNode* node){ fireNode.push_back(node); }
 	string getIPAddress() { return ipAddress; }
 
+	vector<PointLight *> point_lights;
+
 protected:	
 	Renderer(Window &parent);
 	virtual ~Renderer(void);
@@ -211,7 +213,7 @@ protected:
 	void DSFinalPass();
 	void DSGeometryPass();
 	void deferRenderPass();
-	vector<PointLight *> point_lights;
+	
 	OBJMesh* point_light_sphere;
 	Shader* point_light_shader;
 	void DSPointLightsPass(PointLight* pt);
@@ -235,5 +237,7 @@ protected:
 
 	bool explosion;
 	float explosion_time;
+
+	
 };
 

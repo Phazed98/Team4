@@ -84,10 +84,10 @@ void main ( void ) {
 //}
 	
 	float fFogCoord = abs(LinearizeDepth(zOverW) );
-	float fResult = exp(-pow(fFogCoord*1.5, 2.0));
+	float fResult = exp(-pow(fFogCoord*1.2, 2.0));
 
 	fResult = 1.0-clamp(fResult, 0.0, 1.0);
-	FragColor = mix(motion_color, vec4(0.7,0.7,0.7,1), fResult);
+	FragColor = mix(motion_color, vec4(0.5,0.5,0.5,1), fResult);
 
 
 //	FragColor += motion_color;

@@ -83,24 +83,23 @@ MyGame::MyGame(bool isHost, bool isClient, bool useNetworking, int numClients)
 	//AllCoins = new Coins(10);
 	//AllPowerups = new Powerups();
 
-	water_sphere = new OBJMesh(MESHDIR"sphere.obj");
-	water_sphere->SetTexture(waterTexture);
+	
+	
 	Renderer::GetRenderer().SetTextureRepeating(waterTexture, true);
 	cube	= new OBJMesh(MESHDIR"cube.obj");
-	cubeAir = new OBJMesh(MESHDIR"cube.obj");
-	cubeAir->SetTexture(airTexture);
-	/*cubeWater = new OBJMesh(MESHDIR"cube.obj");
-	cubeWater->SetTexture(waterTexture);*/
-	cubeFire = new OBJMesh(MESHDIR"cube.obj");
-	cubeFire->SetTexture(fireTexture);
-	cubeEarth = new OBJMesh(MESHDIR"cube.obj");
-	cubeEarth->SetTexture(earthTexture);
+	
+
+	
 	quad	= Mesh::GenerateQuad();
-	quad->SetTexture(checkTexture);
+//	quad->SetTexture(checkTexture);
 	sphere	= new OBJMesh(MESHDIR"sphere.obj");
-	sphere->SetTexture(fireTexture);
+
 	bigRock = new OBJMesh(MESHDIR"bigRock3.obj");
 	missile = new OBJMesh(MESHDIR"missile5.obj");
+
+	cloud_texture = SOIL_load_OGL_texture(TEXTUREDIR"clouds.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, 0);
+	fireball_texture = SOIL_load_OGL_texture(TEXTUREDIR"fireball.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, 0);
+	rainbow_texture = SOIL_load_OGL_texture(TEXTUREDIR"rainbow.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, 0);
 	
 	Renderer::GetRenderer().RenderLoading(95, "Lammas are nice creatures...");
 	Renderer::GetRenderer().RenderLoading(96,"Hold it,  Were not getting into Lammas now...");
@@ -443,22 +442,26 @@ ObjectType* MyGame::BuildObjectEntity(int type, int subType) {
 	//generate different tiles
 	SceneNode* s;
 	if (subType == 0){
-		s = new SceneNode(cubeAir);
+		s = new SceneNode(cube);
+		s->SetTexture(airTexture);
 		s->SetRenderType(AIR_PLANE);
 		s->SetTransform(Matrix4::Translation(Vector3(10000, 10000, 10000)));
 	}
 	else if (subType == 1){
-		s = new SceneNode(cubeFire);
+		s = new SceneNode(cube);
+		s->SetTexture(fireTexture);
 		s->SetRenderType(FIRE_PLANE);
 		s->SetTransform(Matrix4::Translation(Vector3(10000, 10000, 10000)));
 	}
 	else if (subType == 2){
-		s = new SceneNode(cubeEarth);
+		s = new SceneNode(cube);
+		s->SetTexture(earthTexture);
 		s->SetRenderType(EARTH_PLANE);
 		s->SetTransform(Matrix4::Translation(Vector3(10000, 10000, 10000)));
 	}
 	else if (subType == 3){
-		s = new SceneNode(water_sphere);
+		s = new SceneNode(sphere);
+		s->SetTexture(waterTexture);
 		s->SetRenderType(WATER_PLANE);
 		s->SetTransform(Matrix4::Translation(Vector3(10000, 10000, 10000)));
 	}
@@ -526,15 +529,18 @@ Obstacle* MyGame::BuildObstacleEntity(float size, int type, int subType, ObjectT
 	
 	else if (subType == 0 && _obstacle_type == 0){
 		s = new SceneNode(sphere);
-		s->SetRenderType(STABLE_OBSTACLE);
+		s->SetTexture(cloud_texture);
+		s->SetRenderType(AIR_STABLE_OBSTACLE);
 	}
 	else if (subType == 1 && _obstacle_type == 0){
 		s = new SceneNode(sphere);
-		s->SetRenderType(STABLE_OBSTACLE);
+		s->SetTexture(fireball_texture);
+		s->SetRenderType(FIRE_STABLE_OBSTACLE);
 	}
 	else 
 	{
 		s = new SceneNode(sphere);
+		s->SetTexture(rainbow_texture);
 	}
 	
 	PhysicsNode* p = new PhysicsNode();
@@ -1134,7 +1140,7 @@ ObjectType* MyGame::BuildCheckPointEntity(int type, int subType, int size)
 	s->SetModelScale(Vector3(size, size, size));
 	//Oh if only we had a set texture function...we could make our brick floor again WINK WINK
 	s->SetBoundingRadius(size);
-
+	s->SetTexture(checkTexture);
 	PhysicsNode*p = new PhysicsNode(Quaternion::AxisAngleToQuaterion(Vector3(1, 0, 0), 180.0f), Vector3());
 	p->SetUseGravity(false);
 	p->SetInverseMass(0.0f);

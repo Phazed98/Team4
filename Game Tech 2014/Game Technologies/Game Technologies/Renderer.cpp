@@ -123,6 +123,9 @@ Renderer::~Renderer(void)
 
 void Renderer::fullyInit()
 {
+
+	
+
 	explosion = false;
 	explosion_time = 0;
 
@@ -992,9 +995,21 @@ void	Renderer::DrawNode(SceneNode*n)
 				n->Draw(*this);
 			break;
 		}
-		case STABLE_OBSTACLE:{
+		case AIR_STABLE_OBSTACLE:{
+			PointLight* pt = new PointLight(n->GetWorldTransform().GetPositionVector(), Vector4(1, 1, 0, 1), 100);
+			point_lights.push_back(pt);
 			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useDisplace"), 1);
 			glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "displaceStrength"), 0.3);
+			
+			n->Draw(*this);
+			break;
+		}
+		case FIRE_STABLE_OBSTACLE:{
+			PointLight* pt = new PointLight(n->GetWorldTransform().GetPositionVector(), Vector4(1,0,0,1), 100);
+			point_lights.push_back(pt);
+			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "useDisplace"), 1);
+			glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "displaceStrength"), 0.3);
+			
 			n->Draw(*this);
 			break;
 		}
@@ -1203,10 +1218,7 @@ void Renderer::DrawTornado(){
 	PushMatrix();
 	viewMatrix = camera->BuildViewMatrix();
 	projMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float)width / (float)height, 60.0f);
-	Vector4 light_colour = Vector4(0, 0, 1, 1);
-
-	PointLight* pt = new PointLight(spaceship_scene_node->GetWorldTransform().GetPositionVector(), light_colour, 300);
-	point_lights.push_back(pt);
+	
 
 	for (vector<TornadoSceneNode*>::iterator i = tornadoNode.begin(); i != tornadoNode.end(); ++i)
 	{

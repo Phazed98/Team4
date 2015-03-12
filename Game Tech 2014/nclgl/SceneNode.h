@@ -39,7 +39,8 @@ enum RenderType
 	EARTH_PLANE,
 	FIRE_SPHERE,
 	PLAYER_RENDER,
-	STABLE_OBSTACLE
+	AIR_STABLE_OBSTACLE,
+	FIRE_STABLE_OBSTACLE
 };
 
 class SceneNode	{
@@ -76,6 +77,8 @@ public:
 	void	Wake()		{awake = true;}
 	void	Sleep()		{awake = false;} 
 
+	void SetTexture(GLuint t) { texture = t; }
+
 	std::vector<SceneNode*>::const_iterator GetChildIteratorStart()	{return children.begin();}
 	std::vector<SceneNode*>::const_iterator GetChildIteratorEnd()	{return children.end();}
 
@@ -99,5 +102,6 @@ protected:
 	bool		awake;
 	std::vector<SceneNode*>		children;
 	RenderType render_type;
+	GLuint texture;
 };
 

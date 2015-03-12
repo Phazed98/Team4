@@ -69,6 +69,6 @@ void main()
     FragColor = vec4(Color, 1.0) * CalcDirectionalLight(Dir, WorldPos, Normal);
 	Dir = vec3(0,1,0);
 	FragColor *= vec4(Color, 1.0) * CalcDirectionalLight(Dir, WorldPos, Normal); */
-	FragColor = vec4(Color*0.5, 1.0);
+	FragColor = vec4(Color*0.3, 1.0);
 
 }

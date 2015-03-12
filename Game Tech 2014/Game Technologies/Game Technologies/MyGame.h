@@ -14,6 +14,7 @@
 #include "FireSceneNode.h"
 #include "GeyserSceneNode.h"
 
+
 struct sendData
 {
 	int resetNumber;
@@ -175,5 +176,9 @@ protected:
 
 	OBJMesh* water_sphere;
 	bool wasPaused;
+
+	GLuint cloud_texture;
+	GLuint fireball_texture;
+	GLuint rainbow_texture;
 };
 
