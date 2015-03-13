@@ -118,7 +118,7 @@ protected:
 	Mesh* bigRock;
 	Mesh* missile;
 
-	GameEntity* players[4];
+	
 
 	vector<ObjectType*> top;
 	vector<ObjectType*> right;
@@ -166,6 +166,8 @@ protected:
 
 	bool isHost, isClient, useNetworking;
 	int numClients;
+	GameEntity* players[4];
+	float offsets[4];
 
 
 	GLuint earthTexture = SOIL_load_OGL_texture("../../Textures/planet1.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, 0);

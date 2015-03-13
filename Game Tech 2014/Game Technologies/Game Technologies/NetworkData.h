@@ -24,6 +24,7 @@ enum PacketTypes
 struct messageInfo
 {
 	int objectID;
+	float offset;
 	Vector3 Position;
 	Quaternion Orientation;
 };

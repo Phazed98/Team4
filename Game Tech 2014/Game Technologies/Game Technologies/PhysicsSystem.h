@@ -103,6 +103,8 @@ public:
 	vector<PhysicsNode*>* GetMissiles() { return &Missiles; }
 	//---------------------------------------------------------------------------------
 
+	float getProgress() { return offset; }
+
 protected:
 	PhysicsSystem(void);
 	~PhysicsSystem(void);
@@ -228,6 +230,7 @@ protected:
 	//---------------------------------------------------------------------------------------------
 
 
+
 	void		ObstacleCollisions();
 	void		MissileCollisions();
 	bool		CheckOnATile();
@@ -241,5 +244,9 @@ protected:
 	int			actualScore = 0;
 	bool		increaseScore = true;
 	//----------------------------------------------------------------------
+
+	//Offsets for netverking
+
+	float offset;
 };
 

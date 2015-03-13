@@ -881,6 +881,7 @@ void MyGame::receiveFromClients()
 				players[iter->first]->GetPhysicsNode().SetOrientation(playerMessage.Orientation);
 				players[iter->first]->GetRenderNode().SetTransform(players[iter->first]->GetPhysicsNode().BuildTransform());
 				players[iter->first]->GetRenderNode().Update(0);
+				offsets[iter->first] = playerMessage.offset;
 				//Send Updated GameState Back to client
 				sendServerUpdatePackets(iter->first);
 				break;
@@ -938,10 +939,14 @@ void MyGame::recieveFromServer()
 		case PLAYERS_DATA:
 			memcpy(&playerInfo, packet.data, sizeof(messageInfo)* 4);
 
+
 			for (int x = 0; x < 4; x++)
 			{
-				players[x]->GetPhysicsNode().SetPosition(playerInfo[x].Position);
+				Vector3 pos = playerInfo[x].Position;
+				pos.z = -(playerInfo[x].offset - (PhysicsSystem::GetPhysicsSystem().getProgress()));
+				players[x]->GetPhysicsNode().SetPosition(pos);
 				players[x]->GetPhysicsNode().SetOrientation(playerInfo[x].Orientation);
+
 			}
 			break;
 
@@ -1073,6 +1078,7 @@ void MyGame::sendClientUpdatePackets()
 	packet.packet_integer = 193;
 	messageInfo clientMessage;
 	clientMessage.Position = PhysicsSystem::GetPhysicsSystem().GetPlayer()->GetPosition();
+	clientMessage.offset = PhysicsSystem::GetPhysicsSystem().getProgress();
 	clientMessage.Orientation = PhysicsSystem::GetPhysicsSystem().GetPlayer()->GetOrientation();
 	memcpy(packet.data, &clientMessage, sizeof(messageInfo));
 	packet.serialize(packet_data);

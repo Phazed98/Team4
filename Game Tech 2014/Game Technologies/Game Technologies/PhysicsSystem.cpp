@@ -30,6 +30,7 @@ PhysicsSystem::PhysicsSystem(void)
 	//Added by Sam
 	maxTrackSpeed = track_speed;
 	canDie = false;
+	offset = 0.0f;
 }
 
 PhysicsSystem::~PhysicsSystem(void)
@@ -517,6 +518,7 @@ void PhysicsSystem::CalculateScore(float msec)
 
 			increaseScore = true;
 			actualScore = score * scoreMultiplier;
+			offset -= abs(distanceReversed);
 		}
 	}
 	else
@@ -536,6 +538,8 @@ void PhysicsSystem::CalculateScore(float msec)
 		score += (track_speed * msec) / 10000;
 
 		actualScore = score * scoreMultiplier;
+
+		offset -= track_speed;
 	}
 
 
