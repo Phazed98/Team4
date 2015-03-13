@@ -95,7 +95,7 @@ MyGame::MyGame(bool isHost, bool isClient, bool useNetworking, int numClients)
 	sphere	= new OBJMesh(MESHDIR"sphere.obj");
 
 	bigRock = new OBJMesh(MESHDIR"bigRock3.obj");
-	missile = new OBJMesh(MESHDIR"missile5.obj");
+	missile = new OBJMesh(MESHDIR"missile6.obj");
 
 	cloud_texture = SOIL_load_OGL_texture(TEXTUREDIR"clouds.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, 0);
 	fireball_texture = SOIL_load_OGL_texture(TEXTUREDIR"fireball.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, 0);
@@ -561,6 +561,12 @@ Obstacle* MyGame::BuildObstacleEntity(float size, int type, int subType, ObjectT
 		s = new SceneNode(sphere);
 		size = size / size;
 	}
+	else if (_obstacle_type == 2)
+	{
+
+		s = new SceneNode(sphere);
+		s->SetTexture(coinTexture);
+	}
 	
 	else if (subType == 0 && _obstacle_type == 0){
 		s = new SceneNode(sphere);
@@ -572,6 +578,7 @@ Obstacle* MyGame::BuildObstacleEntity(float size, int type, int subType, ObjectT
 		s->SetTexture(fireball_texture);
 		s->SetRenderType(FIRE_STABLE_OBSTACLE);
 	}
+		
 	else 
 	{
 		s = new SceneNode(sphere);
@@ -633,7 +640,8 @@ Obstacle* MyGame::BuildObstacleEntity(float size, int type, int subType, ObjectT
 GameEntity* MyGame::BuildBulletEntity(float radius, Vector3 pos)
 {
 	SceneNode* test = new SceneNode(missile);
-	test->SetModelScale(Vector3(radius, radius, radius));
+	test->SetTexture(missileTexture);
+	test->SetModelScale(Vector3(radius*4, radius*4, radius*4));
 	test->SetBoundingRadius(radius);
 	test->SetColour(Vector4(0.2f, 0.2f, 0.5f, 1.0f));
 	PhysicsNode*p = new PhysicsNode();

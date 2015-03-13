@@ -37,7 +37,7 @@ void physicsLoop(GameClass* game, bool& running)
 
 int main() 
 {
-	if(!Window::Initialise("Game Technologies", 1000,800,false )) 
+	if(!Window::Initialise("Game Technologies", 1000,800, false )) 
 	{
 		return Quit(true, "Window failed to initialise!");
 	}

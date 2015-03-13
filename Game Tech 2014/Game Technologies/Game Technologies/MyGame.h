@@ -185,6 +185,10 @@ protected:
 
 	GLuint checkTexture = SOIL_load_OGL_texture("../../Textures/Checkpoint.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, 0);
 
+	GLuint missileTexture = SOIL_load_OGL_texture("../../Textures/missileTex.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, 0);
+
+	GLuint coinTexture = SOIL_load_OGL_texture("../../Textures/coin.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, 0);
+
 	OBJMesh* water_sphere;
 	bool wasPaused;
 

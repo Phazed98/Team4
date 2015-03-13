@@ -226,7 +226,7 @@ void Obstacle::HandleShootingObstacles()
 	{
 		if (PhysicsSystem::GetVehicle()->GetCurrentPlaneID() == subType && physicsNode->GetPosition().z < -length)
 		{
-			if (count_time == 200)
+			if (count_time == 80)
 			{
 				bullet->GetPhysicsNode().SetPosition(physicsNode->GetPosition());
 				count_time = 0;
@@ -244,7 +244,7 @@ void Obstacle::Shoot()
 
 	Vector3 direction = player->GetPosition() - physicsNode->GetPosition();
 	direction.Normalise();
-	bullet->GetPhysicsNode().SetLinearVelocity(direction * 2);
+	bullet->GetPhysicsNode().SetLinearVelocity(direction  );
 	//bullet->GetPhysicsNode().SetOrientation(Quaternion::LookAt(bullet->GetPhysicsNode().GetPosition(), player->GetPosition()));
 	Vector3 rotation = bullet->GetPhysicsNode().GetOrientation().GetEulerAngles();
 	rotation.y += 90;
