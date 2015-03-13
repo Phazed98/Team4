@@ -97,10 +97,10 @@ void	PhysicsSystem::Update(float msec)
 
 	if (canDie)
 	{
-		if (!CheckOnATile())
+		if (!CheckOnATile()&& !(playerVehicle->getIsSwitchingPlane()))
 		{
 			std::cout << " For those of you who dont know boobs loook like ( . Y . )" << std::endl;
-		//	GameClass::GetGameClass().setCurrentState(GAME_OVER);
+			GameClass::GetGameClass().setCurrentState(GAME_OVER);
 		}
 	}
 

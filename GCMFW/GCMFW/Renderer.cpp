@@ -52,7 +52,7 @@ Renderer::Renderer(void)
 	BackGroundSceneNode = new SceneNode(BackGrounMesh);
 
 	mainMenuQuad = Mesh::GenerateQuad();
-	mainMenuQuad->SetDefaultTexture(*GCMRenderer::LoadGTF("/Textures/Loading.gtf"));
+	mainMenuQuad->SetDefaultTexture(*GCMRenderer::LoadGTF("/Textures/Background.gtf"));
 	mainMenuSceneNode = new SceneNode(mainMenuQuad);
 
 	selectorMesh = Mesh::GenerateTriangle();
@@ -66,7 +66,7 @@ Renderer::Renderer(void)
 	Mesh* mainButtonMesh = Mesh::GenerateQuad();
 	mainButtonMesh->SetDefaultTexture(*GCMRenderer::LoadGTF("/Textures/Solo.gtf"));
 	mainMenuButtons[0] = new SceneNode(mainButtonMesh);
-	mainMenuButtons[0]->SetTransform(Matrix4::translation(Vector3(0.0f, -0.5f, 0)) * Matrix4::scale(Vector3(0.2f, 0.1f, 0.1f)));
+	mainMenuButtons[0]->SetTransform(Matrix4::translation(Vector3(0.0f, -0.4f, 0)) * Matrix4::scale(Vector3(0.2f, 0.1f, 0.1f)));
 	mainMenuButtons[0]->Update(0);
 	
 
@@ -74,7 +74,7 @@ Renderer::Renderer(void)
 	Mesh* mainButtonMesh2 = Mesh::GenerateQuad();
 	mainButtonMesh2->SetDefaultTexture(*GCMRenderer::LoadGTF("/Textures/Split.gtf"));
 	mainMenuButtons[1] = new SceneNode(mainButtonMesh2);
-	mainMenuButtons[1]->SetTransform(Matrix4::translation(Vector3(0.0f, -0.2f, 0)) * Matrix4::scale(Vector3(0.2f, 0.1f, 0.1f)));
+	mainMenuButtons[1]->SetTransform(Matrix4::translation(Vector3(0.0f, -0.1f, 0)) * Matrix4::scale(Vector3(0.2f, 0.1f, 0.1f)));
 	mainMenuButtons[1]->Update(0);
 
 
@@ -82,7 +82,7 @@ Renderer::Renderer(void)
 	Mesh* mainButtonMesh3 = Mesh::GenerateQuad();
 	mainButtonMesh3->SetDefaultTexture(*GCMRenderer::LoadGTF("/Textures/Exit.gtf"));
 	mainMenuButtons[2] = new SceneNode(mainButtonMesh3);
-	mainMenuButtons[2]->SetTransform(Matrix4::translation(Vector3(0.0f, 0.1f, 0)) * Matrix4::scale(Vector3(0.2f, 0.1f, 0.1f)));
+	mainMenuButtons[2]->SetTransform(Matrix4::translation(Vector3(0.0f, 0.2f, 0)) * Matrix4::scale(Vector3(0.2f, 0.1f, 0.1f)));
 	mainMenuButtons[2]->Update(0);
 
 	//Pause Menu Buttons

@@ -32,6 +32,8 @@ public:
 
 	int temp;
 
+	bool getIsSwitchingPlane() { return isSwitchingPlane; }
+
 protected:
 
 
@@ -84,4 +86,6 @@ protected:
 
 	//Debug method, doesnt do anything, only for triggering breaks when needed.
 	void debug();
+
+
 };
