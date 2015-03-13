@@ -104,17 +104,11 @@ Renderer::~Renderer(void)
 void Renderer::fullyInit()
 {
 
+	RenderLoading(3, "Loading Buttons");
+
 	mainMenuQuad = Mesh::GenerateQuad();
 	mainMenuQuad->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"Background.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
 
-
-	RenderLoading(1, "Making Graphics");
-	textShader = new Shader(SHADERDIR"TexVertex.glsl", SHADERDIR"TexFragment.glsl");
-	if (!textShader->LinkProgram())
-	{
-		cout << "error in link shaders" << endl;
-		return;
-	}
 
 	//Pause Menu Buttons
 
@@ -129,6 +123,7 @@ void Renderer::fullyInit()
 	pauseMenuButtons[1]->SetHighlightTexture(SOIL_load_OGL_texture(TEXTUREDIR"MenuButtons/ExitButtonHighlighted.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
 
 
+	RenderLoading(4, "Initializing Particles");
 	tornado_system.InitParticleSystem(0, Vector3(0, 10, 0));
 	geyser_system.InitParticleSystem(2, Vector3(0, 5, 0));
 	galaxy_system.InitParticleSystem(1, Vector3(0, 0, -200));
@@ -142,21 +137,15 @@ void Renderer::fullyInit()
 	postprocessTimer = new float(0);
 	motionblurTimer = new float(0);
 
+
+	RenderLoading(5, "Loading Textures");
+
+
 	GameOverQuad = Mesh::GenerateQuad();
 	GameOverQuad->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"EndGame.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
 
-
 	explosion = false;
 	explosion_time = 0;
-
-	post_processing_shader = new Shader(SHADERDIR"TechVertex.glsl", SHADERDIR"PostProcessingFragment.glsl");
-
-	point_light_sphere = new OBJMesh("../../Meshes/ico.obj");
-	screen_quad = Mesh::GenerateQuad();
-	defer_shader = new Shader(SHADERDIR"DeferGeometryVertex.glsl", SHADERDIR"DeferGeometryFragment.glsl");
-	point_light_shader = new Shader(SHADERDIR"TechVertex.glsl", SHADERDIR"PointLightFragment.glsl");
-	dir_light_shader = new Shader(SHADERDIR"TechVertex.glsl", SHADERDIR"DirectionLightFragment.glsl");
-
 
 	camera = NULL;
 	total_sec_pass = 0;
@@ -164,35 +153,59 @@ void Renderer::fullyInit()
 	root = new SceneNode();
 	
 	basicFont = new Font(SOIL_load_OGL_texture(TEXTUREDIR"tahoma.tga", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_COMPRESS_TO_DXT), 16, 16);
-
 	background[0] = SOIL_load_OGL_texture(TEXTUREDIR"air_background.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS);
 	background[1] = SOIL_load_OGL_texture(TEXTUREDIR"fire_background.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS);
 	background[2] = SOIL_load_OGL_texture(TEXTUREDIR"earth_background.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS);
 	background[3] = SOIL_load_OGL_texture(TEXTUREDIR"water_background.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS);
 
 	cur_back = pre_back = background[2];
-
 	glBindTexture(GL_TEXTURE_2D, background[0]);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 
-	water_plane_shader = new Shader(SHADERDIR"plane-shader/displace3DVert.glsl", SHADERDIR"plane-shader/TexturedFragment.glsl");
-
+	RenderLoading(6, "Loading Shaders");
 	//add by steven for motion blur
+	screen_quad = Mesh::GenerateQuad();
 	quad_motion_blur = Mesh::GenerateQuad();
 
-	motion_blur_shader = new Shader(SHADERDIR"MotionBlurVertex.glsl", SHADERDIR"MotionBlurFragment.glsl");
+	point_light_sphere = new OBJMesh("../../Meshes/ico.obj");
 
+	post_processing_shader = new Shader(SHADERDIR"TechVertex.glsl", SHADERDIR"PostProcessingFragment.glsl");
+	defer_shader = new Shader(SHADERDIR"DeferGeometryVertex.glsl", SHADERDIR"DeferGeometryFragment.glsl");
+	point_light_shader = new Shader(SHADERDIR"TechVertex.glsl", SHADERDIR"PointLightFragment.glsl");
+	dir_light_shader = new Shader(SHADERDIR"TechVertex.glsl", SHADERDIR"DirectionLightFragment.glsl");
+
+	RenderLoading(7, "Still Loading Shaders");
+	water_plane_shader = new Shader(SHADERDIR"plane-shader/displace3DVert.glsl", SHADERDIR"plane-shader/TexturedFragment.glsl");
+	motion_blur_shader = new Shader(SHADERDIR"MotionBlurVertex.glsl", SHADERDIR"MotionBlurFragment.glsl");
 	simpleShader = new Shader(SHADERDIR"TechVertex.glsl", SHADERDIR"TechFragment.glsl");
 	textShader = new Shader(SHADERDIR"TexVertex.glsl", SHADERDIR"TexFragment.glsl");
 	backgroundShader = new Shader(SHADERDIR"BackgroundVertex.glsl", SHADERDIR"BackgroundFragment.glsl");
+	textShader = new Shader(SHADERDIR"TexVertex.glsl", SHADERDIR"TexFragment.glsl");
+	
+	if (!textShader->LinkProgram())
+	{
+		cout << "error in link shaders" << endl;
+		return;
+	}
 
+	RenderLoading(7, "More Shaders");
+
+	if (!simpleShader->LinkProgram() || !textShader->LinkProgram() ||
+		!backgroundShader->LinkProgram() || !menuShader->LinkProgram() ||
+		!motion_blur_shader->LinkProgram() || !water_plane_shader->LinkProgram() ||
+		!defer_shader->LinkProgram() || !point_light_shader->LinkProgram() ||
+		!dir_light_shader->LinkProgram() || !post_processing_shader->LinkProgram())
+	{
+		cout << "error in link shaders" << endl;
+		return;
+	}
 
 	
 
-	
+	RenderLoading(10, "Loading GUI Elements");
 	//--------------------------------------------------GUI--------------------------------------------------------------------------------
 	uiQuad = Mesh::GenerateQuad();
 	uiQuad->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"/GUITextures/score.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
@@ -228,19 +241,10 @@ void Renderer::fullyInit()
 	buttonE->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"/GUITextures/e.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
 	//--------------------------------------------------GUI--------------------------------------------------------------------------------
 
+	RenderLoading(15, "Building Buffers");
 
 	if (!quad->GetTexture()){
 		cout << "error in loading screen texture!!" << endl;
-		return;
-	}
-
-	if (!simpleShader->LinkProgram() || !textShader->LinkProgram() ||
-		!backgroundShader->LinkProgram() || !menuShader->LinkProgram() ||
-		!motion_blur_shader->LinkProgram() || !water_plane_shader->LinkProgram()||
-		!defer_shader->LinkProgram() || !point_light_shader->LinkProgram() ||
-		!dir_light_shader->LinkProgram() || !post_processing_shader->LinkProgram())
-	{
-		cout << "error in link shaders" << endl;
 		return;
 	}
 
@@ -273,6 +277,8 @@ void Renderer::fullyInit()
 	glClearColor(0, 0, 0, 1);
 
 	fullyInitialised = true;
+
+	RenderLoading(17, "Renderer Fully Initialized");
 }
 
 void Renderer::UpdateScene(float msec)

@@ -46,9 +46,9 @@ int main()
 	{
 		return Quit(true, "Renderer failed to initialise!");
 	}
-	Renderer::GetRenderer().RenderLoading(0, "Welcome");
-
+	Renderer::GetRenderer().RenderLoading(0, "Initializing Sound");
 	SoundSystem::Initialise(); //Build SoundSystem
+	Renderer::GetRenderer().RenderLoading(1, "Displaying Main Menu");
 
 	Window::GetWindow().LockMouseToWindow(true);
 	Window::GetWindow().ShowOSPointer(false);
@@ -82,10 +82,10 @@ int main()
 
 
 	Renderer::GetRenderer().fullyInit();
-	//Start Loading Screen Draw
-	Renderer::GetRenderer().RenderLoading(0, "Hello World");
 
 	PhysicsSystem::Initialise();
+
+	Renderer::GetRenderer().RenderLoading(20, "Physics System Initialized");
 	SoundSystem::GetSoundSystem()->GameStart();
 
 	MyGame* game;
@@ -110,6 +110,8 @@ int main()
 		exit(0);
 	}
 
+	Renderer::GetRenderer().RenderLoading(96, "Starting Physics Loop");
+	Renderer::GetRenderer().RenderLoading(98, "Playing Game? ...");
 	bool running = true;
 	std::thread physics(physicsLoop, game, std::ref(running));
 

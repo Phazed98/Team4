@@ -29,7 +29,7 @@ MyGame::MyGame(bool isHost, bool isClient, bool useNetworking, int numClients)
 
 	wasPaused = false;
 
-	Renderer::GetRenderer().RenderLoading(0, "Initializing...");
+	Renderer::GetRenderer().RenderLoading(25, "Game State Loading");
 	setCurrentState(Game_LOADING);
 	timer = 0;
 
@@ -37,26 +37,26 @@ MyGame::MyGame(bool isHost, bool isClient, bool useNetworking, int numClients)
 
 	Speed_Player = 1;  //control the player speed
 
-	Renderer::GetRenderer().RenderLoading(5, "Loading Elements...");
+	Renderer::GetRenderer().RenderLoading(27, "Loading Elements...");
 
 	elements.push_back(top);
 	elements.push_back(right);
 	elements.push_back(bottom);
 	elements.push_back(left);
 
-	Renderer::GetRenderer().RenderLoading(15,"Feeding Hamsters..." );
+	Renderer::GetRenderer().RenderLoading(29,"Feeding Hamsters..." );
 
 	reference.push_back(top);
 	reference.push_back(right);
 	reference.push_back(bottom);
 	reference.push_back(left);
 
-	Renderer::GetRenderer().RenderLoading(25,"Creating Obtsacles...");
+	Renderer::GetRenderer().RenderLoading(35,"Creating Obtsacles...");
 
 	obstacleElements.resize(4);
 	obstacleReference.resize(4);
 
-	Renderer::GetRenderer().RenderLoading(30,"Referencing Obstacles..."); 
+	Renderer::GetRenderer().RenderLoading(38,"Referencing Obstacles..."); 
 	for (int i = 0; i < 4; i++)
 	{
 		obstacleReference[i] = NULL;
@@ -67,44 +67,39 @@ MyGame::MyGame(bool isHost, bool isClient, bool useNetworking, int numClients)
 	gameCamera = new ChaseCamera(player, 200, 20, 12);
 
 
-	Renderer::GetRenderer().RenderLoading(50, "I knew A Moose Once...");
+	Renderer::GetRenderer().RenderLoading(45, "I knew A Moose Once...");
 
 	Renderer::GetRenderer().SetCamera(gameCamera);
 
-	Renderer::GetRenderer().RenderLoading(70, "He was a really good moose...");
-
-	Renderer::GetRenderer().RenderLoading(75, "The moose never bit anyone...");
-	Renderer::GetRenderer().RenderLoading(76, "I called him George...");
-	Renderer::GetRenderer().RenderLoading(91, "Sorry about that...");
-	Renderer::GetRenderer().RenderLoading(92, "The person responsible for the loading screen...");
-	Renderer::GetRenderer().RenderLoading(93, "...has been sacked...");
+	
+	
 
 	//add all powerup variable!!!
 	//AllCoins = new Coins(10);
 	//AllPowerups = new Powerups();
 
 	
-	
+	Renderer::GetRenderer().RenderLoading(53, "He was a really good moose...");
+
 	Renderer::GetRenderer().SetTextureRepeating(waterTexture, true);
 	cube	= new OBJMesh(MESHDIR"cube.obj");
 	
 
-	
 	quad	= Mesh::GenerateQuad();
 //	quad->SetTexture(checkTexture);
 	sphere	= new OBJMesh(MESHDIR"sphere.obj");
-
 	bigRock = new OBJMesh(MESHDIR"bigRock3.obj");
 	missile = new OBJMesh(MESHDIR"missile6.obj");
+
+	Renderer::GetRenderer().RenderLoading(62, "The moose never bit anyone...");
+
 
 	cloud_texture = SOIL_load_OGL_texture(TEXTUREDIR"clouds.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, 0);
 	fireball_texture = SOIL_load_OGL_texture(TEXTUREDIR"fireball.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, 0);
 	rainbow_texture = SOIL_load_OGL_texture(TEXTUREDIR"rainbow.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, 0);
+
+	Renderer::GetRenderer().RenderLoading(76, "I called him George...");
 	
-	Renderer::GetRenderer().RenderLoading(95, "Lammas are nice creatures...");
-	Renderer::GetRenderer().RenderLoading(96,"Hold it,  Were not getting into Lammas now...");
-	Renderer::GetRenderer().RenderLoading(97, "The loading system is obviously faulty, we will continue now without any further updates...");
-	Renderer::GetRenderer().RenderLoading(98, "Except this to say we love Mooses? Meese? Multiple Moose? ...");
 
 	//-------------------------------------------------Planes---------------------------------------------------------//
 
@@ -120,6 +115,8 @@ MyGame::MyGame(bool isHost, bool isClient, bool useNetworking, int numClients)
 		//-----------------------------------------------------------------------------
 	}
 
+	Renderer::GetRenderer().RenderLoading(82, "Sorry about that...");
+	
 
 	for (int i = 0; i < MAX_NUM_TILES_PER_PLANE; i++)
 	{
@@ -133,6 +130,9 @@ MyGame::MyGame(bool isHost, bool isClient, bool useNetworking, int numClients)
 		//-----------------------------------------------------------------------------
 	}
 
+	Renderer::GetRenderer().RenderLoading(89, "The person responsible for the loading screen...");
+	
+
 	for (int i = 0; i < MAX_NUM_TILES_PER_PLANE; i++)
 	{
 		ObjectType* plane = BuildObjectEntity(0, 1);
@@ -144,6 +144,9 @@ MyGame::MyGame(bool isHost, bool isClient, bool useNetworking, int numClients)
 		PhysicsSystem::GetPhysicsSystem().GetPlane1Tiles()->push_back(&(plane->GetPhysicsNode()));
 		//-----------------------------------------------------------------------------
 	}
+
+	Renderer::GetRenderer().RenderLoading(93, "...has been sacked...");
+	
 
 	for (int i = 0; i < MAX_NUM_TILES_PER_PLANE; i++)
 	{
@@ -157,22 +160,12 @@ MyGame::MyGame(bool isHost, bool isClient, bool useNetworking, int numClients)
 		//-----------------------------------------------------------------------------
 	}
 
-	OBJMesh* PlayerMesh = new OBJMesh(MESHDIR"SR-71_Blackbird.obj");
-
-	for (int x = 0; x < 4; x++)
-	{
-		players[x] = BuildCubeEntity(4);
-		players[x]->GetRenderNode().SetMesh(PlayerMesh);
-		players[x]->GetRenderNode().SetColour(Vector4(1, 0, 0, 1));
-		players[x]->GetPhysicsNode().SetPosition(Vector3(10, 10, 10));
-		players[x]->GetPhysicsNode().SetUseGravity(false);
-		players[x]->ConnectToSystems();
-	}
-
+	Renderer::GetRenderer().RenderLoading(95, "Lammas are nice creatures...");
+	
 	//-------------------------------------------------#####---------------------------------------------------------//
 
 	setCurrentState(GAME_PLAYING);
-	Renderer::GetRenderer().RenderLoading(100, "Done...");
+
 
 
 	if (useNetworking)
@@ -190,6 +183,7 @@ MyGame::MyGame(bool isHost, bool isClient, bool useNetworking, int numClients)
 			players[x]->GetPhysicsNode().SetMovable(false);
 			players[x]->GetPhysicsNode().SetUseDamping(false);
 			players[x]->ConnectToSystems();
+			players[x]->GetPhysicsNode().Update(0);
 		}
 
 
@@ -202,6 +196,7 @@ MyGame::MyGame(bool isHost, bool isClient, bool useNetworking, int numClients)
 			serverPlayers[x]->GetPhysicsNode().SetUseGravity(false);
 			serverPlayers[x]->GetPhysicsNode().SetMovable(false);
 			serverPlayers[x]->GetPhysicsNode().SetUseDamping(false);
+			serverPlayers[x]->GetPhysicsNode().Update(0);
 		}
 
 
@@ -232,7 +227,7 @@ MyGame::MyGame(bool isHost, bool isClient, bool useNetworking, int numClients)
 		if (isHost)
 		{
 			Renderer::GetRenderer().RenderLoading(100, "Waiting on Clients");
-			while (client_id < numClients-1)
+			while (client_id < numClients)
 			{
 				// get new clients
 				if (networkServer->acceptNewClient(client_id))
