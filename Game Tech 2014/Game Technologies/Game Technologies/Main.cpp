@@ -64,7 +64,7 @@ int main()
 		float msec = menuTimer.GetTimedMS();
 		bp = Renderer::GetRenderer().RenderMainMenu();
 		Window::GetWindow().updateController(msec);
-		if (Window::GetinputScrollCDing)
+		if (Window::GetinputScrollCDing())
 		{
 			Window::updateInputScrollLock(msec);
 		}

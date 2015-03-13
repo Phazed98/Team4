@@ -86,7 +86,7 @@ void GameClass::UpdateRendering(float msec)
 				Renderer::GetRenderer().RenderScene();
 				
 
-				if (!(Window::GetinputScrollCDing()) && Window::GetKeyboard()->KeyDown(KEYBOARD_ESCAPE) ||
+				if (!(Window::GetinputScrollCDing()) && Window::GetKeyboard()->KeyDown(KEYBOARD_ESCAPE) || !(Window::GetinputScrollCDing()) &&
 					(Window::GetControllerConnected() && Window::GetWindow().GetController()->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_START))
 				{
 					setCurrentState(GAME_PAUSED);
@@ -98,7 +98,7 @@ void GameClass::UpdateRendering(float msec)
 			{
 				Renderer::GetRenderer().RenderPauseMenu();
 
-				if (!(Window::GetinputScrollCDing()) && Window::GetKeyboard()->KeyDown(KEYBOARD_ESCAPE) ||
+				if (!(Window::GetinputScrollCDing()) && Window::GetKeyboard()->KeyDown(KEYBOARD_ESCAPE) || !(Window::GetinputScrollCDing()) &&
 					(Window::GetControllerConnected() && Window::GetWindow().GetController()->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_START))
 				{
 					setCurrentState(GAME_PLAYING);
@@ -110,7 +110,8 @@ void GameClass::UpdateRendering(float msec)
 			{
 				Renderer::GetRenderer().RenderGameOver();
 
-				if (Window::GetWindow().GetKeyboard()->KeyTriggered(KEYBOARD_RETURN) || Window::GetWindow().GetKeyboard()->KeyTriggered(KEYBOARD_ESCAPE))
+				if (Window::GetWindow().GetKeyboard()->KeyTriggered(KEYBOARD_RETURN) || Window::GetWindow().GetKeyboard()->KeyTriggered(KEYBOARD_ESCAPE) ||
+					(Window::GetControllerConnected() && Window::GetWindow().GetController()->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_START))
 				{
 					exit(0);
 				}
