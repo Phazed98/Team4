@@ -10,30 +10,22 @@ Obstacle::Obstacle(ObjectType* _tile, SceneNode* s, PhysicsNode* p, int _type, i
 	powerupType = rand() % 3 + 1;
 	this->GetRenderNode().SetColour(Vector4(0, 0, 0, 1));
 
-	if (obstacleType == 1)
-	{
-		renderNode->SetColour(Vector4(0.835f, 0.262f, 0.043f, 1.0f));
-	}
-	else if (obstacleType == 2)
-	{
-		renderNode->SetColour(Vector4(0.827f, 0.835f, 0.043f, 1.0f));
-	}
-	else if (obstacleType == 3) // PowerUp
+	if (obstacleType == 3) // PowerUp
 	{
 		if (powerupType == 1) // Slow
 		{
 			Renderer::GetRenderer().SetYellowformSceneNode(renderNode);
-			renderNode->SetColour(Vector4(1, 0, 0, 1.0f));
+			
 		}
 		else if (powerupType == 2) // Cooldown
 		{
 			Renderer::GetRenderer().SetRedformSceneNode(renderNode);
-			renderNode->SetColour(Vector4(0, 1, 0, 1.0f));
+			
 		}
 		else if (powerupType == 3) // Immunity
 		{
 			Renderer::GetRenderer().SetBlueformSceneNode(renderNode);
-			renderNode->SetColour(Vector4(0, 0, 1, 1.0f));
+			
 		}
 	}
 

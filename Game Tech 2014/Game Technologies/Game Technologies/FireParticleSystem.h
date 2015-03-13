@@ -94,4 +94,11 @@ private:
 	Camera* camera;
 	Matrix4 project_matrix;
 	Matrix4 view_matrix;
+
+	GLuint vao;
+
+	const GLvoid* a;
+	const GLvoid* b;
+	const GLvoid* c;
+	const GLvoid* d;
 };

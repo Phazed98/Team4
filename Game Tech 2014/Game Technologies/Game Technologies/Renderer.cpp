@@ -1611,7 +1611,9 @@ void Renderer::deferRenderPass(){
 	//draw final texture
 //	DSFinalPass();
 
-
+	for (vector<PointLight*>::const_iterator i = point_lights.begin(); i != point_lights.end(); ++i){
+		delete *i;
+	}
 
 
 	point_lights.clear();

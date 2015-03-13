@@ -16,7 +16,11 @@
 
 
 EarthParticleSystem::EarthParticleSystem(){
-	
+	a = (const GLvoid*)4;
+	b = (const GLvoid*)16;
+	c = (const GLvoid*)28;
+	d = (const GLvoid*)32;
+
 	m_currVB=0;
 	m_currTFB = 1;
 	m_isFirst+true;
@@ -222,6 +226,7 @@ bool EarthParticleSystem::InitRenderSystem(int shape_type){
 
 	glUniform1i(glGetUniformLocation(particleRenderShader->GetProgram(), "diffuseTex"), 0);
 
+	glGenVertexArrays(1, &vao);
 	return true;
 }
 
@@ -265,8 +270,7 @@ void EarthParticleSystem::UpdateParticles(int DeltaTime){
 	glUniform1i(glGetUniformLocation(particleUpdateShader->GetProgram(), "gRandomTexture1"), 0);
 	glUniform1i(glGetUniformLocation(particleUpdateShader->GetProgram(), "gRandomTexture2"), 1);
 
-	GLuint vao;
-	glGenVertexArrays(1, &vao);
+	
 	glBindVertexArray(vao);
 
 	glBindBuffer(GL_ARRAY_BUFFER, m_particleBuffer[m_currVB]);//bind input vertex buffer
@@ -275,10 +279,10 @@ void EarthParticleSystem::UpdateParticles(int DeltaTime){
 	//Set up the vertex attributes of the particles in the vertyex buffer
 
 	glVertexAttribPointer(input_type, 1, GL_FLOAT, GL_FALSE, sizeof(EarthParticle), 0);                  // type
-	glVertexAttribPointer(input_position, 3, GL_FLOAT, GL_FALSE, sizeof(EarthParticle), (const GLvoid*)4);   // position
-	glVertexAttribPointer(input_velocity, 3, GL_FLOAT, GL_FALSE, sizeof(EarthParticle), (const GLvoid*)16);  // velocity
-	glVertexAttribPointer(input_lifetime, 1, GL_FLOAT, GL_FALSE, sizeof(EarthParticle), (const GLvoid*)28);  // lifetime
-	glVertexAttribPointer(input_index, 1, GL_FLOAT, GL_FALSE, sizeof(EarthParticle), (const GLvoid*)32);	// index
+	glVertexAttribPointer(input_position, 3, GL_FLOAT, GL_FALSE, sizeof(EarthParticle), a);   // position
+	glVertexAttribPointer(input_velocity, 3, GL_FLOAT, GL_FALSE, sizeof(EarthParticle), b);  // velocity
+	glVertexAttribPointer(input_lifetime, 1, GL_FLOAT, GL_FALSE, sizeof(EarthParticle), c);  // lifetime
+	glVertexAttribPointer(input_index, 1, GL_FLOAT, GL_FALSE, sizeof(EarthParticle),    d);	// index
 
 	glEnableVertexAttribArray(input_type);
 	glEnableVertexAttribArray(input_position);
@@ -286,8 +290,7 @@ void EarthParticleSystem::UpdateParticles(int DeltaTime){
 	glEnableVertexAttribArray(input_lifetime);
 	glEnableVertexAttribArray(input_index);
 
-	GLuint query;
-	glGenQueries(1, &query);
+
 
 	glEnable(GL_RASTERIZER_DISCARD); //Discard all the primitives before they reach rasterizer
 
@@ -295,7 +298,7 @@ void EarthParticleSystem::UpdateParticles(int DeltaTime){
 
 	//	glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, m_particleBuffer[m_currTFB]);
 
-	glBeginQuery(GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN, query);
+
 
 	glBeginTransformFeedback(GL_POINTS); // All the draw calls after this until the glEndTransformFeedback() have their output redirected to the transform feedback buffer.
 
@@ -310,12 +313,10 @@ void EarthParticleSystem::UpdateParticles(int DeltaTime){
 
 	glEndTransformFeedback();
 
-	glEndQuery(GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN);
 	glDisable(GL_RASTERIZER_DISCARD);
 	//	glFlush();
 
-	GLuint primitives;
-	glGetQueryObjectuiv(query, GL_QUERY_RESULT, &primitives);
+	
 	//	printf("%u primitives written!\n\n", primitives);
 
 	glDisableVertexAttribArray(input_type);
@@ -410,8 +411,7 @@ void EarthParticleSystem::RenderParticles(const Matrix4& modelMatrix)
 	glUniform1f(glGetUniformLocation(particleRenderShader->GetProgram(), "particleSize"), particle_size);
 	glUniform1i(glGetUniformLocation(particleRenderShader->GetProgram(), "diffuseTex"), 0);
 	glUniform1i(glGetUniformLocation(particleRenderShader->GetProgram(), "flameTex"), 1);
-	GLuint vao;
-	glGenVertexArrays(1, &vao);
+
 	glBindVertexArray(vao);
 	glBindBuffer(GL_ARRAY_BUFFER, m_particleBuffer[m_currTFB]);
 	//	glDisable(GL_RASTERIZER_DISCARD);
@@ -419,10 +419,10 @@ void EarthParticleSystem::RenderParticles(const Matrix4& modelMatrix)
 
 
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(EarthParticle), (const GLvoid*)4);  // position
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(EarthParticle), a);  // position
 
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, sizeof(EarthParticle), (const GLvoid*)28);  // age
+	glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, sizeof(EarthParticle), c);  // age
 
 	glDrawTransformFeedback(GL_POINTS, m_transformFeedback[m_currTFB]);
 

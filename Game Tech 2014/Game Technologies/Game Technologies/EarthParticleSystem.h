@@ -74,4 +74,11 @@ private:
 	float render_particle_lifetime;
 
 	int texture_type;
+
+	GLuint vao;
+
+	const GLvoid* a;
+	const GLvoid* b;
+	const GLvoid* c;
+	const GLvoid* d;
 };

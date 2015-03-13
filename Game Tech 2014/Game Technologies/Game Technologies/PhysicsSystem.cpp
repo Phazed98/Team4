@@ -330,6 +330,8 @@ void	PhysicsSystem::ObstacleCollisions()
 							}
 						}
 					}
+					delete collisionData;
+					delete gjkObj;
 				}
 			}
 		}
@@ -397,6 +399,8 @@ void	PhysicsSystem::MissileCollisions()
 						Missiles[i]->SetPosition(Vector3(1000.0f, 1000.0f, 1000.0f));
 					}
 				}
+				delete collisionData;
+				delete gjkObj;
 			}
 
 		}

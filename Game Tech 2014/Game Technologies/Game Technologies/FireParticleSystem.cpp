@@ -20,7 +20,11 @@
 
 FireParticleSystem::FireParticleSystem()
 {
-	
+	a = (const GLvoid*)4;
+	b = (const GLvoid*)16;
+	c = (const GLvoid*)28;
+	d = (const GLvoid*)32;
+
 	
 	m_currVB = 0;
 	m_currTFB = 1;
@@ -197,6 +201,8 @@ bool FireParticleSystem::InitRenderSystem(){
 	}
 
 	glUniform1i(glGetUniformLocation(particleRenderShader->GetProgram(), "diffuseTex"), 0);
+
+	glGenVertexArrays(1, &vao);
 	return true;
 }
 
@@ -269,8 +275,7 @@ void FireParticleSystem::UpdateParticles(int DeltaTimeMillis)
 	glUniform1i(glGetUniformLocation(particleUpdateShader->GetProgram(), "gRandomTexture1"), 0);
 	glUniform1i(glGetUniformLocation(particleUpdateShader->GetProgram(), "gRandomTexture2"), 1);
 
-	GLuint vao;
-	glGenVertexArrays(1, &vao);
+	
 	glBindVertexArray(vao);
 	
 	glBindBuffer(GL_ARRAY_BUFFER, m_particleBuffer[m_currVB]);//bind input vertex buffer
@@ -278,10 +283,10 @@ void FireParticleSystem::UpdateParticles(int DeltaTimeMillis)
 
 
 	glVertexAttribPointer(input_type	, 1, GL_FLOAT, GL_FALSE, sizeof(FireParticle), 0);                  // type
-	glVertexAttribPointer(input_position, 3, GL_FLOAT, GL_FALSE, sizeof(FireParticle), (const GLvoid*)4);   // position
-	glVertexAttribPointer(input_velocity, 3, GL_FLOAT, GL_FALSE, sizeof(FireParticle), (const GLvoid*)16);  // velocity
-	glVertexAttribPointer(input_lifetime, 1, GL_FLOAT, GL_FALSE, sizeof(FireParticle), (const GLvoid*)28);  // lifetime
-	glVertexAttribPointer(input_index,	  1, GL_FLOAT, GL_FALSE, sizeof(FireParticle), (const GLvoid*)32);	// index
+	glVertexAttribPointer(input_position, 3, GL_FLOAT, GL_FALSE, sizeof(FireParticle), a);   // position
+	glVertexAttribPointer(input_velocity, 3, GL_FLOAT, GL_FALSE, sizeof(FireParticle), b);  // velocity
+	glVertexAttribPointer(input_lifetime, 1, GL_FLOAT, GL_FALSE, sizeof(FireParticle), c);  // lifetime
+	glVertexAttribPointer(input_index,	  1, GL_FLOAT, GL_FALSE, sizeof(FireParticle), d);	// index
 
 	glEnableVertexAttribArray(input_type);
 	glEnableVertexAttribArray(input_position);
@@ -290,14 +295,13 @@ void FireParticleSystem::UpdateParticles(int DeltaTimeMillis)
 	glEnableVertexAttribArray(input_index);
 	
 	
-	GLuint query;
-	glGenQueries(1, &query);
+
 	
 	glEnable(GL_RASTERIZER_DISCARD);
 //	glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, tbo);
 
 //	glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, m_particleBuffer[m_currTFB]);
-	glBeginQuery(GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN, query);
+	
 
 	glBeginTransformFeedback(GL_POINTS);
 
@@ -312,12 +316,9 @@ void FireParticleSystem::UpdateParticles(int DeltaTimeMillis)
 
 	glEndTransformFeedback();
 
-	glEndQuery(GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN);
 	glDisable(GL_RASTERIZER_DISCARD);
 //	glFlush();
 
-	GLuint primitives;
-	glGetQueryObjectuiv(query, GL_QUERY_RESULT, &primitives);
 //	printf("%u primitives written!\n\n", primitives);
 	
 	glDisableVertexAttribArray(input_type);
@@ -369,8 +370,7 @@ void FireParticleSystem::RenderParticles(const Matrix4& modelMatrix)
 	glUniform1i(glGetUniformLocation(particleRenderShader->GetProgram(), "diffuseTex"), 0);
 	glUniform1i(glGetUniformLocation(particleRenderShader->GetProgram(), "flameTex"), 1);
 	glUniform1i(glGetUniformLocation(particleRenderShader->GetProgram(), "shapeType"), _shape);
-	GLuint vao;
-	glGenVertexArrays(1, &vao);
+	
 	glBindVertexArray(vao);
 	glBindBuffer(GL_ARRAY_BUFFER, m_particleBuffer[m_currTFB]);
 //	glDisable(GL_RASTERIZER_DISCARD);
@@ -378,10 +378,10 @@ void FireParticleSystem::RenderParticles(const Matrix4& modelMatrix)
 
 	
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(FireParticle), (const GLvoid*)4);  // position
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(FireParticle), a);  // position
 
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, sizeof(FireParticle), (const GLvoid*)28);  // age
+	glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, sizeof(FireParticle), c);  // age
 
 	glDrawTransformFeedback(GL_POINTS, m_transformFeedback[m_currTFB]);
 
