@@ -522,12 +522,12 @@ Obstacle* MyGame::BuildObstacleEntity(float size, int type, int subType, ObjectT
 		size= size/size ;
 	}
 	
-	else if (subType == 2 /*&& _obstacle_type == 0*/)
-	{
-		s = new LifeformSceneNode(sphere);
-		Renderer::GetRenderer().SetLifeformSceneNode((LifeformSceneNode*)s);
-		size = size / size;
-	}
+	//else if (subType == 2 /*&& _obstacle_type == 0*/)
+	//{
+	//	s = new LifeformSceneNode(sphere);
+	//	Renderer::GetRenderer().SetLifeformSceneNode((LifeformSceneNode*)s);
+	//	size = size / size;
+	//}
 	
 	else if (subType == 0 && _obstacle_type == 0){
 		s = new SceneNode(sphere);

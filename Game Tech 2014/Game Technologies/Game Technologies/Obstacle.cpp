@@ -22,14 +22,17 @@ Obstacle::Obstacle(ObjectType* _tile, SceneNode* s, PhysicsNode* p, int _type, i
 	{
 		if (powerupType == 1) // Slow
 		{
+			Renderer::GetRenderer().SetYellowformSceneNode(renderNode);
 			renderNode->SetColour(Vector4(1, 0, 0, 1.0f));
 		}
 		else if (powerupType == 2) // Cooldown
 		{
+			Renderer::GetRenderer().SetRedformSceneNode(renderNode);
 			renderNode->SetColour(Vector4(0, 1, 0, 1.0f));
 		}
 		else if (powerupType == 3) // Immunity
 		{
+			Renderer::GetRenderer().SetBlueformSceneNode(renderNode);
 			renderNode->SetColour(Vector4(0, 0, 1, 1.0f));
 		}
 	}

@@ -104,6 +104,24 @@ bool EarthParticleSystem::InitParticleSystem(int shape_type, const Vector3& Pos)
 		break;
 		
 	}
+	case 5:{
+		particle_lifetime = 10000.f;
+		particle_size = 40;
+		particleUpdateShader = new Shader(EARTH_SHADER_DIR"vs_update.glsl", EARTH_SHADER_DIR"fs_update.glsl", EARTH_SHADER_DIR"gs_updateAWESOME.glsl");
+		flame_texture = SOIL_load_OGL_texture(TEXTUREDIR"redPower.jpg",
+			SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_COMPRESS_TO_DXT);
+		break;
+
+	}
+	case 6:{
+		particle_lifetime = 10000.f;
+		particle_size = 40;
+		particleUpdateShader = new Shader(EARTH_SHADER_DIR"vs_update.glsl", EARTH_SHADER_DIR"fs_update.glsl", EARTH_SHADER_DIR"gs_updateAWESOME.glsl");
+		flame_texture = SOIL_load_OGL_texture(TEXTUREDIR"bluePower.jpg",
+			SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_COMPRESS_TO_DXT);
+		break;
+
+	}
 	}
 
 	EarthParticle Particles[MAX_PARTICLES];
@@ -182,6 +200,14 @@ bool EarthParticleSystem::InitRenderSystem(int shape_type){
 		break;
 	}
 	case 4: {
+		particleRenderShader = new Shader(EARTH_SHADER_DIR"vertexStrong.glsl", EARTH_SHADER_DIR"fragmentStrong.glsl", EARTH_SHADER_DIR"geometry.glsl");
+		break;
+	}
+	case 5: {
+		particleRenderShader = new Shader(EARTH_SHADER_DIR"vertexStrong.glsl", EARTH_SHADER_DIR"fragmentStrong.glsl", EARTH_SHADER_DIR"geometry.glsl");
+		break;
+	}
+	case 6: {
 		particleRenderShader = new Shader(EARTH_SHADER_DIR"vertexStrong.glsl", EARTH_SHADER_DIR"fragmentStrong.glsl", EARTH_SHADER_DIR"geometry.glsl");
 		break;
 	}
@@ -334,7 +360,15 @@ void EarthParticleSystem::RenderParticles(const Matrix4& modelMatrix)
 		break;
 	}
 	case 4:{
-		model_matrix = modelMatrix*Matrix4::Scale(Vector3(10, 10, 10));
+		model_matrix = modelMatrix*Matrix4::Scale(Vector3(5, 5, 5));
+		break;
+	}
+	case 5:{
+		model_matrix = modelMatrix*Matrix4::Scale(Vector3(5, 5, 5));
+		break;
+	}
+	case 6:{
+		model_matrix = modelMatrix*Matrix4::Scale(Vector3(5, 5, 5));
 		break;
 	}
 	}
@@ -362,7 +396,11 @@ void EarthParticleSystem::RenderParticles(const Matrix4& modelMatrix)
 	if (_shape == 3)
 		glUniform1f(glGetUniformLocation(particleRenderShader->GetProgram(), "MaxLifeTime"), SECOND_PARTICLE_LIFETIME);
 	if (_shape == 4)
-		glUniform1f(glGetUniformLocation(particleRenderShader->GetProgram(), "MaxLifeTime"), SECOND_PARTICLE_LIFETIME);
+		glUniform1f(glGetUniformLocation(particleRenderShader->GetProgram(), "MaxLifeTime"), particle_lifetime);
+	if (_shape == 5)
+		glUniform1f(glGetUniformLocation(particleRenderShader->GetProgram(), "MaxLifeTime"), particle_lifetime);
+	if (_shape == 6)
+		glUniform1f(glGetUniformLocation(particleRenderShader->GetProgram(), "MaxLifeTime"), particle_lifetime);
 	glUniform1f(glGetUniformLocation(particleRenderShader->GetProgram(), "particleSize"), particle_size);
 	glUniform1i(glGetUniformLocation(particleRenderShader->GetProgram(), "diffuseTex"), 0);
 	glUniform1i(glGetUniformLocation(particleRenderShader->GetProgram(), "flameTex"), 1);

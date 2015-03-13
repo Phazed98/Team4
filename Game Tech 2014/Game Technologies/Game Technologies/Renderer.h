@@ -60,7 +60,9 @@ public:
 
 	void SetTornadoSceneNode(TornadoSceneNode* node){ tornadoNode.push_back(node); }
 	void SetGeyserSceneNode(GeyserSceneNode* node){ geyserNode.push_back(node); }
-	void SetLifeformSceneNode(LifeformSceneNode* node){ lifeNode.push_back(node); }
+	void SetYellowformSceneNode(SceneNode* node){ yellowNode.push_back(node); }
+	void SetRedformSceneNode(SceneNode* node){ redNode.push_back(node); }
+	void SetBlueformSceneNode(SceneNode* node){ blueNode.push_back(node); }
 
 	//Statics
 	static bool Initialise() 
@@ -194,9 +196,15 @@ protected:
 	EarthParticleSystem geyser_system;
 	void DrawGeyser();
 
-	vector<LifeformSceneNode*> lifeNode;
-	EarthParticleSystem life_system;
-	void DrawLife();
+	vector<SceneNode*> yellowNode;
+	vector<SceneNode*> blueNode;
+	vector<SceneNode*> redNode;
+	EarthParticleSystem yellow_system;
+	EarthParticleSystem red_system;
+	EarthParticleSystem blue_system;
+	void Draw_yellow_powerup();
+	void Draw_red_powerup();
+	void Draw_blue_powerup();
 
 	//steven added for rendering different objects
 	Shader* water_plane_shader;
