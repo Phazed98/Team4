@@ -203,7 +203,17 @@ void Renderer::fullyInit()
 
 	buttonY = Mesh::GenerateQuad();
 	buttonY->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"/GUITextures/bigY.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
+
+	buttonQ = Mesh::GenerateQuad();
+	buttonQ->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"/GUITextures/q.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
+
+	buttonW = Mesh::GenerateQuad();
+	buttonW->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"/GUITextures/w.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
+
+	buttonE = Mesh::GenerateQuad();
+	buttonE->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"/GUITextures/e.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
 	//--------------------------------------------------GUI--------------------------------------------------------------------------------
+
 
 	if (!quad->GetTexture()){
 		cout << "error in loading screen texture!!" << endl;
@@ -640,25 +650,56 @@ void Renderer::RenderUI()
 	//Button Y for Immunity
 	if (PhysicsSystem::GetVehicle()->getHasImmunityPowerUp())
 	{
-		modelMatrix = Matrix4::Translation(Vector3(0.62f, -0.85f, 0.0f)) *  Matrix4::Scale(Vector3(0.05f, 0.05f, 0.5f));
-		UpdateShaderMatrices();
-		buttonY->Draw();
+		if (Window::GetControllerConnected())
+		{
+			modelMatrix = Matrix4::Translation(Vector3(0.62f, -0.85f, 0.0f)) *  Matrix4::Scale(Vector3(0.05f, 0.05f, 0.5f));
+			UpdateShaderMatrices();
+			buttonY->Draw();
+		}
+		else
+		{
+			modelMatrix = Matrix4::Translation(Vector3(0.62f, -0.85f, 0.0f)) *  Matrix4::Scale(Vector3(0.05f, 0.05f, 0.5f));
+			UpdateShaderMatrices();
+			buttonW->Draw();
+		}
+
 	}
 
 	//Button X for Slow
 	if (PhysicsSystem::GetVehicle()->getHasSlowPowerUp())
 	{
-		modelMatrix = Matrix4::Translation(Vector3(0.52f, -0.75f, 0.0f)) *  Matrix4::Scale(Vector3(0.05f, 0.05f, 0.5f));
-		UpdateShaderMatrices();
-		buttonX->Draw();
+		if (Window::GetControllerConnected())
+		{
+			modelMatrix = Matrix4::Translation(Vector3(0.52f, -0.75f, 0.0f)) *  Matrix4::Scale(Vector3(0.05f, 0.05f, 0.5f));
+			UpdateShaderMatrices();
+			buttonX->Draw();
+		}
+		else
+		{
+			modelMatrix = Matrix4::Translation(Vector3(0.52f, -0.75f, 0.0f)) *  Matrix4::Scale(Vector3(0.05f, 0.05f, 0.5f));
+			UpdateShaderMatrices();
+			buttonQ->Draw();
+		}
+
 	}
 
-	//Button B for Cooldown
+
 	if (PhysicsSystem::GetVehicle()->getHasCDRedPowerUp())
 	{
-		modelMatrix = Matrix4::Translation(Vector3(0.72f, -0.75f, 0.0f)) *  Matrix4::Scale(Vector3(0.05f, 0.05f, 0.5f));
-		UpdateShaderMatrices();
-		buttonB->Draw();
+		//Button B for Cooldown
+		if (Window::GetControllerConnected())
+		{
+			modelMatrix = Matrix4::Translation(Vector3(0.72f, -0.75f, 0.0f)) *  Matrix4::Scale(Vector3(0.05f, 0.05f, 0.5f));
+			UpdateShaderMatrices();
+			buttonB->Draw();
+		}
+		else
+		{
+			modelMatrix = Matrix4::Translation(Vector3(0.72f, -0.75f, 0.0f)) *  Matrix4::Scale(Vector3(0.05f, 0.05f, 0.5f));
+			UpdateShaderMatrices();
+			buttonE->Draw();
+		}
+
 	}
 
 

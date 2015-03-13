@@ -262,6 +262,7 @@ void Obstacle::resetObstacle(){
 	directionRand = rand() % 100 + 1;
 	//powerupType = rand() % 3 + 1;
 	offset.y = (TILE_HEIGHT + size);
+	coinCollected = false;
 	if (directionRand > 30)
 	{
 		goingLeft = true;

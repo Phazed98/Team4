@@ -1,27 +1,27 @@
-﻿Build started 13/03/2015 04:42:18.
+﻿Build started 13/03/2015 04:58:28.
      1>Project "D:\GitHub\Team4\Game Tech 2014\Game Technologies\Game Technologies\GameTech.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Bullets.cpp ChaseCamera.cpp Coins.cpp EarthParticleSystem.cpp FireParticleSystem.cpp FireSceneNode.cpp GameClass.cpp GameEntity.cpp GeyserSceneNode.cpp LifeformSceneNode.cpp Main.cpp MyGame.cpp NetworkClient.cpp NetworkServer.cpp ObjectType.cpp Obstacle.cpp PhysicsSystem.cpp Powerups.cpp Renderer.cpp SpaceshipSceneNode.cpp Spring.cpp SpringDemo.cpp TornadoSceneNode.cpp Vehicle.cpp
          SpringDemo.cpp
          Spring.cpp
          Renderer.cpp
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(381): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(988): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(1006): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(1015): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(1438): warning C4305: 'argument' : truncation from 'double' to 'const float'
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(1642): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(1679): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(391): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(1029): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(1047): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(1056): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(1479): warning C4305: 'argument' : truncation from 'double' to 'const float'
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(1683): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\renderer.cpp(1720): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
          PhysicsSystem.cpp
      1>d:\github\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(238): warning C4018: '<' : signed/unsigned mismatch
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(346): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(380): warning C4018: '<' : signed/unsigned mismatch
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(426): warning C4018: '<' : signed/unsigned mismatch
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(447): warning C4018: '<' : signed/unsigned mismatch
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(468): warning C4018: '<' : signed/unsigned mismatch
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(489): warning C4018: '<' : signed/unsigned mismatch
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(524): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
-     1>d:\github\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(544): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(354): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(388): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(434): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(455): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(476): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(497): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(532): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>d:\github\team4\game tech 2014\game technologies\game technologies\physicssystem.cpp(549): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
          Obstacle.cpp
      1>d:\github\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(8): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
      1>d:\github\team4\game tech 2014\game technologies\game technologies\obstacle.cpp(87): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
@@ -61,22 +61,22 @@
      1>d:\github\team4\game tech 2014\game technologies\game technologies\earthparticlesystem.cpp(411): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
          Generating Code...
          Compiling...
+         Vehicle.cpp
+         TornadoSceneNode.cpp
+         SpaceshipSceneNode.cpp
          ObjectType.cpp
      1>d:\github\team4\game tech 2014\game technologies\game technologies\objecttype.cpp(57): warning C4244: '-=' : conversion from 'float' to 'int', possible loss of data
+         LifeformSceneNode.cpp
+         GeyserSceneNode.cpp
+         FireSceneNode.cpp
          Coins.cpp
+         ChaseCamera.cpp
          Bullets.cpp
          Generating Code...
          Skipping... (no relevant changes detected)
          Powerups.cpp
-         Vehicle.cpp
-         TornadoSceneNode.cpp
-         SpaceshipSceneNode.cpp
          NetworkServer.cpp
          NetworkClient.cpp
-         LifeformSceneNode.cpp
-         GeyserSceneNode.cpp
-         FireSceneNode.cpp
-         ChaseCamera.cpp
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\GitHub\Team4\Game Tech 2014\Game Technologies\Debug\GameTech.lib" /MACHINE:X86 /FORCE:MULTIPLE Debug\Bullets.obj
          Debug\Button.obj
@@ -215,4 +215,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:08.45
+Time Elapsed 00:00:11.87

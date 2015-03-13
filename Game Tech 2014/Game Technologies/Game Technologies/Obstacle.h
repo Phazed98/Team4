@@ -36,6 +36,10 @@ public:
 
 	void GetRidOfObstacle() { offset.y = 10000; }
 
+	bool GetCoinCollected() { return coinCollected; }
+
+	void SetCoinCollected(bool value) { coinCollected = value; }
+
 private:
 
 	int lane; // Lanes are from 0 t 7 starting from top, two lanes per tile
@@ -62,5 +66,6 @@ private:
 
 	int powerupType;
 
+	bool coinCollected = false;
 };
 

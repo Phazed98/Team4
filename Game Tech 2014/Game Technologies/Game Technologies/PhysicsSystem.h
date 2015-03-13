@@ -243,6 +243,7 @@ protected:
 	int			numberOfCoins = 0;
 	int			actualScore = 0;
 	bool		increaseScore = true;
+	bool		coinCollected = false;
 	//----------------------------------------------------------------------
 
 	//Offsets for netverking

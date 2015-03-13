@@ -307,7 +307,15 @@ void	PhysicsSystem::ObstacleCollisions()
 									//do nothing
 									break;
 								}
+							}//-------------------------------------Kostas made it----------------------
+							else if (Obstacles[i]->getObstacleType() == 2 && Obstacles[i]->GetCoinCollected() == false)
+							{
+								numberOfCoins++;
+								Obstacles[i]->SetCoinCollected(true);
+								Obstacles[i]->GetRidOfObstacle();
+
 							}
+							//-------------------------------------------------------------------------
 							else
 							{
 								//link the amount reversed to both track speed
@@ -527,10 +535,7 @@ void PhysicsSystem::CalculateScore(float msec)
 	}
 	else
 	{
-		if (Window::GetKeyboard()->KeyTriggered(KEYBOARD_7))
-		{
-			numberOfCoins++;
-		}
+		
 
 		if (numberOfCoins > scoreMultiplier)
 		{

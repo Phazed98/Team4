@@ -183,6 +183,9 @@ protected:
 	Mesh* buttonB;
 	Mesh* buttonX;
 	Mesh* buttonY;
+	Mesh* buttonQ;
+	Mesh* buttonW;
+	Mesh* buttonE;
 	float planeSwitchCD;
 	float slowPowerUpDuration;
 	float immunePowerUpDuration;
