@@ -76,7 +76,7 @@ void	PhysicsSystem::Update(float msec)
 	MissileCollisions();
 	if (canDie)
 	{
-		if (!CheckOnATile())
+		if (!CheckOnATile() || GetCheckPointTimer() <= 0)
 		{
 			SoundSystem::GetSoundSystem()->PlaySoundA(SoundManager::GetSound("../../Sounds/bomb.wav"),Vector3());
 			GameClass::GetGameClass().setCurrentState(GAME_OVER);

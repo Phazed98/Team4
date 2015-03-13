@@ -51,10 +51,14 @@ vec4 CalcLightInternal(vec3 LightDirection,
 vec4 CalcPointLight(vec3 WorldPos, vec3 Normal)
 {
     vec3 LightDirection = WorldPos - lightPos;
+	
+		
+
     float Distance = length(LightDirection);
+	float atten = 1.0 - clamp ( Distance / lightRadius , 0.0 , 1.0);
     LightDirection = normalize(LightDirection);
 
-    vec4 Color = CalcLightInternal(LightDirection, WorldPos, Normal);
+    vec4 Color = atten*CalcLightInternal(LightDirection, WorldPos, Normal);
 
    /*  float Attenuation =  gPointLight.Atten.Constant +
                          gPointLight.Atten.Linear * Distance +

@@ -58,7 +58,7 @@ void main ( void ) {
 	previousPos /= previousPos.w;  
 //	previousPos.z = currentPos.z-0.1;
 	// Use this frame's position and last frame's to compute the pixel velocity.  
-	vec2 velocity = ((previousPos-currentPos)/1000.f).xy; 
+	vec2 velocity = ((previousPos-currentPos)/800.f).xy; 
 //	vec2 velocity = ((currentPos-previousPos)).xy; 
 	// Get the initial color at this pixel.  
 	vec4 motion_color = texture(diffuseTex, texCoord);

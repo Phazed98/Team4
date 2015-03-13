@@ -1242,17 +1242,17 @@ void Renderer::displayInformation()
 	}
 
 	//--------------------------------------------------GUI--------------------------------------------------------------------------------
-	DrawText("SCORE", Vector3(25, 20, 0), 18, false);
-	DrawText(to_string(PhysicsSystem::GetPhysicsSystem().GetScore()), Vector3(30, 50, 0), 18, false);
+	DrawText("SCORE", Vector3(100, 40, 0), 25, false);
+	DrawText(to_string(PhysicsSystem::GetPhysicsSystem().GetScore()), Vector3(100, 60, 0), 25, false);
 
-	DrawText("STACK", Vector3(175, 20, 0), 18, false);
-	DrawText("X  " + to_string(PhysicsSystem::GetPhysicsSystem().GetScoreMultiplier()), Vector3(185, 50, 0), 18, false);
+	DrawText("STACK", Vector3(370, 40, 0), 25, false);
+	DrawText("X  " + to_string(PhysicsSystem::GetPhysicsSystem().GetScoreMultiplier()), Vector3(370, 60, 0), 25, false);
 
-	DrawText("COINS", Vector3(325, 20, 0), 18, false);
-	DrawText("X  " + to_string(PhysicsSystem::GetPhysicsSystem().GetNumberOfCoins()), Vector3(335, 50, 0), 18, false);
+	DrawText("COINS", Vector3(650, 40, 0), 25, false);
+	DrawText("X  " + to_string(PhysicsSystem::GetPhysicsSystem().GetNumberOfCoins()), Vector3(650, 60, 0), 25, false);
 
-	DrawText("Timer", Vector3(475, 20, 0), 18, false);
-	DrawText(to_string(PhysicsSystem::GetPhysicsSystem().GetCheckPointTimer()), Vector3(485, 50, 0), 18, false);
+	DrawText("Timer", Vector3(900, 40, 0), 25, false);
+	DrawText(to_string(PhysicsSystem::GetPhysicsSystem().GetCheckPointTimer()), Vector3(900, 60, 0), 25, false);
 
 	//Button Y for Immunity
 	if (PhysicsSystem::GetVehicle()->getHasImmunityPowerUp())
@@ -1319,8 +1319,10 @@ void Renderer::DrawAfterBurner(){
 		spaceship_scene_node->afterburner_system[0].Render(msec, model_matrix, projMatrix, viewMatrix);
 		spaceship_scene_node->afterburner_system[1].Render(msec, model_matrix, projMatrix, viewMatrix);
 		Vector4 light_colour = Vector4(1, 1, 0, 1);
-		PointLight* pt = new PointLight(model_matrix.GetPositionVector(), light_colour, 80);
-		point_lights.push_back(pt);
+		PointLight* pt1 = new PointLight(model_matrix.GetPositionVector() + Vector3(20, 0, 0), light_colour, 60);
+		point_lights.push_back(pt1);
+		PointLight* pt2 = new PointLight(model_matrix.GetPositionVector() + Vector3(-20, 0, 0), light_colour, 60);
+		point_lights.push_back(pt2);
 	}
 	if (PhysicsSystem::GetVehicle()->getImmunityPowerUpActive()){
 		spaceship_scene_node->shieldSystem.Render(msec, model_matrix, projMatrix, viewMatrix);
