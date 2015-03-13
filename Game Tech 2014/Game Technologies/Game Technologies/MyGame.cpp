@@ -640,10 +640,10 @@ Obstacle* MyGame::BuildObstacleEntity(float size, int type, int subType, ObjectT
 GameEntity* MyGame::BuildBulletEntity(float radius, Vector3 pos)
 {
 	SceneNode* test = new SceneNode(missile);
-	test->SetTexture(missileTexture);
-	test->SetModelScale(Vector3(radius*4, radius*4, radius*4));
+	//test->SetTexture(missileTexture);
+	test->SetModelScale(Vector3(radius, radius, radius));
 	test->SetBoundingRadius(radius);
-	test->SetColour(Vector4(0.2f, 0.2f, 0.5f, 1.0f));
+	test->SetColour(Vector4(0.2f, 1.f, 0.5f, 1.0f));
 	PhysicsNode*p = new PhysicsNode();
 	p->SetUseDamping(false);
 	p->SetUseGravity(false);
