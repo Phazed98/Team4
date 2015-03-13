@@ -279,10 +279,12 @@ void Renderer::UpdateScene(float msec)
 	{
 		fps = nbFrames;
 		time = 0;
+
 		nbFrames = 0;
 	}
 
 	nbFrames++;
+
 
 	if (camera)
 	{
@@ -615,7 +617,7 @@ void Renderer::RenderUI()
 	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendEquation(GL_FUNC_ADD);
-	glBlendFunc(GL_ONE, GL_ZERO);
+	glBlendFunc(GL_ONE, GL_ONE);
 
 	//Set Shader to TexturedShader
 	SetCurrentShader(menuShader);
@@ -626,24 +628,24 @@ void Renderer::RenderUI()
 	textureMatrix.ToIdentity();
 	modelMatrix.ToIdentity();
 	UpdateShaderMatrices();
-	
+
 	//Score
-	modelMatrix = Matrix4::Translation(Vector3(-0.82f, -0.88f, 0.0f)) *  Matrix4::Scale(Vector3(0.15f, 0.1f, 0.5f));
+	modelMatrix = Matrix4::Translation(Vector3(-0.85f, -0.88f, 0.0f)) *  Matrix4::Scale(Vector3(0.12f, 0.08f, 0.5f));
 	UpdateShaderMatrices();
 	uiQuad->Draw();
 
 	//Multiplier
-	modelMatrix = Matrix4::Translation(Vector3(-0.48f, -0.88f, 0.0f)) *  Matrix4::Scale(Vector3(0.15f, 0.1f, 0.5f));
+	modelMatrix = Matrix4::Translation(Vector3(-0.55f, -0.88f, 0.0f)) *  Matrix4::Scale(Vector3(0.12f, 0.08f, 0.5f));
 	UpdateShaderMatrices();
 	uiQuad->Draw();
 
 	//Stack Counter
-	modelMatrix = Matrix4::Translation(Vector3(-0.1f, -0.88f, 0.0f)) *  Matrix4::Scale(Vector3(0.15f, 0.1f, 0.5f));
+	modelMatrix = Matrix4::Translation(Vector3(-0.25f, -0.88f, 0.0f)) *  Matrix4::Scale(Vector3(0.12f, 0.08f, 0.5f));
 	UpdateShaderMatrices();
 	uiQuad->Draw();
 
 	//Timer
-	modelMatrix = Matrix4::Translation(Vector3(-0.82f, -0.65f, 0.0f)) *  Matrix4::Scale(Vector3(0.15f, 0.1f, 0.5f));
+	modelMatrix = Matrix4::Translation(Vector3(0.05f, -0.88f, 0.0f)) *  Matrix4::Scale(Vector3(0.12f, 0.08f, 0.5f));
 	UpdateShaderMatrices();
 	uiQuad->Draw();
 
@@ -709,7 +711,7 @@ void Renderer::RenderUI()
 		planeSwitchCD = PhysicsSystem::GetVehicle()->getPlaneSwitchCDRemaining() / 1000;
 	}
 
-	
+
 	//Plane switch cooldown
 	modelMatrix = Matrix4::Translation(Vector3(0.0f, 0.9f, 0.0f)) *  Matrix4::Scale(Vector3(planeSwitchCD * 0.5f, 0.05f, 0.5f));
 	UpdateShaderMatrices();
@@ -1170,25 +1172,27 @@ void Renderer::displayInformation()
 	DrawText("WASD = Move", Vector3(0, 144, 0), 16, false);
 	DrawText("Shift = Down", Vector3(0, 160, 0), 16, false);
 	DrawText("Space = Up", Vector3(0, 176, 0), 16, false);*/
-	
-	//Added for the timer debugger
 
-	DrawText("Motion blur timer : " + to_string(*motionblurTimer), Vector3(0, 224, 0), 16, false);
-	DrawText("PostProcess Render timer : " + to_string(*postprocessTimer), Vector3(0, 240, 0), 16, false);
-	DrawText("Defer Rendering timer : " + to_string(*deferTimer), Vector3(0, 256, 0), 16, false);
+	//Added for the timer debugger
+	if (Window::GetKeyboard()->KeyDown(KEYBOARD_0)){
+		DrawText("current fps : " + to_string(fps), Vector3(0, 208, 0), 16, false);
+		DrawText("Motion blur timer : " + to_string(*motionblurTimer), Vector3(0, 224, 0), 16, false);
+		DrawText("PostProcess Render timer : " + to_string(*postprocessTimer), Vector3(0, 240, 0), 16, false);
+		DrawText("Defer Rendering timer : " + to_string(*deferTimer), Vector3(0, 256, 0), 16, false);
+	}
 
 	//--------------------------------------------------GUI--------------------------------------------------------------------------------
-	DrawText("SCORE", Vector3(25, 15, 0), 25, false);
-	DrawText(to_string(PhysicsSystem::GetPhysicsSystem().GetScore()), Vector3(32, 50, 0), 25, false);
+	DrawText("SCORE", Vector3(25, 20, 0), 18, false);
+	DrawText(to_string(PhysicsSystem::GetPhysicsSystem().GetScore()), Vector3(30, 50, 0), 18, false);
 
-	DrawText("STACK", Vector3(195, 15, 0), 25, false);
-	DrawText("X  " + to_string(PhysicsSystem::GetPhysicsSystem().GetScoreMultiplier()), Vector3(205, 50, 0), 25, false);
+	DrawText("STACK", Vector3(175, 20, 0), 18, false);
+	DrawText("X  " + to_string(PhysicsSystem::GetPhysicsSystem().GetScoreMultiplier()), Vector3(185, 50, 0), 18, false);
 
-	DrawText("COINS", Vector3(375, 15, 0), 25, false);
-	DrawText(to_string(PhysicsSystem::GetPhysicsSystem().GetNumberOfCoins()) + '/' + to_string((PhysicsSystem::GetPhysicsSystem().GetScoreMultiplier())+ 1), Vector3(395, 50, 0), 25, false);
+	DrawText("COINS", Vector3(325, 20, 0), 18, false);
+	DrawText("X  " + to_string(PhysicsSystem::GetPhysicsSystem().GetNumberOfCoins()), Vector3(335, 50, 0), 18, false);
 
-	DrawText("Timer", Vector3(25, 105, 0), 25, false);
-	DrawText(to_string(PhysicsSystem::GetPhysicsSystem().GetCheckPointTimer()), Vector3(32, 135, 0), 25, false);
+	DrawText("Timer", Vector3(475, 20, 0), 18, false);
+	DrawText(to_string(PhysicsSystem::GetPhysicsSystem().GetCheckPointTimer()), Vector3(485, 50, 0), 18, false);
 
 	//Button Y for Immunity
 	if (PhysicsSystem::GetVehicle()->getHasImmunityPowerUp())
@@ -1337,7 +1341,7 @@ void Renderer::Draw_powerup(){
 			viewMatrix = camera->BuildViewMatrix();
 		}
 
-		yellow_system.Render(msec, model_matrix, projMatrix, viewMatrix, 1);
+		yellow_system.Render(msec, model_matrix, projMatrix, viewMatrix, 2);
 	}
 	for (vector<SceneNode*>::iterator i = redNode.begin(); i != redNode.end(); ++i)
 	{
@@ -1347,7 +1351,7 @@ void Renderer::Draw_powerup(){
 			viewMatrix = camera->BuildViewMatrix();
 		}
 
-		yellow_system.Render(msec, model_matrix, projMatrix, viewMatrix, 2);
+		yellow_system.Render(msec, model_matrix, projMatrix, viewMatrix, 1);
 	}
 	PopMatrix();
 }

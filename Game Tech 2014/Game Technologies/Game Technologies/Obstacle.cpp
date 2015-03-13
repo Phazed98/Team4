@@ -14,7 +14,7 @@ Obstacle::Obstacle(ObjectType* _tile, SceneNode* s, PhysicsNode* p, int _type, i
 	{
 		if (powerupType == 1) // Slow
 		{
-			Renderer::GetRenderer().SetYellowformSceneNode(renderNode);
+			Renderer::GetRenderer().SetBlueformSceneNode(renderNode);
 			
 		}
 		else if (powerupType == 2) // Cooldown
@@ -24,7 +24,7 @@ Obstacle::Obstacle(ObjectType* _tile, SceneNode* s, PhysicsNode* p, int _type, i
 		}
 		else if (powerupType == 3) // Immunity
 		{
-			Renderer::GetRenderer().SetBlueformSceneNode(renderNode);
+			Renderer::GetRenderer().SetYellowformSceneNode(renderNode);
 			
 		}
 	}
