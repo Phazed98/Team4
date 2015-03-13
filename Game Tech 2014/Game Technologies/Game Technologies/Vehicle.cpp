@@ -349,6 +349,12 @@ void Vehicle::UpdatePlayerRotationOnPlane()
 	{
 		rotationOnPlane -= 360.0f;
 	}
+
+	//clamp due to mathematical error to prevent wobbles and drifts
+	if (abs(rotationOnPlane) < 0.5f)
+	{
+		rotationOnPlane = 0.0f;
+	}
 }
 
 void Vehicle::debug()
@@ -718,41 +724,6 @@ void Vehicle::GetUserInput()
 
 
 
-	//Statement to return the vehicle to flat rotation after A or D are released. 
-	if (!controllerIsConnected && !Window::GetKeyboard()->KeyDown(KEYBOARD_A) && !Window::GetKeyboard()->KeyDown(KEYBOARD_D))
-	{
-		if (rotationOnPlane < -0.02)
-		{
-			PhysNode->SetAngularVelocity(Vector3(0, 0, Speed_Turn));
-		}
-		else if (rotationOnPlane > 0.02)
-		{
-			PhysNode->SetAngularVelocity(Vector3(0, 0, -Speed_Turn));
-		}
-		else
-		{
-			PhysNode->SetAngularVelocity(Vector3(0, 0, 0));
-		}
-	}
-	//return statement with controller
-	else if (!Window::GetKeyboard()->KeyDown(KEYBOARD_A) && !Window::GetKeyboard()->KeyDown(KEYBOARD_D))
-	{
-		//if (rotationOnPlane < -0.02 && (normRotOnPlane > normalisedLX))
-		if (rotationOnPlane < -0.02 && (normRotOnPlane > LXHigh))
-		{
-			PhysNode->SetAngularVelocity(Vector3(0, 0, Speed_Turn));
-		}
-		//else if (rotationOnPlane > 0.02 && (normRotOnPlane > -normalisedLX))
-		else if (rotationOnPlane > 0.02 && (normRotOnPlane > -LXHigh))
-		{
-			PhysNode->SetAngularVelocity(Vector3(0, 0, -Speed_Turn));
-		}
-		else
-		{
-			PhysNode->SetAngularVelocity(Vector3(0, 0, 0));
-		}
-	}
-
 
 
 	if (Window::GetKeyboard()->KeyDown(KEYBOARD_D))
@@ -807,6 +778,41 @@ void Vehicle::GetUserInput()
 	}
 
 
+
+	//Statement to return the vehicle to flat rotation after A or D are released. 
+	if (!controllerIsConnected && !Window::GetKeyboard()->KeyDown(KEYBOARD_A) && !Window::GetKeyboard()->KeyDown(KEYBOARD_D))
+	{
+		if (rotationOnPlane < -0.02)
+		{
+			PhysNode->SetAngularVelocity(Vector3(0, 0, Speed_Turn));
+		}
+		else if (rotationOnPlane > 0.02)
+		{
+			PhysNode->SetAngularVelocity(Vector3(0, 0, -Speed_Turn));
+		}
+		else
+		{
+			PhysNode->SetAngularVelocity(Vector3(0, 0, 0));
+		}
+	}
+	//return statement with controller
+	else if (!Window::GetKeyboard()->KeyDown(KEYBOARD_A) && !Window::GetKeyboard()->KeyDown(KEYBOARD_D))
+	{
+		//if (rotationOnPlane < -0.02 && (normRotOnPlane > normalisedLX))
+		if (rotationOnPlane < -0.02 && (normRotOnPlane > LXHigh))
+		{
+			PhysNode->SetAngularVelocity(Vector3(0, 0, Speed_Turn));
+		}
+		//else if (rotationOnPlane > 0.02 && (normRotOnPlane > -normalisedLX))
+		else if (rotationOnPlane > 0.02 && (normRotOnPlane > -LXHigh))
+		{
+			PhysNode->SetAngularVelocity(Vector3(0, 0, -Speed_Turn));
+		}
+		else
+		{
+			PhysNode->SetAngularVelocity(Vector3(0, 0, 0));
+		}
+	}
 
 	//---------------------------------------------------------------------------------------------------
 	//Check for cooldown trigger input
@@ -898,6 +904,16 @@ void Vehicle::triggerPlaneSwitch()
 	previousPlaneID = currentPlaneID;
 
 	//################## ADD RANDOM HERE FOR CURRENTPLANEID FROM 0 TO 3, THEN WHILE CURRENT ROLL AGAIN #######################
+
+	while (true)
+	{
+		int temp = rand() % 4;
+		if (temp != currentPlaneID)
+		{
+			currentPlaneID = temp;
+			break;
+		}
+	}
 
 	//########################################################################################################################
 
