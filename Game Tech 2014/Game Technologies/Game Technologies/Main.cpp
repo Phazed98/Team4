@@ -37,7 +37,7 @@ void physicsLoop(GameClass* game, bool& running)
 
 int main() 
 {
-	if(!Window::Initialise("Eternal Elements ", 1920,1080, true )) 
+	if(!Window::Initialise("Eternal Elements ", 1920,1080, false )) 
 	{
 		return Quit(true, "Window failed to initialise!");
 	}
@@ -129,7 +129,7 @@ int main()
 		game->UpdateRendering(msec);	//Update our 'sybsystem' logic (renderer and physics!)
 		game->UpdateGame(msec);	//Update our game logic	
 		Window::GetWindow().updateController(msec);
-		if (Window::GetinputScrollCDing)
+		if (Window::GetinputScrollCDing())
 		{
 			Window::updateInputScrollLock(msec);
 		}

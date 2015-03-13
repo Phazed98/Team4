@@ -723,7 +723,40 @@ void Vehicle::GetUserInput()
 	}
 
 
-
+	//Statement to return the vehicle to flat rotation after A or D are released. 
+	if (!controllerIsConnected && !Window::GetKeyboard()->KeyDown(KEYBOARD_A) && !Window::GetKeyboard()->KeyDown(KEYBOARD_D))
+	{
+		if (rotationOnPlane < -0.02)
+		{
+			PhysNode->SetAngularVelocity(Vector3(0, 0, Speed_Turn));
+		}
+		else if (rotationOnPlane > 0.02)
+		{
+			PhysNode->SetAngularVelocity(Vector3(0, 0, -Speed_Turn));
+		}
+		else
+		{
+			PhysNode->SetAngularVelocity(Vector3(0, 0, 0));
+		}
+	}
+	//return statement with controller
+	else if (!Window::GetKeyboard()->KeyDown(KEYBOARD_A) && !Window::GetKeyboard()->KeyDown(KEYBOARD_D))
+	{
+		//if (rotationOnPlane < -0.02 && (normRotOnPlane > normalisedLX))
+		if (rotationOnPlane < -0.02 && (normRotOnPlane > LXHigh))
+		{
+			PhysNode->SetAngularVelocity(Vector3(0, 0, Speed_Turn));
+		}
+		//else if (rotationOnPlane > 0.02 && (normRotOnPlane > -normalisedLX))
+		else if (rotationOnPlane > 0.02 && (normRotOnPlane > -LXHigh))
+		{
+			PhysNode->SetAngularVelocity(Vector3(0, 0, -Speed_Turn));
+		}
+		else
+		{
+			PhysNode->SetAngularVelocity(Vector3(0, 0, 0));
+		}
+	}
 
 
 	if (Window::GetKeyboard()->KeyDown(KEYBOARD_D))
@@ -779,40 +812,7 @@ void Vehicle::GetUserInput()
 
 
 
-	//Statement to return the vehicle to flat rotation after A or D are released. 
-	if (!controllerIsConnected && !Window::GetKeyboard()->KeyDown(KEYBOARD_A) && !Window::GetKeyboard()->KeyDown(KEYBOARD_D))
-	{
-		if (rotationOnPlane < -0.02)
-		{
-			PhysNode->SetAngularVelocity(Vector3(0, 0, Speed_Turn));
-		}
-		else if (rotationOnPlane > 0.02)
-		{
-			PhysNode->SetAngularVelocity(Vector3(0, 0, -Speed_Turn));
-		}
-		else
-		{
-			PhysNode->SetAngularVelocity(Vector3(0, 0, 0));
-		}
-	}
-	//return statement with controller
-	else if (!Window::GetKeyboard()->KeyDown(KEYBOARD_A) && !Window::GetKeyboard()->KeyDown(KEYBOARD_D))
-	{
-		//if (rotationOnPlane < -0.02 && (normRotOnPlane > normalisedLX))
-		if (rotationOnPlane < -0.02 && (normRotOnPlane > LXHigh))
-		{
-			PhysNode->SetAngularVelocity(Vector3(0, 0, Speed_Turn));
-		}
-		//else if (rotationOnPlane > 0.02 && (normRotOnPlane > -normalisedLX))
-		else if (rotationOnPlane > 0.02 && (normRotOnPlane > -LXHigh))
-		{
-			PhysNode->SetAngularVelocity(Vector3(0, 0, -Speed_Turn));
-		}
-		else
-		{
-			PhysNode->SetAngularVelocity(Vector3(0, 0, 0));
-		}
-	}
+
 
 	//---------------------------------------------------------------------------------------------------
 	//Check for cooldown trigger input
