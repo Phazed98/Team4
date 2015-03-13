@@ -15,8 +15,8 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)
 	galaxyShield.InitParticleSystem(3, Vector3(0, 0, 0));
 	fire_system.InitParticleSystem(0, Vector3(0, 0, 0));
 	yellow_system.InitParticleSystem(4, Vector3(0, 0, 0));
-	red_system.InitParticleSystem(5, Vector3(0, 0, 0));
-	blue_system.InitParticleSystem(6, Vector3(0, 0, 0));
+//	red_system.InitParticleSystem(5, Vector3(0, 0, 0));
+//	blue_system.InitParticleSystem(6, Vector3(0, 0, 0));
 
 	deferTimer = new float(0);
 	postprocessTimer = new float(0);
@@ -1273,7 +1273,7 @@ void Renderer::DrawGeyser(){
 	PopMatrix();
 }
 
-void Renderer::Draw_yellow_powerup(){
+void Renderer::Draw_powerup(){
 	PushMatrix();
 	viewMatrix = camera->BuildViewMatrix();
 	projMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float)width / (float)height, 60.0f);
@@ -1285,30 +1285,9 @@ void Renderer::Draw_yellow_powerup(){
 			viewMatrix = camera->BuildViewMatrix();
 		}
 
-		yellow_system.Render(msec, model_matrix, projMatrix, viewMatrix);
+		yellow_system.Render(msec, model_matrix, projMatrix, viewMatrix, 0);
 	}
-	PopMatrix();
-}
-void Renderer::Draw_red_powerup(){
-	PushMatrix();
-	viewMatrix = camera->BuildViewMatrix();
-	projMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float)width / (float)height, 60.0f);
-	for (vector<SceneNode*>::iterator i = redNode.begin(); i != redNode.end(); ++i)
-	{
-		Matrix4 model_matrix = (*i)->GetWorldTransform();
 
-		if (camera){
-			viewMatrix = camera->BuildViewMatrix();
-		}
-
-		red_system.Render(msec, model_matrix, projMatrix, viewMatrix);
-	}
-	PopMatrix();
-}
-void Renderer::Draw_blue_powerup(){
-	PushMatrix();
-	viewMatrix = camera->BuildViewMatrix();
-	projMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float)width / (float)height, 60.0f);
 	for (vector<SceneNode*>::iterator i = blueNode.begin(); i != blueNode.end(); ++i)
 	{
 		Matrix4 model_matrix = (*i)->GetWorldTransform();
@@ -1317,10 +1296,22 @@ void Renderer::Draw_blue_powerup(){
 			viewMatrix = camera->BuildViewMatrix();
 		}
 
-		blue_system.Render(msec, model_matrix, projMatrix, viewMatrix);
+		yellow_system.Render(msec, model_matrix, projMatrix, viewMatrix, 1);
+	}
+	for (vector<SceneNode*>::iterator i = redNode.begin(); i != redNode.end(); ++i)
+	{
+		Matrix4 model_matrix = (*i)->GetWorldTransform();
+
+		if (camera){
+			viewMatrix = camera->BuildViewMatrix();
+		}
+
+		yellow_system.Render(msec, model_matrix, projMatrix, viewMatrix, 2);
 	}
 	PopMatrix();
 }
+
+
 
 void Renderer::DrawFire(){
 	PushMatrix();
@@ -1407,9 +1398,8 @@ void Renderer::RenderParticleToTexture(){
 	
 	DrawTornado();
 	DrawGeyser();
-	Draw_yellow_powerup();
-	Draw_red_powerup();
-	Draw_blue_powerup();
+	Draw_powerup();
+	
 	DrawFire();
 	glUseProgram(0);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);

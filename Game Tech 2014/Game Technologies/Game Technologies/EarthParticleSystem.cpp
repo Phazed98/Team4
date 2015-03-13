@@ -93,19 +93,23 @@ bool EarthParticleSystem::InitParticleSystem(int shape_type, const Vector3& Pos)
 		particleUpdateShader = new Shader(EARTH_SHADER_DIR"vs_update.glsl", EARTH_SHADER_DIR"fs_update.glsl", EARTH_SHADER_DIR"gs_updateShield.glsl");
 		flame_texture = SOIL_load_OGL_texture(TEXTUREDIR"blueShield.jpg",
 			SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_COMPRESS_TO_DXT);
+		
+
 		break;
 	}
 	case 4:{
-		particle_lifetime = 7000.f;
+		particle_lifetime = 10000.f;
 		particle_size = 40;
 		particleUpdateShader = new Shader(EARTH_SHADER_DIR"vs_update.glsl", EARTH_SHADER_DIR"fs_update.glsl", EARTH_SHADER_DIR"gs_updateAWESOME.glsl");
-		flame_texture = SOIL_load_OGL_texture(TEXTUREDIR"yellowPower.jpg",
-			SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_COMPRESS_TO_DXT);
+		
+		powerup_texture[0] = SOIL_load_OGL_texture(TEXTUREDIR"life2.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, 0);
+		powerup_texture[1] = SOIL_load_OGL_texture(TEXTUREDIR"redPower.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, 0);
+		powerup_texture[2] = SOIL_load_OGL_texture(TEXTUREDIR"bluePower.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, 0);
 		break;
 		
 	}
 	case 5:{
-		particle_lifetime = 7000.f;
+		particle_lifetime = 10000.f;
 		particle_size = 40;
 		particleUpdateShader = new Shader(EARTH_SHADER_DIR"vs_update.glsl", EARTH_SHADER_DIR"fs_update.glsl", EARTH_SHADER_DIR"gs_updateAWESOME.glsl");
 		flame_texture = SOIL_load_OGL_texture(TEXTUREDIR"redPower.jpg",
@@ -114,7 +118,7 @@ bool EarthParticleSystem::InitParticleSystem(int shape_type, const Vector3& Pos)
 
 	}
 	case 6:{
-		particle_lifetime = 7000.f;
+		particle_lifetime = 10000.f;
 		particle_size = 40;
 		particleUpdateShader = new Shader(EARTH_SHADER_DIR"vs_update.glsl", EARTH_SHADER_DIR"fs_update.glsl", EARTH_SHADER_DIR"gs_updateAWESOME.glsl");
 		flame_texture = SOIL_load_OGL_texture(TEXTUREDIR"bluePower.jpg",
@@ -200,15 +204,15 @@ bool EarthParticleSystem::InitRenderSystem(int shape_type){
 		break;
 	}
 	case 4: {
-		particleRenderShader = new Shader(EARTH_SHADER_DIR"vertexStrong.glsl", EARTH_SHADER_DIR"fragmentMedium.glsl", EARTH_SHADER_DIR"geometry.glsl");
+		particleRenderShader = new Shader(EARTH_SHADER_DIR"vertexStrong.glsl", EARTH_SHADER_DIR"fragmentStrong.glsl", EARTH_SHADER_DIR"geometry.glsl");
 		break;
 	}
 	case 5: {
-		particleRenderShader = new Shader(EARTH_SHADER_DIR"vertexStrong.glsl", EARTH_SHADER_DIR"fragmentMedium.glsl", EARTH_SHADER_DIR"geometry.glsl");
+		particleRenderShader = new Shader(EARTH_SHADER_DIR"vertexStrong.glsl", EARTH_SHADER_DIR"fragmentStrong.glsl", EARTH_SHADER_DIR"geometry.glsl");
 		break;
 	}
 	case 6: {
-		particleRenderShader = new Shader(EARTH_SHADER_DIR"vertexStrong.glsl", EARTH_SHADER_DIR"fragmentMedium.glsl", EARTH_SHADER_DIR"geometry.glsl");
+		particleRenderShader = new Shader(EARTH_SHADER_DIR"vertexStrong.glsl", EARTH_SHADER_DIR"fragmentStrong.glsl", EARTH_SHADER_DIR"geometry.glsl");
 		break;
 	}
 	}
@@ -221,8 +225,8 @@ bool EarthParticleSystem::InitRenderSystem(int shape_type){
 	return true;
 }
 
-void EarthParticleSystem::Render(float DeltaTime, const Matrix4& modelMatrix, const Matrix4& projMatrix , const Matrix4& viewMatrix ){
-
+void EarthParticleSystem::Render(float DeltaTime, const Matrix4& modelMatrix, const Matrix4& projMatrix , const Matrix4& viewMatrix, int type){
+	texture_type = type;
 	project_matrix = projMatrix;
 	view_matrix = viewMatrix;
 	m_time += DeltaTime;
@@ -395,8 +399,10 @@ void EarthParticleSystem::RenderParticles(const Matrix4& modelMatrix)
 		glUniform1f(glGetUniformLocation(particleRenderShader->GetProgram(), "MaxLifeTime"), particle_lifetime);
 	if (_shape == 3)
 		glUniform1f(glGetUniformLocation(particleRenderShader->GetProgram(), "MaxLifeTime"), SECOND_PARTICLE_LIFETIME);
-	if (_shape == 4)
+	if (_shape == 4){
 		glUniform1f(glGetUniformLocation(particleRenderShader->GetProgram(), "MaxLifeTime"), particle_lifetime);
+		flame_texture = powerup_texture[texture_type];
+	}
 	if (_shape == 5)
 		glUniform1f(glGetUniformLocation(particleRenderShader->GetProgram(), "MaxLifeTime"), particle_lifetime);
 	if (_shape == 6)

@@ -200,11 +200,11 @@ protected:
 	vector<SceneNode*> blueNode;
 	vector<SceneNode*> redNode;
 	EarthParticleSystem yellow_system;
-	EarthParticleSystem red_system;
-	EarthParticleSystem blue_system;
-	void Draw_yellow_powerup();
-	void Draw_red_powerup();
-	void Draw_blue_powerup();
+//	EarthParticleSystem red_system;
+//	EarthParticleSystem blue_system;
+	void Draw_powerup();
+//	void Draw_red_powerup();
+//	void Draw_blue_powerup();
 
 	//steven added for rendering different objects
 	Shader* water_plane_shader;

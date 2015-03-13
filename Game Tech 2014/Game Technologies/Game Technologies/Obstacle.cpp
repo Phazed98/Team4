@@ -27,12 +27,12 @@ Obstacle::Obstacle(ObjectType* _tile, SceneNode* s, PhysicsNode* p, int _type, i
 		}
 		else if (powerupType == 2) // Cooldown
 		{
-			Renderer::GetRenderer().SetBlueformSceneNode(renderNode);
+			Renderer::GetRenderer().SetRedformSceneNode(renderNode);
 			renderNode->SetColour(Vector4(0, 1, 0, 1.0f));
 		}
 		else if (powerupType == 3) // Immunity
 		{
-			Renderer::GetRenderer().SetRedformSceneNode(renderNode);
+			Renderer::GetRenderer().SetBlueformSceneNode(renderNode);
 			renderNode->SetColour(Vector4(0, 0, 1, 1.0f));
 		}
 	}
@@ -277,23 +277,5 @@ void Obstacle::resetObstacle(){
 	else
 	{
 		goingLeft = false;
-	}
-	if (obstacleType == 3) // PowerUp
-	{
-		if (powerupType == 1) // Slow
-		{
-			Renderer::GetRenderer().SetYellowformSceneNode(renderNode);
-			renderNode->SetColour(Vector4(1, 0, 0, 1.0f));
-		}
-		else if (powerupType == 2) // Cooldown
-		{
-			Renderer::GetRenderer().SetBlueformSceneNode(renderNode);
-			renderNode->SetColour(Vector4(0, 1, 0, 1.0f));
-		}
-		else if (powerupType == 3) // Immunity
-		{
-			Renderer::GetRenderer().SetRedformSceneNode(renderNode);
-			renderNode->SetColour(Vector4(0, 0, 1, 1.0f));
-		}
 	}
 }

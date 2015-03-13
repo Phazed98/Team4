@@ -22,7 +22,7 @@ public:
 
 	bool InitParticleSystem(int shape_type, const Vector3& Pos);
 
-	void Render(float DeltaTimeMillis, const Matrix4& modelMatrix = Matrix4(), const Matrix4& projMatrix = Matrix4(), const Matrix4& viewMatrix = Matrix4());
+	void Render(float DeltaTimeMillis, const Matrix4& modelMatrix = Matrix4(), const Matrix4& projMatrix = Matrix4(), const Matrix4& viewMatrix = Matrix4(), int texture_type = 0);
 private:
 
 	void UpdateParticles(int DeltaTime);
@@ -39,6 +39,7 @@ private:
 	int m_time;
 	GLuint particle_texture;
 	GLuint flame_texture;
+	GLuint powerup_texture[3];
 	GLuint random_texture1;
 	GLuint random_texture2;
 
@@ -71,4 +72,6 @@ private:
 	float first_particle_launch_time;
 	float second_particle_lifetime;
 	float render_particle_lifetime;
+
+	int texture_type;
 };
