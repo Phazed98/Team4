@@ -556,6 +556,11 @@ Obstacle* MyGame::BuildObstacleEntity(float size, int type, int subType, ObjectT
 	//	Renderer::GetRenderer().SetLifeformSceneNode((LifeformSceneNode*)s);
 	//	size = size / size;
 	//}
+
+	else if (_obstacle_type == 3){
+		s = new SceneNode(sphere);
+		size = size / size;
+	}
 	
 	else if (subType == 0 && _obstacle_type == 0){
 		s = new SceneNode(sphere);
@@ -580,7 +585,16 @@ Obstacle* MyGame::BuildObstacleEntity(float size, int type, int subType, ObjectT
 	g->SetSize((int)size);
 	g->ConnectToSystems();
 
+
+
 	//-------------------------------------------------------------
+	if (_obstacle_type == 3)
+	{
+		p->SetAABBHalfLength(25);
+	}
+
+
+
 	if (subType == 0 && _obstacle_type == 4)
 	{
 		p->SetAABBHalfLength(25.f);

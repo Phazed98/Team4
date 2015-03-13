@@ -262,6 +262,24 @@ void	PhysicsSystem::ObstacleCollisions()
 						SoundSystem::GetSoundSystem()->PlaySoundA(SoundManager::GetSound("../../Sounds/watercross.wav"), Vector3());
 						playerVehicle->triggerPlaneSwitch();
 					}
+
+					//check if powerup
+					else if (Obstacles[i]->getObstacleType() == 3 && Obstacles[i]->GetPowerupType() == 1 && playerVehicle->getHasSlowPowerUp() == false)
+					{
+						playerVehicle->setHasSlowPowerUp(true);
+						Obstacles[i]->GetRidOfObstacle();
+					}
+					else if (Obstacles[i]->getObstacleType() == 3 && Obstacles[i]->GetPowerupType() == 2 && playerVehicle->getHasCDRedPowerUp() == false)
+					{
+						playerVehicle->setHasCDRedPowerUp(true);
+						Obstacles[i]->GetRidOfObstacle();
+					}
+					else if (Obstacles[i]->getObstacleType() == 3 && Obstacles[i]->GetPowerupType() == 3 && playerVehicle->getHasImmunityPowerUp() == false)
+					{
+						playerVehicle->setHasImmunityPowerUp(true);
+						Obstacles[i]->GetRidOfObstacle();
+					}
+
 					else
 					{
 
@@ -275,38 +293,7 @@ void	PhysicsSystem::ObstacleCollisions()
 							if (collisionData->m_normal.z > 0.0f)
 							{
 
-								//check if object is a powerup
-								if (Obstacles[i]->getObstacleType() == 3)
-								{
-									switch (Obstacles[i]->GetPowerupType())
-									{
-									case 1:
-										if (playerVehicle->getHasSlowPowerUp() == false)
-										{
-											playerVehicle->setHasSlowPowerUp(true);
-											Obstacles[i]->GetRidOfObstacle();
-										}
-										break;
-
-									case 2:
-										if (playerVehicle->getHasCDRedPowerUp() == false)
-										{
-											playerVehicle->setHasCDRedPowerUp(true);
-											Obstacles[i]->GetRidOfObstacle();
-										}
-										break;
-
-									case 3:
-										if (playerVehicle->getHasImmunityPowerUp() == false)
-										{
-											playerVehicle->setHasImmunityPowerUp(true);
-											Obstacles[i]->GetRidOfObstacle();
-										}
-										break;
-									}
-								}
-								//-------------------------------------Kostas made it----------------------
-								else if (Obstacles[i]->getObstacleType() == 2 && Obstacles[i]->GetCoinCollected() == false)
+								if (Obstacles[i]->getObstacleType() == 2 && Obstacles[i]->GetCoinCollected() == false)
 								{
 									numberOfCoins++;
 									Obstacles[i]->SetCoinCollected(true);
