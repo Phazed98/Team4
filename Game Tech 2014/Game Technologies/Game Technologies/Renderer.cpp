@@ -75,29 +75,31 @@ Renderer::~Renderer(void)
 		delete simpleShader;
 		delete motion_blur_shader;
 		delete quad_motion_blur;
-
+		delete textShader;
+		delete mainMenuQuad;
 		delete camera;
 		
 		glDeleteFramebuffers(1, &motion_blur_FBO);
 		glDeleteTextures(1, &motion_blur_ColourTex);
 		
+		for (int i = 0; i < PAUSE_BUTTONS_SIZE; i++)
+		{
+			delete pauseMenuButtons[i];
+		}
 
 		currentShader = NULL;
 	}
 
 	delete menuShader;
-	delete textShader;
+	
 	delete basicFont;
-	delete mainMenuQuad;
+
 	delete ipQuad;
 	for (int i = 0; i < MAIN_BUTTONS_SIZE; i++)
 	{
 		delete mainMenuButtons[i];
 	}
-	for (int i = 0; i < PAUSE_BUTTONS_SIZE; i++)
-	{
-		delete pauseMenuButtons[i];
-	}
+	
 	currentShader = NULL;
 }
 
@@ -909,7 +911,7 @@ buttonPressed Renderer::RenderMainMenu()
 	glDepthMask(false);
 	glBlendFunc(GL_SRC_ALPHA, GL_SRC_ALPHA);
 
-	DrawText(ipAddress, Vector3(width / 4.0f - ipAddress.length() * 12.0f - 20, height / 2 + 175.0f, 0.0f), 20.0f, false);
+	DrawText(ipAddress, Vector3(width / 4.0f - ipAddress.length() * 12.0f - 180, height / 2 + 250.0f, 0.0f), 36.0f, false);
 
 
 	glDepthMask(true);
@@ -1257,19 +1259,19 @@ void Renderer::displayInformation()
 	//Button Y for Immunity
 	if (PhysicsSystem::GetVehicle()->getHasImmunityPowerUp())
 	{
-		DrawText("Immune", Vector3(740, 15, 0), 20, false);
+		DrawText("Immune", Vector3(1500, 15, 0), 20, false);
 	}
 
 	//Button X for Slow
 	if (PhysicsSystem::GetVehicle()->getHasSlowPowerUp())
 	{
-		DrawText("Slow", Vector3(640, 85, 0), 20, false);
+		DrawText("Slow", Vector3(1400, 85, 0), 20, false);
 	}
 
 	//Button B for Cooldown
 	if (PhysicsSystem::GetVehicle()->getHasCDRedPowerUp())
 	{
-		DrawText("No CD", Vector3(880, 85, 0), 20, false);
+		DrawText("No CD", Vector3(1600, 85, 0), 20, false);
 	}
 
 	//--------------------------------------------------GUI--------------------------------------------------------------------------------
