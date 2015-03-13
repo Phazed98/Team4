@@ -21,6 +21,7 @@ Implements:OGLRendere
 #include "TornadoSceneNode.h"
 #include "FireSceneNode.h"
 #include "GeyserSceneNode.h"
+#include "LifeformSceneNode.h"
 #include "PointLight.h"
 
 #define PAUSE_BUTTONS_SIZE 2
@@ -59,6 +60,7 @@ public:
 
 	void SetTornadoSceneNode(TornadoSceneNode* node){ tornadoNode.push_back(node); }
 	void SetGeyserSceneNode(GeyserSceneNode* node){ geyserNode.push_back(node); }
+	void SetLifeformSceneNode(LifeformSceneNode* node){ lifeNode.push_back(node); }
 
 	//Statics
 	static bool Initialise() 
@@ -192,12 +194,18 @@ protected:
 	EarthParticleSystem geyser_system;
 	void DrawGeyser();
 
+	vector<LifeformSceneNode*> lifeNode;
+	EarthParticleSystem life_system;
+	void DrawLife();
+
 	//steven added for rendering different objects
 	Shader* water_plane_shader;
 	float total_sec_pass;
 
 	EarthParticleSystem galaxy_system;
 	EarthParticleSystem galaxyShield;
+
+	EarthParticleSystem awesomeness;
 
 	void DrawFire();
 

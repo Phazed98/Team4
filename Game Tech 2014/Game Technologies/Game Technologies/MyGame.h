@@ -13,6 +13,7 @@
 #include "TornadoSceneNode.h"
 #include "FireSceneNode.h"
 #include "GeyserSceneNode.h"
+#include "LifeformSceneNode.h"
 
 
 struct sendData

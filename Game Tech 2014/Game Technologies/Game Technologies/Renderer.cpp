@@ -14,6 +14,7 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)
 	galaxy_system.InitParticleSystem(1, Vector3(0, 0, -200));
 	galaxyShield.InitParticleSystem(3, Vector3(0, 0, 0));
 	fire_system.InitParticleSystem(0, Vector3(0, 0, 0));
+	life_system.InitParticleSystem(4, Vector3(0, 0, 0));
 
 	deferTimer = new float(0);
 	postprocessTimer = new float(0);
@@ -1270,6 +1271,23 @@ void Renderer::DrawGeyser(){
 	PopMatrix();
 }
 
+void Renderer::DrawLife(){
+	PushMatrix();
+	viewMatrix = camera->BuildViewMatrix();
+	projMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float)width / (float)height, 60.0f);
+	for (vector<LifeformSceneNode*>::iterator i = lifeNode.begin(); i != lifeNode.end(); ++i)
+	{
+		Matrix4 model_matrix = (*i)->GetLifeFormSceneNode()->GetWorldTransform();
+
+		if (camera){
+			viewMatrix = camera->BuildViewMatrix();
+		}
+
+		life_system.Render(msec, model_matrix, projMatrix, viewMatrix);
+	}
+	PopMatrix();
+}
+
 void Renderer::DrawFire(){
 	PushMatrix();
 	viewMatrix = camera->BuildViewMatrix();
@@ -1355,6 +1373,7 @@ void Renderer::RenderParticleToTexture(){
 	
 	DrawTornado();
 	DrawGeyser();
+	DrawLife();
 	DrawFire();
 	glUseProgram(0);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);

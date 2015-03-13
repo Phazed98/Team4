@@ -153,6 +153,9 @@
     <ClCompile Include="GeyserSceneNode.cpp">
       <Filter>Source Files\Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="LifeformSceneNode.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CollisionHelper.h">
@@ -288,6 +291,9 @@
       <Filter>Header Files\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="PointLight.h">
+      <Filter>Header Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="LifeformSceneNode.h">
       <Filter>Header Files\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
