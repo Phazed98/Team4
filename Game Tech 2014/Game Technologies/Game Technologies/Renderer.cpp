@@ -1185,7 +1185,7 @@ void Renderer::displayInformation()
 	DrawText("X  " + to_string(PhysicsSystem::GetPhysicsSystem().GetScoreMultiplier()), Vector3(205, 50, 0), 25, false);
 
 	DrawText("COINS", Vector3(375, 15, 0), 25, false);
-	DrawText("X  " + to_string(PhysicsSystem::GetPhysicsSystem().GetNumberOfCoins()), Vector3(395, 50, 0), 25, false);
+	DrawText(to_string(PhysicsSystem::GetPhysicsSystem().GetNumberOfCoins()) + '/' + to_string((PhysicsSystem::GetPhysicsSystem().GetScoreMultiplier())+ 1), Vector3(395, 50, 0), 25, false);
 
 	DrawText("Timer", Vector3(25, 105, 0), 25, false);
 	DrawText(to_string(PhysicsSystem::GetPhysicsSystem().GetCheckPointTimer()), Vector3(32, 135, 0), 25, false);

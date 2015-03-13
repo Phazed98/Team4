@@ -55,6 +55,10 @@ public:
 	float getNormalisedPlaneSwitchProgress() { return normalisedPlaneSwitchProgress; }
 	int getPreviousPlaneID() { return previousPlaneID; }
 
+	//Sam - external trigger for plane change (special obstacles)
+	void triggerPlaneSwitch();
+
+
 protected:
 
 
@@ -133,4 +137,7 @@ protected:
 
 	//added by Daixi
 	int soundTemp;
+
+	//for scaling the plane switch cooldowns
+	void scalePlaneSwitchCDs();
 };

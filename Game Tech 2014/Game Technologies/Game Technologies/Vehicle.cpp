@@ -1,4 +1,5 @@
 #include"Vehicle.h"
+#include "PhysicsSystem.h"
 
 #define CONTROLLER_ROTATION_TOLERENCE 0.02f
 
@@ -56,6 +57,8 @@ void Vehicle::UpdatePlayer(float msec)
 {
 	//update cooldowns
 	updateCooldowns(msec);
+	//scale cooldown for switching to keep game playable as difficulty increases.
+	scalePlaneSwitchCDs();
 
 	UpdatePlayerRotationOnPlane();
 
@@ -379,9 +382,7 @@ void Vehicle::GetSwitchPlaneInputs(float normalisedRX, float normalisedRY)
 		//set previous plane ID to current ID before change
 		previousPlaneID = currentPlaneID;
 
-		Vector3 EulerOrientation;
 		//set new position then change the plane of current velocity (maintain in a new direction relative to new plane
-		Vector3 currentVelocity = PhysNode->GetLinearVelocity();
 		switch (currentPlaneID)
 		{
 		case 0:
@@ -889,4 +890,87 @@ void Vehicle::updateCooldowns(float msec)
 			cdRedPowerUpActive = false;
 		}
 	}
+}
+
+void Vehicle::triggerPlaneSwitch()
+{
+	//set previous plane ID to current ID before change
+	previousPlaneID = currentPlaneID;
+
+	//################## ADD RANDOM HERE FOR CURRENTPLANEID FROM 0 TO 3, THEN WHILE CURRENT ROLL AGAIN #######################
+
+	//########################################################################################################################
+
+	//set new position then change the plane of current velocity (maintain in a new direction relative to new plane
+	switch (currentPlaneID)
+	{
+	case 0:
+		//set start location
+		startPoint = Vector2(PhysNode->GetPosition().x, PhysNode->GetPosition().y);
+		//move player to relative position on plane
+		endPoint = Vector2(-xLocationOnPlane, -SURFACE_CENTRE_OFFSET);
+		//set relevant variables;
+		isSwitchingPlane = true;
+		planeSwitchProgress = 0;
+		//set velocity to 0 as will follow the spline
+		PhysNode->SetLinearVelocity(Vector3(0, 0, 0));
+		//change currentPlaneID
+		currentPlaneID = 2;
+		break;
+
+	case 1:
+		//set start location
+		startPoint = Vector2(PhysNode->GetPosition().x, PhysNode->GetPosition().y);
+		//move player to relative position on plane
+		endPoint = Vector2(-SURFACE_CENTRE_OFFSET, -xLocationOnPlane);
+		//set relevant variables;
+		isSwitchingPlane = true;
+		planeSwitchProgress = 0;
+		//set velocity to 0 as will follow the spline
+		PhysNode->SetLinearVelocity(Vector3(0, 0, 0));
+		//change currentPlaneID
+		currentPlaneID = 3;
+		break;
+
+	case 2:
+		//set start location
+		startPoint = Vector2(PhysNode->GetPosition().x, PhysNode->GetPosition().y);
+		//move player to relative position on plane
+		endPoint = Vector2(-xLocationOnPlane, SURFACE_CENTRE_OFFSET);
+		//set relevant variables;
+		isSwitchingPlane = true;
+		planeSwitchProgress = 0;
+		//set velocity to 0 as will follow the spline
+		PhysNode->SetLinearVelocity(Vector3(0, 0, 0));
+		//change currentPlaneID
+		currentPlaneID = 0;
+		break;
+
+	case 3:
+		//set start location
+		startPoint = Vector2(PhysNode->GetPosition().x, PhysNode->GetPosition().y);
+		//move player to relative position on plane
+		endPoint = Vector2(SURFACE_CENTRE_OFFSET, -xLocationOnPlane);
+		//set relevant variables;
+		isSwitchingPlane = true;
+		planeSwitchProgress = 0;
+		//set velocity to 0 as will follow the spline
+		PhysNode->SetLinearVelocity(Vector3(0, 0, 0));
+		//change currentPlaneID
+		currentPlaneID = 1;
+		break;
+
+	}
+	SoundSystem::GetSoundSystem()->SwitchBoard(SoundManager::GetSound("../../Sounds/switchsound01.wav"));
+}
+
+void Vehicle::scalePlaneSwitchCDs()
+{
+	//starting track speed is 15f
+	//starting planeSwitchTime is 1000
+	//starting PlaneSwitchCDTime is 1500
+
+	float speedScale = 15.0f / PhysicsSystem::GetTrackSpeed();
+	planeSwitchTime = speedScale * 1000;
+	PlaneSwitchCDTime = speedScale * 1500;
 }

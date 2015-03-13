@@ -244,103 +244,106 @@ void	PhysicsSystem::ObstacleCollisions()
 				//check objects are close enough to collide
 				if (CheckAABBCollision(*playerPhysNode, *otherObj) == true)
 				{
-					//create the collision objects to test for an actual collision
-					CollisionData* collisionData = new CollisionData();
-					GJK* gjkObj = new GJK();
-					//check for collision
-					if (gjkObj->CollisionDetection(*playerPhysNode, *otherObj, collisionData))
+					//check if a tornado
+					if (Obstacles[i]->getObstacleType() == 4 && Obstacles[i]->getSubType() == 0)
 					{
-						//bounce object if collision normal is positive in z axis
-						if (collisionData->m_normal.z > 0.0f)
+						SoundSystem::GetSoundSystem()->PlaySoundA(SoundManager::GetSound("../../Sounds/thundercross.wav"), Vector3());
+						playerVehicle->triggerPlaneSwitch();
+					}
+					//check if a flaming obstacle
+					else if (Obstacles[i]->getObstacleType() == 4 && Obstacles[i]->getSubType() == 1)
+					{
+						SoundSystem::GetSoundSystem()->PlaySoundA(SoundManager::GetSound("../../Sounds/firecross.wav"), Vector3());
+						playerVehicle->triggerPlaneSwitch();
+					}
+					//check if a water spout 
+					else if (Obstacles[i]->getObstacleType() == 0 && Obstacles[i]->getSubType() == 3)
+					{
+						SoundSystem::GetSoundSystem()->PlaySoundA(SoundManager::GetSound("../../Sounds/watercross.wav"), Vector3());
+						playerVehicle->triggerPlaneSwitch();
+					}
+					else
+					{
+
+						//create the collision objects to test for an actual collision
+						CollisionData* collisionData = new CollisionData();
+						GJK* gjkObj = new GJK();
+						//check for collision
+						if (gjkObj->CollisionDetection(*playerPhysNode, *otherObj, collisionData))
 						{
-
-							//check if object is a powerup
-							if (Obstacles[i]->getObstacleType() == 3)
+							//bounce object if collision normal is positive in z axis
+							if (collisionData->m_normal.z > 0.0f)
 							{
-								switch (Obstacles[i]->GetPowerupType())
+
+								//check if object is a powerup
+								if (Obstacles[i]->getObstacleType() == 3)
 								{
-								case 1:
-									if (playerVehicle->getHasSlowPowerUp() == false)
+									switch (Obstacles[i]->GetPowerupType())
 									{
-										playerVehicle->setHasSlowPowerUp(true);
-										Obstacles[i]->GetRidOfObstacle();
-									}
-									break;
+									case 1:
+										if (playerVehicle->getHasSlowPowerUp() == false)
+										{
+											playerVehicle->setHasSlowPowerUp(true);
+											Obstacles[i]->GetRidOfObstacle();
+										}
+										break;
 
-								case 2:
-									if (playerVehicle->getHasCDRedPowerUp() == false)
-									{
-										playerVehicle->setHasCDRedPowerUp(true);
-										Obstacles[i]->GetRidOfObstacle();
-									}
-									break;
+									case 2:
+										if (playerVehicle->getHasCDRedPowerUp() == false)
+										{
+											playerVehicle->setHasCDRedPowerUp(true);
+											Obstacles[i]->GetRidOfObstacle();
+										}
+										break;
 
-								case 3:
-									if (playerVehicle->getHasImmunityPowerUp() == false)
-									{
-										playerVehicle->setHasImmunityPowerUp(true);
-										Obstacles[i]->GetRidOfObstacle();
+									case 3:
+										if (playerVehicle->getHasImmunityPowerUp() == false)
+										{
+											playerVehicle->setHasImmunityPowerUp(true);
+											Obstacles[i]->GetRidOfObstacle();
+										}
+										break;
 									}
-									break;
 								}
-							}
-							//check if a special obstacle; tornado, flamethrower, water spout
-							else if (Obstacles[i]->getObstacleType() == 4)
-							{
-								switch (Obstacles[i]->getSubType())
+								//-------------------------------------Kostas made it----------------------
+								else if (Obstacles[i]->getObstacleType() == 2 && Obstacles[i]->GetCoinCollected() == false)
 								{
-									//tornado
-									
-								case 0:
-									//flames
-									SoundSystem::GetSoundSystem()->PlaySoundA(SoundManager::GetSound("../../Sounds/thundercross.wav"), Vector3());
+									numberOfCoins++;
+									Obstacles[i]->SetCoinCollected(true);
+									Obstacles[i]->GetPhysicsNode().SetPosition(Vector3(1000, 1000, 1000));
+									Obstacles[i]->GetRidOfObstacle();
 
-								case 1:
-									//water spout 
-									SoundSystem::GetSoundSystem()->PlaySoundA(SoundManager::GetSound("../../Sounds/firecross.wav"), Vector3());
-
-								case 3:
-									SoundSystem::GetSoundSystem()->PlaySoundA(SoundManager::GetSound("../../Sounds/watercross.wav"), Vector3());
-									break;
-
-								case 2:
-									//do nothing
-									break;
 								}
-							}//-------------------------------------Kostas made it----------------------
-							else if (Obstacles[i]->getObstacleType() == 2 && Obstacles[i]->GetCoinCollected() == false)
-							{
-								numberOfCoins++;
-								Obstacles[i]->SetCoinCollected(true);
-								Obstacles[i]->GetPhysicsNode().SetPosition(Vector3(1000, 1000, 1000));
-								Obstacles[i]->GetRidOfObstacle();
-
-							}
-							//-------------------------------------------------------------------------
-							else
-							{
-								//link the amount reversed to both track speed
-								zAmountToReverse = COLLISION_BOUNCE_FACTOR * track_speed;
-								//check reverse amount doesnt go off the back of the current tile (in case no previous tile)
-								if (zAmountToReverse > (TILE_DEPTH - playerPhysNode->GetAABBHalfLength() - 10.0f)) //the 10.0 is just to prevent the player going right to the edge of the tile
+								//-------------------------------------------------------------------------
+								else
 								{
-									zAmountToReverse = TILE_DEPTH - playerPhysNode->GetAABBHalfLength() - 10.0f;
+									//link the amount reversed to both track speed
+									zAmountToReverse = COLLISION_BOUNCE_FACTOR * track_speed;
+									//check reverse amount doesnt go off the back of the current tile (in case no previous tile)
+									if (zAmountToReverse > (TILE_DEPTH - playerPhysNode->GetAABBHalfLength() - 10.0f)) //the 10.0 is just to prevent the player going right to the edge of the tile
+									{
+										zAmountToReverse = TILE_DEPTH - playerPhysNode->GetAABBHalfLength() - 10.0f;
+									}
+									//store forward track speed at moment of impact
+									initialTrackSpeed = track_speed;
+									//set track to be reversing
+									playerIsReversing = true;
+									track_speed = -track_speed;
+									//zero reverse distance so far
+									distanceReversed = 0.0f;
+									//set track accelerating to false (collision still possible if accelerating after collision
+									playerIsAccelerating = false;
+									SoundSystem::GetSoundSystem()->PlaySoundA(SoundManager::GetSound("../../Sounds/collision01.wav"), Vector3());
+
+									//lose coins
+									scoreMultiplier = 1;
+									numberOfCoins = 0;
 								}
-								//store forward track speed at moment of impact
-								initialTrackSpeed = track_speed;
-								//set track to be reversing
-								playerIsReversing = true;
-								track_speed = -track_speed;
-								//zero reverse distance so far
-								distanceReversed = 0.0f;
-								//set track accelerating to false (collision still possible if accelerating after collision
-								playerIsAccelerating = false;
-								SoundSystem::GetSoundSystem()->PlaySoundA(SoundManager::GetSound("../../Sounds/collision01.wav"), Vector3());
 							}
 						}
+						delete collisionData;
+						delete gjkObj;
 					}
-					delete collisionData;
-					delete gjkObj;
 				}
 			}
 		}
