@@ -106,7 +106,12 @@ void GameClass::UpdateRendering(float msec)
 			}
 			else if (currentGameState == GAME_OVER)
 			{
-				Renderer::GetRenderer().RenderPauseMenu();
+				Renderer::GetRenderer().RenderGameOver();
+
+				if (Window::GetWindow().GetKeyboard()->KeyTriggered(KEYBOARD_RETURN) || Window::GetWindow().GetKeyboard()->KeyTriggered(KEYBOARD_ESCAPE))
+				{
+					exit(0);
+				}
 			}
 		}
 

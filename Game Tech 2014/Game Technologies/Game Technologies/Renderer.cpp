@@ -9,25 +9,12 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)
 {
 	fullyInitialised = false;
 
-	tornado_system.InitParticleSystem(0, Vector3(0, 10, 0));
-	geyser_system.InitParticleSystem(2, Vector3(0, 5, 0));
-	galaxy_system.InitParticleSystem(1, Vector3(0, 0, -200));
-	galaxyShield.InitParticleSystem(3, Vector3(0, 0, 0));
-	fire_system.InitParticleSystem(0, Vector3(0, 0, 0));
-	yellow_system.InitParticleSystem(4, Vector3(0, 0, 0));
-//	red_system.InitParticleSystem(5, Vector3(0, 0, 0));
-//	blue_system.InitParticleSystem(6, Vector3(0, 0, 0));
-
-	deferTimer = new float(0);
-	postprocessTimer = new float(0);
-	motionblurTimer = new float(0);
-	
 	menuShader = new Shader(SHADERDIR"menuVertex.glsl", SHADERDIR"menuFragment.glsl");
 	basicFont = new Font(SOIL_load_OGL_texture(TEXTUREDIR"tahoma.tga", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_COMPRESS_TO_DXT), 16, 16);
-	textShader = new Shader(SHADERDIR"TexVertex.glsl", SHADERDIR"TexFragment.glsl");
+	
 	ipAddress = "127.0.0.1";
 
-	if (!menuShader->LinkProgram() || !textShader->LinkProgram())
+	if (!menuShader->LinkProgram() )//|| !textShader->LinkProgram())
 	{
 		cout << "error in link shaders" << endl;
 		return;
@@ -36,12 +23,12 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)
 	pauseButtonIndex = 0;
 	mainButtonIndex = 0;
 
-	mainMenuQuad = Mesh::GenerateQuad();
-	mainMenuQuad->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"Background.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
+	quad = Mesh::GenerateQuad();
+	quad->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"Background.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
+	quad->SetColour(new Vector4(1, 0, 0, 1));
 
 	ipQuad = Mesh::GenerateQuad();
 	ipQuad->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"IPBox.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
-
 
 	//Main Menu Buttons
 
@@ -75,20 +62,8 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)
 	mainMenuButtons[5]->SetDefaultTexture(SOIL_load_OGL_texture(TEXTUREDIR"MenuButtons/MainExitButton.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
 	mainMenuButtons[5]->SetHighlightTexture(SOIL_load_OGL_texture(TEXTUREDIR"MenuButtons/MainExitButtonHL.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
 
-	//Pause Menu Buttons
-
-	//Resume
-	pauseMenuButtons[0] = new Button(Mesh::GenerateQuad());
-	pauseMenuButtons[0]->SetDefaultTexture(SOIL_load_OGL_texture(TEXTUREDIR"MenuButtons/resume.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
-	pauseMenuButtons[0]->SetHighlightTexture(SOIL_load_OGL_texture(TEXTUREDIR"MenuButtons/resumeHighlighted.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
-
-	//Exit
-	pauseMenuButtons[1] = new Button(Mesh::GenerateQuad());
-	pauseMenuButtons[1]->SetDefaultTexture(SOIL_load_OGL_texture(TEXTUREDIR"MenuButtons/ExitButton.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
-	pauseMenuButtons[1]->SetHighlightTexture(SOIL_load_OGL_texture(TEXTUREDIR"MenuButtons/ExitButtonHighlighted.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
-
+	
 	instance = this;
-
 	init = true;
 }
 
@@ -128,7 +103,47 @@ Renderer::~Renderer(void)
 void Renderer::fullyInit()
 {
 
-	
+	mainMenuQuad = Mesh::GenerateQuad();
+	mainMenuQuad->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"Background.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
+
+
+	RenderLoading(1, "Making Graphics");
+	textShader = new Shader(SHADERDIR"TexVertex.glsl", SHADERDIR"TexFragment.glsl");
+	if (!textShader->LinkProgram())
+	{
+		cout << "error in link shaders" << endl;
+		return;
+	}
+
+	//Pause Menu Buttons
+
+	//Resume
+	pauseMenuButtons[0] = new Button(Mesh::GenerateQuad());
+	pauseMenuButtons[0]->SetDefaultTexture(SOIL_load_OGL_texture(TEXTUREDIR"MenuButtons/resume.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
+	pauseMenuButtons[0]->SetHighlightTexture(SOIL_load_OGL_texture(TEXTUREDIR"MenuButtons/resumeHighlighted.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
+
+	//Exit
+	pauseMenuButtons[1] = new Button(Mesh::GenerateQuad());
+	pauseMenuButtons[1]->SetDefaultTexture(SOIL_load_OGL_texture(TEXTUREDIR"MenuButtons/ExitButton.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
+	pauseMenuButtons[1]->SetHighlightTexture(SOIL_load_OGL_texture(TEXTUREDIR"MenuButtons/ExitButtonHighlighted.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
+
+
+	tornado_system.InitParticleSystem(0, Vector3(0, 10, 0));
+	geyser_system.InitParticleSystem(2, Vector3(0, 5, 0));
+	galaxy_system.InitParticleSystem(1, Vector3(0, 0, -200));
+	galaxyShield.InitParticleSystem(3, Vector3(0, 0, 0));
+	fire_system.InitParticleSystem(0, Vector3(0, 0, 0));
+	yellow_system.InitParticleSystem(4, Vector3(0, 0, 0));
+	//	red_system.InitParticleSystem(5, Vector3(0, 0, 0));
+	//	blue_system.InitParticleSystem(6, Vector3(0, 0, 0));
+
+	deferTimer = new float(0);
+	postprocessTimer = new float(0);
+	motionblurTimer = new float(0);
+
+	GameOverQuad = Mesh::GenerateQuad();
+	GameOverQuad->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"EndGame.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
+
 
 	explosion = false;
 	explosion_time = 0;
@@ -174,9 +189,7 @@ void Renderer::fullyInit()
 	backgroundShader = new Shader(SHADERDIR"BackgroundVertex.glsl", SHADERDIR"BackgroundFragment.glsl");
 
 
-	quad = Mesh::GenerateQuad();
-	quad->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"Background.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
-	quad->SetColour(new Vector4(1, 0, 0, 1));
+	
 
 	
 	//--------------------------------------------------GUI--------------------------------------------------------------------------------
@@ -477,30 +490,21 @@ void Renderer::RenderPauseMenu()
 {
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-	if (camera)
-	{
-		SetCurrentShader(simpleShader);
-		glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), 0);
+	/*SetCurrentShader(simpleShader);
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), 0);*/
 
-		textureMatrix.ToIdentity();
-		modelMatrix.ToIdentity();
-		viewMatrix = camera->BuildViewMatrix();
-		projMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float)width / (float)height, 60.0f);
-		frameFrustum.FromMatrix(projMatrix * viewMatrix);
-		UpdateShaderMatrices();
+	textureMatrix.ToIdentity();
+	modelMatrix.ToIdentity();
+	projMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float)width / (float)height, 60.0f);
+	frameFrustum.FromMatrix(projMatrix * viewMatrix);
+	UpdateShaderMatrices();
 
-		//Return to default 'usable' state every frame!
-		glEnable(GL_DEPTH_TEST);
-		glEnable(GL_CULL_FACE);
-		glDisable(GL_STENCIL_TEST);
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-		BuildNodeLists(root);
-		SortNodeLists();
-		DrawNodes();
-		ClearNodeLists();
-	}
+	//Return to default 'usable' state every frame!
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+	glDisable(GL_STENCIL_TEST);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	//Set Shader to TexturedShader
 	SetCurrentShader(menuShader);
@@ -518,11 +522,17 @@ void Renderer::RenderPauseMenu()
 		toggleWireFrame();
 	}
 
-	Vector3 translation(-0.7f, -0.7f, 0.0f);
+	glDisable(GL_DEPTH_TEST);
+	mainMenuQuad->Draw();
+
+
+	Vector3 translation(-0.7f, -0.5f, 0.0f);
 	Vector3 scale(0.25f, 0.25f, 0.25f);
 
 	modelMatrix = Matrix4::Translation(translation) *  Matrix4::Scale(scale);
 	UpdateShaderMatrices();
+
+
 
 	for (int x = 0; x < PAUSE_BUTTONS_SIZE; x++)
 	{
@@ -606,6 +616,45 @@ void Renderer::RenderPauseMenu()
 			break;
 		}
 	}
+
+	glUseProgram(0);
+	SwapBuffers();
+}
+
+void Renderer::RenderGameOver()
+{
+	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	//Return to default 'usable' state every frame!
+
+	glEnable(GL_CULL_FACE);
+	glDisable(GL_STENCIL_TEST);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	//Set Shader to TexturedShader
+	SetCurrentShader(menuShader);
+
+	//Reset Matrixes
+	projMatrix = Matrix4::Orthographic(-1, 1, 1, -1, -1, 1);
+	viewMatrix.ToIdentity();
+	textureMatrix.ToIdentity();
+	modelMatrix.ToIdentity();
+	UpdateShaderMatrices();
+
+	glDisable(GL_DEPTH_TEST);
+	//Draw Background Image
+	GameOverQuad->Draw();
+
+	glDepthMask(false);
+	glBlendFunc(GL_SRC_ALPHA, GL_SRC_ALPHA);
+
+	string finalScore = "Final Score:";
+	DrawText(finalScore, Vector3(((width / 2) - (finalScore.length() * 15)), height / 2, 1), 25, false);
+	DrawText(to_string(PhysicsSystem::GetPhysicsSystem().GetScore()), Vector3(((width / 2) - (to_string(PhysicsSystem::GetPhysicsSystem().GetScore()).length() * 17)), height / 2 + 30, 0), 25, false);
+
+	glDepthMask(true);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 
 	glUseProgram(0);
 	SwapBuffers();
@@ -773,7 +822,7 @@ buttonPressed Renderer::RenderMainMenu()
 
 
 	glDisable(GL_DEPTH_TEST);
-	mainMenuQuad->Draw();
+	quad->Draw();
 
 	Vector3 translation2 = Vector3(-0.6f, 0.47f, 0.0f);
 	Vector3 scale2 = Vector3(0.35f, 0.15f, 0.35f);
@@ -922,35 +971,39 @@ buttonPressed Renderer::RenderMainMenu()
 
 	}
 
+	buttonPressed bp = NO_PRESSED;
+
 	if ((Window::GetWindow().GetKeyboard()->KeyTriggered(KEYBOARD_RETURN)) || controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_A)
 	{
 		SoundSystem::GetSoundSystem()->SwitchBoard(SoundManager::GetSound("../../Sounds/button.wav"));
+
+		
 		switch (mainButtonIndex)
 		{
 		case 0:
-			return SOLO;
+			bp = SOLO;
 			break;
 
 		case 1:
-			return HOST_2;
+			bp = HOST_2;
 			break;
 
 		case 2:
-			return HOST_3;
+			bp = HOST_3;
 			break;
 
 		case 3:
-			return HOST_4;
+			bp = HOST_4;
 			break;
 		case 4:
-			return CLIENT;
+			bp = CLIENT;
 			break;
 		case 5:
-			return EXIT;
+			bp = EXIT;
 			break;
 
 		default:
-			return NO_PRESSED;
+			bp = NO_PRESSED;
 			break;
 		}
 	}
@@ -958,7 +1011,7 @@ buttonPressed Renderer::RenderMainMenu()
 	glUseProgram(0);
 	SwapBuffers();
 
-	return NO_PRESSED;
+	return bp;
 }
 
 void Renderer::RenderLoading(int percent, string message)

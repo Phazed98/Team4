@@ -53,6 +53,7 @@ public:
 	void	RenderPauseMenu();
 	void	RenderUI();
 	buttonPressed	RenderMainMenu();
+	void RenderGameOver();
 	void	RenderLoading(int percent, string Message);
 	ChaseCamera* GetCamera(){ return camera; }
 	Matrix4 GetProjMatrix(){ return projMatrix; }
@@ -168,6 +169,7 @@ protected:
 	//Menu Buttons
 	Mesh*		mainMenuQuad;
 	Mesh*		ipQuad;
+	Mesh*		GameOverQuad;
 	Button*		pauseMenuButtons[PAUSE_BUTTONS_SIZE];
 	Button*		mainMenuButtons[MAIN_BUTTONS_SIZE];
 	int			mainButtonIndex;

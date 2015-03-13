@@ -37,8 +37,6 @@ void physicsLoop(GameClass* game, bool& running)
 
 int main() 
 {
-	SoundSystem::Initialise(); //Build SoundSystem
-
 	if(!Window::Initialise("Game Technologies", 1000,800,false )) 
 	{
 		return Quit(true, "Window failed to initialise!");
@@ -48,6 +46,9 @@ int main()
 	{
 		return Quit(true, "Renderer failed to initialise!");
 	}
+	Renderer::GetRenderer().RenderLoading(0, "Welcome");
+
+	SoundSystem::Initialise(); //Build SoundSystem
 
 	Window::GetWindow().LockMouseToWindow(true);
 	Window::GetWindow().ShowOSPointer(false);
@@ -57,8 +58,9 @@ int main()
 
 	GameTimer menuTimer;
 
-	while (Window::GetWindow().UpdateWindow() && bp == NO_PRESSED)
+	while (bp == NO_PRESSED)
 	{
+		Window::GetWindow().UpdateWindow();
 		float msec = menuTimer.GetTimedMS();
 		bp = Renderer::GetRenderer().RenderMainMenu();
 		Window::GetWindow().updateController(msec);
@@ -69,13 +71,14 @@ int main()
 		SoundSystem::GetSoundSystem()->Update(msec);
 	}
 
+
+
 	if (bp == EXIT)
 	{
 		//Window::Destroy();
 		Renderer::Destroy();
 		return 0;
 	}
-
 
 
 	Renderer::GetRenderer().fullyInit();
