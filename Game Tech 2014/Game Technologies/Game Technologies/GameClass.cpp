@@ -6,6 +6,7 @@ GameClass::GameClass()
 {
 	renderCounter	= 0.0f;
 	physicsCounter	= 0.0f;
+	gameOver = 0.0f;
 	currentGameState = GAME_PLAYING;
 	instance		= this;
 }
@@ -104,7 +105,8 @@ void GameClass::UpdateRendering(float msec)
 					Window::enableInputScrollLock();
 				}
 			}
-			else if (currentGameState == GAME_OVER)
+
+			else if (currentGameState == GAME_REALLY_OVER)
 			{
 				Renderer::GetRenderer().RenderGameOver();
 
@@ -112,6 +114,20 @@ void GameClass::UpdateRendering(float msec)
 				{
 					exit(0);
 				}
+			}
+
+
+			else if (currentGameState == GAME_OVER)
+			{
+				Renderer::GetRenderer().UpdateScene(1000.0f / (float)RENDER_HZ);
+				Renderer::GetRenderer().RenderScene();
+
+				gameOver += msec;
+				if (gameOver > 4000)
+				{
+					setCurrentState(GAME_REALLY_OVER);
+				}
+
 			}
 		}
 

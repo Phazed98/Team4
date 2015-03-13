@@ -15,6 +15,8 @@ in Vertex	{
 out vec4 FragColor;
 
 void main(void)	{
+//	vec2 texCoord = IN.texCoord;
+	
 	if(current_plane == 1){
 		float TimeInRadians_x = times*2;
 		float TimeInRadians_y = times*2;
@@ -22,10 +24,17 @@ void main(void)	{
 		float offset_y = cos(TimeInRadians_y+IN.texCoord.y*5*3.14)*DistortionAmount;
 
 		vec2 texCoord = vec2(IN.texCoord.x+offset_x,IN.texCoord.y+offset_y);
-		FragColor = texture(diffuseTex, texCoord);
-
+		if(times<5)
+			FragColor = (times/5)*texture(diffuseTex, texCoord);
+		else
+			FragColor	= texture(diffuseTex, texCoord);
 	}
-	else
-		FragColor	= texture(diffuseTex, IN.texCoord);
+	else{
+		if(times<5)
+			FragColor = (times/5)*texture(diffuseTex, IN.texCoord);
+		else
+			FragColor	= texture(diffuseTex, IN.texCoord);
+		
+	}
 	
 }

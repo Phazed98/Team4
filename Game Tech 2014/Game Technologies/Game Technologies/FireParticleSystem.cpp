@@ -1,4 +1,5 @@
 #include "FireParticleSystem.h"
+#include "PhysicsSystem.h"
 
 #define MAX_PARTICLES 20000
 //#define PARTICLE_LIFETIME 10000.0f
@@ -232,17 +233,12 @@ void FireParticleSystem::Render(float DeltaTimeMillis, const Matrix4& modelMatri
 			afterburner_index = (afterburner_index + 1) & 0x1;
 			flame_texture = afterburner_texture[afterburner_index];
 		}
-		if (Window::GetKeyboard()->KeyTriggered(KEYBOARD_2)) {
-
-
+		
+		float track_speed = PhysicsSystem::GetTrackSpeed();
+		if (track_speed < 0)
 			render_particle_lifetime = 300;
-		}
-
-		if (Window::GetKeyboard()->KeyTriggered(KEYBOARD_3)) {
-
-
-			render_particle_lifetime = second_particle_lifetime;
-		}
+		else
+			render_particle_lifetime = track_speed * 10 + 300;
 	}
 
 	glEnable(GL_DEPTH_TEST);

@@ -14,12 +14,14 @@
 
 class ChaseCamera;
 
-enum GameState { 
-	GAME_PLAYING, 
+enum GameState {
+	GAME_PLAYING,
 	GAME_PAUSED,
 	Game_LOADING,
 	GAME_OVER,
-	GAME_EXIT };
+	GAME_EXIT,
+	GAME_REALLY_OVER,
+};
 
 
 class GameClass	{
@@ -49,5 +51,7 @@ protected:
 
 	//added by Sam to pause game on controller disconnect
 	bool controllerConnected = false;
+
+	float gameOver;
 };
 

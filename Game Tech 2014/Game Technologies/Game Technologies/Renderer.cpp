@@ -2,6 +2,7 @@
 #include "ChaseCamera.h"
 #include "GamePadController.h"
 #include "../../nclgl/OBJMesh.h"
+#include "MyGame.h"
 
 Renderer* Renderer::instance = NULL;
 
@@ -1302,7 +1303,7 @@ void Renderer::DrawAfterBurner(){
 
 
 
-	if (Window::GetKeyboard()->KeyTriggered(KEYBOARD_M) || explosion) //Build Cube
+	if (MyGame::GetGameClass().getCurrentState()==GAME_OVER || explosion) //Build Cube
 	{
 		explosion = true;
 		explosion_time += msec;
@@ -1311,6 +1312,9 @@ void Renderer::DrawAfterBurner(){
 	else{
 		spaceship_scene_node->afterburner_system[0].Render(msec, model_matrix, projMatrix, viewMatrix);
 		spaceship_scene_node->afterburner_system[1].Render(msec, model_matrix, projMatrix, viewMatrix);
+		Vector4 light_colour = Vector4(1, 1, 0, 1);
+		PointLight* pt = new PointLight(model_matrix.GetPositionVector(), light_colour, 80);
+		point_lights.push_back(pt);
 	}
 	if (PhysicsSystem::GetVehicle()->getImmunityPowerUpActive()){
 		spaceship_scene_node->shieldSystem.Render(msec, model_matrix, projMatrix, viewMatrix);
