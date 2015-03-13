@@ -99,10 +99,10 @@ bool EarthParticleSystem::InitParticleSystem(int shape_type, const Vector3& Pos)
 	}
 	case 4:{
 		particle_lifetime = 10000.f;
-		particle_size = 40;
+		particle_size = 3.5f;
 		particleUpdateShader = new Shader(EARTH_SHADER_DIR"vs_update.glsl", EARTH_SHADER_DIR"fs_update.glsl", EARTH_SHADER_DIR"gs_updateAWESOME.glsl");
 		
-		powerup_texture[0] = SOIL_load_OGL_texture(TEXTUREDIR"life2.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, 0);
+		powerup_texture[0] = SOIL_load_OGL_texture(TEXTUREDIR"yellowPower.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, 0);
 		powerup_texture[1] = SOIL_load_OGL_texture(TEXTUREDIR"redPower.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, 0);
 		powerup_texture[2] = SOIL_load_OGL_texture(TEXTUREDIR"bluePower.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, 0);
 		break;
@@ -110,7 +110,7 @@ bool EarthParticleSystem::InitParticleSystem(int shape_type, const Vector3& Pos)
 	}
 	case 5:{
 		particle_lifetime = 10000.f;
-		particle_size = 40;
+		particle_size = 30;
 		particleUpdateShader = new Shader(EARTH_SHADER_DIR"vs_update.glsl", EARTH_SHADER_DIR"fs_update.glsl", EARTH_SHADER_DIR"gs_updateAWESOME.glsl");
 		flame_texture = SOIL_load_OGL_texture(TEXTUREDIR"redPower.jpg",
 			SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_COMPRESS_TO_DXT);
@@ -119,7 +119,7 @@ bool EarthParticleSystem::InitParticleSystem(int shape_type, const Vector3& Pos)
 	}
 	case 6:{
 		particle_lifetime = 10000.f;
-		particle_size = 40;
+		particle_size = 30;
 		particleUpdateShader = new Shader(EARTH_SHADER_DIR"vs_update.glsl", EARTH_SHADER_DIR"fs_update.glsl", EARTH_SHADER_DIR"gs_updateAWESOME.glsl");
 		flame_texture = SOIL_load_OGL_texture(TEXTUREDIR"bluePower.jpg",
 			SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_COMPRESS_TO_DXT);
@@ -204,15 +204,15 @@ bool EarthParticleSystem::InitRenderSystem(int shape_type){
 		break;
 	}
 	case 4: {
-		particleRenderShader = new Shader(EARTH_SHADER_DIR"vertexStrong.glsl", EARTH_SHADER_DIR"fragmentStrong.glsl", EARTH_SHADER_DIR"geometry.glsl");
+		particleRenderShader = new Shader(EARTH_SHADER_DIR"vertexStrong.glsl", EARTH_SHADER_DIR"fragmentMedium.glsl", EARTH_SHADER_DIR"geometry.glsl");
 		break;
 	}
 	case 5: {
-		particleRenderShader = new Shader(EARTH_SHADER_DIR"vertexStrong.glsl", EARTH_SHADER_DIR"fragmentStrong.glsl", EARTH_SHADER_DIR"geometry.glsl");
+		particleRenderShader = new Shader(EARTH_SHADER_DIR"vertexStrong.glsl", EARTH_SHADER_DIR"fragmentMedium.glsl", EARTH_SHADER_DIR"geometry.glsl");
 		break;
 	}
 	case 6: {
-		particleRenderShader = new Shader(EARTH_SHADER_DIR"vertexStrong.glsl", EARTH_SHADER_DIR"fragmentStrong.glsl", EARTH_SHADER_DIR"geometry.glsl");
+		particleRenderShader = new Shader(EARTH_SHADER_DIR"vertexStrong.glsl", EARTH_SHADER_DIR"fragmentMedium.glsl", EARTH_SHADER_DIR"geometry.glsl");
 		break;
 	}
 	}
@@ -364,15 +364,15 @@ void EarthParticleSystem::RenderParticles(const Matrix4& modelMatrix)
 		break;
 	}
 	case 4:{
-		model_matrix = modelMatrix*Matrix4::Scale(Vector3(5, 5, 5));
+		model_matrix = modelMatrix*Matrix4::Scale(Vector3(2.5f, 2.5f, 2.5f));
 		break;
 	}
 	case 5:{
-		model_matrix = modelMatrix*Matrix4::Scale(Vector3(5, 5, 5));
+		model_matrix = modelMatrix*Matrix4::Scale(Vector3(2.5f, 2.5f, 2.5f));
 		break;
 	}
 	case 6:{
-		model_matrix = modelMatrix*Matrix4::Scale(Vector3(5, 5, 5));
+		model_matrix = modelMatrix*Matrix4::Scale(Vector3(2.5f, 2.5f, 2.5f));
 		break;
 	}
 	}

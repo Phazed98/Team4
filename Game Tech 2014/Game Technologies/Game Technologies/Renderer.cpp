@@ -101,7 +101,7 @@ Renderer::~Renderer(void)
 		delete quad_motion_blur;
 
 		delete camera;
-
+		
 		glDeleteFramebuffers(1, &motion_blur_FBO);
 		glDeleteTextures(1, &motion_blur_ColourTex);
 		

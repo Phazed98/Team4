@@ -6,7 +6,7 @@ layout(points, max_vertices = 101) out;
 #define PARTICLE_TYPE_LAUNCHER 0.0f                                                 
 #define PARTICLE_TYPE_SHELL 1.0f                                                    
      
-#define PARTICLE_AMOUNT 20.0	//the amount of generated particles each time
+#define PARTICLE_AMOUNT 10.0	//the amount of generated particles each time
 
 uniform float gDeltaTimeMillis;
 uniform float gTime;
@@ -44,8 +44,8 @@ vec3 GetRandomDir(float n)
 	// vec3 Dir = vec3(xx, yy, 0);
 	// return Dir;
 	
-	float xx = sin(36*n/3.14 );
-	float yy = cos(n);
+	float xx = 0.5*sin(36*n/3.14 );
+	float yy = 0.5*cos(n/1.57);
 	vec3 Dir= vec3(xx,yy,0);
 	return Dir;
 	
