@@ -312,6 +312,7 @@ void	PhysicsSystem::ObstacleCollisions()
 							{
 								numberOfCoins++;
 								Obstacles[i]->SetCoinCollected(true);
+								Obstacles[i]->GetPhysicsNode().SetPosition(Vector3(1000, 1000, 1000));
 								Obstacles[i]->GetRidOfObstacle();
 
 							}
@@ -420,6 +421,11 @@ bool	PhysicsSystem::CheckOnATile()
 {
 	//if immune, return true
 	if (playerVehicle->getImmunityPowerUpActive())
+	{
+		return true;
+	}
+	//if switching plane, return true
+	if (playerVehicle->getIsPlaneSwitching())
 	{
 		return true;
 	}

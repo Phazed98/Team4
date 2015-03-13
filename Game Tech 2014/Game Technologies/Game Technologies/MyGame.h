@@ -64,6 +64,7 @@ public:
 
 	/*---------------------
 	NETWORKING METHODS
+	Matthew Battison
 	---------------------*/
 	//Server
 	void receiveFromClients();
@@ -72,6 +73,7 @@ public:
 	void sendServerStartPackets();
 	void sendServerPausePackets();
 	void sendServerUnPausePackets();
+	void sendServerAssignPackets(int client);
 	void sendServerUpdatePackets(int client);
 	char server_network_data[MAX_PACKET_SIZE];
 
@@ -166,9 +168,15 @@ protected:
 
 	bool isHost, isClient, useNetworking;
 	int numClients;
+	GameEntity* serverPlayers[4];
 	GameEntity* players[4];
 	float offsets[4];
+	float serverOffsets[4];
+	int clientNumber;
 
+	/*
+	NETWORKING OBJECTS - MATTHEW BATTISON
+	*/
 
 	GLuint earthTexture = SOIL_load_OGL_texture("../../Textures/planet1.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, 0);
 	GLuint waterTexture = SOIL_load_OGL_texture("../../Textures/05_DIFFUSE.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, 0);

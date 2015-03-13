@@ -19,6 +19,7 @@ enum PacketTypes
 	PLAYERS_DATA = 4,
 	GAME_PAUSE,
 	GAME_UNPAUSE,
+	ASSIGN_NUMBER,
 };
 
 struct messageInfo

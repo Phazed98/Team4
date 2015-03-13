@@ -177,6 +177,34 @@ MyGame::MyGame(bool isHost, bool isClient, bool useNetworking, int numClients)
 
 	if (useNetworking)
 	{
+
+		OBJMesh* PlayerMesh = new OBJMesh(MESHDIR"SR-71_Blackbird.obj");
+
+		for (int x = 0; x < 4; x++)
+		{
+			players[x] = BuildCubeEntity(3);
+			players[x]->GetRenderNode().SetMesh(PlayerMesh);
+			players[x]->GetRenderNode().SetColour(Vector4(1, 0, 0, 1));
+			players[x]->GetPhysicsNode().SetPosition(Vector3(-1000, -1000, -1000));
+			players[x]->GetPhysicsNode().SetUseGravity(false);
+			players[x]->GetPhysicsNode().SetMovable(false);
+			players[x]->GetPhysicsNode().SetUseDamping(false);
+			players[x]->ConnectToSystems();
+		}
+
+
+		for (int x = 0; x < 4; x++)
+		{
+			serverPlayers[x] = new GameEntity(new SceneNode(cube), new PhysicsNode());
+			serverPlayers[x]->GetRenderNode().SetMesh(PlayerMesh);
+			serverPlayers[x]->GetRenderNode().SetColour(Vector4(1, 0, 0, 1));
+			serverPlayers[x]->GetPhysicsNode().SetPosition(Vector3(-1000, -1000, -1000));
+			serverPlayers[x]->GetPhysicsNode().SetUseGravity(false);
+			serverPlayers[x]->GetPhysicsNode().SetMovable(false);
+			serverPlayers[x]->GetPhysicsNode().SetUseDamping(false);
+		}
+
+
 		if (isHost)
 		{
 			//Init client list to nothing
@@ -868,6 +896,7 @@ void MyGame::receiveFromClients()
 
 			case INIT_CONNECTION:
 				cout << "server received init packet from client" << endl;
+				sendServerAssignPackets(iter->first);
 				break;
 
 			case ACTION_EVENT:
@@ -877,11 +906,12 @@ void MyGame::receiveFromClients()
 			case CLIENT_POSITION_DATA:
 				//Set Corrisponding Player Orientation and Position
 				memcpy(&playerMessage, packet.data, sizeof(messageInfo));
-				players[iter->first]->GetPhysicsNode().SetPosition(playerMessage.Position);
-				players[iter->first]->GetPhysicsNode().SetOrientation(playerMessage.Orientation);
-				players[iter->first]->GetRenderNode().SetTransform(players[iter->first]->GetPhysicsNode().BuildTransform());
-				players[iter->first]->GetRenderNode().Update(0);
+				serverPlayers[iter->first]->GetPhysicsNode().SetPosition(playerMessage.Position);
+				serverPlayers[iter->first]->GetPhysicsNode().SetOrientation(playerMessage.Orientation);
+				serverPlayers[iter->first]->GetRenderNode().SetTransform(players[iter->first]->GetPhysicsNode().BuildTransform());
+				serverPlayers[iter->first]->GetRenderNode().Update(0);
 				offsets[iter->first] = playerMessage.offset;
+				//	cout << "Server recieved an Offset off" << playerMessage.offset << endl;
 				//Send Updated GameState Back to client
 				sendServerUpdatePackets(iter->first);
 				break;
@@ -942,10 +972,20 @@ void MyGame::recieveFromServer()
 
 			for (int x = 0; x < 4; x++)
 			{
+				if (x == clientNumber)
+				{
+					continue;
+				}
+				if (playerInfo[x].offset < -10000000)
+					continue;
+				//	cout << "Client recieved an Offset off" << playerInfo[x].offset << endl;
 				Vector3 pos = playerInfo[x].Position;
 				pos.z = -(playerInfo[x].offset - (PhysicsSystem::GetPhysicsSystem().getProgress()));
+
+				cout << pos.z << endl;
 				players[x]->GetPhysicsNode().SetPosition(pos);
 				players[x]->GetPhysicsNode().SetOrientation(playerInfo[x].Orientation);
+				players[x]->Update(0);
 
 			}
 			break;
@@ -958,15 +998,16 @@ void MyGame::recieveFromServer()
 			setCurrentState(GAME_PLAYING);
 			break;
 
+		case ASSIGN_NUMBER:
+			clientNumber = packet.packet_integer;
+			break;
+
 		default:
 			cout << "error in packet types" << endl;
 			break;
 		}
 	}
 }
-
-
-
 
 void MyGame::sendServerActionPackets()
 {
@@ -996,7 +1037,6 @@ void MyGame::sendServerStartPackets()
 
 	networkServer->sendToAll(packet_data, packet_size);
 }
-
 
 void MyGame::sendServerPausePackets()
 {
@@ -1028,8 +1068,6 @@ void MyGame::sendServerUnPausePackets()
 	networkServer->sendToAll(packet_data, packet_size);
 }
 
-
-
 void MyGame::sendServerUpdatePackets(int client)
 {
 	const unsigned int packet_size = sizeof(Packet);
@@ -1039,8 +1077,9 @@ void MyGame::sendServerUpdatePackets(int client)
 	for (int x = 0; x < 4; x++)
 	{
 		mi[x].objectID = x;
-		mi[x].Orientation = players[x]->GetPhysicsNode().GetOrientation();
-		mi[x].Position = players[x]->GetPhysicsNode().GetPosition();
+		mi[x].Orientation = serverPlayers[x]->GetPhysicsNode().GetOrientation();
+		mi[x].Position = serverPlayers[x]->GetPhysicsNode().GetPosition();
+		mi[x].offset = offsets[x];
 	}
 
 	Packet packet;
@@ -1052,6 +1091,18 @@ void MyGame::sendServerUpdatePackets(int client)
 	NetworkServices::sendMessage(networkServer->sessions[client], packet_data, packet_size);
 }
 
+void MyGame::sendServerAssignPackets(int client)
+{
+	const unsigned int packet_size = sizeof(Packet);
+	char packet_data[packet_size];
+
+	Packet packet;
+	packet.packet_type = ASSIGN_NUMBER;
+	packet.packet_integer = client;
+	packet.serialize(packet_data);
+
+	NetworkServices::sendMessage(networkServer->sessions[client], packet_data, packet_size);
+}
 
 void MyGame::sendClientActionPackets()
 {
@@ -1082,6 +1133,8 @@ void MyGame::sendClientUpdatePackets()
 	clientMessage.Orientation = PhysicsSystem::GetPhysicsSystem().GetPlayer()->GetOrientation();
 	memcpy(packet.data, &clientMessage, sizeof(messageInfo));
 	packet.serialize(packet_data);
+
+	//cout << "Client Sent offSet of " << clientMessage.offset << endl;
 
 	NetworkServices::sendMessage(networkClient->ConnectSocket, packet_data, packet_size);
 }
