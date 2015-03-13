@@ -81,12 +81,8 @@ void GameClass::UpdateRendering(float msec)
 		{
 		//	Renderer::GetRenderer().RenderGameOver();
 
-			if (Input::ButtonDown(INPUT_CROSS, pad))
-			{
-				PhysicsSystem::GetPhysicsSystem().setImmunity();
-				setCurrentState(GAME_PLAYING);
-				
-			}
+			Renderer::GetRenderer().RenderGameOver();
+
 
 			if (Input::ButtonDown(INPUT_TRIANGLE, pad))
 			{

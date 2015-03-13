@@ -1,5 +1,8 @@
 #include "Renderer.h"
 #include "Input.h"
+#include "MyGame.h"
+#include <string>
+#include <sstream>
 
 Renderer* Renderer::instance = NULL;
 
@@ -14,6 +17,11 @@ Renderer::Renderer(void)
 
 	this->SetCurrentShader(*basicVert, *basicFrag);
 	
+
+
+
+	score = 0; 
+	timer = 20;
 
 	/*
 	Projection matrix...0.7853982 is 45 degrees in radians.
@@ -34,6 +42,10 @@ Renderer::Renderer(void)
 
 	pauseButtonIndex = 0;
 	mainButtonIndex = 0;
+
+	GameOverQuad = Mesh::GenerateQuad();
+	GameOverQuad->SetDefaultTexture(*GCMRenderer::LoadGTF("/Textures/Stars.gtf"));
+	GameOverSN = new SceneNode(GameOverQuad);
 
 	BackGrounMesh = Mesh::GenerateQuad();
 	BackGrounMesh->SetDefaultTexture(*GCMRenderer::LoadGTF("/Textures/Stars.gtf"));
@@ -164,6 +176,14 @@ void Renderer::UpdateScene(float msec)
 		fps = nbFrames;
 		time = 0;
 		nbFrames = 0;
+
+		score = PhysicsSystem::GetPhysicsSystem().GetScore();
+		timer = PhysicsSystem::GetPhysicsSystem().GetCheckPointTimer();
+
+		if (timer < 0)
+		{
+			MyGame::GetGameClass().setCurrentState(GAME_OVER);
+		}
 	}
 
 	nbFrames++;
@@ -239,17 +259,19 @@ void Renderer::RenderScene()
 	DrawNode(scoreSN);
 	timerSN->Update(0);
 	DrawNode(timerSN);
-	cooldownBarSN->Update(0);
-	DrawNode(cooldownBarSN);
-	buttonBSN->Update(0);
-	DrawNode(buttonBSN);
-	buttonXSN->Update(0);
-	DrawNode(buttonXSN);
-	buttonYSN->Update(0);
-	DrawNode(buttonYSN);
+	//cooldownBarSN->Update(0);
+	//DrawNode(cooldownBarSN);
+	//buttonBSN->Update(0);
+	//DrawNode(buttonBSN);
+	//buttonXSN->Update(0);
+	//DrawNode(buttonXSN);
+	//buttonYSN->Update(0);
+	//DrawNode(buttonYSN);
 
-	//cellGcmSetDepthTestEnable(CELL_GCM_TRUE);
-	//cellGcmSetDepthFunc(CELL_GCM_LESS);
+	displayInformation();
+
+	cellGcmSetDepthTestEnable(CELL_GCM_TRUE);
+	cellGcmSetDepthFunc(CELL_GCM_LESS);
 
 	//projMatrix = Matrix4::perspective(0.7853982, screenRatio, 1.0f, 20000.0f);	//CHANGED TO THIS!!
 
@@ -418,8 +440,6 @@ buttonPressed	Renderer::RenderMainMenu()
 
 	}
 
-	DrawText("Hello World", Vector3(0, 0, 0), 16, false);
-
 	if (Input::ButtonDown(INPUT_CROSS))
 	{
 		switch (mainButtonIndex)
@@ -444,6 +464,27 @@ buttonPressed	Renderer::RenderMainMenu()
 	SwapBuffers();
 
 	return bp;
+}
+
+
+void	Renderer::RenderGameOver()
+{
+
+	SetViewport();
+	ClearBuffer();
+
+	this->SetCurrentShader(*currentVert, *currentFrag);
+
+	projMatrix = Matrix4::orthographic(-1, 1, 1, -1, -1, 1);
+	textureMatrix = Matrix4::identity();
+	viewMatrix = Matrix4::identity();
+	currentVert->UpdateShaderMatrices(modelMatrix, viewMatrix, projMatrix);
+
+	DrawNode(GameOverSN);
+
+	displayInformation();
+
+	SwapBuffers();
 }
 
 void	Renderer::SetCamera(ChaseCamera*c)
@@ -552,7 +593,9 @@ void Renderer::DrawText(const std::string &text, const Vector3 &position, const 
 	//modelMatrix = Matrix4::translation(Vector3(position.getX(), screenHeight - position.getY(), position.getZ())) * Matrix4::scale(Vector3(size, size, 1));
 	//modelMatrix = Matrix4::identity() * Matrix4::scale(Vector3(16,16,1));
 
-	modelMatrix = Matrix4::translation(Vector3(200, 200, 0)) * Matrix4::scale(Vector3(32, 32, 1));
+	cellGcmSetBlendFunc(CELL_GCM_SRC_ALPHA, CELL_GCM_ONE_MINUS_SRC_ALPHA, CELL_GCM_SRC_ALPHA, CELL_GCM_ONE_MINUS_SRC_ALPHA);
+
+	modelMatrix = Matrix4::translation(position) * Matrix4::scale(Vector3(32, 32, 1));
 	textNode->SetTransform(modelMatrix);
 	textNode->Update(0);
 	viewMatrix = Matrix4::identity();
@@ -560,9 +603,72 @@ void Renderer::DrawText(const std::string &text, const Vector3 &position, const 
 	textureMatrix = Matrix4::identity();
 	currentVert->UpdateShaderMatrices(modelMatrix, viewMatrix, projMatrix);
 
+	cellGcmSetBlendFunc(CELL_GCM_SRC_ALPHA, CELL_GCM_SRC_ALPHA, CELL_GCM_SRC_ALPHA, CELL_GCM_SRC_ALPHA);
+
 	DrawNode(textNode);
+
+
 
 	delete mesh; //Once it's drawn, we don't need it anymore!
 }
 
+void Renderer::displayInformation()
+{
+	cellGcmSetDepthTestEnable(CELL_GCM_FALSE);
+	cellGcmSetDepthFunc(CELL_GCM_NEVER);
 
+	this->SetCurrentShader(*currentVert, *currentFrag);
+
+	//projMatrix = Matrix4::orthographic(-1, 1, 1, -1, -1, 1);
+	projMatrix = Matrix4::orthographic(0.0f, (float)screenWidth, 0.0f, (float)screenHeight, -1.0f, 1.0f);
+	textureMatrix = Matrix4::identity();
+	viewMatrix = Matrix4::identity();
+	currentVert->UpdateShaderMatrices(modelMatrix, viewMatrix, projMatrix);
+
+	Matrix4 viewMatrixTemp = viewMatrix;
+	Matrix4 projMatrixTemp = projMatrix;
+	Matrix4 modelMatrixTemp = modelMatrix;
+	int x = 64;
+
+	/*DrawText("Physics FPS: " + to_string(PhysicsSystem::getFPS()), Vector3(0, 16, 0), 16, false);
+	DrawText("Renderer FPS: " + to_string(fps), Vector3(0, 32, 0), 16, false);
+	DrawText("Number of Nodes: " + to_string(nodeCount), Vector3(0, 48, 0), 16, false);*/
+
+	//--------------------------------------------------GUI--------------------------------------------------------------------------------
+
+	if(MyGame::GetGameClass().getCurrentState() == GAME_PLAYING)
+	{
+		std::ostringstream scoreStream; //output string stream
+		scoreStream << score;
+		std::string scoreString = scoreStream.str();
+
+		DrawText("SCORE", Vector3(50, screenHeight - 30, 0), 25, false);
+		DrawText(scoreString, Vector3(50, screenHeight - 70, 0), 25, false);
+
+
+		std::ostringstream timeStream; //output string stream
+		timeStream << timer;
+		std::string timeString = timeStream.str();
+		DrawText("Timer", Vector3(400, screenHeight - 30, 0), 25, false);
+		DrawText(timeString, Vector3(400, screenHeight - 70, 0), 25, false);
+	}
+	else if (MyGame::GetGameClass().getCurrentState() == GAME_OVER)
+	{
+		std::ostringstream scoreStream; //output string stream
+		scoreStream << score;
+		std::string scoreString = scoreStream.str();
+
+
+		DrawText("GAME OVER!!!",			Vector3(screenWidth/2 - 200,	screenHeight - screenHeight / 2 + 140,	0), 50,	false);
+		DrawText("FINAL SCORE",				Vector3(screenWidth/2 - 180,	screenHeight - screenHeight / 2 + 70,	0),	50,	false);
+		DrawText(scoreString,				Vector3(screenWidth/2 - 50,		screenHeight - screenHeight / 2,		0), 50,	false);
+		DrawText("Thanks For Playing!!!",	Vector3(screenWidth/2 - 300,	screenHeight - screenHeight / 2 - 70,	0), 50,	false);
+	}
+	
+
+	//--------------------------------------------------GUI--------------------------------------------------------------------------------
+
+	viewMatrix = viewMatrixTemp;
+	projMatrix = projMatrixTemp;
+	modelMatrix = modelMatrixTemp;
+}

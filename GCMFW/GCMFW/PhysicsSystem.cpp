@@ -33,6 +33,13 @@ PhysicsSystem::PhysicsSystem(void)
 	immunityTime = 5000;
 	checkPointTimer = 50000;
 	canDie = false;
+
+
+	score = 0;
+	scoreMultiplier = 1;
+	numberOfCoins = 0;
+	actualScore = 0;
+	increaseScore = true;
 }
 
 PhysicsSystem::~PhysicsSystem(void)
@@ -49,6 +56,10 @@ void	PhysicsSystem::Update(float msec)
 	nbFrames++;
 	time += msec;
 	checkPointTimer -= msec;
+
+
+	//Calculate Score
+	CalculateScore(msec);
 
 	//--------added by sam-----------------------
 	//Update max track speed
@@ -86,22 +97,11 @@ void	PhysicsSystem::Update(float msec)
 
 	if (canDie)
 	{
-		if (checkPointTimer < 1)
-		{
-			GameClass::GetGameClass().setCurrentState(GAME_OVER);
-		}
-
 		if (!CheckOnATile())
 		{
 			std::cout << " For those of you who dont know boobs loook like ( . Y . )" << std::endl;
 		//	GameClass::GetGameClass().setCurrentState(GAME_OVER);
 		}
-	}
-
-
-	for (std::vector<Constraint*>::iterator i = allSprings.begin(); i != allSprings.end(); ++i)
-	{
-		(*i)->Update(msec);
 	}
 
 	for (std::vector<PhysicsNode*>::iterator i = allNodes.begin(); i != allNodes.end(); ++i)
@@ -579,5 +579,35 @@ void PhysicsSystem::AddCollisionImpulse(PhysicsNode &s0, PhysicsNode &s1, Collis
 		Vector3 angular1 = s1.GetAngularVelocity() - s1.GetInverseInertiaMatrix().getUpper3x3() * cross(r1, tangent * angularImpulse);
 		s1.SetAngularVelocity(angular1);
 	}
+
+}
+
+void PhysicsSystem::CalculateScore(float msec)
+{
+
+	if (!increaseScore && track_speed > 0)
+	{
+		distanceReversed -= track_speed;
+		if (distanceReversed < 0)
+		{
+			score += (abs(distanceReversed) * msec) / 10000;
+
+			increaseScore = true;
+			actualScore = score * scoreMultiplier;
+		}
+	}
+	else
+	{
+		if (numberOfCoins > scoreMultiplier)
+		{
+			scoreMultiplier++;
+			numberOfCoins = 0;
+		}
+
+		score += (track_speed * msec) / 10000;
+
+		actualScore = score * scoreMultiplier;
+	}
+
 
 }

@@ -14,7 +14,7 @@
 #define COLLISION_BOUNCE_FACTOR 20.0f
 
 //added by Sam for updating the speed of the game over time. Larger value gives SLOWER speed increase
-#define DIFFICULTY_SPEED_INCREASE 1000.0f
+#define DIFFICULTY_SPEED_INCREASE 7000.0f
 //added by Sam for ship acceleration LERP after collision. Higher = slower acceleration
 #define COLLISION_RECOVERY_SPEED 0.2f
 
@@ -78,6 +78,15 @@ public:
 
 	int GetCheckPointTimer(){ return checkPointTimer; }
 	void  SetCheckPointTimer(int s){ checkPointTimer = s; }
+
+
+	//---------------------Score--------------------------------------------
+	void CalculateScore(float);
+	int GetScoreMultiplier() { return scoreMultiplier; }
+	int GetNumberOfCoins() { return numberOfCoins; }
+	int GetScore() { return actualScore; }
+
+	//---------------------------------------------------------------------------------
 
 	//---------------------------------------------------------------------------------
 	//getters for storage vectors - to be filled at tile/obstacle creation
@@ -181,5 +190,15 @@ protected:
 	int		immunityTime;
 
 	bool canDie;
+
+
+	//---------------------Score--------------------------------------------
+	float		score;
+	int			scoreMultiplier;
+	int			numberOfCoins;
+	int			actualScore;
+	bool		increaseScore;
+	//----------------------------------------------------------------------
+
 };
 

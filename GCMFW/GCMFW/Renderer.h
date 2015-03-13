@@ -47,10 +47,12 @@ public:
 	void	AddNode(SceneNode* n);
 	void	RemoveNode(SceneNode* n);
 	void	RenderPauseMenu();
+	void	RenderGameOver();
 	buttonPressed	RenderMainMenu();
 	void	RenderLoading(int percent);
 	void SetSpaceshipSceneNode(SpaceshipSceneNode* ssn){ spaceship_scene_node = ssn; }
 	void DrawText(const std::string &text, const Vector3 &position, const float size, const bool perspective);
+	void displayInformation();
 
 
 	virtual void RenderScene();
@@ -126,5 +128,12 @@ protected:
 	SceneNode* buttonBSN;
 	SceneNode* buttonXSN;
 	SceneNode* buttonYSN;
+
+	float score;
+	float timer;
+
+	//GAme Over
+	Mesh* GameOverQuad;
+	SceneNode* GameOverSN;
 
 };

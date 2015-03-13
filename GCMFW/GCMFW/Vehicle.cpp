@@ -25,7 +25,7 @@ Speed_Turn(speedTurn), currentPlaneID(startingPlaneID), steeringResponsiveness(s
 	BuildPlayerEntity(mesh, playerScale, CalculatePlayerLocation(), CalculateStartingOrientation());
 
 	//set plane switch cooldown period. Add a parameter later if needed
-	PlaneSwitchCDTime = 1500;
+	PlaneSwitchCDTime = 200;
 	temp = 4;
 }
 

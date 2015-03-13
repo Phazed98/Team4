@@ -11,7 +11,7 @@ ObjectType::ObjectType(SceneNode* s, PhysicsNode* p, int _type, int _subType) : 
 	SetInitialAttributes();
 	length = 800.0f;
 	random = 1;
-	checkPointTimer = 10000;
+	checkPointTimer = 40000;
 	AddToPhysics = true;
 }
 
@@ -47,37 +47,30 @@ void ObjectType::Update(float msec)
 	}
 	else if (type == 2)
 	{
+		if (GameClass::GetGameClass().getCurrentState() == GAME_PLAYING)
+		{
+			if (!(msec> 1000))
+				checkPointTimer -= msec;
+		}
+
 		float speed = PhysicsSystem::GetTrackSpeed();
 		physicsNode->SetPosition(physicsNode->GetPosition() + Vector3(0, 0, speed));
+		PhysicsSystem::GetPhysicsSystem().SetCheckPointTimer(checkPointTimer / 1000);
 
 		if (physicsNode->GetPosition().getZ() > 0 && increaseTimer)
 		{
-			checkPointTimer += 10000000 + resetDistance;
+			checkPointTimer += 10000 + resetDistance;
 
 			increaseTimer = false;
 		}
 
-		if (physicsNode->GetPosition().getZ() < 0 && AddToPhysics)
-		{
-			PhysicsSystem::GetPhysicsSystem().SetCheckPointTimer(PhysicsSystem::GetPhysicsSystem().GetCheckPointTimer() + (resetDistance/150));
-			AddToPhysics = false;
-		}
-
-		if (physicsNode->GetPosition().getZ() < -5 && !AddToPhysics)
-		{
-			AddToPhysics = true;
-		}
-
-		if (physicsNode->GetPosition().getZ() > (resetDistance))
+		if (physicsNode->GetPosition().getZ()> (resetDistance))
 		{
 			reset();
 			resetDistance += 1000;
 			increaseTimer = true;
 		}
-
 	}
-
-
 }
 
 
